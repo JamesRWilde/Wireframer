@@ -1,6 +1,7 @@
 'use strict';
 
 const select = document.getElementById('obj-select');
+const themeMode = document.getElementById('theme-mode');
 const lodSlider = document.getElementById('lod-slider');
 const lodValue = document.getElementById('lod-value');
 const fillOpacity = document.getElementById('fill-opacity');
@@ -52,6 +53,7 @@ const PRESET_SWATCH_BUTTONS = [];
 
 let THEME = null;
 let CUSTOM_RGB = CUSTOM_RGB_DEFAULT.slice();
+let THEME_MODE = 'dark';
 
 const LIGHT_DIR = (() => {
   const x = -0.38;

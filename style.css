@@ -9,6 +9,7 @@
   --ui-control-hover-border: rgba(100, 200, 255, 0.6);
   --ui-control-hover-fg: rgba(150, 235, 255, 0.95);
   --ui-control-bg: rgba(5, 10, 20, 0.88);
+  --ui-panel-bg: rgba(6, 12, 24, 0.4);
   --ui-control-option-bg: rgb(7, 12, 24);
   --ui-label: rgba(105, 198, 236, 0.78);
   --ui-value: rgba(145, 224, 255, 0.82);
@@ -76,7 +77,7 @@ canvas:active { cursor: grabbing; }
   width: 100%;
   padding: 0.6rem 0.75rem;
   border: 1px solid var(--ui-control-border);
-  background: rgba(6, 12, 24, 0.4);
+  background: var(--ui-panel-bg);
 }
 
 .panel-title {
@@ -87,9 +88,9 @@ canvas:active { cursor: grabbing; }
   text-transform: uppercase;
 }
 
-#obj-select {
+#obj-select,
+#theme-mode {
   display: block;
-  width: 100%;
   background: var(--ui-control-bg);
   border: 1px solid var(--ui-control-border);
   color: var(--ui-control-fg);
@@ -109,14 +110,39 @@ canvas:active { cursor: grabbing; }
   background-color: var(--ui-control-bg);
   transition: border-color 0.2s, color 0.2s;
 }
-#obj-select:hover {
+
+#obj-select {
+  width: 100%;
+}
+
+#theme-mode {
+  min-width: 7.4rem;
+  background-position: right 8px center;
+}
+
+#obj-select:hover,
+#theme-mode:hover {
   border-color: var(--ui-control-hover-border);
   color: var(--ui-control-hover-fg);
 }
-#obj-select option {
+
+#obj-select option,
+#theme-mode option {
   background: var(--ui-control-option-bg);
   color: var(--ui-control-fg);
   letter-spacing: 1px;
+}
+
+#theme-control {
+  margin-top: 0.42rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--ui-label);
+  font-size: 0.95rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
 }
 
 #lod-control {

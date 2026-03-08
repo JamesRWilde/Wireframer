@@ -31,45 +31,69 @@ function enforceContrast(fg, bg, minRatio) {
 
 function buildCustomTheme(rgbInput) {
   const base = [clampByte(rgbInput[0]), clampByte(rgbInput[1]), clampByte(rgbInput[2])];
-  const bg = mixRgb(base, [0, 0, 0], 0.93);
-  const uiBg = mixRgb(base, [0, 0, 0], 0.9);
-  const optionBg = mixRgb(base, [0, 0, 0], 0.88);
+  const isLight = THEME_MODE === 'light';
 
-  const title = enforceContrast(mixRgb(base, [255, 255, 255], 0.54), bg, 5.5);
-  const subtitle = enforceContrast(mixRgb(base, [255, 255, 255], 0.16), bg, 2.3);
-  const controlFg = enforceContrast(mixRgb(base, [255, 255, 255], 0.32), bg, 4.2);
-  const controlHoverFg = enforceContrast(mixRgb(base, [255, 255, 255], 0.58), bg, 5.5);
-  const label = enforceContrast(mixRgb(base, [255, 255, 255], 0.26), bg, 3.6);
-  const value = enforceContrast(mixRgb(base, [255, 255, 255], 0.46), bg, 4.8);
+  const bg = isLight ? mixRgb(base, [255, 255, 255], 0.95) : mixRgb(base, [0, 0, 0], 0.93);
+  const uiBg = isLight ? mixRgb(base, [255, 255, 255], 0.88) : mixRgb(base, [0, 0, 0], 0.9);
+  const panelBg = isLight ? mixRgb(base, [255, 255, 255], 0.78) : mixRgb(base, [0, 0, 0], 0.88);
+  const optionBg = isLight ? mixRgb(base, [255, 255, 255], 0.82) : mixRgb(base, [0, 0, 0], 0.88);
+
+  const title = isLight
+    ? enforceContrast(mixRgb(base, [0, 0, 0], 0.72), bg, 5.5)
+    : enforceContrast(mixRgb(base, [255, 255, 255], 0.54), bg, 5.5);
+  const subtitle = isLight
+    ? enforceContrast(mixRgb(base, [0, 0, 0], 0.46), bg, 2.3)
+    : enforceContrast(mixRgb(base, [255, 255, 255], 0.16), bg, 2.3);
+  const controlFg = isLight
+    ? enforceContrast(mixRgb(base, [0, 0, 0], 0.6), bg, 4.2)
+    : enforceContrast(mixRgb(base, [255, 255, 255], 0.32), bg, 4.2);
+  const controlHoverFg = isLight
+    ? enforceContrast(mixRgb(base, [0, 0, 0], 0.8), bg, 5.5)
+    : enforceContrast(mixRgb(base, [255, 255, 255], 0.58), bg, 5.5);
+  const label = isLight
+    ? enforceContrast(mixRgb(base, [0, 0, 0], 0.54), bg, 3.6)
+    : enforceContrast(mixRgb(base, [255, 255, 255], 0.26), bg, 3.6);
+  const value = isLight
+    ? enforceContrast(mixRgb(base, [0, 0, 0], 0.72), bg, 4.8)
+    : enforceContrast(mixRgb(base, [255, 255, 255], 0.46), bg, 4.8);
 
   return {
-    particle: mixRgb(base, [255, 255, 255], 0.34),
-    wireA: mixRgb(base, [0, 0, 0], 0.2),
-    wireB: mixRgb(base, [255, 255, 255], 0.08),
-    wireNear: mixRgb(base, [0, 0, 0], 0.42),
-    wireFar: mixRgb(base, [255, 255, 255], 0.46),
-    shadeDark: mixRgb(base, [0, 0, 0], 0.5),
-    shadeBright: mixRgb(base, [255, 255, 255], 0.3),
-    morph: mixRgb(base, [255, 255, 255], 0.36),
+    bg,
+    particle: isLight ? mixRgb(base, [0, 0, 0], 0.9) : mixRgb(base, [255, 255, 255], 0.34),
+    wireA: isLight ? mixRgb(base, [255, 255, 255], 0.12) : mixRgb(base, [0, 0, 0], 0.2),
+    wireB: isLight ? mixRgb(base, [0, 0, 0], 0.18) : mixRgb(base, [255, 255, 255], 0.08),
+    wireNear: isLight ? mixRgb(base, [255, 255, 255], 0.28) : mixRgb(base, [0, 0, 0], 0.42),
+    wireFar: isLight ? mixRgb(base, [0, 0, 0], 0.46) : mixRgb(base, [255, 255, 255], 0.46),
+    shadeDark: isLight ? mixRgb(base, [255, 255, 255], 0.22) : mixRgb(base, [0, 0, 0], 0.5),
+    shadeBright: isLight ? mixRgb(base, [0, 0, 0], 0.24) : mixRgb(base, [255, 255, 255], 0.3),
+    morph: isLight ? mixRgb(base, [0, 0, 0], 0.28) : mixRgb(base, [255, 255, 255], 0.36),
     uiVars: {
       '--bg-solid': toRgbCss(bg),
       '--ui-title': toRgbaCss(title, 0.88),
       '--ui-subtitle': toRgbaCss(subtitle, 0.5),
-      '--ui-control-border': toRgbaCss(mixRgb(base, [255, 255, 255], 0.12), 0.42),
+      '--ui-control-border': toRgbaCss(isLight ? mixRgb(base, [0, 0, 0], 0.2) : mixRgb(base, [255, 255, 255], 0.12), 0.42),
       '--ui-control-fg': toRgbaCss(controlFg, 0.86),
-      '--ui-control-hover-border': toRgbaCss(mixRgb(base, [255, 255, 255], 0.28), 0.7),
+      '--ui-control-hover-border': toRgbaCss(isLight ? mixRgb(base, [0, 0, 0], 0.36) : mixRgb(base, [255, 255, 255], 0.28), 0.7),
       '--ui-control-hover-fg': toRgbaCss(controlHoverFg, 0.98),
-      '--ui-control-bg': toRgbaCss(uiBg, 0.9),
+      '--ui-control-bg': toRgbaCss(uiBg, isLight ? 0.92 : 0.9),
+      '--ui-panel-bg': toRgbaCss(panelBg, isLight ? 0.8 : 0.4),
       '--ui-control-option-bg': toRgbCss(optionBg),
       '--ui-label': toRgbaCss(label, 0.82),
       '--ui-value': toRgbaCss(value, 0.9),
-      '--ui-switch-glow': toRgbaCss(mixRgb(base, [255, 255, 255], 0.46), 0.58),
-      '--ui-stats': toRgbaCss(mixRgb(base, [255, 255, 255], 0.18), 0.42),
+      '--ui-switch-glow': toRgbaCss(isLight ? mixRgb(base, [0, 0, 0], 0.24) : mixRgb(base, [255, 255, 255], 0.46), 0.58),
+      '--ui-stats': toRgbaCss(isLight ? mixRgb(base, [0, 0, 0], 0.34) : mixRgb(base, [255, 255, 255], 0.18), 0.42),
       '--ui-object-label': toRgbaCss(value, 0.64),
       '--ui-hint': toRgbaCss(label, 0.36),
       '--ui-accent': toRgbCss(base),
     },
   };
+}
+
+function setThemeMode(mode, options = {}) {
+  const { apply = true } = options;
+  THEME_MODE = mode === 'light' ? 'light' : 'dark';
+  if (themeMode) themeMode.value = THEME_MODE;
+  if (apply) applyPalette();
 }
 
 function randomPresetRgb() {

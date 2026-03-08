@@ -47,6 +47,7 @@ function persistUiState() {
 
   const payload = {
     selectedShapeName: selectedObject ? selectedObject.name : null,
+    themeMode: themeMode ? themeMode.value : 'dark',
     lod: Number(lodSlider.value),
     fillOpacity: Number(fillOpacity.value),
     wireOpacity: Number(wireOpacity.value),
@@ -72,6 +73,7 @@ function restoreUiState() {
   bgDensity.value = String(clampNumber(state.bgDensity, 0, 220, 100));
   bgVelocity.value = String(clampNumber(state.bgVelocity, 0, 220, 100));
   bgOpacity.value = String(clampNumber(state.bgOpacity, 0, 100, 100));
+  if (themeMode) themeMode.value = state.themeMode === 'light' ? 'light' : 'dark';
 
   if (typeof state.selectedShapeName === 'string' && state.selectedShapeName) {
     return state.selectedShapeName;
@@ -135,6 +137,13 @@ function initObjectSelector() {
   bgVelocity.onchange = syncRenderToggles;
   bgOpacity.oninput = syncRenderToggles;
   bgOpacity.onchange = syncRenderToggles;
+  if (themeMode) {
+    themeMode.oninput = () => {
+      setThemeMode(themeMode.value, { apply: true });
+      persistUiState();
+    };
+    themeMode.onchange = themeMode.oninput;
+  }
   initPresetSwatches();
 
   const onCustomInput = () => {
@@ -151,9 +160,9 @@ function initObjectSelector() {
   }
 
   CUSTOM_RGB = readCustomRgb();
-  setCustomRgb(CUSTOM_RGB, { persist: false, apply: true });
-
   const selectedShapeName = restoreUiState();
+  setThemeMode(themeMode ? themeMode.value : 'dark', { apply: false });
+  setCustomRgb(CUSTOM_RGB, { persist: false, apply: true });
   syncRenderToggles();
 
   if (!OBJECTS.length) {
