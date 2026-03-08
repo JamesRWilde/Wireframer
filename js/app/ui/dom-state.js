@@ -24,6 +24,11 @@ const customBlueValue = document.getElementById('custom-blue-value');
 const customHex = document.getElementById('custom-hex');
 const customSwatch = document.getElementById('custom-swatch');
 const statRenderer = document.getElementById('stat-renderer');
+const statFps = document.getElementById('stat-fps');
+const statFrameMs = document.getElementById('stat-frame-ms');
+const statPhysMs = document.getElementById('stat-phys-ms');
+const statBgMs = document.getElementById('stat-bg-ms');
+const statFgMs = document.getElementById('stat-fg-ms');
 
 let FILL_OPACITY = 0;
 let WIRE_OPACITY = 1;

@@ -224,22 +224,37 @@ function createSceneGpuRenderer(canvas) {
     uAlpha: gl.getUniformLocation(wireProgram, 'u_alpha'),
   };
 
-  function normalize3(v, fallback) {
+  const IDENTITY3 = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+  const tmpLight = new Float32Array(3);
+  const tmpView = new Float32Array(3);
+  const tmpShadeDark = new Float32Array(3);
+  const tmpShadeBright = new Float32Array(3);
+  const tmpWireNear = new Float32Array(3);
+  const tmpWireFar = new Float32Array(3);
+
+  function fillNormalized3(out, v, fallback) {
     const x = Number(v && v[0]);
     const y = Number(v && v[1]);
     const z = Number(v && v[2]);
     const l = Math.hypot(x, y, z);
-    if (!Number.isFinite(l) || l < 1e-6) return fallback.slice();
-    return [x / l, y / l, z / l];
+    if (!Number.isFinite(l) || l < 1e-6) {
+      out[0] = fallback[0];
+      out[1] = fallback[1];
+      out[2] = fallback[2];
+      return out;
+    }
+    out[0] = x / l;
+    out[1] = y / l;
+    out[2] = z / l;
+    return out;
   }
 
-  function toColor01(rgb, fallback) {
+  function fillColor01(out, rgb, fallback) {
     const src = rgb || fallback;
-    return [
-      (src[0] || 0) / 255,
-      (src[1] || 0) / 255,
-      (src[2] || 0) / 255,
-    ];
+    out[0] = (src[0] || 0) / 255;
+    out[1] = (src[1] || 0) / 255;
+    out[2] = (src[2] || 0) / 255;
+    return out;
   }
 
   function buildModelBuffers(model) {
@@ -348,10 +363,10 @@ function createSceneGpuRenderer(canvas) {
     }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffers.posBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, posData, gl.DYNAMIC_DRAW);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, posData);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normalBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, normalData, gl.DYNAMIC_DRAW);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, normalData);
 
     return true;
   }
@@ -367,7 +382,7 @@ function createSceneGpuRenderer(canvas) {
 
   function toRowMajorRotation(m) {
     if (!Array.isArray(m) || m.length !== 9) {
-      return [1, 0, 0, 0, 1, 0, 0, 0, 1];
+      return IDENTITY3;
     }
     return m;
   }
@@ -415,12 +430,10 @@ function createSceneGpuRenderer(canvas) {
       gl.uniform3f(fillLoc.uR1, rot[3], rot[4], rot[5]);
       gl.uniform3f(fillLoc.uR2, rot[6], rot[7], rot[8]);
 
-      const lightDir = normalize3(params.lightDir, [-0.38, 0.74, -0.56]);
-      const viewDir = normalize3(params.viewDir, [0, 0, -1]);
-      gl.uniform3fv(fillLoc.uLightDir, new Float32Array(lightDir));
-      gl.uniform3fv(fillLoc.uViewDir, new Float32Array(viewDir));
-      gl.uniform3fv(fillLoc.uShadeDark, new Float32Array(toColor01(params.theme.shadeDark, [35, 48, 64])));
-      gl.uniform3fv(fillLoc.uShadeBright, new Float32Array(toColor01(params.theme.shadeBright, [120, 180, 230])));
+      gl.uniform3fv(fillLoc.uLightDir, fillNormalized3(tmpLight, params.lightDir, [-0.38, 0.74, -0.56]));
+      gl.uniform3fv(fillLoc.uViewDir, fillNormalized3(tmpView, params.viewDir, [0, 0, -1]));
+      gl.uniform3fv(fillLoc.uShadeDark, fillColor01(tmpShadeDark, params.theme.shadeDark, [35, 48, 64]));
+      gl.uniform3fv(fillLoc.uShadeBright, fillColor01(tmpShadeBright, params.theme.shadeBright, [120, 180, 230]));
       gl.uniform1f(fillLoc.uAlpha, fillAlpha);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers.posBuffer);
@@ -444,8 +457,8 @@ function createSceneGpuRenderer(canvas) {
       gl.uniform3f(wireLoc.uR1, rot[3], rot[4], rot[5]);
       gl.uniform3f(wireLoc.uR2, rot[6], rot[7], rot[8]);
       gl.uniform1f(wireLoc.uZHalf, Math.max(0.01, params.zHalf || 1));
-      gl.uniform3fv(wireLoc.uWireNear, new Float32Array(toColor01(params.theme.wireNear, [210, 245, 255])));
-      gl.uniform3fv(wireLoc.uWireFar, new Float32Array(toColor01(params.theme.wireFar, [120, 195, 255])));
+      gl.uniform3fv(wireLoc.uWireNear, fillColor01(tmpWireNear, params.theme.wireNear, [210, 245, 255]));
+      gl.uniform3fv(wireLoc.uWireFar, fillColor01(tmpWireFar, params.theme.wireFar, [120, 195, 255]));
       gl.uniform1f(wireLoc.uAlpha, wireAlpha);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers.posBuffer);

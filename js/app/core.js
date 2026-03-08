@@ -291,7 +291,10 @@ function mapVerticesToTargetOrder(sourceVertices, targetVertices) {
   const sourceNorm = sourceVertices.map((v) => normalizePoint(v, sourceBounds));
 
   const indexedTarget = targetVertices
-    .map((v, i) => ({ i, v: [v[0], v[1], v[2]] }))
+    .map((v, i) => {
+      const copy = [v[0], v[1], v[2]];
+      return { i, v: copy, n: normalizePoint(copy, targetBounds) };
+    })
     .sort((a, b) => compareMorphVertices(a.v, b.v));
 
   // Coherence weight: higher reduces chaotic point jumps but can over-constrain far-apart regions.
@@ -306,7 +309,7 @@ function mapVerticesToTargetOrder(sourceVertices, targetVertices) {
 
     for (const t of order) {
       const targetIndex = t.i;
-      const nT = normalizePoint(t.v, targetBounds);
+      const nT = t.n;
 
       let bestIndex = -1;
       let bestScore = Infinity;

@@ -3,9 +3,30 @@
 let cpuForegroundDrawnOnMainCanvas = false;
 let gpuSceneDrawnLastFrame = false;
 let foregroundRenderMode = 'unknown';
-const MAX_FPS = 60;
-const MIN_FRAME_INTERVAL_MS = 1000 / MAX_FPS;
+// Keep uncapped by default so telemetry reflects actual workload scaling.
+const MAX_FPS = 0;
+const MIN_FRAME_INTERVAL_MS = MAX_FPS > 0 ? (1000 / MAX_FPS) : 0;
 let lastFrameMs = -1;
+let telemetryLastUiMs = 0;
+const TELEMETRY_UI_INTERVAL_MS = 250;
+let lastPresentedFrameMs = -1;
+let emaFrameMs = 0;
+let emaFpsFrameIntervalMs = 0;
+let emaPhysMs = 0;
+let emaBgMs = 0;
+let emaFgMs = 0;
+const TELEMETRY_ALPHA = 0.2;
+
+function updateTelemetryHud(nowMs) {
+  if (nowMs - telemetryLastUiMs < TELEMETRY_UI_INTERVAL_MS) return;
+  telemetryLastUiMs = nowMs;
+
+  if (statFps) statFps.textContent = emaFpsFrameIntervalMs > 0.0001 ? String(Math.round(1000 / emaFpsFrameIntervalMs)) : '--';
+  if (statFrameMs) statFrameMs.textContent = emaFrameMs > 0 ? emaFrameMs.toFixed(2) : '--';
+  if (statPhysMs) statPhysMs.textContent = emaPhysMs > 0 ? emaPhysMs.toFixed(2) : '--';
+  if (statBgMs) statBgMs.textContent = emaBgMs > 0 ? emaBgMs.toFixed(2) : '--';
+  if (statFgMs) statFgMs.textContent = emaFgMs > 0 ? emaFgMs.toFixed(2) : '--';
+}
 
 function updateRendererHud(mode) {
   if (!statRenderer) return;
@@ -34,13 +55,18 @@ function fallbackToCpuForegroundMode() {
 function frame(nowMs = 0) {
   requestAnimationFrame(frame);
 
-  if (lastFrameMs >= 0 && nowMs - lastFrameMs < MIN_FRAME_INTERVAL_MS) {
+  const frameStartMs = performance.now();
+
+  if (MIN_FRAME_INTERVAL_MS > 0 && lastFrameMs >= 0 && nowMs - lastFrameMs < MIN_FRAME_INTERVAL_MS) {
     return;
   }
+  const frameIntervalMs = lastPresentedFrameMs >= 0 ? (nowMs - lastPresentedFrameMs) : 0;
+  lastPresentedFrameMs = nowMs;
   lastFrameMs = nowMs;
   RENDER_FRAME_ID++;
 
   // Physics
+  const physStartMs = performance.now();
   if (HOLD_ROTATION_FRAMES > 0) {
     HOLD_ROTATION_FRAMES--;
   } else {
@@ -56,9 +82,14 @@ function frame(nowMs = 0) {
       wy *= 0.85;
     }
   }
+  const physMs = performance.now() - physStartMs;
 
   // Draw
+  const bgStartMs = performance.now();
   const backgroundOnSeparateCanvas = drawBackground(nowMs) === true;
+  const bgMs = performance.now() - bgStartMs;
+
+  const fgStartMs = performance.now();
   let drewCpuForeground = false;
   const mode = resolveForegroundRenderMode();
 
@@ -160,6 +191,27 @@ function frame(nowMs = 0) {
       gpuSceneDrawnLastFrame = true;
     }
   }
+
+  const fgMs = performance.now() - fgStartMs;
+  const frameMs = performance.now() - frameStartMs;
+
+  if (emaFrameMs === 0) {
+    emaFrameMs = frameMs;
+    emaFpsFrameIntervalMs = frameIntervalMs > 0 ? frameIntervalMs : (MIN_FRAME_INTERVAL_MS > 0 ? MIN_FRAME_INTERVAL_MS : 16.67);
+    emaPhysMs = physMs;
+    emaBgMs = bgMs;
+    emaFgMs = fgMs;
+  } else {
+    const a = TELEMETRY_ALPHA;
+    emaFrameMs += (frameMs - emaFrameMs) * a;
+    if (frameIntervalMs > 0) {
+      emaFpsFrameIntervalMs += (frameIntervalMs - emaFpsFrameIntervalMs) * a;
+    }
+    emaPhysMs += (physMs - emaPhysMs) * a;
+    emaBgMs += (bgMs - emaBgMs) * a;
+    emaFgMs += (fgMs - emaFgMs) * a;
+  }
+  updateTelemetryHud(nowMs);
 
   cpuForegroundDrawnOnMainCanvas = drewCpuForeground && backgroundOnSeparateCanvas;
 }
