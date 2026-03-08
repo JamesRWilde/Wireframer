@@ -5,6 +5,8 @@
 ───────────────────────────────────────────────────────────────────────── */
 const canvas = document.getElementById('c');
 const ctx    = canvas.getContext('2d');
+const fillLayerCanvas = document.createElement('canvas');
+const fillLayerCtx = fillLayerCanvas.getContext('2d');
 let W = 0, H = 0;
 const BG_PARTICLES = [];
 
@@ -31,6 +33,8 @@ function initBackgroundParticles() {
 function resize() {
   W = canvas.width  = window.innerWidth;
   H = canvas.height = window.innerHeight;
+  fillLayerCanvas.width = W;
+  fillLayerCanvas.height = H;
   initBackgroundParticles();
 }
 resize();
@@ -211,6 +215,8 @@ canvas.addEventListener('touchmove',  e => {
 }, { passive: false });
 
 canvas.addEventListener('wheel', (e) => {
+  // Let Ctrl+wheel keep browser/page zoom behavior.
+  if (e.ctrlKey) return;
   e.preventDefault();
   const factor = Math.exp(-e.deltaY * 0.0012);
   ZOOM = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, ZOOM * factor));
@@ -222,9 +228,184 @@ canvas.addEventListener('wheel', (e) => {
 const select = document.getElementById('obj-select');
 const fillOpacity = document.getElementById('fill-opacity');
 const fillOpacityValue = document.getElementById('fill-opacity-value');
-const wireToggle = document.getElementById('wire-toggle');
+const wireOpacity = document.getElementById('wire-opacity');
+const wireOpacityValue = document.getElementById('wire-opacity-value');
+const presetSwatches = document.getElementById('preset-swatches');
+const customRed = document.getElementById('custom-red');
+const customGreen = document.getElementById('custom-green');
+const customBlue = document.getElementById('custom-blue');
+const customRedValue = document.getElementById('custom-red-value');
+const customGreenValue = document.getElementById('custom-green-value');
+const customBlueValue = document.getElementById('custom-blue-value');
+const customHex = document.getElementById('custom-hex');
+const customSwatch = document.getElementById('custom-swatch');
 let FILL_OPACITY = 0;
-let SHOW_WIREFRAME = true;
+let WIRE_OPACITY = 1;
+
+// Static seam overlap tuning for dense meshes.
+const DENSE_SEAM_EXPAND_PX = 0.56;
+const CUSTOM_RGB_KEY = 'wireframer.customRgb';
+const CUSTOM_RGB_DEFAULT = [95, 188, 230];
+const PRESET_SWATCHES = [
+  { name: 'Ruby', rgb: [235, 64, 52] },
+  { name: 'Orange', rgb: [255, 136, 0] },
+  { name: 'Sun', rgb: [255, 214, 10] },
+  { name: 'Lime', rgb: [120, 220, 20] },
+  { name: 'Emerald', rgb: [10, 196, 122] },
+  { name: 'Cyan', rgb: [0, 190, 255] },
+  { name: 'Blue', rgb: [72, 126, 255] },
+  { name: 'Indigo', rgb: [140, 92, 255] },
+  { name: 'Violet', rgb: [220, 78, 255] },
+  { name: 'Rose', rgb: [255, 86, 170] },
+  { name: 'Teal', rgb: [0, 172, 154] },
+  { name: 'Mid Gray', rgb: [128, 128, 128] },
+  { name: 'Coral', rgb: [255, 108, 78] },
+  { name: 'Mint', rgb: [94, 236, 170] },
+];
+const SHUFFLE_SWATCH_NAME = 'Shuffle';
+const PRESET_SWATCH_BUTTONS = [];
+
+const PALETTES = {
+  cyan: {
+    bg: [5, 8, 16],
+    particle: [105, 205, 255],
+    wireA: [20, 150, 210],
+    wireB: [50, 185, 235],
+    wireNear: [65, 140, 190],
+    wireFar: [120, 230, 255],
+    shadeDark: [18, 72, 102],
+    shadeBright: [66, 192, 240],
+    morph: [108, 214, 255],
+    uiVars: {
+      '--bg-solid': 'rgb(5, 8, 16)',
+      '--ui-title': 'rgba(130, 220, 255, 0.85)',
+      '--ui-subtitle': 'rgba(80, 160, 200, 0.45)',
+      '--ui-control-border': 'rgba(80, 160, 200, 0.35)',
+      '--ui-control-fg': 'rgba(110, 210, 255, 0.80)',
+      '--ui-control-hover-border': 'rgba(100, 200, 255, 0.60)',
+      '--ui-control-hover-fg': 'rgba(150, 235, 255, 0.95)',
+      '--ui-control-bg': 'rgba(5, 10, 20, 0.88)',
+      '--ui-control-option-bg': 'rgb(7, 12, 24)',
+      '--ui-label': 'rgba(105, 198, 236, 0.78)',
+      '--ui-value': 'rgba(145, 224, 255, 0.82)',
+      '--ui-switch-bg': 'rgba(36, 78, 106, 0.85)',
+      '--ui-switch-border': 'rgba(86, 170, 206, 0.45)',
+      '--ui-switch-on-bg': 'rgba(52, 146, 188, 0.86)',
+      '--ui-switch-on-border': 'rgba(118, 214, 247, 0.72)',
+      '--ui-switch-knob': 'rgba(178, 236, 255, 0.90)',
+      '--ui-switch-glow': 'rgba(109, 204, 245, 0.55)',
+      '--ui-stats': 'rgba(70, 150, 190, 0.35)',
+      '--ui-object-label': 'rgba(110, 210, 255, 0.55)',
+      '--ui-hint': 'rgba(70, 140, 180, 0.30)',
+      '--ui-accent': 'rgb(95, 188, 230)',
+    },
+  },
+  emerald: {
+    bg: [5, 14, 10],
+    particle: [106, 255, 190],
+    wireA: [16, 170, 118],
+    wireB: [48, 214, 158],
+    wireNear: [44, 138, 100],
+    wireFar: [138, 252, 196],
+    shadeDark: [14, 92, 64],
+    shadeBright: [78, 225, 172],
+    morph: [126, 255, 204],
+    uiVars: {
+      '--bg-solid': 'rgb(5, 14, 10)',
+      '--ui-title': 'rgba(142, 255, 216, 0.86)',
+      '--ui-subtitle': 'rgba(86, 194, 150, 0.48)',
+      '--ui-control-border': 'rgba(88, 186, 146, 0.38)',
+      '--ui-control-fg': 'rgba(142, 244, 204, 0.86)',
+      '--ui-control-hover-border': 'rgba(122, 232, 185, 0.66)',
+      '--ui-control-hover-fg': 'rgba(196, 255, 232, 0.96)',
+      '--ui-control-bg': 'rgba(6, 18, 14, 0.9)',
+      '--ui-control-option-bg': 'rgb(8, 22, 17)',
+      '--ui-label': 'rgba(126, 230, 192, 0.8)',
+      '--ui-value': 'rgba(186, 255, 230, 0.85)',
+      '--ui-switch-bg': 'rgba(26, 98, 74, 0.86)',
+      '--ui-switch-border': 'rgba(92, 194, 150, 0.5)',
+      '--ui-switch-on-bg': 'rgba(44, 166, 122, 0.9)',
+      '--ui-switch-on-border': 'rgba(134, 244, 204, 0.76)',
+      '--ui-switch-knob': 'rgba(202, 255, 236, 0.94)',
+      '--ui-switch-glow': 'rgba(134, 244, 204, 0.56)',
+      '--ui-stats': 'rgba(86, 184, 148, 0.36)',
+      '--ui-object-label': 'rgba(142, 244, 204, 0.62)',
+      '--ui-hint': 'rgba(78, 164, 130, 0.34)',
+      '--ui-accent': 'rgb(64, 188, 140)',
+    },
+  },
+  amber: {
+    bg: [18, 11, 4],
+    particle: [255, 198, 108],
+    wireA: [214, 132, 34],
+    wireB: [244, 176, 76],
+    wireNear: [170, 112, 44],
+    wireFar: [255, 216, 136],
+    shadeDark: [112, 74, 24],
+    shadeBright: [248, 188, 88],
+    morph: [255, 212, 120],
+    uiVars: {
+      '--bg-solid': 'rgb(18, 11, 4)',
+      '--ui-title': 'rgba(255, 214, 148, 0.88)',
+      '--ui-subtitle': 'rgba(210, 150, 80, 0.5)',
+      '--ui-control-border': 'rgba(198, 142, 72, 0.42)',
+      '--ui-control-fg': 'rgba(255, 208, 136, 0.86)',
+      '--ui-control-hover-border': 'rgba(246, 188, 110, 0.68)',
+      '--ui-control-hover-fg': 'rgba(255, 234, 178, 0.98)',
+      '--ui-control-bg': 'rgba(24, 16, 8, 0.9)',
+      '--ui-control-option-bg': 'rgb(28, 18, 8)',
+      '--ui-label': 'rgba(236, 182, 112, 0.82)',
+      '--ui-value': 'rgba(255, 226, 170, 0.88)',
+      '--ui-switch-bg': 'rgba(118, 82, 32, 0.86)',
+      '--ui-switch-border': 'rgba(214, 160, 88, 0.56)',
+      '--ui-switch-on-bg': 'rgba(184, 128, 44, 0.9)',
+      '--ui-switch-on-border': 'rgba(255, 216, 136, 0.76)',
+      '--ui-switch-knob': 'rgba(255, 238, 194, 0.95)',
+      '--ui-switch-glow': 'rgba(255, 204, 128, 0.58)',
+      '--ui-stats': 'rgba(194, 142, 76, 0.4)',
+      '--ui-object-label': 'rgba(255, 206, 132, 0.64)',
+      '--ui-hint': 'rgba(176, 130, 70, 0.35)',
+      '--ui-accent': 'rgb(222, 154, 64)',
+    },
+  },
+  magenta: {
+    bg: [15, 6, 18],
+    particle: [232, 148, 255],
+    wireA: [164, 82, 224],
+    wireB: [212, 122, 248],
+    wireNear: [122, 74, 178],
+    wireFar: [244, 188, 255],
+    shadeDark: [84, 42, 132],
+    shadeBright: [220, 142, 255],
+    morph: [238, 170, 255],
+    uiVars: {
+      '--bg-solid': 'rgb(15, 6, 18)',
+      '--ui-title': 'rgba(236, 178, 255, 0.88)',
+      '--ui-subtitle': 'rgba(170, 110, 208, 0.5)',
+      '--ui-control-border': 'rgba(166, 104, 206, 0.42)',
+      '--ui-control-fg': 'rgba(222, 160, 248, 0.86)',
+      '--ui-control-hover-border': 'rgba(208, 148, 238, 0.68)',
+      '--ui-control-hover-fg': 'rgba(242, 206, 255, 0.98)',
+      '--ui-control-bg': 'rgba(20, 10, 26, 0.9)',
+      '--ui-control-option-bg': 'rgb(24, 12, 30)',
+      '--ui-label': 'rgba(206, 148, 234, 0.82)',
+      '--ui-value': 'rgba(236, 196, 255, 0.88)',
+      '--ui-switch-bg': 'rgba(92, 52, 132, 0.86)',
+      '--ui-switch-border': 'rgba(178, 120, 218, 0.56)',
+      '--ui-switch-on-bg': 'rgba(134, 76, 186, 0.9)',
+      '--ui-switch-on-border': 'rgba(224, 168, 248, 0.76)',
+      '--ui-switch-knob': 'rgba(246, 220, 255, 0.95)',
+      '--ui-switch-glow': 'rgba(208, 150, 242, 0.58)',
+      '--ui-stats': 'rgba(160, 106, 198, 0.4)',
+      '--ui-object-label': 'rgba(218, 154, 246, 0.64)',
+      '--ui-hint': 'rgba(150, 100, 184, 0.35)',
+      '--ui-accent': 'rgb(176, 108, 216)',
+    },
+  },
+};
+
+let THEME = PALETTES.cyan;
+let CUSTOM_RGB = readCustomRgb();
 
 const LIGHT_DIR = (() => {
   const x = -0.38, y = 0.74, z = -0.56;
@@ -236,7 +417,296 @@ const VIEW_DIR = [0, 0, -1];
 function syncRenderToggles() {
   FILL_OPACITY = Number(fillOpacity.value) / 100;
   fillOpacityValue.textContent = `${Math.round(FILL_OPACITY * 100)}%`;
-  SHOW_WIREFRAME = !!wireToggle.checked;
+  WIRE_OPACITY = Number(wireOpacity.value) / 100;
+  wireOpacityValue.textContent = `${Math.round(WIRE_OPACITY * 100)}%`;
+}
+
+function clampByte(value) {
+  return Math.max(0, Math.min(255, Math.round(Number(value) || 0)));
+}
+
+function mixRgb(a, b, t) {
+  return [
+    Math.round(a[0] + (b[0] - a[0]) * t),
+    Math.round(a[1] + (b[1] - a[1]) * t),
+    Math.round(a[2] + (b[2] - a[2]) * t),
+  ];
+}
+
+function toRgbCss(rgb) {
+  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+}
+
+function toRgbaCss(rgb, alpha) {
+  return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha.toFixed(3)})`;
+}
+
+function toHex(rgb) {
+  const hex = rgb.map((v) => clampByte(v).toString(16).padStart(2, '0')).join('');
+  return `#${hex.toUpperCase()}`;
+}
+
+function hsvToRgb(h, s, v) {
+  const i = Math.floor(h * 6);
+  const f = h * 6 - i;
+  const p = v * (1 - s);
+  const q = v * (1 - f * s);
+  const t = v * (1 - (1 - f) * s);
+
+  let r = 0;
+  let g = 0;
+  let b = 0;
+
+  switch (i % 6) {
+    case 0: r = v; g = t; b = p; break;
+    case 1: r = q; g = v; b = p; break;
+    case 2: r = p; g = v; b = t; break;
+    case 3: r = p; g = q; b = v; break;
+    case 4: r = t; g = p; b = v; break;
+    default: r = v; g = p; b = q; break;
+  }
+
+  return [
+    Math.round(r * 255),
+    Math.round(g * 255),
+    Math.round(b * 255),
+  ];
+}
+
+function randomPresetRgb() {
+  for (let i = 0; i < 18; i++) {
+    const hue = Math.random();
+    const saturation = 0.68 + Math.random() * 0.28;
+    const value = 0.74 + Math.random() * 0.23;
+    const rgb = hsvToRgb(hue, saturation, value);
+
+    const max = Math.max(rgb[0], rgb[1], rgb[2]);
+    const min = Math.min(rgb[0], rgb[1], rgb[2]);
+    const spread = max - min;
+    const lum = relativeLuminance(rgb);
+
+    // Keep random picks vivid and clearly visible on black.
+    if (spread >= 90 && max >= 150 && lum >= 0.17) return rgb;
+  }
+
+  return hsvToRgb(Math.random(), 0.82, 0.86);
+}
+
+function rgbEquals(a, b) {
+  return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
+}
+
+function linearChannel(v) {
+  const n = v / 255;
+  return n <= 0.04045 ? n / 12.92 : Math.pow((n + 0.055) / 1.055, 2.4);
+}
+
+function relativeLuminance(rgb) {
+  const r = linearChannel(rgb[0]);
+  const g = linearChannel(rgb[1]);
+  const b = linearChannel(rgb[2]);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrastRatio(a, b) {
+  const la = relativeLuminance(a);
+  const lb = relativeLuminance(b);
+  const light = Math.max(la, lb);
+  const dark = Math.min(la, lb);
+  return (light + 0.05) / (dark + 0.05);
+}
+
+function enforceContrast(fg, bg, minRatio) {
+  const current = contrastRatio(fg, bg);
+  if (current >= minRatio) return fg;
+
+  let best = fg;
+  let bestRatio = current;
+
+  for (let i = 1; i <= 24; i++) {
+    const t = i / 24;
+    const towardWhite = mixRgb(fg, [255, 255, 255], t);
+    const cw = contrastRatio(towardWhite, bg);
+    if (cw > bestRatio) {
+      bestRatio = cw;
+      best = towardWhite;
+    }
+    if (cw >= minRatio) return towardWhite;
+
+    const towardBlack = mixRgb(fg, [0, 0, 0], t);
+    const cb = contrastRatio(towardBlack, bg);
+    if (cb > bestRatio) {
+      bestRatio = cb;
+      best = towardBlack;
+    }
+    if (cb >= minRatio) return towardBlack;
+  }
+
+  return best;
+}
+
+function buildCustomTheme(rgbInput) {
+  const base = [clampByte(rgbInput[0]), clampByte(rgbInput[1]), clampByte(rgbInput[2])];
+  const bg = mixRgb(base, [0, 0, 0], 0.93);
+  const uiBg = mixRgb(base, [0, 0, 0], 0.9);
+  const optionBg = mixRgb(base, [0, 0, 0], 0.88);
+
+  const title = enforceContrast(mixRgb(base, [255, 255, 255], 0.54), bg, 5.5);
+  const subtitle = enforceContrast(mixRgb(base, [255, 255, 255], 0.16), bg, 2.3);
+  const controlFg = enforceContrast(mixRgb(base, [255, 255, 255], 0.32), bg, 4.2);
+  const controlHoverFg = enforceContrast(mixRgb(base, [255, 255, 255], 0.58), bg, 5.5);
+  const label = enforceContrast(mixRgb(base, [255, 255, 255], 0.26), bg, 3.6);
+  const value = enforceContrast(mixRgb(base, [255, 255, 255], 0.46), bg, 4.8);
+
+  const border = mixRgb(base, [255, 255, 255], 0.12);
+  const hoverBorder = mixRgb(base, [255, 255, 255], 0.28);
+  const switchBg = mixRgb(base, [0, 0, 0], 0.58);
+  const switchBorder = mixRgb(base, [255, 255, 255], 0.22);
+  const switchOnBg = mixRgb(base, [255, 255, 255], 0.06);
+  const switchOnBorder = mixRgb(base, [255, 255, 255], 0.4);
+  const switchKnob = enforceContrast(mixRgb(base, [255, 255, 255], 0.78), switchOnBg, 3.0);
+
+  return {
+    bg,
+    particle: mixRgb(base, [255, 255, 255], 0.34),
+    wireA: mixRgb(base, [0, 0, 0], 0.2),
+    wireB: mixRgb(base, [255, 255, 255], 0.08),
+    wireNear: mixRgb(base, [0, 0, 0], 0.42),
+    wireFar: mixRgb(base, [255, 255, 255], 0.46),
+    shadeDark: mixRgb(base, [0, 0, 0], 0.5),
+    shadeBright: mixRgb(base, [255, 255, 255], 0.3),
+    morph: mixRgb(base, [255, 255, 255], 0.36),
+    uiVars: {
+      '--bg-solid': toRgbCss(bg),
+      '--ui-title': toRgbaCss(title, 0.88),
+      '--ui-subtitle': toRgbaCss(subtitle, 0.5),
+      '--ui-control-border': toRgbaCss(border, 0.42),
+      '--ui-control-fg': toRgbaCss(controlFg, 0.86),
+      '--ui-control-hover-border': toRgbaCss(hoverBorder, 0.7),
+      '--ui-control-hover-fg': toRgbaCss(controlHoverFg, 0.98),
+      '--ui-control-bg': toRgbaCss(uiBg, 0.9),
+      '--ui-control-option-bg': toRgbCss(optionBg),
+      '--ui-label': toRgbaCss(label, 0.82),
+      '--ui-value': toRgbaCss(value, 0.9),
+      '--ui-switch-bg': toRgbaCss(switchBg, 0.86),
+      '--ui-switch-border': toRgbaCss(switchBorder, 0.56),
+      '--ui-switch-on-bg': toRgbaCss(switchOnBg, 0.9),
+      '--ui-switch-on-border': toRgbaCss(switchOnBorder, 0.78),
+      '--ui-switch-knob': toRgbaCss(switchKnob, 0.95),
+      '--ui-switch-glow': toRgbaCss(mixRgb(base, [255, 255, 255], 0.46), 0.58),
+      '--ui-stats': toRgbaCss(mixRgb(base, [255, 255, 255], 0.18), 0.42),
+      '--ui-object-label': toRgbaCss(value, 0.64),
+      '--ui-hint': toRgbaCss(label, 0.36),
+      '--ui-accent': toRgbCss(base),
+    },
+  };
+}
+
+function readCustomRgb() {
+  try {
+    const saved = localStorage.getItem(CUSTOM_RGB_KEY);
+    if (!saved) return CUSTOM_RGB_DEFAULT.slice();
+    const parsed = JSON.parse(saved);
+    if (!Array.isArray(parsed) || parsed.length !== 3) return CUSTOM_RGB_DEFAULT.slice();
+    return [clampByte(parsed[0]), clampByte(parsed[1]), clampByte(parsed[2])];
+  } catch {
+    return CUSTOM_RGB_DEFAULT.slice();
+  }
+}
+
+function persistCustomRgb() {
+  try {
+    localStorage.setItem(CUSTOM_RGB_KEY, JSON.stringify(CUSTOM_RGB));
+  } catch {
+    // Ignore localStorage failures (private mode/quota).
+  }
+}
+
+function updateCustomColorUi() {
+  if (!customRed || !customGreen || !customBlue) return;
+
+  const [r, g, b] = CUSTOM_RGB;
+  customRed.value = String(r);
+  customGreen.value = String(g);
+  customBlue.value = String(b);
+
+  if (customRedValue) customRedValue.textContent = String(r);
+  if (customGreenValue) customGreenValue.textContent = String(g);
+  if (customBlueValue) customBlueValue.textContent = String(b);
+  if (customHex) customHex.textContent = toHex(CUSTOM_RGB);
+  if (customSwatch) customSwatch.style.background = toRgbCss(CUSTOM_RGB);
+
+  for (const entry of PRESET_SWATCH_BUTTONS) {
+    entry.button.classList.toggle('is-active', rgbEquals(entry.rgb, CUSTOM_RGB));
+  }
+}
+
+function getCustomRgbFromInputs() {
+  return [
+    clampByte(customRed ? customRed.value : CUSTOM_RGB[0]),
+    clampByte(customGreen ? customGreen.value : CUSTOM_RGB[1]),
+    clampByte(customBlue ? customBlue.value : CUSTOM_RGB[2]),
+  ];
+}
+
+function setCustomRgb(rgb, options = {}) {
+  const { persist = true, apply = true } = options;
+  CUSTOM_RGB = [clampByte(rgb[0]), clampByte(rgb[1]), clampByte(rgb[2])];
+  updateCustomColorUi();
+  if (persist) persistCustomRgb();
+  if (apply) applyPalette();
+}
+
+function initPresetSwatches() {
+  if (!presetSwatches) return;
+
+  presetSwatches.innerHTML = '';
+  PRESET_SWATCH_BUTTONS.length = 0;
+
+  for (const preset of PRESET_SWATCHES) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'preset-swatch';
+    button.title = `${preset.name} (${toHex(preset.rgb)})`;
+    button.setAttribute('aria-label', `${preset.name} preset ${toHex(preset.rgb)}`);
+    button.style.setProperty('--swatch-color', toRgbCss(preset.rgb));
+    button.addEventListener('click', () => {
+      setCustomRgb(preset.rgb, { persist: true, apply: true });
+    });
+
+    presetSwatches.appendChild(button);
+    PRESET_SWATCH_BUTTONS.push({ button, rgb: preset.rgb });
+  }
+
+  const shuffleButton = document.createElement('button');
+  shuffleButton.type = 'button';
+  shuffleButton.className = 'preset-swatch is-shuffle';
+  shuffleButton.title = `${SHUFFLE_SWATCH_NAME} random preset`;
+  shuffleButton.setAttribute('aria-label', `${SHUFFLE_SWATCH_NAME} random preset`);
+  shuffleButton.addEventListener('click', () => {
+    setCustomRgb(randomPresetRgb(), { persist: true, apply: true });
+  });
+  presetSwatches.appendChild(shuffleButton);
+}
+
+function applyPalette() {
+  const palette = buildCustomTheme(CUSTOM_RGB);
+  THEME = palette;
+  for (const [k, v] of Object.entries(palette.uiVars)) {
+    document.documentElement.style.setProperty(k, v);
+  }
+}
+
+function rgbA(rgb, alpha) {
+  return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha.toFixed(3)})`;
+}
+
+function lerpColor(a, b, t) {
+  return [
+    Math.round(a[0] + (b[0] - a[0]) * t),
+    Math.round(a[1] + (b[1] - a[1]) * t),
+    Math.round(a[2] + (b[2] - a[2]) * t),
+  ];
 }
 
 function initObjectSelector() {
@@ -252,8 +722,31 @@ function initObjectSelector() {
   select.onchange = () => startMorphToObject(OBJECTS[+select.value]);
   fillOpacity.oninput = syncRenderToggles;
   fillOpacity.onchange = syncRenderToggles;
-  wireToggle.oninput = syncRenderToggles;
-  wireToggle.onchange = syncRenderToggles;
+  wireOpacity.oninput = syncRenderToggles;
+  wireOpacity.onchange = syncRenderToggles;
+  initPresetSwatches();
+
+  const onCustomInput = () => {
+    setCustomRgb(getCustomRgbFromInputs(), {
+      persist: true,
+      apply: true,
+    });
+  };
+
+  if (customRed) {
+    customRed.oninput = onCustomInput;
+    customRed.onchange = onCustomInput;
+  }
+  if (customGreen) {
+    customGreen.oninput = onCustomInput;
+    customGreen.onchange = onCustomInput;
+  }
+  if (customBlue) {
+    customBlue.oninput = onCustomInput;
+    customBlue.onchange = onCustomInput;
+  }
+
+  setCustomRgb(CUSTOM_RGB, { persist: false, apply: true });
   syncRenderToggles();
 
   if (!OBJECTS.length) {
@@ -279,7 +772,8 @@ const buckets = Array.from({ length: DEPTH_BUCKETS }, () => []);
 function drawBackground(nowMs) {
   const t = nowMs * 0.001;
 
-  ctx.fillStyle = '#050810';
+  // Keep the scene floor neutral black so only particles/geometry carry color.
+  ctx.fillStyle = 'rgb(0, 0, 0)';
   ctx.fillRect(0, 0, W, H);
 
   // Particle-based ambient motion is less prone to HDR gradient banding.
@@ -300,22 +794,16 @@ function drawBackground(nowMs) {
 
     // Small soft dots read better than 1px squares, especially on HDR/high-density panels.
     ctx.beginPath();
-    ctx.fillStyle = `rgba(105, 205, 255, ${alpha.toFixed(3)})`;
+    ctx.fillStyle = rgbA(THEME.particle, alpha);
     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.restore();
-
-  // Keep a very light vignette for depth, but avoid heavy gradients.
-  const g = ctx.createRadialGradient(W*.5, H*.5, 0, W*.5, H*.5, Math.max(W,H)*.72);
-  g.addColorStop(0, 'rgba(10, 22, 48, 0.0)');
-  g.addColorStop(1, 'rgba(0,   2, 12, 0.34)');
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, W, H);
 }
 
 function drawWireframeModel(model, alphaScale = 1) {
   if (!model || !model.V.length || !model.E.length || alphaScale <= 0.001) return;
+  const wireStrength = Math.max(0, Math.min(1, alphaScale));
 
   const T = model.V.map(v => mvec(R, v));
   const P2 = T.map(p => project(p));
@@ -330,7 +818,7 @@ function drawWireframeModel(model, alphaScale = 1) {
 
   ctx.save();
   ctx.lineWidth = 4.5;
-  ctx.strokeStyle = `rgba(20, 150, 210, ${(0.05 * alphaScale).toFixed(3)})`;
+  ctx.strokeStyle = rgbA(THEME.wireA, 0.11 * wireStrength);
   ctx.beginPath();
   for (const [a, b] of model.E) {
     ctx.moveTo(P2[a][0], P2[a][1]);
@@ -339,7 +827,7 @@ function drawWireframeModel(model, alphaScale = 1) {
   ctx.stroke();
 
   ctx.lineWidth = 1.8;
-  ctx.strokeStyle = `rgba(50, 185, 235, ${(0.075 * alphaScale).toFixed(3)})`;
+  ctx.strokeStyle = rgbA(THEME.wireB, 0.17 * wireStrength);
   ctx.beginPath();
   for (const [a, b] of model.E) {
     ctx.moveTo(P2[a][0], P2[a][1]);
@@ -348,14 +836,15 @@ function drawWireframeModel(model, alphaScale = 1) {
   ctx.stroke();
   ctx.restore();
 
-  ctx.lineWidth = 0.75;
+  ctx.lineWidth = 0.82 + 0.30 * wireStrength;
   for (let i = 0; i < DEPTH_BUCKETS; i++) {
     if (!buckets[i].length) continue;
     const t = (i + 0.5) / DEPTH_BUCKETS;
-    const alp = (Math.pow(t, 1.6) * alphaScale).toFixed(3);
-    const g = Math.floor(140 + t * 90);
-    const b = Math.floor(190 + t * 65);
-    ctx.strokeStyle = `rgba(65, ${g}, ${b}, ${alp})`;
+    const edgeAlpha = (0.06 + Math.pow(t, 1.35) * 0.94) * wireStrength;
+    const alp = edgeAlpha.toFixed(3);
+    // Bias toward brighter depth tones so wireframe remains readable on black.
+    const c = lerpColor(THEME.wireNear, THEME.wireFar, 0.2 + t * 0.8);
+    ctx.strokeStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alp})`;
     ctx.beginPath();
     for (const [a, bi] of buckets[i]) {
       ctx.moveTo(P2[a][0], P2[a][1]);
@@ -386,6 +875,77 @@ function getModelTriangles(model) {
   return tris;
 }
 
+function getModelVertexNormals(model, triFaces) {
+  if (model._vertexNormals) return model._vertexNormals;
+
+  const V = model.V;
+  const normals = Array.from({ length: V.length }, () => [0, 0, 0]);
+
+  let cx = 0;
+  let cy = 0;
+  let cz = 0;
+  for (const v of V) {
+    cx += v[0];
+    cy += v[1];
+    cz += v[2];
+  }
+  const invCount = V.length ? 1 / V.length : 1;
+  cx *= invCount;
+  cy *= invCount;
+  cz *= invCount;
+
+  for (const tri of triFaces) {
+    const ia = tri[0], ib = tri[1], ic = tri[2];
+    const a = V[ia], b = V[ib], c = V[ic];
+
+    const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+    const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+
+    let nx = uy * vz - uz * vy;
+    let ny = uz * vx - ux * vz;
+    let nz = ux * vy - uy * vx;
+    const nl = Math.hypot(nx, ny, nz);
+    if (nl < 1e-9) continue;
+
+    // Orient normals outward from object center to avoid winding inconsistencies.
+    const fx = (a[0] + b[0] + c[0]) / 3 - cx;
+    const fy = (a[1] + b[1] + c[1]) / 3 - cy;
+    const fz = (a[2] + b[2] + c[2]) / 3 - cz;
+    if (nx * fx + ny * fy + nz * fz < 0) {
+      nx = -nx;
+      ny = -ny;
+      nz = -nz;
+    }
+
+    normals[ia][0] += nx; normals[ia][1] += ny; normals[ia][2] += nz;
+    normals[ib][0] += nx; normals[ib][1] += ny; normals[ib][2] += nz;
+    normals[ic][0] += nx; normals[ic][1] += ny; normals[ic][2] += nz;
+  }
+
+  for (let i = 0; i < normals.length; i++) {
+    let nx = normals[i][0];
+    let ny = normals[i][1];
+    let nz = normals[i][2];
+    let nl = Math.hypot(nx, ny, nz);
+
+    if (nl < 1e-9) {
+      nx = V[i][0] - cx;
+      ny = V[i][1] - cy;
+      nz = V[i][2] - cz;
+      nl = Math.hypot(nx, ny, nz);
+      if (nl < 1e-9) {
+        normals[i] = [0, 1, 0];
+        continue;
+      }
+    }
+
+    normals[i] = [nx / nl, ny / nl, nz / nl];
+  }
+
+  model._vertexNormals = normals;
+  return normals;
+}
+
 function drawSolidFillModel(model, alphaScale = 1) {
   const opacity = FILL_OPACITY * alphaScale;
   if (!model || !model.V.length || opacity <= 0.001) return;
@@ -395,12 +955,19 @@ function drawSolidFillModel(model, alphaScale = 1) {
 
   if (!model._triFaces) model._triFaces = getModelTriangles(model);
 
-  ctx.save();
   const triFaces = model._triFaces;
-  if (!triFaces.length) {
-    ctx.restore();
-    return;
-  }
+  if (!triFaces.length) return;
+
+  // Draw fill to an offscreen layer at full triangle opacity, then composite once.
+  // This prevents internal seam lines from accumulated per-triangle alpha blending.
+  fillLayerCtx.setTransform(1, 0, 0, 1, 0, 0);
+  fillLayerCtx.clearRect(0, 0, W, H);
+
+  // Dense meshes (revolved/tubed forms) look better with topology-based smooth normals.
+  const useSmoothShading = triFaces.length > 80;
+  const vertexNormals = useSmoothShading ? getModelVertexNormals(model, triFaces) : null;
+
+  const seamExpandPx = useSmoothShading ? DENSE_SEAM_EXPAND_PX : 0;
 
   const triOrder = triFaces
     .map((tri) => ({
@@ -409,7 +976,7 @@ function drawSolidFillModel(model, alphaScale = 1) {
     }))
     .sort((a, b) => b.z - a.z);
 
-  ctx.globalCompositeOperation = 'source-over';
+  fillLayerCtx.globalCompositeOperation = 'source-over';
   for (const item of triOrder) {
     const [a, b, c] = item.tri;
     const ax = P2[a][0], ay = P2[a][1];
@@ -419,23 +986,39 @@ function drawSolidFillModel(model, alphaScale = 1) {
     const area2 = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
     if (Math.abs(area2) < 0.2) continue;
 
-    const depth = Math.max(0, Math.min(1, (Z_HALF - item.z) / (Z_HALF * 2)));
     const v0 = T[a], v1 = T[b], v2 = T[c];
     const ux = v1[0] - v0[0], uy = v1[1] - v0[1], uz = v1[2] - v0[2];
     const vx = v2[0] - v0[0], vy = v2[1] - v0[1], vz = v2[2] - v0[2];
 
-    let nx = uy * vz - uz * vy;
-    let ny = uz * vx - ux * vz;
-    let nz = ux * vy - uy * vx;
-    const nl = Math.hypot(nx, ny, nz);
-    if (nl < 1e-6) continue;
-    nx /= nl;
-    ny /= nl;
-    nz /= nl;
+    let nx;
+    let ny;
+    let nz;
 
-    // Use absolute diffuse so inconsistent face winding does not produce broken lighting.
+    if (useSmoothShading) {
+      const na = vertexNormals[a];
+      const nb = vertexNormals[b];
+      const nc = vertexNormals[c];
+      nx = na[0] + nb[0] + nc[0];
+      ny = na[1] + nb[1] + nc[1];
+      nz = na[2] + nb[2] + nc[2];
+      const nl = Math.hypot(nx, ny, nz);
+      if (nl < 1e-6) continue;
+      nx /= nl;
+      ny /= nl;
+      nz /= nl;
+    } else {
+      nx = uy * vz - uz * vy;
+      ny = uz * vx - ux * vz;
+      nz = ux * vy - uy * vx;
+      const nl = Math.hypot(nx, ny, nz);
+      if (nl < 1e-6) continue;
+      nx /= nl;
+      ny /= nl;
+      nz /= nl;
+    }
+
     const ndotlRaw = nx * LIGHT_DIR[0] + ny * LIGHT_DIR[1] + nz * LIGHT_DIR[2];
-    const ndotl = Math.max(0, Math.abs(ndotlRaw));
+    const ndotl = Math.max(0, useSmoothShading ? ndotlRaw : Math.abs(ndotlRaw));
 
     // Blinn-Phong style highlight with fixed camera direction.
     const hx = LIGHT_DIR[0] + VIEW_DIR[0];
@@ -443,27 +1026,71 @@ function drawSolidFillModel(model, alphaScale = 1) {
     const hz = LIGHT_DIR[2] + VIEW_DIR[2];
     const hl = Math.hypot(hx, hy, hz);
     const hnx = hx / hl, hny = hy / hl, hnz = hz / hl;
-    const spec = Math.pow(Math.max(0, Math.abs(nx * hnx + ny * hny + nz * hnz)), 18);
+    const nhRaw = nx * hnx + ny * hny + nz * hnz;
+    const nh = Math.max(0, useSmoothShading ? nhRaw : Math.abs(nhRaw));
+    const spec = Math.pow(nh, useSmoothShading ? 24 : 18);
 
     const ambient = 0.26;
     const diffuse = 0.72 * ndotl;
-    const specular = 0.30 * spec;
+    const specular = useSmoothShading ? 0.18 * spec : 0.30 * spec;
     const lit = Math.max(0, Math.min(1, ambient + diffuse + specular));
 
-    const r = Math.round(18 + 42 * lit);
-    const g = Math.round(72 + 120 * lit);
-    const bcol = Math.round(102 + 138 * lit);
-    const alpha = opacity;
+    const shadeColor = lerpColor(THEME.shadeDark, THEME.shadeBright, lit);
+    let axd = ax;
+    let ayd = ay;
+    let bxd = bx;
+    let byd = by;
+    let cxd = cx;
+    let cyd = cy;
 
-    ctx.beginPath();
-    ctx.moveTo(ax, ay);
-    ctx.lineTo(bx, by);
-    ctx.lineTo(cx, cy);
-    ctx.closePath();
-    ctx.fillStyle = `rgba(${r}, ${g}, ${bcol}, ${alpha.toFixed(3)})`;
-    ctx.fill();
+    if (seamExpandPx > 0) {
+      const mx = (ax + bx + cx) / 3;
+      const my = (ay + by + cy) / 3;
+
+      let dax = ax - mx;
+      let day = ay - my;
+      let dal = Math.hypot(dax, day);
+      if (dal > 1e-6) {
+        dax /= dal;
+        day /= dal;
+        axd = ax + dax * seamExpandPx;
+        ayd = ay + day * seamExpandPx;
+      }
+
+      let dbx = bx - mx;
+      let dby = by - my;
+      let dbl = Math.hypot(dbx, dby);
+      if (dbl > 1e-6) {
+        dbx /= dbl;
+        dby /= dbl;
+        bxd = bx + dbx * seamExpandPx;
+        byd = by + dby * seamExpandPx;
+      }
+
+      let dcx = cx - mx;
+      let dcy = cy - my;
+      let dcl = Math.hypot(dcx, dcy);
+      if (dcl > 1e-6) {
+        dcx /= dcl;
+        dcy /= dcl;
+        cxd = cx + dcx * seamExpandPx;
+        cyd = cy + dcy * seamExpandPx;
+      }
+    }
+
+    fillLayerCtx.beginPath();
+    fillLayerCtx.moveTo(axd, ayd);
+    fillLayerCtx.lineTo(bxd, byd);
+    fillLayerCtx.lineTo(cxd, cyd);
+    fillLayerCtx.closePath();
+    fillLayerCtx.fillStyle = `rgb(${shadeColor[0]}, ${shadeColor[1]}, ${shadeColor[2]})`;
+    fillLayerCtx.fill();
   }
 
+  ctx.save();
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = opacity;
+  ctx.drawImage(fillLayerCanvas, 0, 0);
   ctx.restore();
 }
 
@@ -481,7 +1108,7 @@ function drawMorphPoints(nowMs, tRaw, t) {
   // Movement guides: source → target paths make the morph direction obvious.
   const linkAlpha = (0.08 + (1 - Math.abs(0.5 - t) * 2) * 0.08).toFixed(3);
   ctx.lineWidth = 0.65;
-  ctx.strokeStyle = `rgba(95, 190, 245, ${linkAlpha})`;
+  ctx.strokeStyle = rgbA(THEME.morph, Number(linkAlpha));
   ctx.beginPath();
   for (let i = 0; i < MORPH.sampleCount; i += 2) {
     const pFrom = project(mvec(R, MORPH.fromPts[i]));
@@ -507,7 +1134,7 @@ function drawMorphPoints(nowMs, tRaw, t) {
     const pPrev = project(mvec(R, vPrev));
 
     ctx.lineWidth = 1.0;
-    ctx.strokeStyle = 'rgba(118, 224, 255, 0.22)';
+    ctx.strokeStyle = rgbA(THEME.morph, 0.22);
     ctx.beginPath();
     ctx.moveTo(pPrev[0], pPrev[1]);
     ctx.lineTo(p[0], p[1]);
@@ -516,7 +1143,7 @@ function drawMorphPoints(nowMs, tRaw, t) {
     const r = 1.0 + t * 0.55;
     const a = 0.13 + Math.sin((p[0] + p[1] + nowMs * 0.03) * 0.01) * 0.04;
     ctx.beginPath();
-    ctx.fillStyle = `rgba(108, 214, 255, ${Math.max(0.06, a).toFixed(3)})`;
+    ctx.fillStyle = rgbA(THEME.morph, Math.max(0.06, a));
     ctx.arc(p[0], p[1], r, 0, Math.PI * 2);
     ctx.fill();
   }
@@ -554,15 +1181,15 @@ function frame(nowMs = 0) {
     const t = easeInOutCubic(tRaw);
     drawSolidFillModel(MORPH.fromModel, (1 - t) * 0.65);
     drawSolidFillModel(MORPH.toModel, t * 0.65);
-    if (SHOW_WIREFRAME) {
+    if (WIRE_OPACITY > 0.001) {
       // Keep wireframes as faint context; primary effect is moving geometry points.
-      drawWireframeModel(MORPH.fromModel, (1 - t) * 0.25);
-      drawWireframeModel(MORPH.toModel, t * 0.25);
+      drawWireframeModel(MORPH.fromModel, (1 - t) * 0.25 * WIRE_OPACITY);
+      drawWireframeModel(MORPH.toModel, t * 0.25 * WIRE_OPACITY);
     }
     drawMorphPoints(nowMs, tRaw, t);
   } else {
     drawSolidFillModel(MODEL, 1);
-    if (SHOW_WIREFRAME) drawWireframeModel(MODEL, 1);
+    if (WIRE_OPACITY > 0.001) drawWireframeModel(MODEL, WIRE_OPACITY);
   }
 }
 
