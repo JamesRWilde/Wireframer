@@ -28,6 +28,15 @@ If you like graphics code that feels alive but is still easy to reason about, th
 - Auto-selects GPU foreground rendering when available, with CPU fallback.
 - Exposes live performance stats (FPS, frame/physics/background/foreground timings).
 
+## Root Layout
+
+- `engine/`: runtime engine code.
+- `engine/fill/`: CPU fill routines (triangulation, normals, lighting, raster, renderer).
+- `engine/shading/`: GPU shading/render routines (shaders, buffers, draw, runtime).
+- `engine/physics/`: input and motion state plumbing.
+- `ui/`: controls, theme, and UI helper modules.
+- `meshes/`: mesh assets, manifest, loader/registry, and embedded fallback.
+
 ## Quick Start
 
 Preferred: use a local web server so mesh assets load from `mesh-manifest.json` via `fetch`.
@@ -46,7 +55,7 @@ npx serve . -l 5500
 
 Direct file-open also works now:
 
-- Open `index.html` directly and loader will use the embedded mesh fallback map (`js/object-system/mesh-fallback-data.js`).
+- Open `index.html` directly and loader will use the embedded mesh fallback map (`meshes/mesh-fallback-data.js`).
 - HTTP mode remains the primary path during development (manifest + individual mesh JSON fetches).
 
 ## Controls
@@ -61,10 +70,10 @@ Direct file-open also works now:
 
 ## Runtime Flow In 30 Seconds
 
-1. `index.html` loads `js/math3d.js`, then `js/object-system/loader.js`, then `js/app/bootstrap.js`.
-2. `loader.js` builds `window.WireframeObjectsReady` by loading registry and then either mesh JSON assets (HTTP) or embedded mesh fallback data (`file://`).
-3. `bootstrap.js` loads app modules in strict order so globals are available when needed.
-4. `render/loop.js` waits for `WireframeObjectsReady`, then calls `startApp()`.
+1. `index.html` loads `engine/math3d.js`, then `meshes/loader.js`, then `engine/bootstrap.js`.
+2. `meshes/loader.js` builds `window.WireframeObjectsReady` by loading registry and then either mesh JSON assets (HTTP) or embedded mesh fallback data (`file://`).
+3. `engine/bootstrap.js` loads app modules in strict order so globals are available when needed.
+4. `engine/loop.js` waits for `WireframeObjectsReady`, then calls `startApp()`.
 5. `startApp()` wires controls and starts `requestAnimationFrame(frame)`.
 6. Each frame updates rotation physics, then draws background plus foreground through GPU or CPU paths.
 7. Telemetry HUD values are updated with smoothed timings on a throttled cadence.
@@ -75,7 +84,7 @@ The key idea is contract boundaries, not folder names.
 
 ### Mesh Contract
 
-Runtime objects are loaded from `js/mesh-data/*.mesh.json` and normalized to:
+Runtime objects are loaded from `meshes/*.mesh.json` and normalized to:
 
 - `format`: `indexed-polygons-v1`
 - `positions`: vertex list (`[x, y, z]`)
@@ -87,18 +96,18 @@ This keeps shape definition import-friendly and renderer-agnostic.
 
 ### Loader and Discovery
 
-`js/object-system/loader.js` controls mesh discovery and registration.
+`meshes/loader.js` controls mesh discovery and registration.
 
-- `readMeshManifest()` reads `js/object-system/mesh-manifest.json`.
-- Mesh assets are loaded from `js/mesh-data/*.mesh.json` and registered as object builders.
-- `loadEmbeddedMeshFallback()` loads `js/object-system/mesh-fallback-data.js` for explicit offline/file-protocol fallback.
+- `readMeshManifest()` reads `meshes/mesh-manifest.json`.
+- Mesh assets are loaded from `meshes/*.mesh.json` and registered as object builders.
+- `loadEmbeddedMeshFallback()` loads `meshes/mesh-fallback-data.js` for explicit offline/file-protocol fallback.
 - `loadScript(src)` loads core registry module with cache busting.
 - `window.WireframeObjectsReady` resolves when all mesh assets are loaded.
 - Script URLs are cache-busted per session (`?v=<token>`) so module edits are reflected reliably during development.
 
 ### Core Scene State
 
-`js/app/core.js` is the runtime state hub.
+`engine/core.js` is the runtime state hub.
 
 - `initBackgroundParticles()` seeds animated ambient particles.
 - `resize()` syncs canvas sizes and reinitializes background particles.
@@ -112,7 +121,7 @@ This keeps shape definition import-friendly and renderer-agnostic.
 
 ### Input and Motion
 
-`js/app/input.js` translates pointer input into angular velocities.
+`engine/physics/input.js` translates pointer input into angular velocities.
 
 - `onDown()`, `onMove()`, `onUp()` manage drag state.
 - Wheel handler updates `ZOOM` with clamping.
@@ -120,12 +129,12 @@ This keeps shape definition import-friendly and renderer-agnostic.
 
 ### UI, Colors, and Theme Propagation
 
-`js/app/ui/controls.js` wires shape, LOD, opacity, and RGB controls.
+`ui/controls.js` wires shape, LOD, opacity, and RGB controls.
 
 - `syncRenderToggles()` updates `DETAIL_LEVEL`, `FILL_OPACITY`, and `WIRE_OPACITY`.
 - `initObjectSelector()` populates shapes and binds events.
 
-`js/app/ui/theme.js` turns one RGB selection into a complete visual theme.
+`ui/theme.js` turns one RGB selection into a complete visual theme.
 
 - `buildCustomTheme(rgbInput)` derives particle, wire, fill-shade, and CSS variable colors.
 - `enforceContrast(fg, bg, minRatio)` nudges colors to keep UI contrast readable.
@@ -133,7 +142,7 @@ This keeps shape definition import-friendly and renderer-agnostic.
 - `setCustomRgb(rgb, options)` updates state, storage, and active theme.
 - `applyPalette()` writes CSS variables on `document.documentElement`.
 
-`js/app/ui/color-utils.js` provides shared math helpers.
+`ui/color-utils.js` provides shared math helpers.
 
 - Conversion and formatting: `toRgbCss`, `toRgbaCss`, `toHex`, `hsvToRgb`.
 - Color operations: `mixRgb`, `lerpColor`, `rgbA`.
@@ -143,7 +152,7 @@ This keeps shape definition import-friendly and renderer-agnostic.
 
 ### Frame Orchestration
 
-`js/app/render/loop.js` owns the order of operations.
+`engine/loop.js` owns the order of operations.
 
 - `frame(nowMs)` updates rotation physics and draws all layers.
 - `startApp()` initializes controls and kicks off the animation loop.
@@ -158,7 +167,7 @@ Draw order matters:
 
 ### GPU Foreground Path
 
-`js/app/render/scene-gpu.js` provides the WebGL foreground renderer.
+`engine/shading/*.js` provides the WebGL foreground renderer pipeline.
 
 - Uses compiled shader programs for fill and wire rendering.
 - Reuses typed arrays and dynamic buffers for low allocation overhead.
@@ -167,7 +176,7 @@ Draw order matters:
 
 ### Wireframe Pass
 
-When CPU foreground is active, `js/app/render/wireframe.js` uses three visual sub-passes in `drawWireframeModel(model, alphaScale)`:
+When CPU foreground is active, `engine/wireframe.js` uses three visual sub-passes in `drawWireframeModel(model, alphaScale)`:
 
 - Broad glow lines for soft bloom feel.
 - Mid-width glow lines.
@@ -177,7 +186,7 @@ Depth bucketing is controlled by `DEPTH_BUCKETS` and `Z_HALF`, so edge readabili
 
 ### Fill Pass
 
-When CPU foreground is active, `js/app/render/fill.js` does more than just paint triangles.
+When CPU foreground is active, `engine/fill/*.js` does more than just paint triangles.
 
 - `getModelTriangles(model)` normalizes mixed face sizes into triangles.
 - `getModelVertexNormals(model, triFaces)` computes and caches outward vertex normals.
@@ -190,7 +199,7 @@ When CPU foreground is active, `js/app/render/fill.js` does more than just paint
 
 ### Morph Overlay
 
-`js/app/render/morph.js` contains morph helpers and optional overlay rendering utilities.
+`engine/morph.js` contains morph helpers and optional overlay rendering utilities.
 
 - `drawMorphPoints(nowMs, tRaw, t)` draws source-to-target guide lines.
 - It renders small streaked particles to communicate motion direction.
@@ -201,7 +210,7 @@ Current default loop behavior focuses on direct mesh morph rendering in the main
 
 ## Mesh Data and Detail Scaling
 
-Current shape library is defined in `js/object-system/mesh-manifest.json` and stored as JSON meshes in `js/mesh-data/`.
+Current shape library is defined in `meshes/mesh-manifest.json` and stored as JSON meshes in `meshes/`.
 
 LOD currently comes from pre-exported mesh snapshots (for example `low/mid/high`) selected by the detail slider. This keeps runtime cost predictable and avoids expensive procedural rebuilds in the browser.
 
@@ -222,8 +231,8 @@ Notes:
 
 ## Adding A New Shape
 
-1. Create `js/mesh-data/my-shape.mesh.json` using `indexed-polygons-v1` format.
-2. Add entry to `js/object-system/mesh-manifest.json`:
+1. Create `meshes/my-shape.mesh.json` using `indexed-polygons-v1` format.
+2. Add entry to `meshes/mesh-manifest.json`:
 
 ```json
 { "name": "My Shape", "file": "my-shape.mesh.json" }
@@ -234,7 +243,7 @@ Notes:
 
 ## Performance Notes
 
-- Model cache in `core.js` avoids rebuilding same shape/LOD repeatedly.
+- Model cache in `engine/core.js` avoids rebuilding same shape/LOD repeatedly.
 - Fill pass caches triangulation and vertex normals on model objects.
 - Frame-level transform/projection cache (`getModelFrameData`) reduces repeated math in CPU passes.
 - GPU path uses buffer updates and typed-array reuse for dynamic geometry.
@@ -246,14 +255,13 @@ Notes:
 
 - Rendering pipeline upgraded with robust n-gon triangulation (ear clipping), shading policy metadata, and crease-angle corner normal handling.
 - CPU and GPU fill paths now share consistent normal/shading assumptions for better visual parity.
-- Runtime moved to mesh-first object definitions (`js/mesh-data/*.mesh.json`) discovered through `js/object-system/mesh-manifest.json`.
+- Runtime moved to mesh-first object definitions (`meshes/*.mesh.json`) discovered through `meshes/mesh-manifest.json`.
 - Legacy JS object-shape modules were removed in favor of canonical JSON mesh assets.
 - Explicit embedded fallback map was reinstated so direct `index.html` (`file://`) runs still work.
 
 ## Troubleshooting
 
-- `Shape list empty`:
-- In HTTP mode, ensure `js/object-system/mesh-manifest.json` plus `js/mesh-data/*.mesh.json` are present and valid.
-- In `file://` mode, ensure `js/object-system/mesh-fallback-data.js` exists and contains embedded entries.
+- `Shape list empty (HTTP)`: ensure `meshes/mesh-manifest.json` plus `meshes/*.mesh.json` are present and valid.
+- `Shape list empty (file://)`: ensure `meshes/mesh-fallback-data.js` exists and contains embedded entries.
 - `App says failed to load`: Check the browser console and network tab for missing script paths.
 - `LOD slider has no effect`: Ensure your mesh file includes multiple `lods` entries with distinct `detail` values.

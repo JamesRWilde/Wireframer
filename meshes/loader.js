@@ -1,8 +1,8 @@
 'use strict';
 
 (function initObjectLoader(global) {
-  const meshDir = 'js/mesh-data/';
-  const systemDir = 'js/object-system/';
+  const meshDir = 'meshes/';
+  const systemDir = 'meshes/';
   const meshManifestPath = `${systemDir}mesh-manifest.json`;
   const embeddedMeshFallbackPath = `${systemDir}mesh-fallback-data.js`;
   const cacheBust = global.WireframerCacheBust || Date.now().toString();

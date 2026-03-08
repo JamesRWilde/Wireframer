@@ -1,23 +1,30 @@
 'use strict';
 
 (function initAppBootstrap() {
-  const appDir = 'js/app/';
   const cacheBust = window.WireframerCacheBust || Date.now().toString();
   window.WireframerCacheBust = cacheBust;
   const orderedFiles = [
-    'core.js',
-    'input.js',
+    'engine/core.js',
+    'engine/physics/input.js',
     'ui/dom-state.js',
     'ui/color-utils.js',
     'ui/theme.js',
     'ui/controls.js',
-    'render/background-gpu.js',
-    'render/background.js',
-    'render/wireframe.js',
-    'render/fill.js',
-    'render/scene-gpu.js',
-    'render/morph.js',
-    'render/loop.js',
+    'engine/shading/background-gpu.js',
+    'engine/background.js',
+    'engine/wireframe.js',
+    'engine/fill/triangulation.js',
+    'engine/fill/normals.js',
+    'engine/fill/lighting.js',
+    'engine/fill/raster.js',
+    'engine/fill/renderer.js',
+    'engine/shading/shaders.js',
+    'engine/shading/buffers.js',
+    'engine/shading/draw.js',
+    'engine/shading/core.js',
+    'engine/shading/runtime.js',
+    'engine/morph.js',
+    'engine/loop.js',
   ];
 
   function loadScript(src) {
@@ -34,7 +41,7 @@
 
   (async () => {
     for (const file of orderedFiles) {
-      await loadScript(`${appDir}${file}`);
+      await loadScript(file);
     }
   })().catch((err) => {
     console.error(err);

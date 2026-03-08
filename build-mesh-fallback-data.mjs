@@ -6,9 +6,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, '..');
 
-const meshManifestPath = path.join(repoRoot, 'js', 'object-system', 'mesh-manifest.json');
-const meshDir = path.join(repoRoot, 'js', 'mesh-data');
-const outPath = path.join(repoRoot, 'js', 'object-system', 'mesh-fallback-data.js');
+const meshManifestPath = path.join(repoRoot, 'meshes', 'mesh-manifest.json');
+const meshDir = path.join(repoRoot, 'meshes');
+const outPath = path.join(repoRoot, 'meshes', 'mesh-fallback-data.js');
 
 async function main() {
   const manifest = JSON.parse(await fs.readFile(meshManifestPath, 'utf8'));
