@@ -47,6 +47,10 @@
       "file": "menger-sponge.mesh.json"
     },
     {
+      "name": "Mandelbulb",
+      "file": "mandelbulb.mesh.json"
+    },
+    {
       "name": "Mobius Strip",
       "file": "mobius-strip.mesh.json"
     },

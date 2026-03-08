@@ -55,7 +55,7 @@ npx serve . -l 5500
 
 Direct file-open also works now:
 
-- Open `index.html` directly and loader will use the embedded mesh fallback map (`meshes/mesh-fallback-data.js`).
+- Open `index.html` directly and loader will use the embedded mesh fallback map (`mesh-fallback-data.js`).
 - HTTP mode remains the primary path during development (manifest + individual mesh JSON fetches).
 
 ## Controls
@@ -70,8 +70,8 @@ Direct file-open also works now:
 
 ## Runtime Flow In 30 Seconds
 
-1. `index.html` loads `engine/math3d.js`, then `meshes/loader.js`, then `engine/bootstrap.js`.
-2. `meshes/loader.js` builds `window.WireframeObjectsReady` by loading registry and then either mesh JSON assets (HTTP) or embedded mesh fallback data (`file://`).
+1. `index.html` loads `engine/math3d.js`, then `loader.js`, then `engine/bootstrap.js`.
+2. `loader.js` builds `window.WireframeObjectsReady` by loading registry and then either mesh JSON assets (HTTP) or embedded mesh fallback data (`file://`).
 3. `engine/bootstrap.js` loads app modules in strict order so globals are available when needed.
 4. `engine/loop.js` waits for `WireframeObjectsReady`, then calls `startApp()`.
 5. `startApp()` wires controls and starts `requestAnimationFrame(frame)`.
@@ -96,11 +96,11 @@ This keeps shape definition import-friendly and renderer-agnostic.
 
 ### Loader and Discovery
 
-`meshes/loader.js` controls mesh discovery and registration.
+`loader.js` controls mesh discovery and registration.
 
-- `readMeshManifest()` reads `meshes/mesh-manifest.json`.
+- `readMeshManifest()` reads `mesh-manifest.json`.
 - Mesh assets are loaded from `meshes/*.mesh.json` and registered as object builders.
-- `loadEmbeddedMeshFallback()` loads `meshes/mesh-fallback-data.js` for explicit offline/file-protocol fallback.
+- `loadEmbeddedMeshFallback()` loads `mesh-fallback-data.js` for explicit offline/file-protocol fallback.
 - `loadScript(src)` loads core registry module with cache busting.
 - `window.WireframeObjectsReady` resolves when all mesh assets are loaded.
 - Script URLs are cache-busted per session (`?v=<token>`) so module edits are reflected reliably during development.
@@ -210,7 +210,7 @@ Current default loop behavior focuses on direct mesh morph rendering in the main
 
 ## Mesh Data and Detail Scaling
 
-Current shape library is defined in `meshes/mesh-manifest.json` and stored as JSON meshes in `meshes/`.
+Current shape library is defined in `mesh-manifest.json` and stored as JSON meshes in `meshes/`.
 
 LOD currently comes from pre-exported mesh snapshots (for example `low/mid/high`) selected by the detail slider. This keeps runtime cost predictable and avoids expensive procedural rebuilds in the browser.
 
@@ -222,7 +222,7 @@ LOD currently comes from pre-exported mesh snapshots (for example `low/mid/high`
 | Tubular parametrics | `torus`, `torusKnot`, `spring`, `cinquefoilKnot`, `mobiusStrip` | Curve segment and tube-side scaling | Medium -> high with dense curve sampling |
 | Subdivided polyhedra | `cube`, `tetrahedron`, `icosahedron`, `pyramid`, `octahedron` | Iteration thresholds mapped from slider | Stepwise growth; can jump per tier |
 | Faceted solids | `diamond`, `prism`, `starPrism` | Discrete facet count / fixed topology variants | Low -> medium |
-| Fractal solids | `mengerSponge`, `sierpinskiTetrahedron`, `sierpinskiPyramid`, `jerusalemCube` | Pre-exported LOD mesh snapshots | Stable runtime cost |
+| Fractal solids | `mengerSponge`, `sierpinskiTetrahedron`, `sierpinskiPyramid`, `jerusalemCube`, `mandelbulb` | Pre-exported LOD mesh snapshots | Stable runtime cost |
 | Curve-as-solid | `hilbertCurve` | Pre-exported LOD mesh snapshots | Stable runtime cost |
 
 Notes:
@@ -232,7 +232,7 @@ Notes:
 ## Adding A New Shape
 
 1. Create `meshes/my-shape.mesh.json` using `indexed-polygons-v1` format.
-2. Add entry to `meshes/mesh-manifest.json`:
+2. Add entry to `mesh-manifest.json`:
 
 ```json
 { "name": "My Shape", "file": "my-shape.mesh.json" }
@@ -255,13 +255,13 @@ Notes:
 
 - Rendering pipeline upgraded with robust n-gon triangulation (ear clipping), shading policy metadata, and crease-angle corner normal handling.
 - CPU and GPU fill paths now share consistent normal/shading assumptions for better visual parity.
-- Runtime moved to mesh-first object definitions (`meshes/*.mesh.json`) discovered through `meshes/mesh-manifest.json`.
+- Runtime moved to mesh-first object definitions (`meshes/*.mesh.json`) discovered through `mesh-manifest.json`.
 - Legacy JS object-shape modules were removed in favor of canonical JSON mesh assets.
 - Explicit embedded fallback map was reinstated so direct `index.html` (`file://`) runs still work.
 
 ## Troubleshooting
 
-- `Shape list empty (HTTP)`: ensure `meshes/mesh-manifest.json` plus `meshes/*.mesh.json` are present and valid.
-- `Shape list empty (file://)`: ensure `meshes/mesh-fallback-data.js` exists and contains embedded entries.
+- `Shape list empty (HTTP)`: ensure `mesh-manifest.json` plus `meshes/*.mesh.json` are present and valid.
+- `Shape list empty (file://)`: ensure `mesh-fallback-data.js` exists and contains embedded entries.
 - `App says failed to load`: Check the browser console and network tab for missing script paths.
 - `LOD slider has no effect`: Ensure your mesh file includes multiple `lods` entries with distinct `detail` values.
