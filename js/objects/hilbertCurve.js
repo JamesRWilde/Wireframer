@@ -1,19 +1,40 @@
 'use strict';
 
 (function registerHilbertCurve(global) {
+  const BASE_ORDER = 3;
+  let basePoints = null;
   const meshCache = new Map();
 
   function clampDetail(detail) {
     return Math.max(0.5, Math.min(1.4, Number(detail) || 1));
   }
 
-  function orderFromDetail(detail) {
+  function tubeFromDetail(detail) {
     const d = clampDetail(detail);
-    if (d < 0.70) return 1;
-    if (d < 0.92) return 2;
-    if (d < 1.12) return 3;
-    return 4;
+    const t = (d - 0.5) / 0.9;
+    const sides = Math.max(6, Math.min(10, Math.round(6 + t * 4)));
+    const radius = 0.032 + t * 0.014;
+    return { sides, radius };
   }
+  function getBasePoints() {
+    if (basePoints) return basePoints;
+
+    const points2D = [];
+    hilbert2D(0, 0, 1, 0, 0, 1, BASE_ORDER, points2D);
+
+    const points = [];
+    for (const p of points2D) {
+      points.push([
+        (p[0] - 0.5) * 1.9,
+        (p[1] - 0.5) * 1.9,
+        0,
+      ]);
+    }
+
+    basePoints = points;
+    return basePoints;
+  }
+
 
   function hilbert2D(x0, y0, xi, xj, yi, yj, n, out) {
     if (n <= 0) {
@@ -126,29 +147,13 @@
   }
 
   function buildHilbertCurve(options = {}) {
-    const order = orderFromDetail(options.detail);
-    const cached = meshCache.get(order);
+    const tube = tubeFromDetail(options.detail);
+    const key = `${tube.sides}|${Math.round(tube.radius * 10000)}`;
+    const cached = meshCache.get(key);
     if (cached) return cached;
 
-    const points2D = [];
-    hilbert2D(0, 0, 1, 0, 0, 1, order, points2D);
-
-    const points = [];
-    const n = points2D.length;
-
-    for (let i = 0; i < n; i++) {
-      const p = points2D[i];
-      const x = (p[0] - 0.5) * 1.9;
-      const y = (p[1] - 0.5) * 1.9;
-      const z = 0;
-      points.push([x, y, z]);
-    }
-
-    const sides = Math.min(12, Math.max(6, 6 + order));
-    const radius = 0.035 + order * 0.004;
-    const mesh = buildTubeFromPolyline(points, sides, radius);
-
-    meshCache.set(order, mesh);
+    const mesh = buildTubeFromPolyline(getBasePoints(), tube.sides, tube.radius);
+    meshCache.set(key, mesh);
     return mesh;
   }
 

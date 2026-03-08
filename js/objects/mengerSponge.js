@@ -1,12 +1,18 @@
 'use strict';
 
 (function registerMengerSponge(global) {
-  function iterationFromDetail(detail) {
-    const d = Math.max(0.5, Math.min(1.4, Number(detail) || 1));
-    if (d < 0.72) return 0;
-    if (d < 1.03) return 1;
-    if (d < 1.28) return 2;
-    return 3;
+  const { subdivideMesh } = global.WireframeGeometry;
+  const BASE_ITERATION = 2;
+  let baseMesh = null;
+  const detailCache = new Map();
+
+  function clampDetail(detail) {
+    return Math.max(0.5, Math.min(1.4, Number(detail) || 1));
+  }
+
+  function subdivisionFromDetail(detail) {
+    const d = clampDetail(detail);
+    return d >= 1.02 ? 1 : 0;
   }
 
   function isFilledCell(x, y, z, iterations) {
@@ -28,8 +34,7 @@
     return true;
   }
 
-  function buildMengerSponge(options = {}) {
-    const iterations = iterationFromDetail(options.detail);
+  function buildMengerAtIteration(iterations) {
     const size = Math.pow(3, iterations);
     const filled = new Set();
 
@@ -152,6 +157,22 @@
     }
 
     return { V, E, F };
+  }
+
+  function getBaseMesh() {
+    if (!baseMesh) baseMesh = buildMengerAtIteration(BASE_ITERATION);
+    return baseMesh;
+  }
+
+  function buildMengerSponge(options = {}) {
+    const subdiv = subdivisionFromDetail(options.detail);
+    const key = `sub:${subdiv}`;
+    const cached = detailCache.get(key);
+    if (cached) return cached;
+
+    const mesh = subdiv > 0 ? subdivideMesh(getBaseMesh(), subdiv) : getBaseMesh();
+    detailCache.set(key, mesh);
+    return mesh;
   }
 
   global.WireframeObjectRegistry.register({ name: 'Menger Sponge', build: buildMengerSponge });

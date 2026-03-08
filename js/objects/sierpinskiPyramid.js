@@ -1,16 +1,21 @@
 'use strict';
 
 (function registerSierpinskiPyramid(global) {
-  function iterationFromDetail(detail) {
-    const d = Math.max(0.5, Math.min(1.4, Number(detail) || 1));
-    if (d < 0.70) return 0;
-    if (d < 0.92) return 1;
-    if (d < 1.12) return 2;
-    return 3;
+  const { subdivideMesh } = global.WireframeGeometry;
+  const BASE_ITERATION = 2;
+  let baseMesh = null;
+  const detailCache = new Map();
+
+  function clampDetail(detail) {
+    return Math.max(0.5, Math.min(1.4, Number(detail) || 1));
   }
 
-  function buildSierpinskiPyramid(options = {}) {
-    const iterations = iterationFromDetail(options.detail);
+  function subdivisionFromDetail(detail) {
+    const d = clampDetail(detail);
+    return d >= 1.06 ? 1 : 0;
+  }
+
+  function buildSierpinskiAtIteration(iterations) {
     const base = [
       [-0.90, -0.80, -0.90],
       [0.90, -0.80, -0.90],
@@ -144,6 +149,22 @@
     }
 
     return { V, E, F };
+  }
+
+  function getBaseMesh() {
+    if (!baseMesh) baseMesh = buildSierpinskiAtIteration(BASE_ITERATION);
+    return baseMesh;
+  }
+
+  function buildSierpinskiPyramid(options = {}) {
+    const subdiv = subdivisionFromDetail(options.detail);
+    const key = `sub:${subdiv}`;
+    const cached = detailCache.get(key);
+    if (cached) return cached;
+
+    const mesh = subdiv > 0 ? subdivideMesh(getBaseMesh(), subdiv) : getBaseMesh();
+    detailCache.set(key, mesh);
+    return mesh;
   }
 
   global.WireframeObjectRegistry.register({ name: 'Sierpinski Pyramid', build: buildSierpinskiPyramid });

@@ -1,18 +1,18 @@
 'use strict';
 
 (function registerJerusalemCube(global) {
+  const { subdivideMesh } = global.WireframeGeometry;
   const meshCache = new Map();
+  const BASE_ITERATION = 2;
+  let baseMesh = null;
 
   function clampDetail(detail) {
     return Math.max(0.5, Math.min(1.4, Number(detail) || 1));
   }
 
-  function iterationFromDetail(detail) {
+  function subdivisionFromDetail(detail) {
     const d = clampDetail(detail);
-    if (d < 0.72) return 0;
-    if (d < 1.02) return 1;
-    if (d < 1.30) return 2;
-    return 4;
+    return d >= 1.08 ? 1 : 0;
   }
 
   function addFace(faceMap, a, b, c, d) {
@@ -26,10 +26,7 @@
     faceMap.set(key, { count: 1, face: [a, b, c, d] });
   }
 
-  function buildJerusalemCube(options = {}) {
-    const iterations = iterationFromDetail(options.detail);
-    const cached = meshCache.get(iterations);
-    if (cached) return cached;
+  function buildJerusalemAtIteration(iterations) {
 
     const cubes = [{ cx: 0, cy: 0, cz: 0, hs: 0.95 }];
 
@@ -142,8 +139,22 @@
       }
     }
 
-    const mesh = { V, E, F };
-    meshCache.set(iterations, mesh);
+    return { V, E, F };
+  }
+
+  function getBaseMesh() {
+    if (!baseMesh) baseMesh = buildJerusalemAtIteration(BASE_ITERATION);
+    return baseMesh;
+  }
+
+  function buildJerusalemCube(options = {}) {
+    const subdiv = subdivisionFromDetail(options.detail);
+    const key = `sub:${subdiv}`;
+    const cached = meshCache.get(key);
+    if (cached) return cached;
+
+    const mesh = subdiv > 0 ? subdivideMesh(getBaseMesh(), subdiv) : getBaseMesh();
+    meshCache.set(key, mesh);
     return mesh;
   }
 
