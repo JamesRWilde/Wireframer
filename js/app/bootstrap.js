@@ -2,6 +2,8 @@
 
 (function initAppBootstrap() {
   const appDir = 'js/app/';
+  const cacheBust = window.WireframerCacheBust || Date.now().toString();
+  window.WireframerCacheBust = cacheBust;
   const orderedFiles = [
     'core.js',
     'input.js',
@@ -21,7 +23,8 @@
   function loadScript(src) {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = src;
+      const join = src.includes('?') ? '&' : '?';
+      script.src = `${src}${join}v=${cacheBust}`;
       script.async = false;
       script.onload = () => resolve();
       script.onerror = () => reject(new Error(`Failed to load app script: ${src}`));

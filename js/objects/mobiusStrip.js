@@ -1,12 +1,20 @@
 'use strict';
 
 (function registerMobiusStrip(global) {
-  const { detailCount } = global.WireframeGeometry;
-
   function buildMobiusStrip(options = {}) {
-    const detail = options.detail ?? 1;
-    const uSeg = detailCount(140, detail, 72, 2);
-    const vSeg = detailCount(16, detail, 8, 1);
+    const detail = Math.max(0.5, Math.min(1.4, Number(options.detail) || 1));
+    const t = (detail - 0.5) / 0.9;
+
+    // Vertex count = uSeg * (vSeg + 1)
+    // Target range around min 50, max 700.
+    const uSegMin = 10;
+    const uSegMax = 70;
+    const vSegMin = 4;
+    const vSegMax = 9;
+    const uSegRaw = uSegMin + (uSegMax - uSegMin) * t;
+    const vSegRaw = vSegMin + (vSegMax - vSegMin) * t;
+    const uSeg = Math.max(uSegMin, Math.round(uSegRaw / 2) * 2);
+    const vSeg = Math.max(vSegMin, Math.round(vSegRaw));
     const width = 0.28;
 
     const V = [];

@@ -51,7 +51,13 @@
       }
     }
 
-    const iterations = detail < 0.75 ? 0 : (detail < 1.2 ? 1 : 2);
+    const iterations = detail < 0.7
+      ? 0
+      : detail < 0.95
+        ? 1
+        : detail < 1.2
+          ? 2
+          : 3;
     return subdivideMesh({ V, E, F }, iterations);
   }
 

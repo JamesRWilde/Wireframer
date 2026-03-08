@@ -1,13 +1,25 @@
 'use strict';
 
 (function registerSpring(global) {
-  const { detailCount } = global.WireframeGeometry;
-
   function buildSpring(options = {}) {
-    const detail = options.detail ?? 1;
+    const detail = Math.max(0.5, Math.min(1.4, Number(options.detail) || 1));
+    const t = (detail - 0.5) / 0.9;
     const turns = 5;
-    const segsPerTurn = detailCount(34, detail, 16, 1);
-    const sides = detailCount(12, detail, 6, 1);
+
+    // Vertices = turns * segsPerTurn * sides.
+    // Target minimum around 100.
+    const segsPerTurnMin = 5;
+    const segsPerTurnMax = 34;
+    const sidesMin = 4;
+    const sidesMax = 12;
+    const segsPerTurn = Math.max(
+      segsPerTurnMin,
+      Math.round(segsPerTurnMin + (segsPerTurnMax - segsPerTurnMin) * t)
+    );
+    const sides = Math.max(
+      sidesMin,
+      Math.round(sidesMin + (sidesMax - sidesMin) * t)
+    );
     const tubeR = 0.10;
     const R = 0.68;
     const height = 1.80;

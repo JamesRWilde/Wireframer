@@ -1,12 +1,20 @@
 'use strict';
 
 (function registerCapsule(global) {
-  const { buildRevolution, detailCount } = global.WireframeGeometry;
+  const { buildRevolution } = global.WireframeGeometry;
 
   function buildCapsule(options = {}) {
-    const detail = options.detail ?? 1;
-    const segs = detailCount(68, detail, 30, 2);
-    const capStacks = detailCount(14, detail, 8, 1);
+    const detail = Math.max(0.5, Math.min(1.4, Number(options.detail) || 1));
+    const t = (detail - 0.5) / 0.9;
+
+    // Direct interpolation gives full slider range from coarse to smooth.
+    const segsMin = 10;
+    const segsMax = 40;
+    const stacksMin = 2;
+    const stacksMax = 10;
+    const segsRaw = segsMin + (segsMax - segsMin) * t;
+    const segs = Math.max(segsMin, Math.round(segsRaw / 2) * 2);
+    const capStacks = Math.max(stacksMin, Math.round(stacksMin + (stacksMax - stacksMin) * t));
     const profile = [];
 
     const bodyHalf = 0.64;

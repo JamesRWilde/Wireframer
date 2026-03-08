@@ -29,7 +29,13 @@
       [3, 4, 0],
     ];
 
-    const iterations = detail < 0.84 ? 0 : (detail < 1.24 ? 1 : 2);
+    const iterations = detail < 0.68
+      ? 0
+      : detail < 0.92
+        ? 1
+        : detail < 1.16
+          ? 2
+          : 3;
     return subdivideMesh({ V, E, F }, iterations);
   }
 

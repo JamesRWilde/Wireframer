@@ -25,11 +25,18 @@
     'torusKnot.js',
     'wineGlass.js',
   ];
+  const cacheBust = global.WireframerCacheBust || Date.now().toString();
+  global.WireframerCacheBust = cacheBust;
+
+  function withCacheBust(src) {
+    const join = src.includes('?') ? '&' : '?';
+    return `${src}${join}v=${cacheBust}`;
+  }
 
   function loadScript(src) {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = src;
+      script.src = withCacheBust(src);
       script.async = false;
       script.onload = () => resolve();
       script.onerror = () => reject(new Error(`Failed to load script: ${src}`));

@@ -19,7 +19,13 @@
       E: [[0, 1], [2, 3], [4, 5], [6, 7], [0, 2], [1, 3], [4, 6], [5, 7], [0, 4], [1, 5], [2, 6], [3, 7]],
       F,
     };
-    const iterations = detail < 0.75 ? 0 : (detail < 1.25 ? 1 : 2);
+    const iterations = detail < 0.68
+      ? 0
+      : detail < 0.92
+        ? 1
+        : detail < 1.16
+          ? 2
+          : 3;
     return subdivideMesh(base, iterations);
   }
 

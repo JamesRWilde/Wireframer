@@ -52,7 +52,13 @@
     ];
 
     const base = { V, E: buildEdgesFromFaces(F), F };
-    const iterations = detail < 0.82 ? 0 : (detail < 1.2 ? 1 : 2);
+    const iterations = detail < 0.68
+      ? 0
+      : detail < 0.92
+        ? 1
+        : detail < 1.16
+          ? 2
+          : 3;
     return subdivideMesh(base, iterations);
   }
 

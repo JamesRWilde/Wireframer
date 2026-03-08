@@ -2,14 +2,22 @@
 'use strict';
 
 (function registerTorus(global) {
-  const { detailCount } = global.WireframeGeometry;
-
   function buildTorus(options = {}) {
-    const detail = options.detail ?? 1;
+    const detail = Math.max(0.5, Math.min(1.4, Number(options.detail) || 1));
+    const t = (detail - 0.5) / 0.9;
     const R = 0.70;
     const r = 0.28;
-    const maj = detailCount(56, detail, 28, 2);
-    const min = detailCount(32, detail, 16, 2);
+
+    // Vertex count = maj * min.
+    // Target minimum around 100.
+    const majMin = 10;
+    const majMax = 56;
+    const minMin = 10;
+    const minMax = 32;
+    const majRaw = majMin + (majMax - majMin) * t;
+    const minRaw = minMin + (minMax - minMin) * t;
+    const maj = Math.max(majMin, Math.round(majRaw / 2) * 2);
+    const min = Math.max(minMin, Math.round(minRaw / 2) * 2);
     const V = [];
     const E = [];
     const F = [];

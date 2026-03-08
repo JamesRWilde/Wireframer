@@ -1,11 +1,15 @@
 'use strict';
 
 (function registerCone(global) {
-  const { detailCount } = global.WireframeGeometry;
-
   function buildCone(options = {}) {
-    const detail = options.detail ?? 1;
-    const segs = detailCount(72, detail, 28, 2);
+    const detail = Math.max(0.5, Math.min(1.4, Number(options.detail) || 1));
+    const t = (detail - 0.5) / 0.9;
+
+    // Non-linear scaling keeps low detail practical while allowing very dense max detail.
+    const eased = Math.pow(Math.max(0, Math.min(1, t)), 2.2);
+    const minSegs = 5;
+    const maxSegs = 40;
+    const segs = Math.round(minSegs + (maxSegs - minSegs) * eased);
     const radius = 0.98;
     const yTop = 1.08;
     const yBase = -1.0;
