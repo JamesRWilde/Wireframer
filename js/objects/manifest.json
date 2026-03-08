@@ -1,0 +1,14 @@
+{
+  "files": [
+    "cube.js",
+    "diamond.js",
+    "hyperboloid.js",
+    "icosahedron.js",
+    "octahedron.js",
+    "sphere.js",
+    "spring.js",
+    "torus.js",
+    "torusKnot.js",
+    "wineGlass.js"
+  ]
+}

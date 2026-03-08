@@ -16,8 +16,9 @@ canvas:active { cursor: grabbing; }
   position: fixed;
   inset: 0;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Share Tech Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 }
 
 /* top-left title */
@@ -27,18 +28,18 @@ canvas:active { cursor: grabbing; }
   left: 34px;
 }
 #title h1 {
-  font-size: 14px;
+  font-size: 1.65rem;
   font-weight: 400;
-  letter-spacing: 8px;
+  letter-spacing: 0.36rem;
   color: rgba(130, 220, 255, 0.85);
   text-transform: uppercase;
 }
 #title p {
-  font-size: 9px;
-  letter-spacing: 5px;
+  font-size: 1.05rem;
+  letter-spacing: 0.2rem;
   color: rgba(80, 160, 200, 0.45);
   text-transform: uppercase;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 /* top-right: object selector + stats */
@@ -52,20 +53,20 @@ canvas:active { cursor: grabbing; }
 
 #obj-select {
   display: block;
-  width: 190px;
+  width: 18.5rem;
   margin-left: auto;
   background: rgba(5, 10, 20, 0.88);
   border: 1px solid rgba(80, 160, 200, 0.35);
   color: rgba(110, 210, 255, 0.80);
-  padding: 7px 28px 7px 10px;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
+  padding: 10px 34px 10px 12px;
+  font-family: 'Share Tech Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.12rem;
   text-transform: uppercase;
   cursor: pointer;
   outline: none;
-  appearance: none;
   -webkit-appearance: none;
+  appearance: none;
   /* custom chevron */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpolygon points='0,0 10,0 5,6' fill='rgba(80,160,200,0.55)'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -83,16 +84,99 @@ canvas:active { cursor: grabbing; }
   letter-spacing: 1px;
 }
 
-#stats {
+#fill-control {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  color: rgba(105, 198, 236, 0.78);
+  font-size: 0.95rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#fill-opacity {
+  width: 9.5rem;
+  accent-color: rgb(95, 188, 230);
+  cursor: pointer;
+}
+
+#fill-opacity-value {
+  min-width: 2.6rem;
+  text-align: right;
+  color: rgba(145, 224, 255, 0.82);
+}
+
+#wire-control {
   margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  color: rgba(105, 198, 236, 0.78);
+  font-size: 0.95rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#wire-switch {
+  position: relative;
+  width: 2.9rem;
+  height: 1.5rem;
+  display: inline-block;
+}
+
+#wire-toggle {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+#wire-slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(36, 78, 106, 0.85);
+  border: 1px solid rgba(86, 170, 206, 0.45);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+#wire-slider::before {
+  content: '';
+  position: absolute;
+  width: 1.05rem;
+  height: 1.05rem;
+  left: 0.22rem;
+  top: 0.18rem;
+  border-radius: 50%;
+  background: rgba(178, 236, 255, 0.9);
+  box-shadow: 0 0 0.35rem rgba(109, 204, 245, 0.55);
+  transition: transform 0.2s ease;
+}
+
+#wire-toggle:checked + #wire-slider {
+  background: rgba(52, 146, 188, 0.86);
+  border-color: rgba(118, 214, 247, 0.72);
+}
+
+#wire-toggle:checked + #wire-slider::before {
+  transform: translateX(1.34rem);
+}
+
+#stats {
+  margin-top: 14px;
 }
 #stats span {
   display: block;
-  font-size: 8px;
-  letter-spacing: 3px;
+  font-size: 1.05rem;
+  letter-spacing: 0.14rem;
   color: rgba(70, 150, 190, 0.35);
   text-transform: uppercase;
-  line-height: 2;
+  line-height: 1.7;
 }
 
 /* bottom-centre label */
@@ -103,15 +187,15 @@ canvas:active { cursor: grabbing; }
   text-align: center;
 }
 #obj-label {
-  font-size: 11px;
-  letter-spacing: 9px;
+  font-size: 1.3rem;
+  letter-spacing: 0.42rem;
   color: rgba(110, 210, 255, 0.55);
   text-transform: uppercase;
 }
 #hint {
-  font-size: 8px;
-  letter-spacing: 4px;
+  font-size: 1rem;
+  letter-spacing: 0.16rem;
   color: rgba(70, 140, 180, 0.30);
   text-transform: uppercase;
-  margin-top: 10px;
+  margin-top: 12px;
 }
