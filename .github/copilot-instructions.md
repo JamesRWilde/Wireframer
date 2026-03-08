@@ -1,0 +1,12 @@
+* Do not constatly kill and restart the server, hot reload is used for most things and if a build is required which is extremely rare then ask the user to restart their own server.
+* Do not confirm plans with user when the next step is clear, continue work until given solution is ready to test without constant prompting to continue.
+* Never ask user to copy and paste and information for which you have access to, this includes but is not limited to code files in the current codebase.
+* Do not ask user to explain current architecture where you could get your answers by inspecting the codebase.
+* Be pro-active not reactive, user wants completed solutions not endless discussions and back and forth. You are an autonomous coding agent, act like it at all times.
+* ALWAYS clean up defunct code and files when you make changes. The codebase should be minimum required for current solution not a dumping ground of abandoned code and files.
+* Codebase has a one function per file architecture and this includes helpers. Avoid creating monoliths and break them up when encountered to properly respect this architecture.
+* Long running multi logic functions should be avoided and broken up into sub functions again respecting the one function per file rules.
+* This codebase is in active enhancement from its MVP beginnings, as such not all changes will be easy fixes. If refactoring is justified then do so especially where it means closer adherence to the other rules.
+* Always be on the lookout for ways to improve the codebase and implement those improvements when you see them, do not wait for user to ask for improvements. This includes but is not limited to refactoring, code cleanup, file cleanup, and architecture improvements.
+* When making changes to the codebase, always consider the impact on the overall architecture and future enhancements. Do not make changes that would hinder future development or make it more difficult.
+* Codebase is heavily commented and this is a requirement for all code. Always add comments when adding new code or modifying existing code. Comments should explain the purpose of the code, how it works, and any important details that would be helpful for future developers working on the codebase.

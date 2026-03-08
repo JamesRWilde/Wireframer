@@ -1,0 +1,177 @@
+[
+  {
+    "key": "acorn",
+    "name": "Acorn",
+    "obj": "/meshes/acorn.obj"
+  },
+  {
+    "key": "airplane",
+    "name": "Airplane",
+    "obj": "/meshes/airplane.obj"
+  },
+  {
+    "key": "bicycle",
+    "name": "Bicycle",
+    "obj": "/meshes/bicycle.obj"
+  },
+  {
+    "key": "capsule",
+    "name": "Capsule",
+    "obj": "/meshes/capsule.obj"
+  },
+  {
+    "key": "car",
+    "name": "Car",
+    "obj": "/meshes/car.obj"
+  },
+  {
+    "key": "cat",
+    "name": "Cat",
+    "obj": "/meshes/cat.obj"
+  },
+  {
+    "key": "cinquefoil-knot",
+    "name": "Cinquefoil Knot",
+    "obj": "/meshes/cinquefoil-knot.obj"
+  },
+  {
+    "key": "cone",
+    "name": "Cone",
+    "obj": "/meshes/cone.obj"
+  },
+  {
+    "key": "cube",
+    "name": "Cube",
+    "obj": "/meshes/cube.obj"
+  },
+  {
+    "key": "cylinder",
+    "name": "Cylinder",
+    "obj": "/meshes/cylinder.obj"
+  },
+  {
+    "key": "dog",
+    "name": "Dog",
+    "obj": "/meshes/dog.obj"
+  },
+  {
+    "key": "drone",
+    "name": "Drone",
+    "obj": "/meshes/drone.obj"
+  },
+  {
+    "key": "helicopter",
+    "name": "Helicopter",
+    "obj": "/meshes/helicopter.obj"
+  },
+  {
+    "key": "houseplant",
+    "name": "Houseplant",
+    "obj": "/meshes/houseplant.obj"
+  },
+  {
+    "key": "icosahedron",
+    "name": "Icosahedron",
+    "obj": "/meshes/icosahedron.obj"
+  },
+  {
+    "key": "jet-fighter",
+    "name": "Jet Fighter",
+    "obj": "/meshes/jet-fighter.obj"
+  },
+  {
+    "key": "jewel",
+    "name": "Jewel",
+    "obj": "/meshes/jewel.obj"
+  },
+  {
+    "key": "mobius-strip",
+    "name": "Mobius Strip",
+    "obj": "/meshes/mobius-strip.obj"
+  },
+  {
+    "key": "moped",
+    "name": "Moped",
+    "obj": "/meshes/moped.obj"
+  },
+  {
+    "key": "motorcycle",
+    "name": "Motorcycle",
+    "obj": "/meshes/motorcycle.obj"
+  },
+  {
+    "key": "octahedron",
+    "name": "Octahedron",
+    "obj": "/meshes/octahedron.obj"
+  },
+  {
+    "key": "pinecone",
+    "name": "Pinecone",
+    "obj": "/meshes/pinecone.obj"
+  },
+  {
+    "key": "prism",
+    "name": "Prism",
+    "obj": "/meshes/prism.obj"
+  },
+  {
+    "key": "pyramid",
+    "name": "Pyramid",
+    "obj": "/meshes/pyramid.obj"
+  },
+  {
+    "key": "robot",
+    "name": "Robot",
+    "obj": "/meshes/robot.obj"
+  },
+  {
+    "key": "sierpinski-pyramid",
+    "name": "Sierpinski Pyramid",
+    "obj": "/meshes/sierpinski-pyramid.obj"
+  },
+  {
+    "key": "spaceship",
+    "name": "Spaceship",
+    "obj": "/meshes/spaceship.obj"
+  },
+  {
+    "key": "sphere",
+    "name": "Sphere",
+    "obj": "/meshes/sphere.obj"
+  },
+  {
+    "key": "spring",
+    "name": "Spring",
+    "obj": "/meshes/spring.obj"
+  },
+  {
+    "key": "star-prism",
+    "name": "Star Prism",
+    "obj": "/meshes/star-prism.obj"
+  },
+  {
+    "key": "strawberry",
+    "name": "Strawberry",
+    "obj": "/meshes/strawberry.obj"
+  },
+  {
+    "key": "torus-knot",
+    "name": "Torus Knot",
+    "obj": "/meshes/torus-knot.obj"
+  },
+  {
+    "key": "torus",
+    "name": "Torus",
+    "obj": "/meshes/torus.obj"
+  },
+  {
+    "key": "tree",
+    "name": "Tree",
+    "obj": "/meshes/tree.obj"
+  },
+  {
+    "key": "wine-glass",
+    "name": "Wine Glass",
+    "obj": "/meshes/wine-glass.obj"
+  }
+]

@@ -1,0 +1,8 @@
+/.vs
+/Wireframer
+/Wireframer.slnx
+/obj/input
+/obj/processed
+/node_modules
+/dist
+wireframer.log
