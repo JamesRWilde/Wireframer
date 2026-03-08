@@ -108,6 +108,7 @@ window.addEventListener('resize', resize);
 let MODEL_CY = 0;
 let Z_HALF   = 1.0; // depth-shading range; set per-object in loadObject()
 let ZOOM = 1.0;
+let RENDER_FRAME_ID = 0;
 const ZOOM_MIN = 0.45;
 const ZOOM_MAX = 2.75;
 
@@ -118,6 +119,51 @@ function project(p) {
     W * 0.5 + p[0] * fov / d,
     H * 0.5 - (p[1] - MODEL_CY) * fov / d,
   ];
+}
+
+function getModelFrameData(model) {
+  if (!model || !model.V || !model.V.length) return null;
+  if (model._frameData && model._frameData.id === RENDER_FRAME_ID) return model._frameData;
+
+  const V = model.V;
+  let T = model._cacheT;
+  let P2 = model._cacheP2;
+  if (!T || T.length !== V.length || !P2 || P2.length !== V.length) {
+    T = new Array(V.length);
+    P2 = new Array(V.length);
+    for (let i = 0; i < V.length; i++) {
+      T[i] = [0, 0, 0];
+      P2[i] = [0, 0];
+    }
+    model._cacheT = T;
+    model._cacheP2 = P2;
+  }
+
+  const r00 = R[0], r01 = R[1], r02 = R[2];
+  const r10 = R[3], r11 = R[4], r12 = R[5];
+  const r20 = R[6], r21 = R[7], r22 = R[8];
+  const fov = Math.min(W, H) * 0.90 * ZOOM;
+  const hw = W * 0.5;
+  const hh = H * 0.5;
+
+  for (let i = 0; i < V.length; i++) {
+    const v = V[i];
+    const tx = r00 * v[0] + r01 * v[1] + r02 * v[2];
+    const ty = r10 * v[0] + r11 * v[1] + r12 * v[2];
+    const tz = r20 * v[0] + r21 * v[1] + r22 * v[2];
+    const t = T[i];
+    t[0] = tx;
+    t[1] = ty;
+    t[2] = tz;
+
+    const d = tz + 3.0;
+    const p = P2[i];
+    p[0] = hw + tx * fov / d;
+    p[1] = hh - (ty - MODEL_CY) * fov / d;
+  }
+
+  model._frameData = { id: RENDER_FRAME_ID, T, P2 };
+  return model._frameData;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -147,13 +193,14 @@ function computeFrameParams(vertices) {
   }
 
   const cy = (minY + maxY) / 2;
-  let maxD = 0;
+  let maxD2 = 0;
   for (const [x, y, z] of vertices) {
-    const d = Math.sqrt(x * x + (y - cy) * (y - cy) + z * z);
-    if (d > maxD) maxD = d;
+    const dy = y - cy;
+    const d2 = x * x + dy * dy + z * z;
+    if (d2 > maxD2) maxD2 = d2;
   }
 
-  return { cy, zHalf: maxD * 1.05 };
+  return { cy, zHalf: Math.sqrt(maxD2) * 1.05 };
 }
 
 function setActiveModel(model, name, vertexCount, edgeCount) {

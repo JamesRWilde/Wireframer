@@ -7,15 +7,20 @@ function drawWireframeModel(model, alphaScale = 1) {
   if (!model || !model.V.length || !model.E.length || alphaScale <= 0.001) return;
   const wireStrength = Math.max(0, Math.min(1, alphaScale));
 
-  const T = model.V.map(v => mvec(R, v));
-  const P2 = T.map(p => project(p));
+  const frameData = getModelFrameData(model);
+  if (!frameData) return;
+  const T = frameData.T;
+  const P2 = frameData.P2;
 
   for (let i = 0; i < DEPTH_BUCKETS; i++) buckets[i].length = 0;
 
-  for (const [a, b] of model.E) {
+  for (let i = 0; i < model.E.length; i++) {
+    const edge = model.E[i];
+    const a = edge[0];
+    const b = edge[1];
     const z = (T[a][2] + T[b][2]) * 0.5;
     const t = Math.max(0, Math.min(0.999, (Z_HALF - z) / (Z_HALF * 2)));
-    buckets[Math.floor(t * DEPTH_BUCKETS)].push([a, b]);
+    buckets[Math.floor(t * DEPTH_BUCKETS)].push(edge);
   }
 
   ctx.save();

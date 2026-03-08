@@ -25,7 +25,17 @@ function getModelVertexNormals(model, triFaces) {
   if (model._vertexNormals) return model._vertexNormals;
 
   const V = model.V;
-  const normals = Array.from({ length: V.length }, () => [0, 0, 0]);
+  let normals = model._normalsBuffer;
+  if (!normals || normals.length !== V.length) {
+    normals = Array.from({ length: V.length }, () => [0, 0, 0]);
+    model._normalsBuffer = normals;
+  } else {
+    for (let i = 0; i < normals.length; i++) {
+      normals[i][0] = 0;
+      normals[i][1] = 0;
+      normals[i][2] = 0;
+    }
+  }
 
   let cx = 0;
   let cy = 0;
@@ -96,8 +106,10 @@ function drawSolidFillModel(model, alphaScale = 1) {
   const opacity = FILL_OPACITY * alphaScale;
   if (!model || !model.V.length || opacity <= 0.001) return;
 
-  const T = model.V.map(v => mvec(R, v));
-  const P2 = T.map(p => project(p));
+  const frameData = getModelFrameData(model);
+  if (!frameData) return;
+  const T = frameData.T;
+  const P2 = frameData.P2;
 
   if (!model._triFaces) model._triFaces = getModelTriangles(model);
 
@@ -115,12 +127,20 @@ function drawSolidFillModel(model, alphaScale = 1) {
 
   const seamExpandPx = useSmoothShading ? DENSE_SEAM_EXPAND_PX : 0;
 
-  const triOrder = triFaces
-    .map((tri) => ({
-      tri,
-      z: (T[tri[0]][2] + T[tri[1]][2] + T[tri[2]][2]) / 3,
-    }))
-    .sort((a, b) => b.z - a.z);
+  let triOrder = model._triOrder;
+  if (!triOrder || triOrder.length !== triFaces.length) {
+    triOrder = new Array(triFaces.length);
+    for (let i = 0; i < triFaces.length; i++) triOrder[i] = { tri: triFaces[i], z: 0 };
+    model._triOrder = triOrder;
+  }
+
+  for (let i = 0; i < triFaces.length; i++) {
+    const tri = triFaces[i];
+    const item = triOrder[i];
+    item.tri = tri;
+    item.z = (T[tri[0]][2] + T[tri[1]][2] + T[tri[2]][2]) / 3;
+  }
+  triOrder.sort((a, b) => b.z - a.z);
 
   fillLayerCtx.globalCompositeOperation = 'source-over';
   for (const item of triOrder) {

@@ -38,12 +38,13 @@ function frame(nowMs = 0) {
     return;
   }
   lastFrameMs = nowMs;
+  RENDER_FRAME_ID++;
 
   // Physics
   if (HOLD_ROTATION_FRAMES > 0) {
     HOLD_ROTATION_FRAMES--;
   } else {
-    R = mmul(mry(wy), mmul(mrx(wx), mmul(mrz(wz), R)));
+    applyEulerIncrementInPlace(R, wx, wy, wz);
     if (++frameCount % 120 === 0) R = reorthogonalize(R);
 
     if (!dragging) {
