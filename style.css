@@ -25,6 +25,27 @@ body {
   overflow: hidden;
 }
 
+#bg,
+#c,
+#fg {
+  position: fixed;
+  inset: 0;
+}
+
+#bg {
+  z-index: 0;
+  pointer-events: none;
+}
+
+#c {
+  z-index: 1;
+}
+
+#fg {
+  z-index: 2;
+  pointer-events: none;
+}
+
 canvas {
   display: block;
   cursor: grab;
@@ -36,6 +57,7 @@ canvas:active { cursor: grabbing; }
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: 20;
   -webkit-user-select: none;
   user-select: none;
   font-family: 'Share Tech Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
@@ -70,7 +92,7 @@ canvas:active { cursor: grabbing; }
   width: 18.5rem;
   display: grid;
   gap: 0.62rem;
-  pointer-events: all;
+  pointer-events: auto;
 }
 
 .control-panel {
@@ -399,6 +421,10 @@ canvas:active { cursor: grabbing; }
 
 #stats {
   margin-top: 0.1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 0.85rem;
+  row-gap: 0.18rem;
 }
 #stats span {
   display: block;
@@ -406,7 +432,7 @@ canvas:active { cursor: grabbing; }
   letter-spacing: 0.14rem;
   color: var(--ui-stats);
   text-transform: uppercase;
-  line-height: 1.7;
+  line-height: 1.45;
 }
 
 /* bottom-centre label */

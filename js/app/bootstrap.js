@@ -9,9 +9,11 @@
     'ui/color-utils.js',
     'ui/theme.js',
     'ui/controls.js',
+    'render/background-gpu.js',
     'render/background.js',
     'render/wireframe.js',
     'render/fill.js',
+    'render/scene-gpu.js',
     'render/morph.js',
     'render/loop.js',
   ];

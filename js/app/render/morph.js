@@ -1,12 +1,23 @@
 'use strict';
 
+function getMorphFrameParams(nowMs, tRaw) {
+  if (!MORPH || !MORPH.active) {
+    return { cy: MODEL_CY, zHalf: Z_HALF };
+  }
+
+  const points = getMorphNowVertices(nowMs);
+  const sampledParams = computeFrameParams(points);
+  const targetParams = MORPH.targetFrameParams || sampledParams;
+  const blend = Math.max(0, Math.min(1, tRaw));
+  return {
+    cy: sampledParams.cy + (targetParams.cy - sampledParams.cy) * blend,
+    zHalf: sampledParams.zHalf + (targetParams.zHalf - sampledParams.zHalf) * blend,
+  };
+}
+
 function drawMorphPoints(nowMs, tRaw, t) {
   if (!MORPH || !MORPH.active) return;
   const points = getMorphNowVertices(nowMs);
-
-  const params = computeFrameParams(points);
-  MODEL_CY = params.cy;
-  Z_HALF = params.zHalf;
 
   ctx.save();
   ctx.globalCompositeOperation = 'screen';
@@ -61,4 +72,14 @@ function drawMorphPoints(nowMs, tRaw, t) {
     setActiveModel(MORPH.toModel, MORPH.targetName, MORPH.targetV, MORPH.targetE);
     MORPH = null;
   }
+}
+
+function finalizeMorphIfDone(tRaw) {
+  if (!MORPH || !MORPH.active) return;
+  if (tRaw < 1) return;
+
+  MORPH.active = false;
+  setActiveModel(MORPH.toModel, MORPH.targetName, MORPH.targetV, MORPH.targetE);
+  MORPH = null;
+  HOLD_ROTATION_FRAMES = 1;
 }

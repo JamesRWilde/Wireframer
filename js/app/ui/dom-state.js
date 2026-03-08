@@ -23,6 +23,7 @@ const customGreenValue = document.getElementById('custom-green-value');
 const customBlueValue = document.getElementById('custom-blue-value');
 const customHex = document.getElementById('custom-hex');
 const customSwatch = document.getElementById('custom-swatch');
+const statRenderer = document.getElementById('stat-renderer');
 
 let FILL_OPACITY = 0;
 let WIRE_OPACITY = 1;
