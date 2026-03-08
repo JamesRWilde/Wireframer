@@ -1,12 +1,21 @@
 {
   "files": [
+    "capsule.js",
+    "cinquefoilKnot.js",
+    "cone.js",
     "cube.js",
+    "cylinder.js",
     "diamond.js",
     "hyperboloid.js",
     "icosahedron.js",
+    "mobiusStrip.js",
     "octahedron.js",
+    "prism.js",
+    "pyramid.js",
     "sphere.js",
     "spring.js",
+    "starPrism.js",
+    "tetrahedron.js",
     "torus.js",
     "torusKnot.js",
     "wineGlass.js"

@@ -5,16 +5,25 @@
   const systemDir = 'js/object-system/';
   const manifestPath = `${systemDir}manifest.json`;
   const fallbackObjectFiles = [
-    'wineGlass.js',
-    'torus.js',
-    'sphere.js',
+    'capsule.js',
+    'cinquefoilKnot.js',
+    'cone.js',
     'cube.js',
-    'icosahedron.js',
+    'cylinder.js',
     'diamond.js',
-    'torusKnot.js',
     'hyperboloid.js',
-    'spring.js',
+    'icosahedron.js',
+    'mobiusStrip.js',
     'octahedron.js',
+    'prism.js',
+    'pyramid.js',
+    'sphere.js',
+    'spring.js',
+    'starPrism.js',
+    'tetrahedron.js',
+    'torus.js',
+    'torusKnot.js',
+    'wineGlass.js',
   ];
 
   function loadScript(src) {
@@ -46,7 +55,8 @@
       const files = await readManifestFiles();
       if (files.length) return files;
       throw new Error('Manifest exists but contains no object files.');
-    } catch {
+    } catch (err) {
+      console.warn('Wireframer: manifest load failed, trying directory discovery.', err);
       // Fall through to directory discovery.
     }
 
@@ -67,8 +77,8 @@
       const uniqueSorted = Array.from(new Set(candidates)).sort();
       if (!uniqueSorted.length) throw new Error('Directory listing did not expose object files.');
       return uniqueSorted;
-    } catch {
-      // Final fallback when no manifest and no directory listing are available.
+    } catch (err) {
+      console.warn('Wireframer: directory discovery failed, using fallback object list.', err);
       return fallbackObjectFiles.slice();
     }
   }
