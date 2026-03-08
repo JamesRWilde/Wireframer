@@ -22,17 +22,19 @@
       V.push([r * Math.cos(a), halfH, r * Math.sin(a)]);
     }
 
+    const bottomCenter = V.length;
+    V.push([0, -halfH, 0]);
+    const topCenter = V.length;
+    V.push([0, halfH, 0]);
+
     const F = [];
-    const bottom = [];
-    const top = [];
     for (let i = 0; i < points; i++) {
-      bottom.push(i);
-      top.push(points + i);
       const ni = (i + 1) % points;
       F.push([i, ni, points + ni, points + i]);
+      // Triangulated caps avoid invalid fan triangulation of concave star polygons.
+      F.push([bottomCenter, ni, i]);
+      F.push([topCenter, points + i, points + ni]);
     }
-    F.push(bottom);
-    F.push(top.slice().reverse());
 
     const E = [];
     const edgeSet = new Set();
@@ -45,10 +47,12 @@
       E.push([lo, hi]);
     }
 
-    for (const face of F) {
-      for (let i = 0; i < face.length; i++) {
-        addEdge(face[i], face[(i + 1) % face.length]);
-      }
+    // Keep wireframe clean: perimeter + verticals only (no cap spokes to center points).
+    for (let i = 0; i < points; i++) {
+      const ni = (i + 1) % points;
+      addEdge(i, ni);
+      addEdge(points + i, points + ni);
+      addEdge(i, points + i);
     }
 
     return { V, E, F };
