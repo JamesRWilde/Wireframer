@@ -2,7 +2,8 @@
 
 (function initObjectLoader(global) {
   const objectDir = 'js/objects/';
-  const manifestPath = `${objectDir}manifest.json`;
+  const systemDir = 'js/object-system/';
+  const manifestPath = `${systemDir}manifest.json`;
   const fallbackObjectFiles = [
     'wineGlass.js',
     'torus.js',
@@ -37,7 +38,7 @@
     return files
       .filter((file) => typeof file === 'string' && file.endsWith('.js'))
       .filter((file) => file && !file.includes('/') && !file.includes('..'))
-      .filter((file) => file !== 'loader.js' && file !== 'registry.js' && file !== 'utils.js');
+      .filter((file) => file !== 'utils.js');
   }
 
   async function discoverObjectFiles() {
@@ -61,7 +62,7 @@
           return path.startsWith(objectDir) ? path.slice(objectDir.length) : path;
         })
         .filter((file) => file && !file.includes('/') && !file.includes('..'))
-        .filter((file) => file !== 'loader.js' && file !== 'registry.js' && file !== 'utils.js');
+        .filter((file) => file !== 'utils.js');
 
       const uniqueSorted = Array.from(new Set(candidates)).sort();
       if (!uniqueSorted.length) throw new Error('Directory listing did not expose object files.');
@@ -73,7 +74,7 @@
   }
 
   global.WireframeObjectsReady = (async () => {
-    await loadScript(`${objectDir}registry.js`);
+    await loadScript(`${systemDir}registry.js`);
     await loadScript(`${objectDir}utils.js`);
 
     const objectFiles = await discoverObjectFiles();

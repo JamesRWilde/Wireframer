@@ -1,11 +1,15 @@
+
 'use strict';
 
 (function registerTorus(global) {
-  function buildTorus() {
+  const { detailCount } = global.WireframeGeometry;
+
+  function buildTorus(options = {}) {
+    const detail = options.detail ?? 1;
     const R = 0.70;
     const r = 0.28;
-    const maj = 28;
-    const min = 16;
+    const maj = detailCount(56, detail, 28, 2);
+    const min = detailCount(32, detail, 16, 2);
     const V = [];
     const E = [];
     const F = [];

@@ -12,11 +12,6 @@
   --ui-control-option-bg: rgb(7, 12, 24);
   --ui-label: rgba(105, 198, 236, 0.78);
   --ui-value: rgba(145, 224, 255, 0.82);
-  --ui-switch-bg: rgba(36, 78, 106, 0.85);
-  --ui-switch-border: rgba(86, 170, 206, 0.45);
-  --ui-switch-on-bg: rgba(52, 146, 188, 0.86);
-  --ui-switch-on-border: rgba(118, 214, 247, 0.72);
-  --ui-switch-knob: rgba(178, 236, 255, 0.9);
   --ui-switch-glow: rgba(109, 204, 245, 0.55);
   --ui-stats: rgba(70, 150, 190, 0.35);
   --ui-object-label: rgba(110, 210, 255, 0.55);
@@ -122,6 +117,32 @@ canvas:active { cursor: grabbing; }
   background: var(--ui-control-option-bg);
   color: var(--ui-control-fg);
   letter-spacing: 1px;
+}
+
+#lod-control {
+  margin-top: 0.42rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--ui-label);
+  font-size: 0.95rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#lod-slider {
+  width: 100%;
+  flex: 1;
+  accent-color: var(--ui-accent);
+  cursor: pointer;
+}
+
+#lod-value {
+  min-width: 2.6rem;
+  text-align: right;
+  color: var(--ui-value);
 }
 
 #custom-color-control {

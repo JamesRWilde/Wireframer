@@ -1,10 +1,12 @@
 'use strict';
 
 (function registerHyperboloid(global) {
-  const { buildRevolution } = global.WireframeGeometry;
+  const { buildRevolution, detailCount } = global.WireframeGeometry;
 
-  function buildHyperboloid() {
-    const stacks = 16;
+  function buildHyperboloid(options = {}) {
+    const detail = options.detail ?? 1;
+    const stacks = detailCount(30, detail, 16, 1);
+    const segs = detailCount(56, detail, 28, 2);
     const profile = [];
 
     for (let i = 0; i <= stacks; i++) {
@@ -14,7 +16,7 @@
       profile.push([r, y]);
     }
 
-    return buildRevolution(profile, 24);
+    return buildRevolution(profile, segs);
   }
 
   global.WireframeObjectRegistry.register({ name: 'Hyperboloid', build: buildHyperboloid });

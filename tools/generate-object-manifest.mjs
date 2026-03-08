@@ -6,9 +6,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, '..');
 const objectsDir = path.join(repoRoot, 'js', 'objects');
-const manifestPath = path.join(objectsDir, 'manifest.json');
+const manifestPath = path.join(repoRoot, 'js', 'object-system', 'manifest.json');
 
-const excluded = new Set(['loader.js', 'registry.js', 'utils.js']);
+const excluded = new Set(['utils.js']);
 
 function compareNames(a, b) {
   return a.localeCompare(b, 'en', { sensitivity: 'base' });

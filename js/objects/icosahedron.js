@@ -1,7 +1,10 @@
 'use strict';
 
 (function registerIcosahedron(global) {
-  function buildIcosahedron() {
+  const { subdivideMesh } = global.WireframeGeometry;
+
+  function buildIcosahedron(options = {}) {
+    const detail = Math.max(0.5, Math.min(1.4, Number(options.detail) || 1));
     const t = (1 + Math.sqrt(5)) / 2;
     const s = 0.90 / Math.sqrt(1 + t * t);
     const V = [
@@ -48,7 +51,8 @@
       }
     }
 
-    return { V, E, F };
+    const iterations = detail < 0.75 ? 0 : (detail < 1.2 ? 1 : 2);
+    return subdivideMesh({ V, E, F }, iterations);
   }
 
   global.WireframeObjectRegistry.register({ name: 'Icosahedron', build: buildIcosahedron });

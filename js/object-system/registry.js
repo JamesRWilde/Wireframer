@@ -10,11 +10,8 @@
       }
       objects.push(objectDef);
     },
-    list() {
-      return objects.slice();
-    },
   };
 
-  // Backward-compatible global consumed by app.js.
+  // Backward-compatible global consumed by app scripts.
   global.OBJECTS = objects;
 })(window);

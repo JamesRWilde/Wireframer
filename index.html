@@ -21,6 +21,11 @@
 			<section class="control-panel" id="shape-panel">
 				<div class="panel-title">Shape</div>
 				<select id="obj-select" aria-label="Object selector" title="Object selector"></select>
+				<label id="lod-control" for="lod-slider">
+					<span>Detail</span>
+					<input id="lod-slider" type="range" min="50" max="140" step="1" value="100" />
+					<span id="lod-value">100%</span>
+				</label>
 			</section>
 
 			<section class="control-panel" id="custom-color-control">
@@ -83,7 +88,7 @@
 	</div>
 
 	<script src="js/math3d.js"></script>
-	<script src="js/objects/loader.js"></script>
-	<script src="js/app.js"></script>
+	<script src="js/object-system/loader.js"></script>
+	<script src="js/app/bootstrap.js"></script>
 </body>
 </html>

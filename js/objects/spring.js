@@ -1,10 +1,13 @@
 'use strict';
 
 (function registerSpring(global) {
-  function buildSpring() {
+  const { detailCount } = global.WireframeGeometry;
+
+  function buildSpring(options = {}) {
+    const detail = options.detail ?? 1;
     const turns = 5;
-    const segsPerTurn = 16;
-    const sides = 7;
+    const segsPerTurn = detailCount(34, detail, 16, 1);
+    const sides = detailCount(12, detail, 6, 1);
     const tubeR = 0.10;
     const R = 0.68;
     const height = 1.80;

@@ -1,7 +1,10 @@
 'use strict';
 
 (function registerDiamond(global) {
-  function buildDiamond() {
+  const { subdivideMesh } = global.WireframeGeometry;
+
+  function buildDiamond(options = {}) {
+    const detail = Math.max(0.5, Math.min(1.4, Number(options.detail) || 1));
     const r = 0.95;
     const yTop = 1.15;
     const yMid = 0.0;
@@ -28,7 +31,8 @@
       [5, 2, 1], [5, 3, 2], [5, 4, 3], [5, 1, 4],
     ];
 
-    return { V, E, F };
+    const iterations = detail < 0.75 ? 0 : (detail < 1.25 ? 1 : 2);
+    return subdivideMesh({ V, E, F }, iterations);
   }
 
   global.WireframeObjectRegistry.register({ name: 'Diamond', build: buildDiamond });
