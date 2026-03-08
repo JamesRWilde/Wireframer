@@ -1,6 +1,6 @@
 # Wireframer
 
-Wireframer is an interactive 3D playground for exploring how procedural geometry, shading, and wireframe rendering can coexist in a clean, hackable browser app.
+Wireframer is an interactive 3D playground for exploring how mesh geometry, shading, and wireframe rendering can coexist in a clean, hackable browser app.
 
 The goal is not just to display shapes. It is to make transformation visible: how a mesh is built, how depth affects line readability, how color themes propagate across UI and scene, and how one topology morphs into another without hiding the math.
 
@@ -11,7 +11,8 @@ If you like graphics code that feels alive but is still easy to reason about, th
 - It is intentionally bundle-free runtime JavaScript, while still split into focused modules.
 - It renders the same model in two complementary styles at once: solid shading and depth-aware wireframe.
 - It uses function-level seams that are easy to modify in isolation.
-- It treats object definitions as pluggable units (`register + build`), so adding new geometry is straightforward.
+- It treats object definitions as canonical mesh assets (`indexed-polygons-v1` JSON), so adding new geometry is import-friendly.
+- It ships an explicit embedded mesh fallback map for `file://` runs, while still preferring manifest-based JSON fetch over HTTP.
 - It makes visual decisions explainable, not magic: shading terms, edge buckets, contrast enforcement, and morph sampling are explicit in code.
 
 ## What The App Does
@@ -29,7 +30,7 @@ If you like graphics code that feels alive but is still easy to reason about, th
 
 ## Quick Start
 
-Use a local web server because object loading relies on `fetch`.
+Preferred: use a local web server so mesh assets load from `mesh-manifest.json` via `fetch`.
 
 ```powershell
 python -m http.server 5500
@@ -42,6 +43,11 @@ Alternative:
 ```powershell
 npx serve . -l 5500
 ```
+
+Direct file-open also works now:
+
+- Open `index.html` directly and loader will use the embedded mesh fallback map (`js/object-system/mesh-fallback-data.js`).
+- HTTP mode remains the primary path during development (manifest + individual mesh JSON fetches).
 
 ## Controls
 
@@ -56,7 +62,7 @@ npx serve . -l 5500
 ## Runtime Flow In 30 Seconds
 
 1. `index.html` loads `js/math3d.js`, then `js/object-system/loader.js`, then `js/app/bootstrap.js`.
-2. `loader.js` builds `window.WireframeObjectsReady` by loading registry, geometry helpers, and object modules.
+2. `loader.js` builds `window.WireframeObjectsReady` by loading registry and then either mesh JSON assets (HTTP) or embedded mesh fallback data (`file://`).
 3. `bootstrap.js` loads app modules in strict order so globals are available when needed.
 4. `render/loop.js` waits for `WireframeObjectsReady`, then calls `startApp()`.
 5. `startApp()` wires controls and starts `requestAnimationFrame(frame)`.
@@ -67,30 +73,27 @@ npx serve . -l 5500
 
 The key idea is contract boundaries, not folder names.
 
-### Object Contract
+### Mesh Contract
 
-Every object module in `js/objects/` calls:
+Runtime objects are loaded from `js/mesh-data/*.mesh.json` and normalized to:
 
-```js
-global.WireframeObjectRegistry.register({ name, build });
-```
+- `format`: `indexed-polygons-v1`
+- `positions`: vertex list (`[x, y, z]`)
+- `faces`: polygon index list (`[i, j, k, ...]`)
+- `edges`: optional edge list (`[i, j]`) auto-derived if omitted
+- optional shading metadata: `shadingMode`, `creaseAngleDeg`
 
-`build(options)` returns a mesh object:
-
-- `V`: vertex list (`[x, y, z]`).
-- `E`: edge list (`[i, j]`).
-- `F`: face list (`[i, j, k, ...]`, optional for pure wireframe, required for fill shading).
-
-That simple contract keeps the rest of the pipeline generic.
+This keeps shape definition import-friendly and renderer-agnostic.
 
 ### Loader and Discovery
 
-`js/object-system/loader.js` controls object discovery and script loading.
+`js/object-system/loader.js` controls mesh discovery and registration.
 
-- `readManifestFiles()` reads `js/object-system/manifest.json`.
-- `discoverObjectFiles()` falls back to directory scraping, then hardcoded defaults.
-- `loadScript(src)` loads modules in order with `async = false`.
-- `window.WireframeObjectsReady` resolves when all object modules are loaded.
+- `readMeshManifest()` reads `js/object-system/mesh-manifest.json`.
+- Mesh assets are loaded from `js/mesh-data/*.mesh.json` and registered as object builders.
+- `loadEmbeddedMeshFallback()` loads `js/object-system/mesh-fallback-data.js` for explicit offline/file-protocol fallback.
+- `loadScript(src)` loads core registry module with cache busting.
+- `window.WireframeObjectsReady` resolves when all mesh assets are loaded.
 - Script URLs are cache-busted per session (`?v=<token>`) so module edits are reflected reliably during development.
 
 ### Core Scene State
@@ -196,18 +199,11 @@ When CPU foreground is active, `js/app/render/fill.js` does more than just paint
 
 Current default loop behavior focuses on direct mesh morph rendering in the main foreground path.
 
-## Object Construction and Detail Scaling
+## Mesh Data and Detail Scaling
 
-`js/objects/utils.js` provides reusable geometry builders:
+Current shape library is defined in `js/object-system/mesh-manifest.json` and stored as JSON meshes in `js/mesh-data/`.
 
-- `buildRevolution(profile, segs)` for lathed forms.
-- `buildTube(curveFn, segs, sides, tubeR)` for swept/tubular forms.
-- `detailCount(maxCount, detail, minCount, step)` for snapping detail to stable counts.
-- `subdivideMesh(model, iterations)` for polyhedral refinement.
-
-Many newer shapes map detail to explicit min/max ranges or recursion order (instead of raw linear vertex scaling) so low detail stays clearly low-poly and high detail remains practical.
-
-Current object set is defined in `js/object-system/manifest.json`.
+LOD currently comes from pre-exported mesh snapshots (for example `low/mid/high`) selected by the detail slider. This keeps runtime cost predictable and avoids expensive procedural rebuilds in the browser.
 
 ### Object Catalog (Quick Reference)
 
@@ -217,37 +213,23 @@ Current object set is defined in `js/object-system/manifest.json`.
 | Tubular parametrics | `torus`, `torusKnot`, `spring`, `cinquefoilKnot`, `mobiusStrip` | Curve segment and tube-side scaling | Medium -> high with dense curve sampling |
 | Subdivided polyhedra | `cube`, `tetrahedron`, `icosahedron`, `pyramid`, `octahedron` | Iteration thresholds mapped from slider | Stepwise growth; can jump per tier |
 | Faceted solids | `diamond`, `prism`, `starPrism` | Discrete facet count / fixed topology variants | Low -> medium |
-| Fractal solids | `mengerSponge`, `sierpinskiTetrahedron`, `sierpinskiPyramid`, `jerusalemCube` | Recursion depth mapping (cached by level) | Exponential growth; cap max tiers conservatively |
-| Curve-as-solid | `hilbertCurve` | Hilbert order mapped from slider, rendered as tube | Medium; rises quickly with order |
+| Fractal solids | `mengerSponge`, `sierpinskiTetrahedron`, `sierpinskiPyramid`, `jerusalemCube` | Pre-exported LOD mesh snapshots | Stable runtime cost |
+| Curve-as-solid | `hilbertCurve` | Pre-exported LOD mesh snapshots | Stable runtime cost |
 
 Notes:
-- For fractal and curve-order objects, slider tuning should prioritize readable structure over maximum raw vertex count.
-- If an object becomes visually noisy above mid detail, prefer reducing top-tier recursion/order before changing low/mid tiers.
+- For dense shapes, prefer authoring additional offline LOD meshes rather than procedural runtime generation.
+- Keep silhouette identity stable across LODs; vary tessellation density rather than core proportions.
 
 ## Adding A New Shape
 
-1. Create `js/objects/myShape.js`.
-2. Implement and register:
+1. Create `js/mesh-data/my-shape.mesh.json` using `indexed-polygons-v1` format.
+2. Add entry to `js/object-system/mesh-manifest.json`:
 
-```js
-'use strict';
-
-(function registerMyShape(global) {
-  function buildMyShape(options = {}) {
-    const detail = Math.max(0.5, Math.min(1.4, Number(options.detail) || 1));
-    return { V: [], E: [], F: [] };
-  }
-
-  global.WireframeObjectRegistry.register({ name: 'My Shape', build: buildMyShape });
-})(window);
+```json
+{ "name": "My Shape", "file": "my-shape.mesh.json" }
 ```
 
-3. Update manifest with:
-
-```powershell
-node tools/generate-object-manifest.mjs
-```
-
+3. Include `lods` entries in the mesh file (`low/mid/high`) to support detail slider selection.
 4. Reload the app and confirm it appears in the shape selector.
 
 ## Performance Notes
@@ -260,8 +242,18 @@ node tools/generate-object-manifest.mjs
 - Offscreen fill compositing helps avoid visible alpha seam accumulation.
 - Telemetry HUD uses EMA smoothing and throttled DOM updates to stay informative with low overhead.
 
+## Major Upgrade Summary
+
+- Rendering pipeline upgraded with robust n-gon triangulation (ear clipping), shading policy metadata, and crease-angle corner normal handling.
+- CPU and GPU fill paths now share consistent normal/shading assumptions for better visual parity.
+- Runtime moved to mesh-first object definitions (`js/mesh-data/*.mesh.json`) discovered through `js/object-system/mesh-manifest.json`.
+- Legacy JS object-shape modules were removed in favor of canonical JSON mesh assets.
+- Explicit embedded fallback map was reinstated so direct `index.html` (`file://`) runs still work.
+
 ## Troubleshooting
 
-- `Shape list empty`: Ensure the app is served over HTTP, check `js/object-system/manifest.json`, and verify your module calls `WireframeObjectRegistry.register`.
+- `Shape list empty`:
+- In HTTP mode, ensure `js/object-system/mesh-manifest.json` plus `js/mesh-data/*.mesh.json` are present and valid.
+- In `file://` mode, ensure `js/object-system/mesh-fallback-data.js` exists and contains embedded entries.
 - `App says failed to load`: Check the browser console and network tab for missing script paths.
-- `LOD slider has no effect`: Ensure your shape's `build(options)` uses `options.detail`.
+- `LOD slider has no effect`: Ensure your mesh file includes multiple `lods` entries with distinct `detail` values.

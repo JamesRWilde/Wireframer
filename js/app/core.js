@@ -215,12 +215,79 @@ function currentLodBucket() {
   return Math.round(DETAIL_LEVEL * 100);
 }
 
+function buildEdgesFromFacesRuntime(faces) {
+  const E = [];
+  const edgeSet = new Set();
+
+  function addEdge(a, b) {
+    const lo = Math.min(a, b);
+    const hi = Math.max(a, b);
+    const key = `${lo}|${hi}`;
+    if (edgeSet.has(key)) return;
+    edgeSet.add(key);
+    E.push([lo, hi]);
+  }
+
+  for (const face of faces || []) {
+    if (!Array.isArray(face) || face.length < 2) continue;
+    for (let i = 0; i < face.length; i++) {
+      addEdge(face[i], face[(i + 1) % face.length]);
+    }
+  }
+
+  return E;
+}
+
+function toRuntimeMesh(rawModel, obj) {
+  if (!rawModel || typeof rawModel !== 'object') {
+    throw new Error(`Invalid mesh for object '${obj.name}'`);
+  }
+
+  // Canonical mesh format used by registry/import pipeline.
+  if (rawModel.format === 'indexed-polygons-v1' || (Array.isArray(rawModel.positions) && Array.isArray(rawModel.faces))) {
+    const V = (rawModel.positions || []).map((v) => [Number(v[0]) || 0, Number(v[1]) || 0, Number(v[2]) || 0]);
+    const F = (rawModel.faces || [])
+      .filter((f) => Array.isArray(f) && f.length >= 3)
+      .map((f) => f.map((idx) => Math.max(0, Math.floor(Number(idx) || 0))));
+    const E = (Array.isArray(rawModel.edges) && rawModel.edges.length
+      ? rawModel.edges
+          .filter((e) => Array.isArray(e) && e.length >= 2)
+          .map((e) => [Math.max(0, Math.floor(Number(e[0]) || 0)), Math.max(0, Math.floor(Number(e[1]) || 0))])
+      : buildEdgesFromFacesRuntime(F));
+
+    return {
+      V,
+      E,
+      F,
+      _meshFormat: 'indexed-polygons-v1',
+      _shadingMode: rawModel.shadingMode || obj.shadingMode || obj.shading || 'auto',
+      _creaseAngleDeg: Number.isFinite(rawModel.creaseAngleDeg) ? rawModel.creaseAngleDeg : obj.creaseAngleDeg,
+    };
+  }
+
+  // Legacy shape contract support.
+  const V = Array.isArray(rawModel.V) ? rawModel.V : [];
+  const F = Array.isArray(rawModel.F) ? rawModel.F : [];
+  const E = Array.isArray(rawModel.E) && rawModel.E.length ? rawModel.E : buildEdgesFromFacesRuntime(F);
+
+  return {
+    ...rawModel,
+    V,
+    E,
+    F,
+    _meshFormat: rawModel._meshFormat || 'legacy-vef',
+    _shadingMode: rawModel._shadingMode || obj.shadingMode || obj.shading || 'auto',
+    _creaseAngleDeg: Number.isFinite(rawModel._creaseAngleDeg) ? rawModel._creaseAngleDeg : obj.creaseAngleDeg,
+  };
+}
+
 function getDetailModel(obj) {
   const key = `${obj.name}|${currentLodBucket()}`;
   const cached = MODEL_CACHE.get(key);
   if (cached) return cached;
 
-  const model = obj.build({ detail: DETAIL_LEVEL });
+  const rawModel = obj.build({ detail: DETAIL_LEVEL });
+  const model = toRuntimeMesh(rawModel, obj);
   MODEL_CACHE.set(key, model);
 
   if (MODEL_CACHE.size > MODEL_CACHE_LIMIT) {
@@ -407,6 +474,8 @@ function startMorphToObject(obj, nowMs = performance.now()) {
     V: meshFromPts.map((v) => [v[0], v[1], v[2]]),
     E: toModel.E,
     F: toModel.F,
+    _shadingMode: toModel._shadingMode || 'auto',
+    _creaseAngleDeg: toModel._creaseAngleDeg,
   };
 
   const baseCount = Math.max(fromModel.V.length, toModel.V.length, 180);

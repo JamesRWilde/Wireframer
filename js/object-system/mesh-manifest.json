@@ -1,0 +1,102 @@
+{
+  "format": "indexed-polygons-v1-manifest",
+  "generatedAt": "2026-03-08T23:10:34.278Z",
+  "files": [
+    {
+      "name": "Capsule",
+      "file": "capsule.mesh.json"
+    },
+    {
+      "name": "Cinquefoil Knot",
+      "file": "cinquefoil-knot.mesh.json"
+    },
+    {
+      "name": "Cone",
+      "file": "cone.mesh.json"
+    },
+    {
+      "name": "Cube",
+      "file": "cube.mesh.json"
+    },
+    {
+      "name": "Cylinder",
+      "file": "cylinder.mesh.json"
+    },
+    {
+      "name": "Diamond",
+      "file": "diamond.mesh.json"
+    },
+    {
+      "name": "Hilbert Curve",
+      "file": "hilbert-curve.mesh.json"
+    },
+    {
+      "name": "Hyperboloid",
+      "file": "hyperboloid.mesh.json"
+    },
+    {
+      "name": "Icosahedron",
+      "file": "icosahedron.mesh.json"
+    },
+    {
+      "name": "Jerusalem Cube",
+      "file": "jerusalem-cube.mesh.json"
+    },
+    {
+      "name": "Menger Sponge",
+      "file": "menger-sponge.mesh.json"
+    },
+    {
+      "name": "Mobius Strip",
+      "file": "mobius-strip.mesh.json"
+    },
+    {
+      "name": "Octahedron",
+      "file": "octahedron.mesh.json"
+    },
+    {
+      "name": "Prism",
+      "file": "prism.mesh.json"
+    },
+    {
+      "name": "Pyramid",
+      "file": "pyramid.mesh.json"
+    },
+    {
+      "name": "Sierpinski Pyramid",
+      "file": "sierpinski-pyramid.mesh.json"
+    },
+    {
+      "name": "Sierpinski Tetrahedron",
+      "file": "sierpinski-tetrahedron.mesh.json"
+    },
+    {
+      "name": "Sphere",
+      "file": "sphere.mesh.json"
+    },
+    {
+      "name": "Spring",
+      "file": "spring.mesh.json"
+    },
+    {
+      "name": "Star Prism",
+      "file": "star-prism.mesh.json"
+    },
+    {
+      "name": "Tetrahedron",
+      "file": "tetrahedron.mesh.json"
+    },
+    {
+      "name": "Torus",
+      "file": "torus.mesh.json"
+    },
+    {
+      "name": "Torus Knot",
+      "file": "torus-knot.mesh.json"
+    },
+    {
+      "name": "Wine Glass",
+      "file": "wine-glass.mesh.json"
+    }
+  ]
+}

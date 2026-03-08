@@ -91,7 +91,9 @@ function frame(nowMs = 0) {
 
   const fgStartMs = performance.now();
   let drewCpuForeground = false;
-  const mode = resolveForegroundRenderMode();
+  const modeResolved = resolveForegroundRenderMode();
+  const forceCpuForShading = !MORPH?.active && MODEL && MODEL._shadingMode === 'flat';
+  const mode = forceCpuForShading ? 'cpu' : modeResolved;
 
   if (MORPH && MORPH.active) {
     const tRaw = Math.max(0, Math.min(1, (nowMs - MORPH.startMs) / MORPH.durationMs));
@@ -116,6 +118,9 @@ function frame(nowMs = 0) {
 
     // Dynamic geometry requires fresh normals each frame.
     mesh._vertexNormals = null;
+    mesh._faceNormals = null;
+    mesh._triCornerNormals = null;
+    mesh._triCornerNormalsKey = null;
 
     if (mode === 'gpu') {
       const morphGpu = drawGpuSceneModel(mesh, {
@@ -143,7 +148,7 @@ function frame(nowMs = 0) {
       }
     }
 
-    if (foregroundRenderMode === 'cpu') {
+    if (mode === 'cpu' || foregroundRenderMode === 'cpu') {
       if (gpuSceneDrawnLastFrame) {
         clearGpuSceneCanvas();
         gpuSceneDrawnLastFrame = false;
@@ -174,7 +179,7 @@ function frame(nowMs = 0) {
       if (!gpuDrawn) fallbackToCpuForegroundMode();
     }
 
-    if (foregroundRenderMode === 'cpu') {
+    if (mode === 'cpu' || foregroundRenderMode === 'cpu') {
       if (gpuSceneDrawnLastFrame) {
         clearGpuSceneCanvas();
         gpuSceneDrawnLastFrame = false;

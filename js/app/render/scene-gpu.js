@@ -264,41 +264,49 @@ function createSceneGpuRenderer(canvas) {
     const triFaces = model._triFaces;
     if (!triFaces.length) return null;
 
-    const normals = getModelVertexNormals(model, triFaces);
-    if (!normals || normals.length !== model.V.length) return null;
+    const triCornerNormals = getModelTriCornerNormals(model, triFaces);
+    if (!triCornerNormals || triCornerNormals.length !== triFaces.length) return null;
 
     const vertexCount = model.V.length;
     const triIndexCount = triFaces.length * 3;
     const edgeIndexCount = model.E.length * 2;
+    const fillVertexCount = triFaces.length * 3;
 
     if (vertexCount > 65535 && !supportsUint32) return null;
 
-    const posData = new Float32Array(vertexCount * 3);
-    const normalData = new Float32Array(vertexCount * 3);
+    const wirePosData = new Float32Array(vertexCount * 3);
+    const fillPosData = new Float32Array(fillVertexCount * 3);
+    const fillNormalData = new Float32Array(fillVertexCount * 3);
+    const fillSourceIndex = new Uint32Array(fillVertexCount);
 
     for (let i = 0; i < vertexCount; i++) {
       const v = model.V[i];
-      const n = normals[i];
       const o = i * 3;
-      posData[o] = v[0];
-      posData[o + 1] = v[1];
-      posData[o + 2] = v[2];
-      normalData[o] = n[0];
-      normalData[o + 1] = n[1];
-      normalData[o + 2] = n[2];
+      wirePosData[o] = v[0];
+      wirePosData[o + 1] = v[1];
+      wirePosData[o + 2] = v[2];
+    }
+
+    for (let i = 0; i < triFaces.length; i++) {
+      const tri = triFaces[i];
+      const cn = triCornerNormals[i];
+      for (let c = 0; c < 3; c++) {
+        const src = tri[c];
+        const v = model.V[src];
+        const n = cn[c];
+        const o = (i * 3 + c) * 3;
+        fillPosData[o] = v[0];
+        fillPosData[o + 1] = v[1];
+        fillPosData[o + 2] = v[2];
+        fillNormalData[o] = n[0];
+        fillNormalData[o + 1] = n[1];
+        fillNormalData[o + 2] = n[2];
+        fillSourceIndex[i * 3 + c] = src;
+      }
     }
 
     const indexType = vertexCount > 65535 ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT;
-    const triData = vertexCount > 65535 ? new Uint32Array(triIndexCount) : new Uint16Array(triIndexCount);
     const edgeData = vertexCount > 65535 ? new Uint32Array(edgeIndexCount) : new Uint16Array(edgeIndexCount);
-
-    for (let i = 0; i < triFaces.length; i++) {
-      const t = triFaces[i];
-      const o = i * 3;
-      triData[o] = t[0];
-      triData[o + 1] = t[1];
-      triData[o + 2] = t[2];
-    }
 
     for (let i = 0; i < model.E.length; i++) {
       const e = model.E[i];
@@ -307,34 +315,37 @@ function createSceneGpuRenderer(canvas) {
       edgeData[o + 1] = e[1];
     }
 
-    const posBuffer = gl.createBuffer();
-    const normalBuffer = gl.createBuffer();
-    const triIndexBuffer = gl.createBuffer();
+    const wirePosBuffer = gl.createBuffer();
+    const fillPosBuffer = gl.createBuffer();
+    const fillNormalBuffer = gl.createBuffer();
     const edgeIndexBuffer = gl.createBuffer();
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, posBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, posData, gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, wirePosBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, wirePosData, gl.STATIC_DRAW);
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, normalData, gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, fillPosBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, fillPosData, gl.DYNAMIC_DRAW);
 
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triIndexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, triData, gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, fillNormalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, fillNormalData, gl.DYNAMIC_DRAW);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, edgeIndexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, edgeData, gl.STATIC_DRAW);
 
     return {
-      posBuffer,
-      normalBuffer,
-      triIndexBuffer,
+      wirePosBuffer,
+      fillPosBuffer,
+      fillNormalBuffer,
       edgeIndexBuffer,
-      triCount: triData.length,
+      triCount: triIndexCount,
+      fillVertexCount,
       edgeCount: edgeData.length,
       indexType,
       vertexCount,
-      posData,
-      normalData,
+      fillSourceIndex,
+      wirePosData,
+      fillPosData,
+      fillNormalData,
     };
   }
 
@@ -344,29 +355,45 @@ function createSceneGpuRenderer(canvas) {
 
     if (!model._triFaces) model._triFaces = getModelTriangles(model);
     const triFaces = model._triFaces;
-    const normals = getModelVertexNormals(model, triFaces);
-    if (!normals || normals.length !== vertexCount) return false;
+    const cornerNormals = getModelTriCornerNormals(model, triFaces);
+    if (!cornerNormals || cornerNormals.length !== triFaces.length) return false;
 
-    const posData = buffers.posData;
-    const normalData = buffers.normalData;
+    const wirePosData = buffers.wirePosData;
+    const fillPosData = buffers.fillPosData;
+    const fillNormalData = buffers.fillNormalData;
+    const fillSourceIndex = buffers.fillSourceIndex;
 
     for (let i = 0; i < vertexCount; i++) {
       const v = model.V[i];
-      const n = normals[i];
       const o = i * 3;
-      posData[o] = v[0];
-      posData[o + 1] = v[1];
-      posData[o + 2] = v[2];
-      normalData[o] = n[0];
-      normalData[o + 1] = n[1];
-      normalData[o + 2] = n[2];
+      wirePosData[o] = v[0];
+      wirePosData[o + 1] = v[1];
+      wirePosData[o + 2] = v[2];
     }
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.posBuffer);
-    gl.bufferSubData(gl.ARRAY_BUFFER, 0, posData);
+    for (let i = 0; i < buffers.fillVertexCount; i++) {
+      const src = fillSourceIndex[i];
+      const v = model.V[src];
+      const triIdx = Math.floor(i / 3);
+      const corner = i % 3;
+      const n = cornerNormals[triIdx][corner];
+      const o = i * 3;
+      fillPosData[o] = v[0];
+      fillPosData[o + 1] = v[1];
+      fillPosData[o + 2] = v[2];
+      fillNormalData[o] = n[0];
+      fillNormalData[o + 1] = n[1];
+      fillNormalData[o + 2] = n[2];
+    }
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normalBuffer);
-    gl.bufferSubData(gl.ARRAY_BUFFER, 0, normalData);
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.wirePosBuffer);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, wirePosData);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fillPosBuffer);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, fillPosData);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fillNormalBuffer);
+    gl.bufferSubData(gl.ARRAY_BUFFER, 0, fillNormalData);
 
     return true;
   }
@@ -436,18 +463,17 @@ function createSceneGpuRenderer(canvas) {
       gl.uniform3fv(fillLoc.uShadeBright, fillColor01(tmpShadeBright, params.theme.shadeBright, [120, 180, 230]));
       gl.uniform1f(fillLoc.uAlpha, fillAlpha);
 
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.posBuffer);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fillPosBuffer);
       gl.enableVertexAttribArray(fillLoc.aPos);
       gl.vertexAttribPointer(fillLoc.aPos, 3, gl.FLOAT, false, 0, 0);
 
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normalBuffer);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fillNormalBuffer);
       gl.enableVertexAttribArray(fillLoc.aNormal);
       gl.vertexAttribPointer(fillLoc.aNormal, 3, gl.FLOAT, false, 0, 0);
 
-      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.triIndexBuffer);
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-      gl.drawElements(gl.TRIANGLES, buffers.triCount, buffers.indexType, 0);
+      gl.drawArrays(gl.TRIANGLES, 0, buffers.fillVertexCount);
     }
 
     if (wireAlpha > 0.001) {
@@ -461,7 +487,7 @@ function createSceneGpuRenderer(canvas) {
       gl.uniform3fv(wireLoc.uWireFar, fillColor01(tmpWireFar, params.theme.wireFar, [120, 195, 255]));
       gl.uniform1f(wireLoc.uAlpha, wireAlpha);
 
-      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.posBuffer);
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffers.wirePosBuffer);
       gl.enableVertexAttribArray(wireLoc.aPos);
       gl.vertexAttribPointer(wireLoc.aPos, 3, gl.FLOAT, false, 0, 0);
 
