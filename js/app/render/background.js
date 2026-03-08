@@ -3,6 +3,11 @@
 function drawBackground(nowMs) {
   const t = nowMs * 0.001;
 
+  BG_PARTICLE_DENSITY += (BG_PARTICLE_DENSITY_TARGET - BG_PARTICLE_DENSITY) * 0.08;
+  BG_PARTICLE_VELOCITY += (BG_PARTICLE_VELOCITY_TARGET - BG_PARTICLE_VELOCITY) * 0.12;
+  BG_PARTICLE_OPACITY += (BG_PARTICLE_OPACITY_TARGET - BG_PARTICLE_OPACITY) * 0.12;
+  reconcileBackgroundParticles();
+
   // Keep the scene floor neutral black so only particles/geometry carry color.
   ctx.fillStyle = 'rgb(0, 0, 0)';
   ctx.fillRect(0, 0, W, H);
@@ -10,9 +15,13 @@ function drawBackground(nowMs) {
   // Particle-based ambient motion is less prone to HDR gradient banding.
   ctx.save();
   ctx.globalCompositeOperation = 'screen';
+
+  const velocityScale = Math.max(0, BG_PARTICLE_VELOCITY);
+  const opacityScale = Math.max(0, Math.min(1.8, BG_PARTICLE_OPACITY));
+
   for (const p of BG_PARTICLES) {
-    p.x += p.vx;
-    p.y += p.vy;
+    p.x += p.vx * velocityScale;
+    p.y += p.vy * velocityScale;
 
     if (p.x < -2) p.x = W + 2;
     else if (p.x > W + 2) p.x = -2;
@@ -21,7 +30,7 @@ function drawBackground(nowMs) {
     else if (p.y > H + 2) p.y = -2;
 
     const pulse = 0.5 + 0.5 * Math.sin(t * p.speed + p.phase);
-    const alpha = p.alphaBase + pulse * 0.14;
+    const alpha = (p.alphaBase + pulse * 0.14) * opacityScale;
 
     // Small soft dots read better than 1px squares, especially on HDR/high-density panels.
     ctx.beginPath();

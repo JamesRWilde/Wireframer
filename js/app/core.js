@@ -9,24 +9,74 @@ const fillLayerCanvas = document.createElement('canvas');
 const fillLayerCtx = fillLayerCanvas.getContext('2d');
 let W = 0, H = 0;
 const BG_PARTICLES = [];
+let BG_PARTICLE_DENSITY = 1;
+let BG_PARTICLE_DENSITY_TARGET = 1;
+let BG_PARTICLE_VELOCITY = 1;
+let BG_PARTICLE_VELOCITY_TARGET = 1;
+let BG_PARTICLE_OPACITY = 1;
+let BG_PARTICLE_OPACITY_TARGET = 1;
+
+function clampBackgroundScale(level) {
+  return Math.max(0, Math.min(5.2, Number(level) || 0));
+}
+
+function createBackgroundParticle() {
+  return {
+    x: Math.random() * W,
+    y: Math.random() * H,
+    size: 0.9 + Math.random() * 1.6,
+    vx: (Math.random() - 0.5) * 0.24,
+    vy: (Math.random() - 0.5) * 0.24,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.8 + Math.random() * 1.5,
+    alphaBase: 0.12 + Math.random() * 0.16,
+  };
+}
+
+function getBackgroundParticleTargetCount() {
+  const baseCount = Math.max(210, Math.round((W * H) / 9500));
+  return Math.max(0, Math.round(baseCount * BG_PARTICLE_DENSITY_TARGET));
+}
+
+function reconcileBackgroundParticles() {
+  const targetCount = getBackgroundParticleTargetCount();
+  const currentCount = BG_PARTICLES.length;
+  if (targetCount === currentCount) return;
+
+  const delta = targetCount - currentCount;
+  const step = Math.max(1, Math.ceil(Math.abs(delta) * 0.12));
+  const amount = Math.min(Math.abs(delta), step);
+
+  if (delta > 0) {
+    for (let i = 0; i < amount; i++) BG_PARTICLES.push(createBackgroundParticle());
+  } else {
+    BG_PARTICLES.splice(Math.max(0, BG_PARTICLES.length - amount), amount);
+  }
+}
+
+function setBackgroundParticleDensity(level) {
+  BG_PARTICLE_DENSITY_TARGET = clampBackgroundScale(level);
+}
+
+function setBackgroundParticleVelocity(level) {
+  BG_PARTICLE_VELOCITY_TARGET = clampBackgroundScale(level);
+}
+
+function setBackgroundParticleOpacity(level) {
+  BG_PARTICLE_OPACITY_TARGET = clampBackgroundScale(level);
+}
 
 function initBackgroundParticles() {
   if (!W || !H) return;
 
-  const count = Math.max(210, Math.round((W * H) / 9500));
+  BG_PARTICLE_DENSITY = BG_PARTICLE_DENSITY_TARGET;
+  BG_PARTICLE_VELOCITY = BG_PARTICLE_VELOCITY_TARGET;
+  BG_PARTICLE_OPACITY = BG_PARTICLE_OPACITY_TARGET;
+  const count = getBackgroundParticleTargetCount();
   BG_PARTICLES.length = 0;
 
   for (let i = 0; i < count; i++) {
-    BG_PARTICLES.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      size: 0.9 + Math.random() * 1.6,
-      vx: (Math.random() - 0.5) * 0.24,
-      vy: (Math.random() - 0.5) * 0.24,
-      phase: Math.random() * Math.PI * 2,
-      speed: 0.8 + Math.random() * 1.5,
-      alphaBase: 0.12 + Math.random() * 0.16,
-    });
+    BG_PARTICLES.push(createBackgroundParticle());
   }
 }
 

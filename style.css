@@ -294,6 +294,83 @@ canvas:active { cursor: grabbing; }
   color: var(--ui-value);
 }
 
+#bg-density-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--ui-label);
+  font-size: 0.95rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#bg-density {
+  width: 100%;
+  flex: 1;
+  accent-color: var(--ui-accent);
+  cursor: pointer;
+}
+
+#bg-density-value {
+  min-width: 2.6rem;
+  text-align: right;
+  color: var(--ui-value);
+}
+
+#bg-velocity-control {
+  margin-top: 0.42rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--ui-label);
+  font-size: 0.95rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#bg-velocity {
+  width: 100%;
+  flex: 1;
+  accent-color: var(--ui-accent);
+  cursor: pointer;
+}
+
+#bg-velocity-value {
+  min-width: 2.6rem;
+  text-align: right;
+  color: var(--ui-value);
+}
+
+#bg-opacity-control {
+  margin-top: 0.42rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--ui-label);
+  font-size: 0.95rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#bg-opacity {
+  width: 100%;
+  flex: 1;
+  accent-color: var(--ui-accent);
+  cursor: pointer;
+}
+
+#bg-opacity-value {
+  min-width: 2.6rem;
+  text-align: right;
+  color: var(--ui-value);
+}
+
 #stats {
   margin-top: 0.1rem;
 }
