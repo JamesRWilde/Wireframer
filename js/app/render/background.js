@@ -3,7 +3,7 @@
 let BG_RENDERER = null;
 let BG_RENDERER_FAILED = false;
 let BG_GPU_LAST_RENDER_MS = -1;
-const BG_GPU_MAX_FPS = 30;
+const BG_GPU_MAX_FPS = 60;
 const BG_GPU_MIN_INTERVAL_MS = 1000 / BG_GPU_MAX_FPS;
 
 function getBackgroundRenderer() {

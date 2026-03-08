@@ -3,6 +3,9 @@
 let cpuForegroundDrawnOnMainCanvas = false;
 let gpuSceneDrawnLastFrame = false;
 let foregroundRenderMode = 'unknown';
+const MAX_FPS = 60;
+const MIN_FRAME_INTERVAL_MS = 1000 / MAX_FPS;
+let lastFrameMs = -1;
 
 function updateRendererHud(mode) {
   if (!statRenderer) return;
@@ -30,6 +33,11 @@ function fallbackToCpuForegroundMode() {
 
 function frame(nowMs = 0) {
   requestAnimationFrame(frame);
+
+  if (lastFrameMs >= 0 && nowMs - lastFrameMs < MIN_FRAME_INTERVAL_MS) {
+    return;
+  }
+  lastFrameMs = nowMs;
 
   // Physics
   if (HOLD_ROTATION_FRAMES > 0) {
