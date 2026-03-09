@@ -12,7 +12,7 @@ If you like graphics code that feels alive but is still easy to reason about, th
 - It renders the same model in two complementary styles at once: solid shading and depth-aware wireframe.
 - It uses function-level seams that are easy to modify in isolation.
 - It treats object definitions as canonical mesh assets (`indexed-polygons-v1` JSON), so adding new geometry is import-friendly.
-- It ships an explicit embedded mesh fallback map for `file://` runs, while still preferring manifest-based JSON fetch over HTTP.
+- It keeps mesh geometry only in per-shape mesh files, with a manifest/fallback list for discovery.
 - It makes visual decisions explainable, not magic: shading terms, edge buckets, contrast enforcement, and morph sampling are explicit in code.
 
 ## What The App Does
@@ -35,7 +35,7 @@ If you like graphics code that feels alive but is still easy to reason about, th
 - `engine/shading/`: GPU shading/render routines (shaders, buffers, draw, runtime).
 - `engine/physics/`: input and motion state plumbing.
 - `ui/`: controls, theme, and UI helper modules.
-- `meshes/`: mesh assets, manifest, loader/registry, and embedded fallback.
+- `meshes/`: mesh assets only (`*.mesh.json`).
 
 ## Quick Start
 
@@ -53,10 +53,10 @@ Alternative:
 npx serve . -l 5500
 ```
 
-Direct file-open also works now:
+Direct file-open can work depending on browser policy:
 
-- Open `index.html` directly and loader will use the embedded mesh fallback map (`mesh-fallback-data.js`).
-- HTTP mode remains the primary path during development (manifest + individual mesh JSON fetches).
+- If browser allows `file://` JSON reads, manifest + mesh files load directly.
+- If `file://` reads are blocked, use HTTP hosting or scoped manifest resolvers in the host page/bundle.
 
 ## Controls
 
@@ -71,7 +71,7 @@ Direct file-open also works now:
 ## Runtime Flow In 30 Seconds
 
 1. `index.html` loads `engine/math3d.js`, then `loader.js`, then `engine/bootstrap.js`.
-2. `loader.js` builds `window.WireframeObjectsReady` by loading registry and then either mesh JSON assets (HTTP) or embedded mesh fallback data (`file://`).
+2. `loader.js` builds `window.WireframeObjectsReady` by loading registry, reading manifest entries, then resolving each mesh payload from file paths or scoped resolvers.
 3. `engine/bootstrap.js` loads app modules in strict order so globals are available when needed.
 4. `engine/loop.js` waits for `WireframeObjectsReady`, then calls `startApp()`.
 5. `startApp()` wires controls and starts `requestAnimationFrame(frame)`.
@@ -98,12 +98,13 @@ This keeps shape definition import-friendly and renderer-agnostic.
 
 `loader.js` controls mesh discovery and registration.
 
-- `readMeshManifest()` reads `mesh-manifest.json`.
-- Mesh assets are loaded from `meshes/*.mesh.json` and registered as object builders.
-- `loadEmbeddedMeshFallback()` loads `mesh-fallback-data.js` for explicit offline/file-protocol fallback.
-- `loadScript(src)` loads core registry module with cache busting.
-- `window.WireframeObjectsReady` resolves when all mesh assets are loaded.
-- Script URLs are cache-busted per session (`?v=<token>`) so module edits are reflected reliably during development.
+- `readMeshManifest()` reads `mesh-manifest.json` when available.
+- If manifest fetch fails, loader can use scoped manifest entries from `window.WireframeMeshManifest`.
+- Fallback list script (`mesh-fallback-data.js`) is metadata-only (`name` + `file`) and does not contain mesh payloads.
+- Mesh payloads are resolved either from `meshes/*.mesh.json` files or manifest `resolver` functions.
+- Resolver providers can be exposed via `window.WireframeMeshResolvers` (or direct global function names).
+- `loadScript(src)` loads registry/fallback scripts with cache busting in HTTP mode.
+- `window.WireframeObjectsReady` resolves when all mesh assets are resolved and registered.
 
 ### Core Scene State
 
@@ -238,6 +239,12 @@ Notes:
 { "name": "My Shape", "file": "my-shape.mesh.json" }
 ```
 
+	Or for bundled/host-scoped resolution:
+
+```json
+{ "name": "My Shape", "resolver": "buildMyShapeMesh" }
+```
+
 3. Include `lods` entries in the mesh file (`low/mid/high`) to support detail slider selection.
 4. Reload the app and confirm it appears in the shape selector.
 
@@ -257,7 +264,7 @@ Notes:
 - CPU and GPU fill paths now share consistent normal/shading assumptions for better visual parity.
 - Runtime moved to mesh-first object definitions (`meshes/*.mesh.json`) discovered through `mesh-manifest.json`.
 - Legacy JS object-shape modules were removed in favor of canonical JSON mesh assets.
-- Explicit embedded fallback map was reinstated so direct `index.html` (`file://`) runs still work.
+- Fallback data is now list-only metadata; all geometry remains defined in per-shape mesh files.
 
 ## Troubleshooting
 

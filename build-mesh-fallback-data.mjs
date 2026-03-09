@@ -9,6 +9,14 @@ const repoRoot = __dirname;
 const meshManifestPath = path.join(repoRoot, 'mesh-manifest.json');
 const outPath = path.join(repoRoot, 'mesh-fallback-data.js');
 
+function resolverNameForFile(fileName) {
+  const stem = String(fileName || '')
+    .replace(/\.mesh\.json$/i, '')
+    .replace(/\.json$/i, '');
+  const safe = stem.replace(/[^A-Za-z0-9_$]+/g, '_');
+  return `mesh_${safe}`;
+}
+
 async function main() {
   const manifest = JSON.parse(await fs.readFile(meshManifestPath, 'utf8'));
   const files = Array.isArray(manifest.files) ? manifest.files : [];
@@ -20,6 +28,7 @@ async function main() {
     fallbackList.push({
       name: name || entry.file.replace(/\.mesh\.json$/i, '').replace(/\.json$/i, ''),
       file: entry.file,
+      resolver: resolverNameForFile(entry.file),
     });
   }
 
