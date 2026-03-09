@@ -109,17 +109,16 @@ function syncRenderToggles() {
 
 function initObjectSelector() {
   select.innerHTML = '';
-
+  // OBJECTS is populated by loader.js using mesh-manifest.json only
   OBJECTS.forEach((obj, i) => {
     const opt = document.createElement('option');
     opt.value = i;
     opt.textContent = obj.name;
     select.appendChild(opt);
   });
-
   select.onchange = () => {
     persistUiState();
-    startMorphToObject(OBJECTS[+select.value]);
+    loadObject(OBJECTS[select.selectedIndex]);
   };
   lodSlider.oninput = () => {
     syncRenderToggles();

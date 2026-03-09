@@ -33,7 +33,10 @@ function buildCustomTheme(rgbInput) {
   const base = [clampByte(rgbInput[0]), clampByte(rgbInput[1]), clampByte(rgbInput[2])];
   const isLight = THEME_MODE === 'light';
 
-  const bg = isLight ? mixRgb(base, [255, 255, 255], 0.95) : mixRgb(base, [0, 0, 0], 0.93);
+  // In dark mode, use original bg-solid color for background (no haze)
+  const bg = isLight
+    ? mixRgb(base, [255, 255, 255], 0.95)
+    : [0, 0, 0]; // match --bg-solid pure black
   const uiBg = isLight ? mixRgb(base, [255, 255, 255], 0.88) : mixRgb(base, [0, 0, 0], 0.9);
   const panelBg = isLight ? mixRgb(base, [255, 255, 255], 0.78) : mixRgb(base, [0, 0, 0], 0.88);
   const optionBg = isLight ? mixRgb(base, [255, 255, 255], 0.82) : mixRgb(base, [0, 0, 0], 0.88);

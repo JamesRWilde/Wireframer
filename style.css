@@ -1,7 +1,7 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg-solid: rgb(5, 8, 16);
+  --bg-solid: rgb(0, 0, 0);
   --ui-title: rgba(130, 220, 255, 0.85);
   --ui-subtitle: rgba(80, 160, 200, 0.45);
   --ui-control-border: rgba(80, 160, 200, 0.35);

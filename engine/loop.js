@@ -226,9 +226,4 @@ function startApp() {
   requestAnimationFrame(frame);
 }
 
-const ready = window.WireframeObjectsReady || Promise.resolve();
-ready.then(startApp).catch((err) => {
-  console.error(err);
-  document.getElementById('obj-label').textContent = 'Failed to load objects';
-  requestAnimationFrame(frame);
-});
+startApp();
