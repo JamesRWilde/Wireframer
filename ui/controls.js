@@ -82,7 +82,7 @@ function restoreUiState() {
 }
 
 function syncRenderToggles() {
-  DETAIL_LEVEL = Number(lodSlider.value) / 100;
+  window.DETAIL_LEVEL = Number(lodSlider.value) / 100;
   lodValue.textContent = `${sliderDisplayPercent(lodSlider)}%`;
 
   const bgDensityRaw = Number(bgDensity.value) / 100;
@@ -123,7 +123,8 @@ function initObjectSelector() {
   lodSlider.oninput = () => {
     syncRenderToggles();
     if (!OBJECTS.length) return;
-    loadObject(OBJECTS[+select.value]);
+    MODEL_CACHE.clear(); // Force recalc for new detail level
+    loadObject(OBJECTS[select.selectedIndex]);
   };
   lodSlider.onchange = lodSlider.oninput;
   fillOpacity.oninput = syncRenderToggles;

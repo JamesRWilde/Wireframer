@@ -7,34 +7,23 @@ if (window.WIREFRAME_MESHES) {
   for (const [name, mesh] of Object.entries(window.WIREFRAME_MESHES)) {
     // Use mesh.name if present, else fallback to filename key
     const displayName = mesh.name || name;
+    let highLod = null;
+    if (Array.isArray(mesh.lods) && mesh.lods.length) {
+      // Find highest detail LOD only
+      highLod = mesh.lods.reduce((a, b) => (b.detail > a.detail ? b : a), mesh.lods[0]);
+    }
     window.OBJECTS.push({
       name: displayName,
-      build: ({ detail } = {}) => {
-        // If mesh has LODs, pick the highest detail (or closest to requested detail)
-        if (Array.isArray(mesh.lods) && mesh.lods.length) {
-          // Pick the LOD with the highest detail value (or closest to requested detail)
-          let best = mesh.lods[0];
-          if (typeof detail === 'number') {
-            let bestDelta = Math.abs((best.detail ?? 1) - detail);
-            for (const lod of mesh.lods) {
-              const delta = Math.abs((lod.detail ?? 1) - detail);
-              if (delta < bestDelta) {
-                best = lod;
-                bestDelta = delta;
-              }
-            }
-          } else {
-            // fallback: pick highest detail
-            best = mesh.lods.reduce((a, b) => (b.detail > a.detail ? b : a), mesh.lods[0]);
-          }
-          // Return in canonical format
+      build: () => {
+        // Always use highest detail LOD
+        if (highLod) {
           return {
             format: mesh.format || 'indexed-polygons-v1',
-            positions: best.positions,
-            faces: best.faces,
-            edges: best.edges,
-            shadingMode: mesh.shadingMode || best.shadingMode || 'auto',
-            creaseAngleDeg: mesh.creaseAngleDeg || best.creaseAngleDeg,
+            positions: highLod.positions,
+            faces: highLod.faces,
+            edges: highLod.edges,
+            shadingMode: mesh.shadingMode || highLod.shadingMode || 'auto',
+            creaseAngleDeg: mesh.creaseAngleDeg || highLod.creaseAngleDeg,
           };
         }
         // No LODs, return as-is

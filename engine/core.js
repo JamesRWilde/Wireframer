@@ -59,6 +59,7 @@ function reconcileBackgroundParticles() {
 function setBackgroundParticleDensity(level) {
   BG_PARTICLE_DENSITY_TARGET = clampBackgroundScale(level);
 }
+window.setBackgroundParticleDensity = setBackgroundParticleDensity;
 
 function setBackgroundParticleVelocity(level) {
   BG_PARTICLE_VELOCITY_TARGET = clampBackgroundScale(level);
@@ -174,7 +175,47 @@ const MORPH_DURATION_MS = 2000;
 const MORPH_POINT_CAP = 700;
 let MORPH = null;
 let HOLD_ROTATION_FRAMES = 0;
-let DETAIL_LEVEL = 1;
+window.DETAIL_LEVEL = 1;
+let GLOBAL_MIN_LOD_PERCENT = 5; // Minimum LOD as percent of max vertices (settable)
+
+function setGlobalMinLodPercent(percent) {
+  GLOBAL_MIN_LOD_PERCENT = Math.max(1, Math.min(100, Number(percent) || 5));
+}
+
+// Minimal, robust QEM decimation that always reduces vertex count
+function decimateMeshVertices(model, percent) {
+  if (!model || !model.V || model.V.length < 3) return model;
+  const n = model.V.length;
+  const minPercent = Math.max(GLOBAL_MIN_LOD_PERCENT, 1);
+  const clampedPercent = Math.max(minPercent, Math.min(100, percent));
+  const targetCount = Math.max(3, Math.round((clampedPercent / 100) * n));
+  if (targetCount >= n) return model;
+
+  // BASIC decimator: randomly remove vertices and associated faces until targetCount is reached
+  let V = model.V.map(v => v.slice());
+  let F = model.F.map(f => f.slice());
+  while (V.length > targetCount) {
+    // Remove a random vertex
+    const idx = Math.floor(Math.random() * V.length);
+    V.splice(idx, 1);
+    // Remove faces that reference this vertex
+    F = F.filter(face => face.every(i => i !== idx));
+    // Reindex faces
+    F = F.map(face => face.map(i => (i > idx ? i - 1 : i)));
+  }
+  const E = buildEdgesFromFacesRuntime(F);
+  if (!F.length || !V.length) {
+    console.warn('Basic decimation produced empty mesh! Returning original.');
+    return model;
+  }
+  return {
+    ...model,
+    V,
+    F,
+    E,
+  };
+}
+
 const MODEL_CACHE = new Map();
 const MODEL_CACHE_LIMIT = 80;
 
@@ -203,12 +244,13 @@ function computeFrameParams(vertices) {
   return { cy, zHalf: Math.sqrt(maxD2) * 1.05 };
 }
 
-function setActiveModel(model, name, vertexCount, edgeCount) {
+function setActiveModel(model, name) {
   MODEL = model;
   const params = computeFrameParams(MODEL.V);
   MODEL_CY = params.cy;
   Z_HALF = params.zHalf;
-  updateHud(name, vertexCount, edgeCount);
+  console.log(`[setActiveModel] MODEL.V.length=${MODEL.V.length}, MODEL.E.length=${MODEL.E.length}`);
+  updateHud(name, MODEL.V.length, MODEL.E.length);
 }
 
 function currentLodBucket() {
@@ -238,6 +280,16 @@ function buildEdgesFromFacesRuntime(faces) {
   return E;
 }
 
+// Utility: filter edges to only those with valid vertex indices
+function filterValidEdges(E, V) {
+  const n = V.length;
+  return (E || []).filter(e =>
+    Array.isArray(e) && e.length === 2 &&
+    Number.isInteger(e[0]) && Number.isInteger(e[1]) &&
+    e[0] >= 0 && e[0] < n && e[1] >= 0 && e[1] < n && e[0] !== e[1]
+  );
+}
+
 function toRuntimeMesh(rawModel, obj) {
   if (!rawModel || typeof rawModel !== 'object') {
     throw new Error(`Invalid mesh for object '${obj.name}'`);
@@ -254,10 +306,9 @@ function toRuntimeMesh(rawModel, obj) {
           .filter((e) => Array.isArray(e) && e.length >= 2)
           .map((e) => [Math.max(0, Math.floor(Number(e[0]) || 0)), Math.max(0, Math.floor(Number(e[1]) || 0))])
       : buildEdgesFromFacesRuntime(F));
-
     return {
       V,
-      E,
+      E: filterValidEdges(E, V),
       F,
       _meshFormat: 'indexed-polygons-v1',
       _shadingMode: rawModel.shadingMode || obj.shadingMode || obj.shading || 'auto',
@@ -269,11 +320,10 @@ function toRuntimeMesh(rawModel, obj) {
   const V = Array.isArray(rawModel.V) ? rawModel.V : [];
   const F = Array.isArray(rawModel.F) ? rawModel.F : [];
   const E = Array.isArray(rawModel.E) && rawModel.E.length ? rawModel.E : buildEdgesFromFacesRuntime(F);
-
   return {
     ...rawModel,
     V,
-    E,
+    E: filterValidEdges(E, V),
     F,
     _meshFormat: rawModel._meshFormat || 'legacy-vef',
     _shadingMode: rawModel._shadingMode || obj.shadingMode || obj.shading || 'auto',
@@ -282,26 +332,22 @@ function toRuntimeMesh(rawModel, obj) {
 }
 
 function getDetailModel(obj) {
-  const key = `${obj.name}|${currentLodBucket()}`;
-  const cached = MODEL_CACHE.get(key);
-  if (cached) return cached;
-
-  const rawModel = obj.build({ detail: DETAIL_LEVEL });
-  const model = toRuntimeMesh(rawModel, obj);
-  MODEL_CACHE.set(key, model);
-
-  if (MODEL_CACHE.size > MODEL_CACHE_LIMIT) {
-    const firstKey = MODEL_CACHE.keys().next().value;
-    MODEL_CACHE.delete(firstKey);
+  const percent = Math.max(GLOBAL_MIN_LOD_PERCENT, Math.round(DETAIL_LEVEL * 100));
+  // Always build at highest detail
+  const rawModel = obj.build({ detail: 1 });
+  let model = toRuntimeMesh(rawModel, obj);
+  // Decimate if needed
+  if (percent < 100) {
+    model = decimateMeshVertices(model, percent);
   }
-
   return model;
 }
 
 function loadObject(obj) {
   MORPH = null;
   const model = getDetailModel(obj);
-  setActiveModel(model, obj.name, model.V.length, model.E.length);
+  console.log(`[loadObject] model.V.length=${model.V.length}, model.E.length=${model.E.length}`);
+  setActiveModel(model, obj.name);
 }
 
 function sortVerticesForMorph(vertices) {
@@ -500,5 +546,25 @@ function startMorphToObject(obj, nowMs = performance.now()) {
   };
 
   updateHud(`${obj.name} (morphing)`, toModel.V.length, toModel.E.length);
+}
+
+// Add a visible debug overlay to the page for mesh decimation status
+function showDecimationDebugInfo(current, target) {
+  let dbg = document.getElementById('decimation-debug');
+  if (!dbg) {
+    dbg = document.createElement('div');
+    dbg.id = 'decimation-debug';
+    dbg.style.position = 'fixed';
+    dbg.style.bottom = '10px';
+    dbg.style.right = '10px';
+    dbg.style.background = 'rgba(0,0,0,0.8)';
+    dbg.style.color = '#fff';
+    dbg.style.font = 'bold 15px monospace';
+    dbg.style.padding = '8px 16px';
+    dbg.style.zIndex = 9999;
+    dbg.style.borderRadius = '8px';
+    document.body.appendChild(dbg);
+  }
+  dbg.textContent = `Decimator: vertices=${current}, target=${target}`;
 }
 
