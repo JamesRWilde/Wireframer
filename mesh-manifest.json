@@ -7,6 +7,30 @@
       "file": "capsule.mesh.json"
     },
     {
+      "name": "Dog",
+      "file": "dog.mesh.json"
+    },
+    {
+      "name": "Cat",
+      "file": "cat.mesh.json"
+    },
+    {
+      "name": "Car",
+      "file": "car.mesh.json"
+    },
+    {
+      "name": "Tree",
+      "file": "tree.mesh.json"
+    },
+    {
+      "name": "Acorn",
+      "file": "acorn.mesh.json"
+    },
+    {
+      "name": "Pinecone",
+      "file": "pinecone.mesh.json"
+    },
+    {
       "name": "Cinquefoil Knot",
       "file": "cinquefoil-knot.mesh.json"
     },

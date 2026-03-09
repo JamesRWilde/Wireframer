@@ -7,28 +7,25 @@ const __dirname = path.dirname(__filename);
 const repoRoot = __dirname;
 
 const meshManifestPath = path.join(repoRoot, 'mesh-manifest.json');
-const meshDir = path.join(repoRoot, 'meshes');
 const outPath = path.join(repoRoot, 'mesh-fallback-data.js');
 
 async function main() {
   const manifest = JSON.parse(await fs.readFile(meshManifestPath, 'utf8'));
   const files = Array.isArray(manifest.files) ? manifest.files : [];
 
-  const embedded = [];
+  const fallbackList = [];
   for (const entry of files) {
     if (!entry || typeof entry.file !== 'string') continue;
-    const p = path.join(meshDir, entry.file);
-    const payload = JSON.parse(await fs.readFile(p, 'utf8'));
-    embedded.push({
-      name: typeof entry.name === 'string' ? entry.name : payload.name,
+    const name = typeof entry.name === 'string' && entry.name.trim() ? entry.name.trim() : null;
+    fallbackList.push({
+      name: name || entry.file.replace(/\.mesh\.json$/i, '').replace(/\.json$/i, ''),
       file: entry.file,
-      payload,
     });
   }
 
-  const content = `'use strict';\n\n(function initEmbeddedMeshes(global) {\n  global.WireframeEmbeddedMeshes = ${JSON.stringify(embedded)};\n})(window);\n`;
+  const content = `'use strict';\n\n(function initEmbeddedMeshList(global) {\n  global.WireframeEmbeddedMeshList = ${JSON.stringify(fallbackList)};\n})(window);\n`;
   await fs.writeFile(outPath, content, 'utf8');
-  console.log(`Wrote ${path.relative(repoRoot, outPath)} with ${embedded.length} embedded mesh entries.`);
+  console.log(`Wrote ${path.relative(repoRoot, outPath)} with ${fallbackList.length} fallback list entries.`);
 }
 
 main().catch((err) => {

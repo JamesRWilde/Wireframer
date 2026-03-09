@@ -55,6 +55,26 @@
       .filter((entry) => !entry.file.includes('/') && !entry.file.includes('..'));
   }
 
+  function normalizeFallbackEntries(entries) {
+    if (!Array.isArray(entries)) return [];
+    return entries
+      .map((entry) => {
+        if (typeof entry === 'string') return { name: null, file: entry };
+        if (!entry || typeof entry !== 'object') return null;
+        return {
+          name: typeof entry.name === 'string' ? entry.name : null,
+          file: typeof entry.file === 'string' ? entry.file : null,
+        };
+      })
+      .filter((entry) => entry && entry.file && entry.file.endsWith('.json'))
+      .filter((entry) => !entry.file.includes('/') && !entry.file.includes('..'));
+  }
+
+  async function readFallbackManifestList() {
+    await loadScript(embeddedMeshFallbackPath);
+    return normalizeFallbackEntries(global.WireframeEmbeddedMeshList);
+  }
+
   function selectLodMesh(payload, detail) {
     const lods = Array.isArray(payload.lods) ? payload.lods : null;
     if (!lods || !lods.length) return payload;
@@ -96,8 +116,7 @@
     });
   }
 
-  async function loadMeshObjects() {
-    const entries = await readMeshManifest();
+  async function loadMeshObjects(entries) {
     if (!entries.length) return false;
 
     for (const entry of entries) {
@@ -116,40 +135,29 @@
     return true;
   }
 
-  async function loadEmbeddedMeshFallback() {
-    await loadScript(embeddedMeshFallbackPath);
-    const embedded = global.WireframeEmbeddedMeshes;
-    if (!Array.isArray(embedded) || !embedded.length) return false;
-
-    for (const entry of embedded) {
-      if (!entry || typeof entry !== 'object') continue;
-      const payload = entry.payload || entry.mesh || entry;
-      if (!payload || typeof payload !== 'object') continue;
-      registerMeshPayload(payload, entry.name, entry.file);
-    }
-
-    return global.OBJECTS.length > 0;
-  }
-
   global.WireframeObjectsReady = (async () => {
     await loadScript(`${systemDir}registry.js`);
 
-    const fromFileProtocol = typeof location !== 'undefined' && location.protocol === 'file:';
-    if (fromFileProtocol) {
-      const loaded = await loadEmbeddedMeshFallback();
-      if (!loaded) throw new Error('No embedded mesh fallback objects found for file:// mode.');
-      return global.OBJECTS;
-    }
-
     try {
-      const loadedMeshes = await loadMeshObjects();
+      const manifestEntries = await readMeshManifest();
+      const loadedMeshes = await loadMeshObjects(manifestEntries);
       if (loadedMeshes) return global.OBJECTS;
     } catch (err) {
-      console.warn('Wireframer: mesh fetch path failed, trying embedded fallback.', err);
+      console.warn('Wireframer: mesh manifest fetch failed, trying fallback shape list.', err);
     }
 
-    const loadedFallback = await loadEmbeddedMeshFallback();
-    if (!loadedFallback) throw new Error('No mesh objects loaded from manifest or embedded fallback.');
+    const fallbackEntries = await readFallbackManifestList();
+    if (!fallbackEntries.length) {
+      throw new Error('No mesh entries available from manifest or fallback shape list.');
+    }
+
+    const loadedFallback = await loadMeshObjects(fallbackEntries);
+    if (!loadedFallback) {
+      throw new Error(
+        'Fallback shape list loaded, but mesh files could not be fetched. Serve Wireframer over HTTP (e.g. python -m http.server 5500).'
+      );
+    }
+
     return global.OBJECTS;
   })();
 })(window);
