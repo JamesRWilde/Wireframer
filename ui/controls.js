@@ -118,13 +118,13 @@ function initObjectSelector() {
   });
   select.onchange = () => {
     persistUiState();
-    loadObject(OBJECTS[select.selectedIndex]);
+    startMorphToObject(OBJECTS[select.selectedIndex]);
   };
   lodSlider.oninput = () => {
     syncRenderToggles();
     if (!OBJECTS.length) return;
     MODEL_CACHE.clear(); // Force recalc for new detail level
-    loadObject(OBJECTS[select.selectedIndex]);
+    startMorphToObject(OBJECTS[select.selectedIndex]);
   };
   lodSlider.onchange = lodSlider.oninput;
   fillOpacity.oninput = syncRenderToggles;
@@ -179,6 +179,6 @@ function initObjectSelector() {
   }
 
   select.value = String(selectedIndex);
-  loadObject(OBJECTS[selectedIndex]);
+  loadObject(OBJECTS[selectedIndex]); // Initial load: do NOT morph on first load
   persistUiState();
 }

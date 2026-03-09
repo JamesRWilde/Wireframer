@@ -367,10 +367,35 @@ function compareMorphVertices(a, b) {
 }
 
 function mapVerticesToTargetOrder(sourceVertices, targetVertices) {
-  if (!sourceVertices.length) {
-    return targetVertices.map((v) => [v[0], v[1], v[2]]);
+  // Fast nearest-neighbor mapping with random sampling and hard cap for performance
+  const nSource = sourceVertices.length;
+  const nTarget = targetVertices.length;
+  if (!nSource) return targetVertices.map((v) => [v[0], v[1], v[2]]);
+
+  // Cap the number of points for morph mapping
+  const MAX_MORPH_POINTS = 300;
+  const sampleCount = Math.min(MAX_MORPH_POINTS, nSource, nTarget);
+
+  // Randomly sample points from source and target for even coverage
+  function randomSample(arr, count) {
+    const n = arr.length;
+    if (count >= n) return arr.slice();
+    const result = [];
+    const used = new Set();
+    while (result.length < count) {
+      const idx = Math.floor(Math.random() * n);
+      if (!used.has(idx)) {
+        used.add(idx);
+        result.push(arr[idx]);
+      }
+    }
+    return result;
   }
 
+  const sourceSample = randomSample(sourceVertices, sampleCount);
+  const targetSample = randomSample(targetVertices, sampleCount);
+
+  // Normalize for fair distance
   function getBounds(vertices) {
     let minX = Infinity, minY = Infinity, minZ = Infinity;
     let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
@@ -389,7 +414,6 @@ function mapVerticesToTargetOrder(sourceVertices, targetVertices) {
       sz: Math.max(1e-6, maxZ - minZ),
     };
   }
-
   function normalizePoint(v, b) {
     return [
       (v[0] - b.minX) / b.sx,
@@ -397,89 +421,51 @@ function mapVerticesToTargetOrder(sourceVertices, targetVertices) {
       (v[2] - b.minZ) / b.sz,
     ];
   }
+  const sourceBounds = getBounds(sourceSample);
+  const targetBounds = getBounds(targetSample);
+  const sourceNorm = sourceSample.map((v) => normalizePoint(v, sourceBounds));
+  const targetNorm = targetSample.map((v) => normalizePoint(v, targetBounds));
 
-  const sourceBounds = getBounds(sourceVertices);
-  const targetBounds = getBounds(targetVertices);
-
-  const sourceNorm = sourceVertices.map((v) => normalizePoint(v, sourceBounds));
-
-  const indexedTarget = targetVertices
-    .map((v, i) => {
-      const copy = [v[0], v[1], v[2]];
-      return { i, v: copy, n: normalizePoint(copy, targetBounds) };
-    })
-    .sort((a, b) => compareMorphVertices(a.v, b.v));
-
-  // Coherence weight: higher reduces chaotic point jumps but can over-constrain far-apart regions.
-  const coherenceWeight = 0.18;
-  const reverseBias = 0.5;
-
-  function mapByOrder(order) {
-    const mapped = new Array(targetVertices.length);
-    const used = new Uint8Array(sourceVertices.length);
-    let remaining = sourceVertices.length;
-    let prevSourceNorm = null;
-
-    for (const t of order) {
-      const targetIndex = t.i;
-      const nT = t.n;
-
-      let bestIndex = -1;
-      let bestScore = Infinity;
-
-      // Prefer one-to-one nearest mapping while source points remain.
-      for (let i = 0; i < sourceNorm.length; i++) {
-        if (remaining > 0 && used[i]) continue;
-        const nS = sourceNorm[i];
-        const dx = nS[0] - nT[0];
-        const dy = nS[1] - nT[1];
-        const dz = nS[2] - nT[2];
-        const d2 = dx * dx + dy * dy + dz * dz;
-
-        let continuity = 0;
-        if (prevSourceNorm) {
-          const cdx = nS[0] - prevSourceNorm[0];
-          const cdy = nS[1] - prevSourceNorm[1];
-          const cdz = nS[2] - prevSourceNorm[2];
-          continuity = cdx * cdx + cdy * cdy + cdz * cdz;
-        }
-
-        const score = d2 + continuity * coherenceWeight;
-        if (score < bestScore) {
-          bestScore = score;
-          bestIndex = i;
-        }
+  // Greedy nearest-neighbor assignment
+  const used = new Array(sourceNorm.length).fill(false);
+  const mapped = new Array(targetNorm.length);
+  for (let j = 0; j < targetNorm.length; j++) {
+    let bestIdx = 0;
+    let bestDist = Infinity;
+    for (let i = 0; i < sourceNorm.length; i++) {
+      if (used[i]) continue;
+      const dx = sourceNorm[i][0] - targetNorm[j][0];
+      const dy = sourceNorm[i][1] - targetNorm[j][1];
+      const dz = sourceNorm[i][2] - targetNorm[j][2];
+      const d2 = dx * dx + dy * dy + dz * dz;
+      if (d2 < bestDist) {
+        bestDist = d2;
+        bestIdx = i;
       }
-
-      if (bestIndex < 0) bestIndex = 0;
-      if (remaining > 0 && !used[bestIndex]) {
-        used[bestIndex] = 1;
-        remaining--;
-      }
-
-      const src = sourceVertices[bestIndex];
-      mapped[targetIndex] = [src[0], src[1], src[2]];
-      prevSourceNorm = sourceNorm[bestIndex];
     }
-
-    return mapped;
+    used[bestIdx] = true;
+    mapped[j] = [sourceSample[bestIdx][0], sourceSample[bestIdx][1], sourceSample[bestIdx][2]];
   }
 
-  const forward = mapByOrder(indexedTarget);
-  const reverse = mapByOrder([...indexedTarget].reverse());
-  const mapped = new Array(targetVertices.length);
-
-  for (let i = 0; i < mapped.length; i++) {
-    const a = forward[i] || targetVertices[i];
-    const b = reverse[i] || a;
-    mapped[i] = [
-      a[0] * (1 - reverseBias) + b[0] * reverseBias,
-      a[1] * (1 - reverseBias) + b[1] * reverseBias,
-      a[2] * (1 - reverseBias) + b[2] * reverseBias,
-    ];
+  // For the full targetVertices array, assign each to the nearest in the mapped sample
+  const mappedFull = new Array(nTarget);
+  for (let j = 0; j < nTarget; j++) {
+    // Find nearest in targetSample
+    let bestIdx = 0;
+    let bestDist = Infinity;
+    for (let k = 0; k < targetSample.length; k++) {
+      const dx = targetVertices[j][0] - targetSample[k][0];
+      const dy = targetVertices[j][1] - targetSample[k][1];
+      const dz = targetVertices[j][2] - targetSample[k][2];
+      const d2 = dx * dx + dy * dy + dz * dz;
+      if (d2 < bestDist) {
+        bestDist = d2;
+        bestIdx = k;
+      }
+    }
+    mappedFull[j] = mapped[bestIdx];
   }
-
-  return mapped;
+  return mappedFull;
 }
 
 function sampleVerticesForMorph(vertices, sampleCount) {
