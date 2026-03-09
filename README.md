@@ -12,7 +12,7 @@ If you like graphics code that feels alive but is still easy to reason about, th
 - It renders the same model in two complementary styles at once: solid shading and depth-aware wireframe.
 - It uses function-level seams that are easy to modify in isolation.
 - It treats object definitions as canonical mesh assets (`indexed-polygons-v1` JSON), so adding new geometry is import-friendly.
-- It keeps mesh geometry only in per-shape mesh files, with a manifest/fallback list for discovery.
+- It keeps mesh geometry only in per-shape mesh files, with `mesh-manifest.json` as the shape discovery source.
 - It makes visual decisions explainable, not magic: shading terms, edge buckets, contrast enforcement, and morph sampling are explicit in code.
 
 ## What The App Does
@@ -56,7 +56,7 @@ npx serve . -l 5500
 Direct file-open can work depending on browser policy:
 
 - If browser allows `file://` JSON reads, manifest + mesh files load directly.
-- If `file://` reads are blocked, use HTTP hosting or scoped manifest resolvers in the host page/bundle.
+- If `file://` reads are blocked, provide `window.WireframeMeshManifest` from the host page scope or use HTTP hosting.
 
 ## Controls
 
@@ -71,7 +71,7 @@ Direct file-open can work depending on browser policy:
 ## Runtime Flow In 30 Seconds
 
 1. `index.html` loads `engine/math3d.js`, then `loader.js`, then `engine/bootstrap.js`.
-2. `loader.js` builds `window.WireframeObjectsReady` by loading registry, reading manifest entries, then resolving each mesh payload from file paths or scoped resolvers.
+2. `loader.js` builds `window.WireframeObjectsReady` by loading registry, reading manifest entries, then loading each payload from `meshes/*.mesh.json`.
 3. `engine/bootstrap.js` loads app modules in strict order so globals are available when needed.
 4. `engine/loop.js` waits for `WireframeObjectsReady`, then calls `startApp()`.
 5. `startApp()` wires controls and starts `requestAnimationFrame(frame)`.
@@ -100,11 +100,9 @@ This keeps shape definition import-friendly and renderer-agnostic.
 
 - `readMeshManifest()` reads `mesh-manifest.json` when available.
 - If manifest fetch fails, loader can use scoped manifest entries from `window.WireframeMeshManifest`.
-- Fallback list script (`mesh-fallback-data.js`) is metadata-only (`name` + `file`) and does not contain mesh payloads.
-- Mesh payloads are resolved either from `meshes/*.mesh.json` files or manifest `resolver` functions.
-- Resolver providers can be exposed via `window.WireframeMeshResolvers` (or direct global function names).
-- `loadScript(src)` loads registry/fallback scripts with cache busting in HTTP mode.
-- `window.WireframeObjectsReady` resolves when all mesh assets are resolved and registered.
+- Mesh payloads are loaded from `meshes/*.mesh.json` listed in manifest entries.
+- `loadScript(src)` loads the registry script with cache busting in HTTP mode.
+- `window.WireframeObjectsReady` resolves when all mesh assets are loaded and registered.
 
 ### Core Scene State
 
@@ -239,12 +237,6 @@ Notes:
 { "name": "My Shape", "file": "my-shape.mesh.json" }
 ```
 
-	Or for bundled/host-scoped resolution:
-
-```json
-{ "name": "My Shape", "resolver": "buildMyShapeMesh" }
-```
-
 3. Include `lods` entries in the mesh file (`low/mid/high`) to support detail slider selection.
 4. Reload the app and confirm it appears in the shape selector.
 
@@ -264,11 +256,11 @@ Notes:
 - CPU and GPU fill paths now share consistent normal/shading assumptions for better visual parity.
 - Runtime moved to mesh-first object definitions (`meshes/*.mesh.json`) discovered through `mesh-manifest.json`.
 - Legacy JS object-shape modules were removed in favor of canonical JSON mesh assets.
-- Fallback data is now list-only metadata; all geometry remains defined in per-shape mesh files.
+- Mesh and manifest are now the only required shape-definition inputs for runtime loading.
 
 ## Troubleshooting
 
 - `Shape list empty (HTTP)`: ensure `mesh-manifest.json` plus `meshes/*.mesh.json` are present and valid.
-- `Shape list empty (file://)`: ensure `mesh-fallback-data.js` exists and contains embedded entries.
+- `Shape list empty (file://)`: ensure browser allows local JSON reads, or set `window.WireframeMeshManifest` before `loader.js`.
 - `App says failed to load`: Check the browser console and network tab for missing script paths.
 - `LOD slider has no effect`: Ensure your mesh file includes multiple `lods` entries with distinct `detail` values.
