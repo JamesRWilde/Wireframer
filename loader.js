@@ -1,50 +1,6 @@
 'use strict';
 
 (function initObjectLoader(global) {
-  const meshDir = 'meshes/';
-  const cacheBust = global.WireframerCacheBust || Date.now().toString();
-  global.WireframerCacheBust = cacheBust;
-
-  function withCacheBust(src) {
-    const fromFileProtocol = typeof location !== 'undefined' && location.protocol === 'file:';
-    if (fromFileProtocol) return src;
-    const join = src.includes('?') ? '&' : '?';
-    return `${src}${join}v=${cacheBust}`;
-  }
-
-  function readJsonViaXhr(src) {
-    return new Promise((resolve, reject) => {
-      const req = new XMLHttpRequest();
-      req.open('GET', withCacheBust(src), true);
-      req.onreadystatechange = () => {
-        if (req.readyState !== 4) return;
-        const hasBody = typeof req.responseText === 'string' && req.responseText.trim().length > 0;
-        const okHttp = req.status >= 200 && req.status < 300;
-        const okFile = req.status === 0 && hasBody;
-        if (!(okHttp || okFile)) {
-          reject(new Error(`Cannot read ${src}: ${req.status}`));
-          return;
-        }
-        try {
-          resolve(JSON.parse(req.responseText));
-        } catch (err) {
-          reject(new Error(`Invalid JSON in ${src}: ${err && err.message ? err.message : err}`));
-        }
-      };
-      req.onerror = () => reject(new Error(`Network error while loading ${src}`));
-      req.send();
-    });
-  }
-
-  async function readJsonResource(src) {
-    const fromFileProtocol = typeof location !== 'undefined' && location.protocol === 'file:';
-    if (fromFileProtocol) return readJsonViaXhr(src);
-
-    const res = await fetch(withCacheBust(src), { cache: 'no-store' });
-    if (!res.ok) throw new Error(`Cannot read ${src}: ${res.status}`);
-    return res.json();
-  }
-
   function normalizeMapEntries(entries) {
     if (!Array.isArray(entries)) return [];
     return entries
@@ -53,10 +9,22 @@
         return {
           name: typeof entry.name === 'string' ? entry.name : null,
           file: typeof entry.file === 'string' ? entry.file : null,
+          resolver: typeof entry.resolver === 'string' ? entry.resolver : null,
         };
       })
       .filter((entry) => entry && entry.file)
-      .filter((entry) => entry.file.endsWith('.json') && !entry.file.includes('/') && !entry.file.includes('..'));
+      .filter((entry) => entry.file.endsWith('.json') && !entry.file.includes('/') && !entry.file.includes('..'))
+      .filter((entry) => !entry.resolver || /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(entry.resolver));
+  }
+
+  function fileToResolver(file) {
+    if (!file || typeof file !== 'string') return null;
+    const stem = file
+      .replace(/\.mesh\.json$/i, '')
+      .replace(/\.json$/i, '')
+      .replace(/[^A-Za-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+    return stem ? `mesh_${stem}` : null;
   }
 
   function selectLodMesh(payload, detail) {
@@ -102,7 +70,18 @@
 
   async function loadMappedMeshes(entries) {
     for (const entry of entries) {
-      const payload = await readJsonResource(`${meshDir}${entry.file}`);
+      const resolverName = entry.resolver || fileToResolver(entry.file);
+      const providers = global.WireframeMeshResolvers;
+      const provider =
+        (resolverName && providers && typeof providers[resolverName] === 'function' && providers[resolverName]) ||
+        (resolverName && typeof global[resolverName] === 'function' && global[resolverName]) ||
+        null;
+
+      if (!provider) {
+        throw new Error(`Missing static mesh resolver for ${entry.file} (${resolverName || 'none'}).`);
+      }
+
+      const payload = await provider({ entry });
       if (!payload || typeof payload !== 'object') {
         throw new Error(`Invalid mesh payload for ${entry.name || entry.file || 'unnamed entry'}.`);
       }
