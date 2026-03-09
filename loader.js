@@ -1,9 +1,8 @@
 'use strict';
 
 (function initObjectLoader(global) {
-  const meshDir = 'meshes/';
   const systemDir = '';
-  const meshManifestPath = `${systemDir}mesh-manifest.json`;
+  const meshScopePath = `${systemDir}mesh-scope.js`;
   const cacheBust = global.WireframerCacheBust || Date.now().toString();
   global.WireframerCacheBust = cacheBust;
 
@@ -25,67 +24,21 @@
     });
   }
 
-  function readJsonViaXhr(src) {
-    return new Promise((resolve, reject) => {
-      const req = new XMLHttpRequest();
-      req.open('GET', withCacheBust(src), true);
-      req.onreadystatechange = () => {
-        if (req.readyState !== 4) return;
-        const hasBody = typeof req.responseText === 'string' && req.responseText.trim().length > 0;
-        const okHttp = req.status >= 200 && req.status < 300;
-        const okFile = req.status === 0 && hasBody;
-        if (!(okHttp || okFile)) {
-          reject(new Error(`Cannot read ${src}: ${req.status}`));
-          return;
-        }
-        try {
-          resolve(JSON.parse(req.responseText));
-        } catch (err) {
-          reject(new Error(`Invalid JSON in ${src}: ${err && err.message ? err.message : err}`));
-        }
-      };
-      req.onerror = () => reject(new Error(`Network error while loading ${src}`));
-      req.send();
-    });
-  }
-
-  async function readJsonResource(src) {
-    try {
-      const res = await fetch(src, { cache: 'no-store' });
-      if (!res.ok) throw new Error(`Cannot read ${src}: ${res.status}`);
-      return await res.json();
-    } catch (fetchErr) {
-      const fromFileProtocol = typeof location !== 'undefined' && location.protocol === 'file:';
-      if (!fromFileProtocol) {
-        throw new Error(`Network error while loading ${src}: ${fetchErr && fetchErr.message ? fetchErr.message : fetchErr}`);
-      }
-
-      try {
-        return await readJsonViaXhr(src);
-      } catch (xhrErr) {
-        throw new Error(
-          `Cannot load ${src} in file:// mode (fetch and XHR both failed). ` +
-          `Provide window.WireframeMeshManifest from host scope, or serve over HTTP. ` +
-          `Details: ${xhrErr && xhrErr.message ? xhrErr.message : xhrErr}`
-        );
-      }
-    }
-  }
-
   function normalizeManifestEntries(entries) {
     if (!Array.isArray(entries)) return [];
     return entries
       .map((entry) => {
-        if (typeof entry === 'string') return { name: null, file: entry };
+        if (typeof entry === 'string') return { name: null, file: entry, resolver: null };
         if (!entry || typeof entry !== 'object') return null;
         return {
           name: typeof entry.name === 'string' ? entry.name : null,
           file: typeof entry.file === 'string' ? entry.file : null,
+          resolver: typeof entry.resolver === 'string' ? entry.resolver : null,
         };
       })
-      .filter((entry) => entry && entry.file)
-      .filter((entry) => entry.file.endsWith('.json'))
-      .filter((entry) => !entry.file.includes('/') && !entry.file.includes('..'));
+      .filter((entry) => entry && (entry.file || entry.resolver))
+      .filter((entry) => !entry.file || (entry.file.endsWith('.json') && !entry.file.includes('/') && !entry.file.includes('..')))
+      .filter((entry) => !entry.resolver || /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(entry.resolver));
   }
 
   function getScopedManifestEntries() {
@@ -95,18 +48,22 @@
     return normalizeManifestEntries(files);
   }
 
-  async function readManifestFromJsonFile() {
-    const payload = await readJsonResource(meshManifestPath);
-    const files = Array.isArray(payload) ? payload : payload.files;
-    if (!Array.isArray(files)) throw new Error('Invalid mesh manifest format. Expected array or { files: [] }.');
-    return normalizeManifestEntries(files);
-  }
-
   async function resolveManifestEntries() {
     const scoped = getScopedManifestEntries();
-    if (scoped.length) return scoped;
+    if (!scoped.length) {
+      throw new Error('No bundled mesh manifest found. Ensure mesh-scope.js loads before loader.js.');
+    }
+    return scoped;
+  }
 
-    return readManifestFromJsonFile();
+  function fileToResolver(file) {
+    if (!file || typeof file !== 'string') return null;
+    const stem = file
+      .replace(/\.mesh\.json$/i, '')
+      .replace(/\.json$/i, '')
+      .replace(/[^A-Za-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '');
+    return stem ? `mesh_${stem}` : null;
   }
 
   function selectLodMesh(payload, detail) {
@@ -154,7 +111,22 @@
     if (!entries.length) return false;
 
     for (const entry of entries) {
-      const payload = await readJsonResource(`${meshDir}${entry.file}`);
+      const resolverName = entry.resolver || fileToResolver(entry.file);
+      const providers = global.WireframeMeshResolvers;
+      const provider =
+        (resolverName && providers && typeof providers[resolverName] === 'function' && providers[resolverName]) ||
+        (resolverName && typeof global[resolverName] === 'function' && global[resolverName]) ||
+        null;
+
+      if (!provider) {
+        throw new Error(`No provider found for ${entry.name || entry.file || 'unnamed entry'} (${resolverName || 'no resolver'}).`);
+      }
+
+      const payload = await provider({ entry });
+      if (!payload || typeof payload !== 'object') {
+        throw new Error(`Provider ${resolverName} returned an invalid payload.`);
+      }
+
       registerMeshPayload(payload, entry.name, entry.file);
     }
 
@@ -163,6 +135,7 @@
 
   global.WireframeObjectsReady = (async () => {
     await loadScript(`${systemDir}registry.js`);
+    await loadScript(meshScopePath);
 
     const entries = await resolveManifestEntries();
     if (!entries.length) {

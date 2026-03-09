@@ -12,7 +12,7 @@ If you like graphics code that feels alive but is still easy to reason about, th
 - It renders the same model in two complementary styles at once: solid shading and depth-aware wireframe.
 - It uses function-level seams that are easy to modify in isolation.
 - It treats object definitions as canonical mesh assets (`indexed-polygons-v1` JSON), so adding new geometry is import-friendly.
-- It keeps mesh geometry only in per-shape mesh files, with `mesh-manifest.json` as the shape discovery source.
+- It keeps mesh geometry authored in per-shape mesh files, then bundles runtime providers into `mesh-scope.js` using `mesh-manifest.json` as the source list.
 - It makes visual decisions explainable, not magic: shading terms, edge buckets, contrast enforcement, and morph sampling are explicit in code.
 
 ## What The App Does
@@ -39,7 +39,11 @@ If you like graphics code that feels alive but is still easy to reason about, th
 
 ## Quick Start
 
-Preferred: use a local web server so mesh assets load from `mesh-manifest.json` via `fetch`.
+Runtime is bundle-driven and `file://`-safe by default.
+
+`index.html` loads `mesh-scope.js` before `loader.js`, so mesh payloads are resolved from bundled providers instead of runtime JSON network requests.
+
+You can still run from a local web server if desired:
 
 ```powershell
 python -m http.server 5500
@@ -53,10 +57,7 @@ Alternative:
 npx serve . -l 5500
 ```
 
-Direct file-open can work depending on browser policy:
-
-- If browser allows `file://` JSON reads, manifest + mesh files load directly.
-- If `file://` reads are blocked, provide `window.WireframeMeshManifest` from the host page scope or use HTTP hosting.
+Direct file-open is supported because no mesh JSON `fetch` calls are performed at runtime.
 
 ## Controls
 
@@ -70,8 +71,8 @@ Direct file-open can work depending on browser policy:
 
 ## Runtime Flow In 30 Seconds
 
-1. `index.html` loads `engine/math3d.js`, then `loader.js`, then `engine/bootstrap.js`.
-2. `loader.js` builds `window.WireframeObjectsReady` by loading registry, reading manifest entries, then loading each payload from `meshes/*.mesh.json`.
+1. `index.html` loads `engine/math3d.js`, then `mesh-scope.js`, then `loader.js`, then `engine/bootstrap.js`.
+2. `loader.js` builds `window.WireframeObjectsReady` by loading registry, reading bundled manifest entries, then resolving each payload from bundled provider functions.
 3. `engine/bootstrap.js` loads app modules in strict order so globals are available when needed.
 4. `engine/loop.js` waits for `WireframeObjectsReady`, then calls `startApp()`.
 5. `startApp()` wires controls and starts `requestAnimationFrame(frame)`.
@@ -98,9 +99,9 @@ This keeps shape definition import-friendly and renderer-agnostic.
 
 `loader.js` controls mesh discovery and registration.
 
-- `readMeshManifest()` reads `mesh-manifest.json` when available.
-- If manifest fetch fails, loader can use scoped manifest entries from `window.WireframeMeshManifest`.
-- Mesh payloads are loaded from `meshes/*.mesh.json` listed in manifest entries.
+- Manifest entries are read from `window.WireframeMeshManifest` (provided by `mesh-scope.js`).
+- Mesh payloads are resolved through `window.WireframeMeshResolvers` provider functions.
+- Resolver names are either explicit (`resolver`) or derived from file names (for example `torus-knot.mesh.json` -> `mesh_torus_knot`).
 - `loadScript(src)` loads the registry script with cache busting in HTTP mode.
 - `window.WireframeObjectsReady` resolves when all mesh assets are loaded and registered.
 
@@ -209,7 +210,7 @@ Current default loop behavior focuses on direct mesh morph rendering in the main
 
 ## Mesh Data and Detail Scaling
 
-Current shape library is defined in `mesh-manifest.json` and stored as JSON meshes in `meshes/`.
+Current shape library is authored in `meshes/` and listed in `mesh-manifest.json`, then bundled into `mesh-scope.js` for runtime loading.
 
 LOD currently comes from pre-exported mesh snapshots (for example `low/mid/high`) selected by the detail slider. This keeps runtime cost predictable and avoids expensive procedural rebuilds in the browser.
 
@@ -231,14 +232,15 @@ Notes:
 ## Adding A New Shape
 
 1. Create `meshes/my-shape.mesh.json` using `indexed-polygons-v1` format.
-2. Add entry to `mesh-manifest.json`:
+2. Add one entry to `mesh-manifest.json`:
 
 ```json
 { "name": "My Shape", "file": "my-shape.mesh.json" }
 ```
 
-3. Include `lods` entries in the mesh file (`low/mid/high`) to support detail slider selection.
-4. Reload the app and confirm it appears in the shape selector.
+3. Regenerate `mesh-scope.js` so it includes the new payload and provider.
+4. Include `lods` entries in the mesh file (`low/mid/high`) to support detail slider selection.
+5. Reload the app and confirm it appears in the shape selector.
 
 ## Performance Notes
 
@@ -256,11 +258,11 @@ Notes:
 - CPU and GPU fill paths now share consistent normal/shading assumptions for better visual parity.
 - Runtime moved to mesh-first object definitions (`meshes/*.mesh.json`) discovered through `mesh-manifest.json`.
 - Legacy JS object-shape modules were removed in favor of canonical JSON mesh assets.
-- Mesh and manifest are now the only required shape-definition inputs for runtime loading.
+- Mesh authoring remains mesh + manifest; runtime loading is provider-only via bundled `mesh-scope.js`.
 
 ## Troubleshooting
 
-- `Shape list empty (HTTP)`: ensure `mesh-manifest.json` plus `meshes/*.mesh.json` are present and valid.
-- `Shape list empty (file://)`: ensure browser allows local JSON reads, or set `window.WireframeMeshManifest` before `loader.js`.
+- `Shape list empty`: ensure `mesh-scope.js` loads before `loader.js` and defines both `window.WireframeMeshManifest` and `window.WireframeMeshResolvers`.
+- `Missing specific shape`: ensure the shape exists in `mesh-manifest.json` and that `mesh-scope.js` includes the matching provider.
 - `App says failed to load`: Check the browser console and network tab for missing script paths.
 - `LOD slider has no effect`: Ensure your mesh file includes multiple `lods` entries with distinct `detail` values.
