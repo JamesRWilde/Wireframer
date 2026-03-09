@@ -41,7 +41,7 @@ If you like graphics code that feels alive but is still easy to reason about, th
 
 Runtime is bundle-driven and `file://`-safe by default.
 
-`index.html` loads `mesh-scope.js` before `loader.js`, so mesh payloads are resolved from bundled providers instead of runtime JSON network requests.
+`index.html` loads `registry.js` and `mesh-scope.js` before `engine/bootstrap.js`, so meshes are registered from bundled providers with no runtime JSON network requests.
 
 You can still run from a local web server if desired:
 
@@ -71,13 +71,14 @@ Direct file-open is supported because no mesh JSON `fetch` calls are performed a
 
 ## Runtime Flow In 30 Seconds
 
-1. `index.html` loads `engine/math3d.js`, then `mesh-scope.js`, then `loader.js`, then `engine/bootstrap.js`.
-2. `loader.js` builds `window.WireframeObjectsReady` by loading registry, reading bundled manifest entries, then resolving each payload from bundled provider functions.
-3. `engine/bootstrap.js` loads app modules in strict order so globals are available when needed.
-4. `engine/loop.js` waits for `WireframeObjectsReady`, then calls `startApp()`.
-5. `startApp()` wires controls and starts `requestAnimationFrame(frame)`.
-6. Each frame updates rotation physics, then draws background plus foreground through GPU or CPU paths.
-7. Telemetry HUD values are updated with smoothed timings on a throttled cadence.
+1. `index.html` loads `engine/math3d.js`, then `registry.js`, then `mesh-scope.js`, then `engine/bootstrap.js`.
+2. `mesh-scope.js` reads bundled manifest entries, resolves each payload from bundled provider functions, and registers objects into `window.WireframeObjectRegistry`.
+3. `mesh-scope.js` sets `window.WireframeObjectsReady` once static registration completes.
+4. `engine/bootstrap.js` loads app modules in strict order so globals are available when needed.
+5. `engine/loop.js` waits for `WireframeObjectsReady`, then calls `startApp()`.
+6. `startApp()` wires controls and starts `requestAnimationFrame(frame)`.
+7. Each frame updates rotation physics, then draws background plus foreground through GPU or CPU paths.
+8. Telemetry HUD values are updated with smoothed timings on a throttled cadence.
 
 ## How The Architecture Fits Together
 
@@ -95,15 +96,14 @@ Runtime objects are loaded from `meshes/*.mesh.json` and normalized to:
 
 This keeps shape definition import-friendly and renderer-agnostic.
 
-### Loader and Discovery
+### Static Registration and Discovery
 
-`loader.js` controls mesh discovery and registration.
+`mesh-scope.js` controls mesh discovery and registration.
 
-- Manifest entries are read from `window.WireframeMeshManifest` (provided by `mesh-scope.js`).
+- Manifest entries are read from `window.WireframeMeshManifest`.
 - Mesh payloads are resolved through `window.WireframeMeshResolvers` provider functions.
 - Resolver names are either explicit (`resolver`) or derived from file names (for example `torus-knot.mesh.json` -> `mesh_torus_knot`).
-- `loadScript(src)` loads the registry script with cache busting in HTTP mode.
-- `window.WireframeObjectsReady` resolves when all mesh assets are loaded and registered.
+- `window.WireframeObjectsReady` resolves when all bundled mesh assets are registered.
 
 ### Core Scene State
 
@@ -262,7 +262,7 @@ Notes:
 
 ## Troubleshooting
 
-- `Shape list empty`: ensure `mesh-scope.js` loads before `loader.js` and defines both `window.WireframeMeshManifest` and `window.WireframeMeshResolvers`.
+- `Shape list empty`: ensure `index.html` loads `registry.js` and `mesh-scope.js` before `engine/bootstrap.js`, and that `mesh-scope.js` defines both `window.WireframeMeshManifest` and `window.WireframeMeshResolvers`.
 - `Missing specific shape`: ensure the shape exists in `mesh-manifest.json` and that `mesh-scope.js` includes the matching provider.
 - `App says failed to load`: Check the browser console and network tab for missing script paths.
 - `LOD slider has no effect`: Ensure your mesh file includes multiple `lods` entries with distinct `detail` values.
