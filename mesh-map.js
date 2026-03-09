@@ -1,13 +1,7 @@
 'use strict';
 
-(function registerStaticMeshMap(global) {
-  if (global.__wireframeStaticMeshMapRegistered) return;
-
-  const registry = global.WireframeObjectRegistry;
-  const payloads = global.WireframeMeshPayloads || {};
-  if (!registry || typeof registry.register !== 'function') return;
-
-  const MESH_MAP = [
+(function defineStaticMeshMap(global) {
+  global.WireframeMeshMap = [
     { name: 'Capsule', file: 'capsule.mesh.json' },
     { name: 'Dog', file: 'dog.mesh.json' },
     { name: 'Cat', file: 'cat.mesh.json' },
@@ -42,49 +36,4 @@
     { name: 'Torus Knot', file: 'torus-knot.mesh.json' },
     { name: 'Wine Glass', file: 'wine-glass.mesh.json' },
   ];
-
-  function selectLodMesh(payload, detail) {
-    const lods = Array.isArray(payload?.lods) ? payload.lods : null;
-    if (!lods || !lods.length) return payload;
-
-    const d = Math.max(0.5, Math.min(1.4, Number(detail) || 1));
-    let best = lods[0];
-    let bestDist = Math.abs((Number(best.detail) || 1) - d);
-
-    for (let i = 1; i < lods.length; i++) {
-      const cand = lods[i];
-      const dist = Math.abs((Number(cand.detail) || 1) - d);
-      if (dist < bestDist) {
-        best = cand;
-        bestDist = dist;
-      }
-    }
-
-    return {
-      format: payload.format || 'indexed-polygons-v1',
-      name: payload.name,
-      shadingMode: payload.shadingMode,
-      creaseAngleDeg: payload.creaseAngleDeg,
-      positions: best.positions,
-      faces: best.faces,
-      edges: best.edges,
-    };
-  }
-
-  for (const entry of MESH_MAP) {
-    const payload = payloads[entry.file];
-    if (!payload) {
-      throw new Error('Missing static mesh payload for ' + entry.file);
-    }
-
-    registry.register({
-      name: entry.name,
-      build(options = {}) {
-        return selectLodMesh(payload, options.detail);
-      },
-    });
-  }
-
-  global.__wireframeStaticMeshMapRegistered = true;
-  global.WireframeObjectsReady = Promise.resolve(global.OBJECTS || []);
 })(window);
