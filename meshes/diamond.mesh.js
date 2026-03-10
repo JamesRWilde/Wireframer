@@ -1,6 +1,4 @@
 window.getMeshDiamond = () => `
-# Diamond (converted from _legacy_meshes/diamond.mesh.js)
-o Diamond
 v 0.52 0.7 0
 v 0.450333 0.7 0.26
 v 0.26 0.7 0.450333

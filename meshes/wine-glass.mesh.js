@@ -1,6 +1,4 @@
 window.getMeshWineGlass = () => `
-# Wine Glass (converted from _legacy_meshes/wine-glass.mesh.js)
-o Wine_Glass
 v 0 -1 0
 v 0 -1 0
 v 0 -1 0

@@ -1,6 +1,4 @@
 window.getMeshCube = () => `
-# Cube (triangulated)
-o Cube
 v -0.82 -0.82 -0.82
 v -0.82 -0.82 0.82
 v -0.82 0.82 -0.82

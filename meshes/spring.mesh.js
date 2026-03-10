@@ -1,6 +1,4 @@
 window.getMeshSpring = () => `
-# Spring (converted from _legacy_meshes/spring.mesh.js)
-o Spring
 v 0.78 -0.899987 0.000156
 v 0.764125 -0.846116 -0.004408
 v 0.721541 -0.809353 -0.007573

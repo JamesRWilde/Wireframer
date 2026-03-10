@@ -1,6 +1,4 @@
 window.getMeshMengerSponge = () => `
-# Menger Sponge (converted from _legacy_meshes/menger-sponge.mesh.js)
-o Menger_Sponge
 v -0.9 -0.9 -0.9
 v -0.9 -0.9 -0.7
 v -0.9 -0.7 -0.7

@@ -1,6 +1,4 @@
 window.getMeshIcosahedron = () => `
-# Icosahedron (converted from _legacy_meshes/icosahedron.mesh.js)
-o Icosahedron
 v 0 0.473158 0.765586
 v 0 -0.473158 0.765586
 v 0 0.473158 -0.765586

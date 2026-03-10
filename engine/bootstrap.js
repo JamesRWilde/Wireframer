@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 (function initAppBootstrap() {
   const cacheBust = window.WireframerCacheBust || Date.now().toString();
@@ -11,6 +11,8 @@
     // Geometry/LOD (must be before core.js which uses LODManager)
     'engine/lod.js',
     // Mesh files (OBJ-style format)
+    'meshes/car.mesh.js',
+    'meshes/airplane.mesh.js',
     'meshes/capsule.mesh.js',
     'meshes/cinquefoil-knot.mesh.js',
     'meshes/cone.mesh.js',

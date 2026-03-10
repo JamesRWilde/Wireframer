@@ -1,6 +1,4 @@
 window.getMeshCinquefoilKnot = () => `
-# Cinquefoil Knot (converted from _legacy_meshes/cinquefoil-knot.mesh.js)
-o Cinquefoil_Knot
 v 0.79 0 -0.000072
 v 0.804266 -0.04068 0.026635
 v 0.842577 -0.068445 0.044887

@@ -1,6 +1,4 @@
 window.getMeshCylinder = () => `
-# Cylinder (converted from _legacy_meshes/cylinder.mesh.js)
-o Cylinder
 v 0 -1.02 0
 v 0 -1.02 0
 v 0 -1.02 0

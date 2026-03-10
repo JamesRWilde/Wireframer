@@ -1,6 +1,4 @@
 window.getMeshPyramid = () => `
-# Pyramid (converted from _legacy_meshes/pyramid.mesh.js)
-o Pyramid
 v -0.95 -0.95 -0.95
 v 0.95 -0.95 -0.95
 v 0.95 -0.95 0.95

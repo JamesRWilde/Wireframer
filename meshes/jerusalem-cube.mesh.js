@@ -1,6 +1,4 @@
 window.getMeshJerusalemCube = () => `
-# Jerusalem Cube (converted from _legacy_meshes/jerusalem-cube.mesh.js)
-o Jerusalem_Cube
 v -0.95 -0.95 -0.95
 v -0.95 -0.95 -0.624012
 v -0.95 -0.624012 -0.95

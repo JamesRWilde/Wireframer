@@ -1,6 +1,4 @@
 window.getMeshStarPrism = () => `
-# Star Prism (converted from _legacy_meshes/star-prism.mesh.js)
-o Star_Prism
 v 0.92 -0.84 0
 v 0.446633 -0.84 0.110085
 v 0.81462 -0.84 0.427545

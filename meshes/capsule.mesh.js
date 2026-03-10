@@ -1,6 +1,4 @@
 window.getMeshCapsule = () => `
-# Capsule (converted from _legacy_meshes/capsule.mesh.js)
-o Capsule
 v 0 -1.12 0
 v 0 -1.12 0
 v 0 -1.12 0

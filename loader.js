@@ -1,6 +1,8 @@
 ﻿// Engine now uses OBJ-style mesh files from meshes/ directory
 window.OBJECTS = (
   (window.MESH_LIBRARY || [
+    { key: 'car', name: 'Car', build: () => window.getMeshCar?.() },
+    { key: 'airplane', name: 'Airplane', build: () => window.getMeshAirplane?.() },
     { key: 'dog', name: 'Dog', build: () => {
       const mesh = window.getMeshDog?.();
       if (mesh === undefined || mesh === null) {
@@ -150,6 +152,8 @@ window.OBJECTS = (
     } },
   ])
 ).filter((entry) => typeof entry?.build === 'function');
+
+
 
 
 

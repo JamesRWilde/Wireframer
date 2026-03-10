@@ -1,6 +1,4 @@
 window.getMeshPrism = () => `
-# Prism (converted from _legacy_meshes/prism.mesh.js)
-o Prism
 v 0 0.92 -0.92
 v -0.736 -0.5336 -0.92
 v 0.736 -0.5336 -0.92

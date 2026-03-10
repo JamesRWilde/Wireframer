@@ -1,6 +1,4 @@
 window.getMeshMobiusStrip = () => `
-# Mobius Strip (converted from _legacy_meshes/mobius-strip.mesh.js)
-o Mobius_Strip
 v 0.6 0 0
 v 0.67 0 0
 v 0.74 0 0

@@ -1,6 +1,4 @@
 window.getMeshSierpinskiPyramid = () => `
-# Sierpinski Pyramid (converted from _legacy_meshes/sierpinski-pyramid.mesh.js)
-o Sierpinski_Pyramid
 v -0.9 -0.8 -0.9
 v -0.45 -0.8 -0.9
 v -0.45 -0.8 -0.45

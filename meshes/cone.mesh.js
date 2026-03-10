@@ -1,6 +1,4 @@
 window.getMeshCone = () => `
-# Cone (converted from _legacy_meshes/cone.mesh.js)
-o Cone
 v 0 1.08 0
 v 0 -1 0
 v 0.98 -1 0

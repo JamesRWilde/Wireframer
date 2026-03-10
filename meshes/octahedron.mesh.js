@@ -1,6 +1,4 @@
 window.getMeshOctahedron = () => `
-# Octahedron (converted from _legacy_meshes/octahedron.mesh.js)
-o Octahedron
 v 0 1 0
 v 0 -1 0
 v 1 0 0

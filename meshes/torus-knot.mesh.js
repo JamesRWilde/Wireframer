@@ -1,6 +1,4 @@
 window.getMeshTorusKnot = () => `
-# Torus Knot (converted from _legacy_meshes/torus-knot.mesh.js)
-o Torus_Knot
 v 0.83 0 -0.00005
 v 0.862205 -0.071844 0.029772
 v 0.939981 -0.101602 0.042154

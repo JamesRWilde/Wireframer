@@ -1,6 +1,4 @@
 window.getMeshTorus = () => `
-# Torus (converted from _legacy_meshes/torus.mesh.js)
-o Torus
 v 0.98 0 0
 v 0.973881 0.058215 0
 v 0.955793 0.113886 0

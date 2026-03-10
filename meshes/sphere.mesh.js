@@ -1,9 +1,4 @@
 window.getMeshSphere = () => `
-# UV Sphere - radius 0.5, 16 stacks x 24 slices
-# 362 vertices, 728 triangular faces - smooth rounded UV sphere
-o SmoothSphere
-usemtl Sphere
-
 v 0.000000 0.000000 0.500000
 v 0.097545 0.000000 0.490393
 v 0.094221 0.025247 0.490393
@@ -366,7 +361,6 @@ v 0.068975 -0.068975 -0.490393
 v 0.084477 -0.048773 -0.490393
 v 0.094221 -0.025247 -0.490393
 v 0.000000 0.000000 -0.500000
-
 f 1 2 3
 f 1 3 4
 f 1 4 5
