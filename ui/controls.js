@@ -133,13 +133,21 @@ function initObjectSelector() {
     persistUiState();
     const obj = OBJECTS[select.selectedIndex];
     if (obj && typeof obj.build === 'function') {
-      const mesh = obj.build();
-      console.log(`[UI] Object selected: ${obj.name}`);
+      let mesh = obj.build();
       const detailPercent = Number(lodSlider.value) / 100;
+      // Parse mesh string if needed
+      if (typeof mesh === 'string' && typeof window.toRuntimeMesh === 'function') {
+        mesh = window.toRuntimeMesh(mesh);
+      }
+      // Decimate mesh to current LOD before morphing
+      if (window.LODManager && typeof window.LODManager.decimateMeshByPercent === 'function') {
+        mesh = window.LODManager.decimateMeshByPercent(mesh, detailPercent);
+      }
+      console.log(`[UI] Object selected: ${obj.name} at LOD ${detailPercent}`);
       if (window.loadMesh) {
-        window.loadMesh(mesh, obj.name, { detailPercent, animateMorph: true });
+        window.loadMesh(mesh, obj.name, { detailPercent: 1, animateMorph: true });
       } else if (typeof loadMesh === 'function') {
-        loadMesh(mesh, obj.name, { detailPercent, animateMorph: true });
+        loadMesh(mesh, obj.name, { detailPercent: 1, animateMorph: true });
       }
       lodValue.textContent = `${lodSlider.value}%`;
     }
@@ -151,8 +159,13 @@ function initObjectSelector() {
     const obj = OBJECTS[select.selectedIndex];
     const percent = Number(lodSlider.value) / 100;
     lodValue.textContent = `${lodSlider.value}%`;
-    if (obj && window.setDetailLevel) {
-      window.setDetailLevel(percent, obj.name);
+    if (obj && typeof obj.build === 'function') {
+      const mesh = obj.build();
+      if (window.loadMesh) {
+        window.loadMesh(mesh, obj.name, { detailPercent: percent, animateMorph: false });
+      } else if (typeof loadMesh === 'function') {
+        loadMesh(mesh, obj.name, { detailPercent: percent, animateMorph: false });
+      }
     }
   };
   lodSlider.onchange = lodSlider.oninput;
