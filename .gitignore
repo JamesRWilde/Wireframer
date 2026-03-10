@@ -1,3 +1,5 @@
 /.vs
 /Wireframer
 /Wireframer.slnx
+/obj/input
+/obj/processed

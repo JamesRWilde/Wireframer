@@ -17,6 +17,7 @@
     'meshes/cube.mesh.js',
     'meshes/cylinder.mesh.js',
     'meshes/diamond.mesh.js',
+    'meshes/dog.mesh.js',
     'meshes/icosahedron.mesh.js',
     'meshes/jerusalem-cube.mesh.js',
     'meshes/menger-sponge.mesh.js',

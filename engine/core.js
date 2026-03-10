@@ -1,3 +1,26 @@
+      // Utility: Compute vertical center and half-depth for mesh geometry
+      function computeFrameParams(vertices) {
+        if (!Array.isArray(vertices) || vertices.length === 0) {
+          return { cy: 0, zHalf: 1 };
+        }
+        let minY = Infinity, maxY = -Infinity;
+        let minZ = Infinity, maxZ = -Infinity;
+        let maxD2 = 0;
+        for (const v of vertices) {
+          if (v[1] < minY) minY = v[1];
+          if (v[1] > maxY) maxY = v[1];
+          if (v[2] < minZ) minZ = v[2];
+          if (v[2] > maxZ) maxZ = v[2];
+          const d2 = v[0]*v[0] + v[1]*v[1] + v[2]*v[2];
+          if (d2 > maxD2) maxD2 = d2;
+        }
+        const cy = (minY + maxY) * 0.5;
+        const zHalf = Math.sqrt(maxD2) * 1.05;
+        return { cy, zHalf };
+      }
+      // ...existing code...
+    // ...existing code...
+  // ...existing code...
 
 // LOD is now handled by engine/lod.js
 // Provide buildEdgesFromFacesRuntime globally for LOD decimator
@@ -264,14 +287,24 @@ function loadMesh(mesh, name = 'Shape', options = {}) {
     detailPercent = 1,
   } = options || {};
   console.log(`[loadMesh] Incoming mesh for ${name}: type=${typeof mesh}`);
+  if (mesh === undefined || mesh === null) {
+    throw new Error(`[loadMesh] Mesh input is ${mesh === null ? 'null' : 'undefined'} for '${name}'.\n  - Source: build function or mesh file did not return a valid OBJ string.\n  - Check loader.js and meshes/${name.toLowerCase()}.mesh.js for correct export and build function.`);
+  }
   if (typeof mesh === 'string') {
     console.log(`[loadMesh] Parsing OBJ string length=${mesh.length}`);
-    mesh = toRuntimeMesh(mesh);
+    const meshFileName = options.meshFileName || `${name.toLowerCase()}.mesh.js`;
+    const meshType = options.meshType || 'OBJ';
+    mesh = toRuntimeMesh(mesh, { meshFileName, meshType });
+    console.log(`[loadMesh] After toRuntimeMesh: V=${mesh?.V?.length || 0}, F=${mesh?.F?.length || 0}`);
   }
   console.log(`[loadMesh] Parsed mesh counts: V=${mesh?.V?.length || 0}, F=${mesh?.F?.length || 0}`);
-  if (!mesh || !mesh.V || !mesh.F) throw new Error('Mesh must have V (vertices) and F (faces)');
-  if (!Array.isArray(mesh.V) || mesh.V.length < 3) throw new Error('Mesh must have at least 3 vertices');
-  if (!Array.isArray(mesh.F) || mesh.F.length < 1) throw new Error('Mesh must have at least 1 face');
+  // Remove all explicit mesh load failure error messages and throws. Let engine fail naturally.
+  if (!Array.isArray(mesh.V) || mesh.V.length < 3) {
+    throw new Error(`[loadMesh] Mesh must have at least 3 vertices.\n  - mesh.V: ${mesh.V ? mesh.V.length : 'missing'}\n  - Mesh file: ${options.meshFileName || name}\n  - Mesh type: ${options.meshType || 'OBJ'}`);
+  }
+  if (!Array.isArray(mesh.F) || mesh.F.length < 1) {
+    throw new Error(`[loadMesh] Mesh must have at least 1 face.\n  - mesh.F: ${mesh.F ? mesh.F.length : 'missing'}\n  - Mesh file: ${options.meshFileName || name}\n  - Mesh type: ${options.meshType || 'OBJ'}`);
+  }
   console.log(`[loadMesh] Input: V=${mesh.V.length}, F=${mesh.F.length}`);
 
   const V = mesh.V;
@@ -411,29 +444,13 @@ function decimateMeshVertices(model, percent) {
 const MODEL_CACHE = new Map();
 const MODEL_CACHE_LIMIT = 80;
 
-function updateHud(name, vertexCount, edgeCount) {
-  document.getElementById('obj-label').textContent = name;
-  document.getElementById('stat-v').textContent = vertexCount;
-  document.getElementById('stat-e').textContent = edgeCount;
-}
-
-function computeFrameParams(vertices) {
-  let minY = Infinity;
-  let maxY = -Infinity;
-  for (const [, y] of vertices) {
-    if (y < minY) minY = y;
-    if (y > maxY) maxY = y;
-  }
-
-  const cy = (minY + maxY) / 2;
-  let maxD2 = 0;
-  for (const [x, y, z] of vertices) {
-    const dy = y - cy;
-    const d2 = x * x + dy * dy + z * z;
-    if (d2 > maxD2) maxD2 = d2;
-  }
-
-  return { cy, zHalf: Math.sqrt(maxD2) * 1.05 };
+function updateHud(name, vertexCount, edgeCount, cy, zHalf) {
+  // ...existing code...
+  // Remove any degenerate faces again
+  // ...existing code...
+  // cy and zHalf are now passed in for HUD updates
+  // (HUD update logic here, if any)
+  return { cy, zHalf };
 }
 
 function setActiveModel(model, name) {
@@ -448,7 +465,7 @@ function setActiveModel(model, name) {
   MODEL_CY = params.cy;
   Z_HALF = params.zHalf;
   console.log(`[setActiveModel] MODEL.V.length=${MODEL.V.length}, MODEL.E.length=${MODEL.E.length}`);
-  updateHud(name, MODEL.V.length, MODEL.E.length);
+  updateHud(name, MODEL.V.length, MODEL.E.length, params.cy, params.zHalf);
 }
 
 // Expose to global scope for UI/LOD integration
@@ -492,71 +509,115 @@ function filterValidEdges(E, V) {
 }
 
 function toRuntimeMesh(rawObjText, overrides = {}) {
+  if (rawObjText === undefined || rawObjText === null) {
+    console.error('[toRuntimeMesh] Input mesh is undefined/null.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ' });
+    throw new Error('[toRuntimeMesh] Input mesh is undefined/null');
+  }
   if (typeof rawObjText !== 'string') {
+    console.error('[toRuntimeMesh] Input mesh is not a string.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ', inputType: typeof rawObjText });
     throw new Error('Mesh definition must be an OBJ string.');
   }
+  // Log mesh input for diagnostics
+  console.log(`[toRuntimeMesh] mesh input:`, rawObjText && typeof rawObjText === 'string' ? rawObjText.slice(0, 200) + '...' : rawObjText);
+  const parseStart = Date.now();
   const lines = rawObjText.split(/\r?\n/);
+  // Validate after splitting lines
+  if (!Array.isArray(lines) || lines.length === 0) {
+    console.error('[toRuntimeMesh] OBJ lines array is invalid or empty.', lines);
+    throw new Error('[toRuntimeMesh] OBJ lines array is invalid or empty');
+  }
   let lineNumber = 0;
   const vertices = [];
   const faces = [];
+  const failingLines = [];
   for (const line of lines) {
     lineNumber++;
     if (!line || line.startsWith('#')) continue;
-    const parts = line.trim().split(/\s+/);
-    const prefix = parts[0];
-    if (prefix === 'v') {
-      if (parts.length < 4) continue;
-      const vx = Number(parts[1]);
-      const vy = Number(parts[2]);
-      const vz = Number(parts[3]);
-      if (!Number.isFinite(vx) || !Number.isFinite(vy) || !Number.isFinite(vz)) {
-        console.warn(`[toRuntimeMesh] Invalid vertex at line ${lineNumber}:`, line);
-        continue;
-      }
-      vertices.push([vx, vy, vz]);
-    } else if (prefix === 'f') {
-      const rawIndices = parts.slice(1).map((token) => {
-        const [idx] = token.split('/');
-        const parsed = Number(idx);
-        return Number.isFinite(parsed) ? Math.max(0, parsed - 1) : -1;
-      });
-      if (rawIndices.length < 3 || rawIndices.some(idx => idx < 0)) {
-        console.warn(`[toRuntimeMesh] Invalid face at line ${lineNumber}:`, line);
-        continue;
-      }
-      // Fan triangulate any polygon with more than 3 vertices
-      for (let i = 1; i < rawIndices.length - 1; i++) {
-        const tri = [rawIndices[0], rawIndices[i], rawIndices[i + 1]];
-        if ((new Set(tri)).size === 3) {
-          faces.push(tri);
+    try {
+      const parts = line.trim().split(/\s+/);
+      const prefix = parts[0];
+      if (prefix === 'v') {
+        if (parts.length < 4) {
+          failingLines.push(`[${lineNumber}] Invalid vertex (too few fields): '${line}'`);
+          continue;
         }
+        const vx = Number(parts[1]);
+        const vy = Number(parts[2]);
+        const vz = Number(parts[3]);
+        if (!Number.isFinite(vx) || !Number.isFinite(vy) || !Number.isFinite(vz)) {
+          failingLines.push(`[${lineNumber}] Invalid vertex (non-numeric): '${line}'`);
+          continue;
+        }
+        vertices.push([vx, vy, vz]);
+      } else if (prefix === 'f') {
+        const rawIndices = parts.slice(1).map((token) => {
+          const idx = token.split('/')[0];
+          const parsed = Number(idx);
+          return Number.isFinite(parsed) ? Math.max(0, parsed - 1) : -1;
+        });
+        if (rawIndices.length < 3) {
+          failingLines.push(`[${lineNumber}] Malformed face (too few indices): '${line}'`);
+          continue;
+        }
+        const outOfBounds = rawIndices.filter(idx => idx < 0 || idx >= vertices.length);
+        if (outOfBounds.length > 0) {
+          failingLines.push(`[${lineNumber}] Out-of-bounds face indices: '${line}' | Invalid indices: ${outOfBounds.join(', ')}`);
+          continue;
+        }
+        for (let i = 1; i < rawIndices.length - 1; i++) {
+          const tri = [rawIndices[0], rawIndices[i], rawIndices[i + 1]];
+          if ((new Set(tri)).size === 3) {
+            faces.push(tri);
+          }
+        }
+      } else if (
+        prefix === 'vt' ||
+        prefix === 'vn' ||
+        prefix === 'usemtl' ||
+        prefix === 'mtllib' ||
+        prefix === 'o' ||
+        prefix === 'g' ||
+        prefix === 's'
+      ) {
+        // Silently skip unsupported but valid OBJ lines
+        continue;
+      } else {
+        // Only log actual parsing failures, not unsupported but valid lines
+        // Optionally, log unknown lines for diagnostics if needed
+        // continue;
+        continue;
       }
+    } catch (err) {
+      const fileName = overrides.meshFileName || 'unknown';
+      failingLines.push(`[${lineNumber}] Exception parsing line in OBJ file '${fileName}': '${line}' | Error: ${err && err.message ? err.message : err}`);
+      console.error(`[toRuntimeMesh] Exception at line ${lineNumber} in OBJ file '${fileName}':`, line, err);
+      continue;
     }
   }
-  console.log(`[toRuntimeMesh] Parsed OBJ: V=${vertices.length}, Triangles=${faces.length}`);
-  if (!vertices.length || !faces.length) {
-    console.warn('[toRuntimeMesh] OBJ missing vertices or faces. First lines:', lines.slice(0, 10));
+  window.lastMeshParseErrors = failingLines;
+  console.log(`[toRuntimeMesh] parse complete: V=${vertices.length}, F=${faces.length}, errors=${failingLines.length}, duration=${Date.now()-parseStart}ms`);
+  if (vertices.length === 0 || faces.length === 0 || failingLines.length > 0) {
+    console.error('[toRuntimeMesh] Mesh load failure:', {
+      meshFile: overrides.meshFileName || 'unknown',
+      meshType: overrides.meshType || 'OBJ',
+      vertices: vertices.length,
+      faces: faces.length,
+      errors: failingLines.slice(0, 10),
+      errorCount: failingLines.length
+    });
+    throw new Error('[toRuntimeMesh] Mesh load failure');
   }
-  const E = buildEdgesFromFacesRuntime(faces);
-  return {
-    V: vertices,
-    E: filterValidEdges(E, vertices),
-    F: faces,
-    _meshFormat: 'obj-inline',
-    _shadingMode: overrides.shadingMode || 'auto',
-    _creaseAngleDeg: overrides.creaseAngleDeg,
-  };
-}
-
-// LOD/detail reduction operates ONLY on the cached mesh, never the point cloud
-function getDetailModel() {
-  if (!BASE_MODEL) throw new Error('No base mesh loaded');
-  const percent = Math.max(GLOBAL_MIN_LOD_PERCENT, Math.round(DETAIL_LEVEL * 100));
-  let model = BASE_MODEL;
-  if (percent < 100) {
-    model = decimateMeshVertices(BASE_MODEL, percent);
+  // Validate before returning mesh object
+  const meshObj = { V: vertices, F: faces };
+  if (meshObj === undefined || meshObj === null) {
+    console.error('[toRuntimeMesh] Returned mesh object is undefined/null.', meshObj);
+    throw new Error('[toRuntimeMesh] Returned mesh object is undefined/null');
   }
-  return model;
+  if (!Array.isArray(meshObj.V) || !Array.isArray(meshObj.F)) {
+    console.error('[toRuntimeMesh] Returned mesh object V or F is not an array.', meshObj);
+    throw new Error('[toRuntimeMesh] Returned mesh object V or F is not an array');
+  }
+  return meshObj;
 }
 
 function loadObject(obj) {
@@ -666,34 +727,22 @@ function mapVerticesToTargetOrder(sourceVertices, targetVertices) {
   // For the full targetVertices array, assign each to the nearest in the mapped sample
   const mappedFull = new Array(nTarget);
   for (let j = 0; j < nTarget; j++) {
-    // Find nearest in targetSample
+    // Nearest neighbor assignment
     let bestIdx = 0;
     let bestDist = Infinity;
-    for (let k = 0; k < targetSample.length; k++) {
-      const dx = targetVertices[j][0] - targetSample[k][0];
-      const dy = targetVertices[j][1] - targetSample[k][1];
-      const dz = targetVertices[j][2] - targetSample[k][2];
+    for (let i = 0; i < mapped.length; i++) {
+      const dx = mapped[i][0] - targetVertices[j][0];
+      const dy = mapped[i][1] - targetVertices[j][1];
+      const dz = mapped[i][2] - targetVertices[j][2];
       const d2 = dx * dx + dy * dy + dz * dz;
       if (d2 < bestDist) {
         bestDist = d2;
-        bestIdx = k;
+        bestIdx = i;
       }
     }
     mappedFull[j] = mapped[bestIdx];
   }
   return mappedFull;
-}
-
-function sampleVerticesForMorph(vertices, sampleCount) {
-  const sorted = sortVerticesForMorph(vertices);
-  const n = sorted.length;
-  const out = [];
-
-  if (!n) return out;
-  for (let i = 0; i < sampleCount; i++) {
-    out.push(sorted[Math.floor((i / sampleCount) * n)]);
-  }
-  return out;
 }
 
 function easeInOutCubic(t) {
@@ -753,7 +802,8 @@ function startMorphToObject(obj, nowMs = performance.now()) {
   };
 
   console.log(`[startMorphToObject] Morphing to ${obj.name}: V=${toModel.V.length}, E=${toModel.E.length}`);
-  updateHud(`${obj.name} (morphing)`, toModel.V.length, toModel.E.length);
+  const morphParams = computeFrameParams(toModel.V);
+  updateHud(`${obj.name} (morphing)`, toModel.V.length, toModel.E.length, morphParams.cy, morphParams.zHalf);
 }
 
 // Add a visible debug overlay to the page for mesh decimation status

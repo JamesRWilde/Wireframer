@@ -33,6 +33,10 @@ function fallbackTo2dBackgroundRenderer(err) {
 }
 
 function drawBackground(nowMs) {
+    if (!ctx) {
+      console.error('[drawBackground] Canvas context (ctx) is null. Background will not render.');
+      return false;
+    }
   const t = nowMs * 0.001;
 
   BG_PARTICLE_DENSITY += (BG_PARTICLE_DENSITY_TARGET - BG_PARTICLE_DENSITY) * 0.08;
