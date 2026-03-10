@@ -1,3 +1,7 @@
+function fallbackToCpuForegroundMode() {
+  foregroundRenderMode = 'cpu';
+  updateRendererHud(foregroundRenderMode);
+}
 'use strict';
 
 // All globals declared in globalVars.js
