@@ -51,7 +51,8 @@ function createSceneGpuDraw(gl, canvas, shaderPack, bufferStore) {
 
   function renderModel(model, params) {
     if (!params || !params.theme || !params.width || !params.height) return false;
-    const buffers = getModelBuffers(model);
+      // Engine-owned mesh only
+      const buffers = getModelBuffers(model);
     if (!buffers) return false;
 
     if (params.dynamic === true && !updateDynamicBuffers(model, buffers)) return false;

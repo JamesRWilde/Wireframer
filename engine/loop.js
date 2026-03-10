@@ -1,21 +1,7 @@
+
 'use strict';
 
-let cpuForegroundDrawnOnMainCanvas = false;
-let gpuSceneDrawnLastFrame = false;
-let foregroundRenderMode = 'unknown';
-// Keep uncapped by default so telemetry reflects actual workload scaling.
-const MAX_FPS = 0;
-const MIN_FRAME_INTERVAL_MS = MAX_FPS > 0 ? (1000 / MAX_FPS) : 0;
-let lastFrameMs = -1;
-let telemetryLastUiMs = 0;
-const TELEMETRY_UI_INTERVAL_MS = 250;
-let lastPresentedFrameMs = -1;
-let emaFrameMs = 0;
-let emaFpsFrameIntervalMs = 0;
-let emaPhysMs = 0;
-let emaBgMs = 0;
-let emaFgMs = 0;
-const TELEMETRY_ALPHA = 0.2;
+// All globals declared in globalVars.js
 
 function updateTelemetryHud(nowMs) {
   if (nowMs - telemetryLastUiMs < TELEMETRY_UI_INTERVAL_MS) return;
@@ -60,6 +46,7 @@ function frame(nowMs = 0) {
   if (MIN_FRAME_INTERVAL_MS > 0 && lastFrameMs >= 0 && nowMs - lastFrameMs < MIN_FRAME_INTERVAL_MS) {
     return;
   }
+  // Engine-owned mesh only: enforce modular pipeline
   const frameIntervalMs = lastPresentedFrameMs >= 0 ? (nowMs - lastPresentedFrameMs) : 0;
   lastPresentedFrameMs = nowMs;
   lastFrameMs = nowMs;
@@ -94,6 +81,22 @@ function frame(nowMs = 0) {
   const modeResolved = resolveForegroundRenderMode();
   const forceCpuForShading = !MORPH?.active && MODEL && MODEL._shadingMode === 'flat';
   const mode = forceCpuForShading ? 'cpu' : modeResolved;
+
+  const setCpuCanvasHidden = (hidden) => {
+    if (!ctx || !ctx.canvas) return;
+    const displayValue = hidden ? 'none' : 'block';
+    if (ctx.canvas.style.display !== displayValue) {
+      ctx.canvas.style.display = displayValue;
+    }
+  };
+
+  const setGpuCanvasHidden = (hidden) => {
+    if (!fgCanvas) return;
+    const displayValue = hidden ? 'none' : 'block';
+    if (fgCanvas.style.display !== displayValue) {
+      fgCanvas.style.display = displayValue;
+    }
+  };
 
   if (MORPH && MORPH.active) {
     const tRaw = Math.max(0, Math.min(1, (nowMs - MORPH.startMs) / MORPH.durationMs));
@@ -176,10 +179,16 @@ function frame(nowMs = 0) {
         lightDir: LIGHT_DIR,
         viewDir: VIEW_DIR,
       });
-      if (!gpuDrawn) fallbackToCpuForegroundMode();
+      setGpuCanvasHidden(!gpuDrawn);
+      setCpuCanvasHidden(gpuDrawn);
+      if (!gpuDrawn) {
+        fallbackToCpuForegroundMode();
+      }
     }
 
     if (mode === 'cpu' || foregroundRenderMode === 'cpu') {
+      setCpuCanvasHidden(false);
+      setGpuCanvasHidden(true);
       if (gpuSceneDrawnLastFrame) {
         clearGpuSceneCanvas();
         gpuSceneDrawnLastFrame = false;
@@ -194,6 +203,9 @@ function frame(nowMs = 0) {
       gpuSceneDrawnLastFrame = true;
     } else {
       gpuSceneDrawnLastFrame = true;
+      if (gpuDrawn) {
+        setCpuCanvasHidden(true);
+      }
     }
   }
 

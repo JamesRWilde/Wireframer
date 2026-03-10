@@ -11,7 +11,8 @@ function createGpuBackgroundRenderer(canvas) {
     premultipliedAlpha: false,
     preserveDrawingBuffer: false,
     desynchronized: true,
-    powerPreference: 'low-power',
+    powerPreference: 'high-performance',
+    antialias: false,
   };
 
   const gl =

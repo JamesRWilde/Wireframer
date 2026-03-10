@@ -23,17 +23,19 @@ const customGreenValue = document.getElementById('custom-green-value');
 const customBlueValue = document.getElementById('custom-blue-value');
 const customHex = document.getElementById('custom-hex');
 const customSwatch = document.getElementById('custom-swatch');
-const statRenderer = document.getElementById('stat-renderer');
-const statFps = document.getElementById('stat-fps');
-const statFrameMs = document.getElementById('stat-frame-ms');
-const statPhysMs = document.getElementById('stat-phys-ms');
-const statBgMs = document.getElementById('stat-bg-ms');
-const statFgMs = document.getElementById('stat-fg-ms');
+// (statRenderer, statFps, statFrameMs, statPhysMs, statBgMs, statFgMs declared in globalVars.js)
+statRenderer = document.getElementById('stat-renderer');
+statFps = document.getElementById('stat-fps');
+statFrameMs = document.getElementById('stat-frame-ms');
+statPhysMs = document.getElementById('stat-phys-ms');
+statBgMs = document.getElementById('stat-bg-ms');
+statFgMs = document.getElementById('stat-fg-ms');
 
-let FILL_OPACITY = 0;
-let WIRE_OPACITY = 1;
+// (FILL_OPACITY, WIRE_OPACITY declared in globalVars.js)
+FILL_OPACITY = 0;
+WIRE_OPACITY = 1;
 
-// Static seam overlap tuning for dense meshes.
+// Static seam overlap tuning for dense meshes (engine-owned mesh only).
 const DENSE_SEAM_EXPAND_PX = 0.56;
 
 const CUSTOM_RGB_KEY = 'wireframer.customRgb';
@@ -57,15 +59,17 @@ const PRESET_SWATCHES = [
 const SHUFFLE_SWATCH_NAME = 'Shuffle';
 const PRESET_SWATCH_BUTTONS = [];
 
-let THEME = null;
+// (THEME declared in globalVars.js)
+THEME = null;
 let CUSTOM_RGB = CUSTOM_RGB_DEFAULT.slice();
 let THEME_MODE = 'dark';
 
-const LIGHT_DIR = (() => {
+// (LIGHT_DIR, VIEW_DIR declared in globalVars.js)
+LIGHT_DIR = (() => {
   const x = -0.38;
   const y = 0.74;
   const z = -0.56;
   const l = Math.hypot(x, y, z);
   return [x / l, y / l, z / l];
 })();
-const VIEW_DIR = [0, 0, -1];
+VIEW_DIR = [0, 0, -1];

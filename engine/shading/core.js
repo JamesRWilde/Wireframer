@@ -35,6 +35,7 @@ function createSceneGpuRenderer(canvas) {
   const bufferStore = createSceneGpuBufferStore(gl, supportsUint32);
   const drawApi = createSceneGpuDraw(gl, canvas, shaderPack, bufferStore);
 
+  // Engine-owned mesh only
   return {
     mode: 'gpu-scene',
     renderModel: drawApi.renderModel,

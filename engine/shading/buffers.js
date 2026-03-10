@@ -1,13 +1,18 @@
+
 'use strict';
+// Ensure getModelTriangles is available (global or import)
+if (typeof getModelTriangles === 'undefined' && typeof window !== 'undefined') {
+  if (window.getModelTriangles) getModelTriangles = window.getModelTriangles;
+}
 
 function createSceneGpuBufferStore(gl, supportsUint32) {
   const modelCache = new WeakMap();
 
   function buildModelBuffers(model) {
     if (!model || !model.V || !model.V.length || !model.E || !model.E.length) return null;
-    if (!model._triFaces) model._triFaces = getModelTriangles(model);
-    const triFaces = model._triFaces;
-    if (!triFaces.length) return null;
+    // Compute triFaces without modifying the model (important for frozen BASE_MODEL)
+    const triFaces = model._triFaces || getModelTriangles(model);
+    if (!triFaces || !triFaces.length) return null;
 
     const triCornerNormals = getModelTriCornerNormals(model, triFaces);
     if (!triCornerNormals || triCornerNormals.length !== triFaces.length) return null;
@@ -91,8 +96,8 @@ function createSceneGpuBufferStore(gl, supportsUint32) {
     const vertexCount = buffers.vertexCount;
     if (!model || !model.V || model.V.length !== vertexCount) return false;
 
-    if (!model._triFaces) model._triFaces = getModelTriangles(model);
-    const triFaces = model._triFaces;
+    // Compute triFaces without modifying the model
+    const triFaces = model._triFaces || getModelTriangles(model);
     const cornerNormals = getModelTriCornerNormals(model, triFaces);
     if (!cornerNormals || cornerNormals.length !== triFaces.length) return false;
 

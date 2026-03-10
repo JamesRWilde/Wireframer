@@ -23,11 +23,6 @@
 <section class="control-panel" id="shape-panel">
 <div class="panel-title">Shape</div>
 <select id="obj-select" aria-label="Object selector" title="Object selector"></select>
-<label id="lod-control" for="lod-slider">
-<span>Detail</span>
-<input id="lod-slider" type="range" min="50" max="140" step="1" value="100" />
-<span id="lod-value">100%</span>
-</label>
 </section>
 
 <section class="control-panel" id="custom-color-control">
@@ -63,6 +58,15 @@
 <span id="custom-hex">#5FBCE6</span>
 <span id="custom-swatch" aria-hidden="true"></span>
 </div>
+</section>
+
+<section class="control-panel" id="lod-panel">
+<div class="panel-title">LOD</div>
+<label id="lod-control" for="lod-slider">
+<span>Level</span>
+<input id="lod-slider" type="range" min="0" max="100" step="1" value="100" />
+<span id="lod-value">100%</span>
+</label>
 </section>
 
 <section class="control-panel" id="opacity-panel">
@@ -122,30 +126,27 @@
 <div id="hint">Drag to rotate • Scroll to zoom</div>
 </div>
 
-<!-- Mesh data scripts: -->
+
+<!-- App scripts (in correct load order): -->
+<script src="engine/globalVars.js"></script>
+<script src="engine/math3d.js"></script>
+<script src="engine/lod.js"></script>
+<!-- OBJ mesh files -->
 <script src="meshes/acorn.mesh.js"></script>
 <script src="meshes/capsule.mesh.js"></script>
-<script src="meshes/car.mesh.js"></script>
-<script src="meshes/cat.mesh.js"></script>
 <script src="meshes/cinquefoil-knot.mesh.js"></script>
 <script src="meshes/cone.mesh.js"></script>
 <script src="meshes/cube.mesh.js"></script>
 <script src="meshes/cylinder.mesh.js"></script>
 <script src="meshes/diamond.mesh.js"></script>
-<script src="meshes/dog.mesh.js"></script>
-<script src="meshes/hilbert-curve.mesh.js"></script>
-<script src="meshes/house.mesh.js"></script>
-<script src="meshes/hyperboloid.mesh.js"></script>
 <script src="meshes/icosahedron.mesh.js"></script>
 <script src="meshes/jerusalem-cube.mesh.js"></script>
 <script src="meshes/mandelbulb.mesh.js"></script>
 <script src="meshes/menger-sponge.mesh.js"></script>
 <script src="meshes/mobius-strip.mesh.js"></script>
 <script src="meshes/octahedron.mesh.js"></script>
-<script src="meshes/pinecone.mesh.js"></script>
 <script src="meshes/prism.mesh.js"></script>
 <script src="meshes/pyramid.mesh.js"></script>
-<script src="meshes/rocket.mesh.js"></script>
 <script src="meshes/sierpinski-pyramid.mesh.js"></script>
 <script src="meshes/sierpinski-tetrahedron.mesh.js"></script>
 <script src="meshes/sphere.mesh.js"></script>
@@ -156,12 +157,30 @@
 <script src="meshes/torus.mesh.js"></script>
 <script src="meshes/tree.mesh.js"></script>
 <script src="meshes/wine-glass.mesh.js"></script>
-
-<!-- App scripts: -->
-<script src="engine/math3d.js"></script>
+<script src="engine/core.js"></script>
+<script src="engine/physics/input.js"></script>
+<script src="ui/dom-state.js"></script>
+<script src="ui/color-utils.js"></script>
+<script src="ui/theme.js"></script>
+<script src="ui/controls.js"></script>
+<script src="engine/shading/background-gpu.js"></script>
+<script src="engine/shading/shaders.js"></script>
+<script src="engine/shading/buffers.js"></script>
+<script src="engine/shading/draw.js"></script>
+<script src="engine/shading/core.js"></script>
+<script src="engine/shading/runtime.js"></script>
+<script src="engine/fill/triangulation.js"></script>
+<script src="engine/fill/getModelTriangles.js"></script>
+<script src="engine/fill/normals.js"></script>
+<script src="engine/fill/lighting.js"></script>
+<script src="engine/fill/raster.js"></script>
+<script src="engine/fill/renderer.js"></script>
+<script src="engine/background.js"></script>
+<script src="engine/wireframe.js"></script>
+<script src="engine/morph.js"></script>
 <script src="registry.js"></script>
 <script src="loader.js"></script>
-<script src="engine/bootstrap.js"></script>
+<script src="engine/loop.js"></script>
 </body>
 </html>
 

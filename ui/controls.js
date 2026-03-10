@@ -109,22 +109,51 @@ function syncRenderToggles() {
 
 function initObjectSelector() {
   select.innerHTML = '';
-  // OBJECTS is populated by loader.js using mesh-manifest.json only
+  // OBJECTS is now populated by loader.js with engine-first point cloud shapes only
   OBJECTS.forEach((obj, i) => {
     const opt = document.createElement('option');
     opt.value = i;
     opt.textContent = obj.name;
     select.appendChild(opt);
   });
+  // Auto-load the first object on init (no morph)
+  if (OBJECTS.length > 0 && typeof OBJECTS[0].build === 'function') {
+    select.selectedIndex = 0;
+    const obj = OBJECTS[0];
+    const mesh = obj.build();
+    console.log(`[UI] Loading initial object: ${obj.name}`);
+    if (window.loadMesh) {
+      window.loadMesh(mesh, obj.name, { detailPercent: Number(lodSlider.value) / 100 });
+    } else if (typeof loadMesh === 'function') {
+      loadMesh(mesh, obj.name, { detailPercent: Number(lodSlider.value) / 100 });
+    }
+    lodValue.textContent = `${lodSlider.value}%`;
+  }
   select.onchange = () => {
     persistUiState();
-    startMorphToObject(OBJECTS[select.selectedIndex]);
+    const obj = OBJECTS[select.selectedIndex];
+    if (obj && typeof obj.build === 'function') {
+      const mesh = obj.build();
+      console.log(`[UI] Object selected: ${obj.name}`);
+      const detailPercent = Number(lodSlider.value) / 100;
+      if (window.loadMesh) {
+        window.loadMesh(mesh, obj.name, { detailPercent, animateMorph: true });
+      } else if (typeof loadMesh === 'function') {
+        loadMesh(mesh, obj.name, { detailPercent, animateMorph: true });
+      }
+      lodValue.textContent = `${lodSlider.value}%`;
+    }
   };
   lodSlider.oninput = () => {
     syncRenderToggles();
     if (!OBJECTS.length) return;
-    MODEL_CACHE.clear(); // Force recalc for new detail level
-    startMorphToObject(OBJECTS[select.selectedIndex]);
+    MODEL_CACHE.clear();
+    const obj = OBJECTS[select.selectedIndex];
+    const percent = Number(lodSlider.value) / 100;
+    lodValue.textContent = `${lodSlider.value}%`;
+    if (obj && window.setDetailLevel) {
+      window.setDetailLevel(percent, obj.name);
+    }
   };
   lodSlider.onchange = lodSlider.oninput;
   fillOpacity.oninput = syncRenderToggles;
@@ -179,6 +208,15 @@ function initObjectSelector() {
   }
 
   select.value = String(selectedIndex);
-  loadObject(OBJECTS[selectedIndex]); // Initial load: do NOT morph on first load
+  if (OBJECTS[selectedIndex] && typeof OBJECTS[selectedIndex].build === 'function') {
+    const mesh = OBJECTS[selectedIndex].build();
+    const detailPercent = Number(lodSlider.value) / 100;
+    if (window.loadMesh) {
+      window.loadMesh(mesh, OBJECTS[selectedIndex].name, { detailPercent, animateMorph: true });
+    } else if (typeof loadMesh === 'function') {
+      loadMesh(mesh, OBJECTS[selectedIndex].name, { detailPercent, animateMorph: true });
+    }
+    lodValue.textContent = `${lodSlider.value}%`;
+  }
   persistUiState();
 }

@@ -22,7 +22,7 @@ function drawMorphPoints(nowMs, tRaw, t) {
   ctx.save();
   ctx.globalCompositeOperation = 'screen';
 
-  // Movement guides: source -> target paths make the morph direction obvious.
+  // Draw morphing points and guides (engine-owned mesh only)
   const linkAlpha = (0.08 + (1 - Math.abs(0.5 - t) * 2) * 0.08).toFixed(3);
   ctx.lineWidth = 0.65;
   ctx.strokeStyle = rgbA(THEME.morph, Number(linkAlpha));
@@ -35,7 +35,7 @@ function drawMorphPoints(nowMs, tRaw, t) {
   }
   ctx.stroke();
 
-  // Particle streaks: tiny tails reinforce motion over simple fade.
+  // Particle streaks for morphing
   const tPrev = easeInOutCubic(Math.max(0, tRaw - 0.06));
   for (let i = 0; i < MORPH.sampleCount; i++) {
     const from = MORPH.fromPts[i];
@@ -67,9 +67,10 @@ function drawMorphPoints(nowMs, tRaw, t) {
 
   ctx.restore();
 
+  // Morph completion: engine sets new model
   if (tRaw >= 1) {
     MORPH.active = false;
-    setActiveModel(MORPH.toModel, MORPH.targetName, MORPH.targetV, MORPH.targetE);
+    setActiveModel(MORPH.toModel, MORPH.targetName);
     MORPH = null;
   }
 }

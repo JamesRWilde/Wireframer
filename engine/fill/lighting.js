@@ -1,6 +1,7 @@
 'use strict';
 
 function resolveTriangleNormal(item, T, triCornerNormals, useSmoothShading) {
+  // Engine-owned mesh only
   const [a, b, c] = item.tri;
   const v0 = T[a];
   const v1 = T[b];
@@ -13,15 +14,10 @@ function resolveTriangleNormal(item, T, triCornerNormals, useSmoothShading) {
   const vy = v2[1] - v0[1];
   const vz = v2[2] - v0[2];
 
-  let nx;
-  let ny;
-  let nz;
-
+  let nx, ny, nz;
   if (useSmoothShading) {
     const cn = triCornerNormals[item.triIndex];
-    const na = cn[0];
-    const nb = cn[1];
-    const nc = cn[2];
+    const na = cn[0], nb = cn[1], nc = cn[2];
     nx = na[0] + nb[0] + nc[0];
     ny = na[1] + nb[1] + nc[1];
     nz = na[2] + nb[2] + nc[2];
@@ -30,10 +26,8 @@ function resolveTriangleNormal(item, T, triCornerNormals, useSmoothShading) {
     ny = uz * vx - ux * vz;
     nz = ux * vy - uy * vx;
   }
-
   const nl = Math.hypot(nx, ny, nz);
   if (nl < 1e-6) return null;
-
   return [nx / nl, ny / nl, nz / nl];
 }
 

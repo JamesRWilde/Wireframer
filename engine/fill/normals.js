@@ -1,6 +1,7 @@
 'use strict';
 
 function getModelShadingMode(model, triFaces) {
+  // Engine-owned mesh only
   const mode = (model && model._shadingMode) || 'auto';
   if (mode === 'flat' || mode === 'smooth') return mode;
   return triFaces.length > 80 ? 'smooth' : 'flat';
@@ -60,7 +61,6 @@ function getModelFaceNormals(model, triFaces) {
     faceNormals[i] = [nx / nl, ny / nl, nz / nl];
   }
 
-  model._faceNormals = faceNormals;
   return faceNormals;
 }
 
@@ -80,8 +80,6 @@ function getModelTriCornerNormals(model, triFaces) {
       const n = faceNormals[i];
       cornerNormals[i] = [[n[0], n[1], n[2]], [n[0], n[1], n[2]], [n[0], n[1], n[2]]];
     }
-    model._triCornerNormals = cornerNormals;
-    model._triCornerNormalsKey = key;
     return cornerNormals;
   }
 
@@ -130,26 +128,12 @@ function getModelTriCornerNormals(model, triFaces) {
     cornerNormals[i] = triCorner;
   }
 
-  model._triCornerNormals = cornerNormals;
-  model._triCornerNormalsKey = key;
   return cornerNormals;
 }
 
 function getModelVertexNormals(model, triFaces) {
-  if (model._vertexNormals) return model._vertexNormals;
-
   const V = model.V;
-  let normals = model._normalsBuffer;
-  if (!normals || normals.length !== V.length) {
-    normals = Array.from({ length: V.length }, () => [0, 0, 0]);
-    model._normalsBuffer = normals;
-  } else {
-    for (let i = 0; i < normals.length; i++) {
-      normals[i][0] = 0;
-      normals[i][1] = 0;
-      normals[i][2] = 0;
-    }
-  }
+  let normals = Array.from({ length: V.length }, () => [0, 0, 0]);
 
   const cornerNormals = getModelTriCornerNormals(model, triFaces);
   const counts = new Uint16Array(V.length);
@@ -178,6 +162,5 @@ function getModelVertexNormals(model, triFaces) {
     normals[i] = [nx / nl, ny / nl, nz / nl];
   }
 
-  model._vertexNormals = normals;
   return normals;
 }

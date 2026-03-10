@@ -41,92 +41,65 @@ function triangulateFaceEarClipping(face, V) {
 
   const area2 = signedArea2(proj);
   if (Math.abs(area2) < 1e-10) {
-    const out = [];
-    for (let i = 1; i < face.length - 1; i++) out.push([face[0], face[i], face[i + 1]]);
-    return out;
+    // Degenerate face, cannot triangulate
+    return [];
   }
 
-  const ccw = area2 > 0;
-  const order = Array.from({ length: face.length }, (_, i) => i);
-  if (!ccw) order.reverse();
-
-  function cross2(a, b, c) {
-    return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+  // Ear clipping algorithm for simple polygons
+  // Returns array of [a, b, c] indices into face[]
+  const n = face.length;
+  const indices = Array.from({ length: n }, (_, i) => i);
+  const triangles = [];
+  let guard = 0;
+  function isConvex(i0, i1, i2) {
+    const a = proj[i0], b = proj[i1], c = proj[i2];
+    // Cross product to check if angle is convex (CCW for positive area)
+    return ((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])) * area2 > 0;
   }
-
-  function pointInTri(p, a, b, c) {
-    const c1 = cross2(a, b, p);
-    const c2 = cross2(b, c, p);
-    const c3 = cross2(c, a, p);
-    const hasNeg = c1 < -1e-10 || c2 < -1e-10 || c3 < -1e-10;
-    const hasPos = c1 > 1e-10 || c2 > 1e-10 || c3 > 1e-10;
-    return !(hasNeg && hasPos);
+  function pointInTriangle(p, a, b, c) {
+    // Barycentric test
+    const v0 = [c[0] - a[0], c[1] - a[1]];
+    const v1 = [b[0] - a[0], b[1] - a[1]];
+    const v2 = [p[0] - a[0], p[1] - a[1]];
+    const dot00 = v0[0] * v0[0] + v0[1] * v0[1];
+    const dot01 = v0[0] * v1[0] + v0[1] * v1[1];
+    const dot02 = v0[0] * v2[0] + v0[1] * v2[1];
+    const dot11 = v1[0] * v1[0] + v1[1] * v1[1];
+    const dot12 = v1[0] * v2[0] + v1[1] * v2[1];
+    const invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+    const u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+    const v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+    return u >= -1e-8 && v >= -1e-8 && (u + v) <= 1 + 1e-8;
   }
-
-  const tris = [];
-  let guard = face.length * face.length;
-
-  while (order.length > 3 && guard-- > 0) {
+  while (indices.length > 3 && guard++ < 100) {
     let earFound = false;
-
-    for (let i = 0; i < order.length; i++) {
-      const ia = order[(i - 1 + order.length) % order.length];
-      const ib = order[i];
-      const ic = order[(i + 1) % order.length];
-
-      const a = proj[ia];
-      const b = proj[ib];
-      const c = proj[ic];
-      if (cross2(a, b, c) <= 1e-10) continue;
-
-      let contains = false;
-      for (let j = 0; j < order.length; j++) {
-        const ip = order[j];
-        if (ip === ia || ip === ib || ip === ic) continue;
-        if (pointInTri(proj[ip], a, b, c)) {
-          contains = true;
+    for (let i = 0; i < indices.length; i++) {
+      const i0 = indices[(i + indices.length - 1) % indices.length];
+      const i1 = indices[i];
+      const i2 = indices[(i + 1) % indices.length];
+      if (!isConvex(i0, i1, i2)) continue;
+      // Check if any other point is inside the triangle
+      let hasPoint = false;
+      for (let j = 0; j < indices.length; j++) {
+        if (j === (i + indices.length - 1) % indices.length || j === i || j === (i + 1) % indices.length) continue;
+        if (pointInTriangle(proj[indices[j]], proj[i0], proj[i1], proj[i2])) {
+          hasPoint = true;
           break;
         }
       }
-      if (contains) continue;
-
-      tris.push([face[ia], face[ib], face[ic]]);
-      order.splice(i, 1);
+      if (hasPoint) continue;
+      // Ear found
+      triangles.push([face[i0], face[i1], face[i2]]);
+      indices.splice(i, 1);
       earFound = true;
       break;
     }
-
-    if (!earFound) {
-      for (let i = 1; i < order.length - 1; i++) {
-        tris.push([face[order[0]], face[order[i]], face[order[i + 1]]]);
-      }
-      return tris;
-    }
+    if (!earFound) break; // No ear found, probably non-simple polygon
   }
-
-  if (order.length === 3) {
-    tris.push([face[order[0]], face[order[1]], face[order[2]]]);
+  if (indices.length === 3) {
+    triangles.push([face[indices[0]], face[indices[1]], face[indices[2]]]);
   }
-
-  return tris;
+  return triangles;
 }
-
-function getModelTriangles(model) {
-  const faces = model.F || [];
-  const tris = [];
-  const V = model.V || [];
-
-  for (const face of faces) {
-    if (!face || face.length < 3) continue;
-    if (face.length === 3) {
-      tris.push([face[0], face[1], face[2]]);
-    } else if (face.length === 4) {
-      tris.push([face[0], face[1], face[2]]);
-      tris.push([face[0], face[2], face[3]]);
-    } else {
-      tris.push(...triangulateFaceEarClipping(face, V));
-    }
-  }
-
-  return tris;
-}
+// Expose for engine modules
+window.triangulateFaceEarClipping = triangulateFaceEarClipping;

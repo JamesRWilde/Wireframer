@@ -1,22 +1,103 @@
+
+// LOD is now handled by engine/lod.js
+// Provide buildEdgesFromFacesRuntime globally for LOD decimator
+window.buildEdgesFromFacesRuntime = buildEdgesFromFacesRuntime;
+
+// Decimate mesh to a specific vertex count (architectural fix)
+function decimateMeshVerticesToCount(model, targetCount) {
+  if (!model || !model.V || model.V.length < 3) return model;
+  const n = model.V.length;
+  if (targetCount >= n) return model;
+  // EDGE COLLAPSE decimator: iteratively collapse shortest edges
+  let V = model.V.map(v => v.slice());
+  let F = model.F.map(f => f.slice());
+  let E = buildEdgesFromFacesRuntime(F);
+  let valid = new Array(V.length).fill(true);
+  while (V.filter((_,i)=>valid[i]).length > targetCount && E.length > 0) {
+    let minLen = Infinity, minEdge = null;
+    for (const [a, b] of E) {
+      if (!valid[a] || !valid[b] || a === b) continue;
+      const v0 = V[a], v1 = V[b];
+      const len = Math.sqrt((v0[0]-v1[0])**2 + (v0[1]-v1[1])**2 + (v0[2]-v1[2])**2);
+      if (len < minLen) {
+        minLen = len;
+        minEdge = [a, b];
+      }
+    }
+    if (!minEdge) break;
+    const [a, b] = minEdge;
+    V[a] = [(V[a][0]+V[b][0])/2, (V[a][1]+V[b][1])/2, (V[a][2]+V[b][2])/2];
+    valid[b] = false;
+    for (let i = 0; i < F.length; ++i) {
+      F[i] = F[i].map(idx => idx === b ? a : idx);
+    }
+    F = F.filter(face => {
+      const s = new Set(face);
+      return s.size === face.length && [...s].every(idx => valid[idx]);
+    });
+    E = buildEdgesFromFacesRuntime(F);
+  }
+  // Reindex vertices to remove invalids
+  const oldToNew = [];
+  const newVerts = [];
+  for (let i = 0; i < V.length; ++i) {
+    if (valid[i]) {
+      oldToNew[i] = newVerts.length;
+      newVerts.push(V[i]);
+    }
+  }
+  let newFaces = F.map(face => face.map(idx => oldToNew[idx]));
+  newFaces = newFaces.filter(face => (new Set(face)).size === face.length);
+  const newEdges = buildEdgesFromFacesRuntime(newFaces);
+  if (!newFaces.length || !newVerts.length) {
+    console.warn('Edge collapse decimation produced empty mesh! Returning original.');
+    return model;
+  }
+
+  return {
+    ...model,
+    V: newVerts,
+    F: newFaces,
+    E: newEdges,
+  };
+}
+
 'use strict';
+
+// Ensure MORPH is always defined globally for all modules
+window.MORPH = null;
+
+// Global minimum LOD percent (prevents decimation from removing all detail)
+// (declared in globalVars.js)
+
+// Cached base mesh (hull-wrapped from point cloud)
+// (declared in globalVars.js)
+
+// ─────────────── Engine/Morphing Configuration ───────────────
+// Maximum number of points used for morphing (sampling cap)
+// (declared in globalVars.js)
+// Duration of morph animation in milliseconds
+// (declared in globalVars.js)
 
 /* ─────────────────────────────────────────────────────────────────────────
    Canvas
 ───────────────────────────────────────────────────────────────────────── */
-const canvas = document.getElementById('c');
-const bgCanvas = document.getElementById('bg');
-const fgCanvas = document.getElementById('fg');
-const ctx    = canvas.getContext('2d');
-const fillLayerCanvas = document.createElement('canvas');
-const fillLayerCtx = fillLayerCanvas.getContext('2d');
-let W = 0, H = 0;
-const BG_PARTICLES = [];
-let BG_PARTICLE_DENSITY = 1;
-let BG_PARTICLE_DENSITY_TARGET = 1;
-let BG_PARTICLE_VELOCITY = 1;
-let BG_PARTICLE_VELOCITY_TARGET = 1;
-let BG_PARTICLE_OPACITY = 1;
-let BG_PARTICLE_OPACITY_TARGET = 1;
+canvas = document.getElementById('c');
+bgCanvas = document.getElementById('bg');
+fgCanvas = document.getElementById('fg');
+ctx    = canvas.getContext('2d', { alpha: true, desynchronized: true });
+ctx.imageSmoothingEnabled = false;
+fillLayerCanvas = document.createElement('canvas');
+fillLayerCtx = fillLayerCanvas.getContext('2d', { alpha: true, desynchronized: true });
+fillLayerCtx.imageSmoothingEnabled = false;
+W = 0; H = 0;
+// (BG_PARTICLES declared in globalVars.js)
+BG_PARTICLE_DENSITY = 1;
+BG_PARTICLE_DENSITY_TARGET = 1;
+BG_PARTICLE_VELOCITY = 1;
+BG_PARTICLE_VELOCITY_TARGET = 1;
+BG_PARTICLE_OPACITY = 1;
+BG_PARTICLE_OPACITY_TARGET = 1;
 
 function clampBackgroundScale(level) {
   return Math.max(0, Math.min(5.2, Number(level) || 0));
@@ -56,6 +137,7 @@ function reconcileBackgroundParticles() {
   }
 }
 
+
 function setBackgroundParticleDensity(level) {
   BG_PARTICLE_DENSITY_TARGET = clampBackgroundScale(level);
 }
@@ -64,10 +146,12 @@ window.setBackgroundParticleDensity = setBackgroundParticleDensity;
 function setBackgroundParticleVelocity(level) {
   BG_PARTICLE_VELOCITY_TARGET = clampBackgroundScale(level);
 }
+window.setBackgroundParticleVelocity = setBackgroundParticleVelocity;
 
 function setBackgroundParticleOpacity(level) {
   BG_PARTICLE_OPACITY_TARGET = clampBackgroundScale(level);
 }
+window.setBackgroundParticleOpacity = setBackgroundParticleOpacity;
 
 function initBackgroundParticles() {
   if (!W || !H) return;
@@ -106,12 +190,7 @@ window.addEventListener('resize', resize);
    Camera sits at z = -3 (d = p[2] + 3), so negative-z is nearest.
    MODEL_CY centres the object vertically on screen.
 ───────────────────────────────────────────────────────────────────────── */
-let MODEL_CY = 0;
-let Z_HALF   = 1.0; // depth-shading range; set per-object in loadObject()
-let ZOOM = 1.0;
-let RENDER_FRAME_ID = 0;
-const ZOOM_MIN = 0.45;
-const ZOOM_MAX = 2.75;
+// (Z_HALF, ZOOM, RENDER_FRAME_ID, ZOOM_MIN, ZOOM_MAX declared in globalVars.js)
 
 function project(p) {
   const fov = Math.min(W, H) * 0.90 * ZOOM;
@@ -168,15 +247,79 @@ function getModelFrameData(model) {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Active model
+   ENGINE-FIRST, GROUND-UP 3D ENGINE CORE
 ───────────────────────────────────────────────────────────────────────── */
-let MODEL = { V: [], E: [] };
-const MORPH_DURATION_MS = 2000;
-const MORPH_POINT_CAP = 700;
-let MORPH = null;
-let HOLD_ROTATION_FRAMES = 0;
+// The engine accepts only point clouds as input, generates its own mesh, and owns all further processing.
+// (MODEL, MODEL_CY declared in globalVars.js)
+MODEL = { V: [], F: [], E: [] };
 window.DETAIL_LEVEL = 1;
-let GLOBAL_MIN_LOD_PERCENT = 5; // Minimum LOD as percent of max vertices (settable)
+MODEL_CY = 0;
+
+
+// Entry: Accept OBJ-style mesh { V: [[x,y,z]...], F: [[i,j,k]...] }, set as active model
+
+function loadMesh(mesh, name = 'Shape', options = {}) {
+  const {
+    animateMorph = false,
+    detailPercent = 1,
+  } = options || {};
+  console.log(`[loadMesh] Incoming mesh for ${name}: type=${typeof mesh}`);
+  if (typeof mesh === 'string') {
+    console.log(`[loadMesh] Parsing OBJ string length=${mesh.length}`);
+    mesh = toRuntimeMesh(mesh);
+  }
+  console.log(`[loadMesh] Parsed mesh counts: V=${mesh?.V?.length || 0}, F=${mesh?.F?.length || 0}`);
+  if (!mesh || !mesh.V || !mesh.F) throw new Error('Mesh must have V (vertices) and F (faces)');
+  if (!Array.isArray(mesh.V) || mesh.V.length < 3) throw new Error('Mesh must have at least 3 vertices');
+  if (!Array.isArray(mesh.F) || mesh.F.length < 1) throw new Error('Mesh must have at least 1 face');
+  console.log(`[loadMesh] Input: V=${mesh.V.length}, F=${mesh.F.length}`);
+  
+  const V = mesh.V;
+  const F = mesh.F;
+  const E = buildEdgesFromFacesRuntime(F);
+  
+  BASE_MODEL = {
+    V,
+    F,
+    E: filterValidEdges(E, V),
+    _meshFormat: 'obj-style',
+    _shadingMode: 'auto',
+    _creaseAngleDeg: undefined,
+  };
+  
+  // Set LOD range
+  LOD_RANGE = { min: window.LODManager.MIN_VERTS, max: BASE_MODEL.V.length };
+  // Set LOD to requested detail percent (default full detail)
+  const clampedDetail = Math.max(0, Math.min(1, Number(detailPercent) || 1));
+  setDetailLevel(clampedDetail, name);
+  if (animateMorph && window.startMorphToObject) {
+    window.startMorphToObject({ name });
+  }
+}
+window.loadMesh = loadMesh;
+
+// Set LOD by percent (0..1), update mesh and HUD
+function setDetailLevel(percent, name = 'Shape') {
+  if (!BASE_MODEL) return;
+  const clampedPercent = Math.max(0, Math.min(1, percent));
+  CURRENT_LOD_VERTS = Math.round(clampedPercent * BASE_MODEL.V.length);
+  // QEM receives percentage, calculates target itself
+  CURRENT_LOD_MODEL = window.LODManager.decimateMeshByPercent(BASE_MODEL, clampedPercent);
+  setActiveModel(CURRENT_LOD_MODEL, name);
+}
+window.setDetailLevel = setDetailLevel;
+
+// Expose LOD range for UI
+function getLodRange() {
+  return LOD_RANGE;
+}
+window.getLodRange = getLodRange;
+
+// Expose current LOD vertex count for UI
+function getCurrentLodVerts() {
+  return CURRENT_LOD_VERTS || (BASE_MODEL ? BASE_MODEL.V.length : 0);
+}
+window.getCurrentLodVerts = getCurrentLodVerts;
 
 function setGlobalMinLodPercent(percent) {
   GLOBAL_MIN_LOD_PERCENT = Math.max(1, Math.min(100, Number(percent) || 5));
@@ -191,28 +334,74 @@ function decimateMeshVertices(model, percent) {
   const targetCount = Math.max(3, Math.round((clampedPercent / 100) * n));
   if (targetCount >= n) return model;
 
-  // BASIC decimator: randomly remove vertices and associated faces until targetCount is reached
+  // EDGE COLLAPSE decimator: iteratively collapse shortest edges
   let V = model.V.map(v => v.slice());
   let F = model.F.map(f => f.slice());
-  while (V.length > targetCount) {
-    // Remove a random vertex
-    const idx = Math.floor(Math.random() * V.length);
-    V.splice(idx, 1);
-    // Remove faces that reference this vertex
-    F = F.filter(face => face.every(i => i !== idx));
-    // Reindex faces
-    F = F.map(face => face.map(i => (i > idx ? i - 1 : i)));
+  if (V.length <= targetCount) return model;
+
+  // Helper: compute edge lengths
+  function edgeLength(a, b) {
+    const v0 = V[a], v1 = V[b];
+    return Math.sqrt((v0[0]-v1[0])**2 + (v0[1]-v1[1])**2 + (v0[2]-v1[2])**2);
   }
-  const E = buildEdgesFromFacesRuntime(F);
-  if (!F.length || !V.length) {
-    console.warn('Basic decimation produced empty mesh! Returning original.');
+
+  // Build initial edge list
+  let E = buildEdgesFromFacesRuntime(F);
+
+  // Track which vertices are still valid
+  let valid = new Array(V.length).fill(true);
+
+  // Collapse edges until targetCount is reached
+  while (V.filter((_,i)=>valid[i]).length > targetCount && E.length > 0) {
+    // Find shortest valid edge
+    let minLen = Infinity, minEdge = null;
+    for (const [a, b] of E) {
+      if (!valid[a] || !valid[b] || a === b) continue;
+      const len = edgeLength(a, b);
+      if (len < minLen) {
+        minLen = len;
+        minEdge = [a, b];
+      }
+    }
+    if (!minEdge) break;
+    const [a, b] = minEdge;
+    // Collapse b into a (move a to midpoint)
+    V[a] = [(V[a][0]+V[b][0])/2, (V[a][1]+V[b][1])/2, (V[a][2]+V[b][2])/2];
+    valid[b] = false;
+    // Remap faces: replace b with a
+    for (let i = 0; i < F.length; ++i) {
+      F[i] = F[i].map(idx => idx === b ? a : idx);
+    }
+    // Remove degenerate faces (collapsed to line or point)
+    F = F.filter(face => {
+      const s = new Set(face);
+      return s.size === face.length && [...s].every(idx => valid[idx]);
+    });
+    // Rebuild edge list
+    E = buildEdgesFromFacesRuntime(F);
+  }
+  // Reindex vertices to remove invalids
+  const oldToNew = [];
+  const newVerts = [];
+  for (let i = 0; i < V.length; ++i) {
+    if (valid[i]) {
+      oldToNew[i] = newVerts.length;
+      newVerts.push(V[i]);
+    }
+  }
+  let newFaces = F.map(face => face.map(idx => oldToNew[idx]));
+  // Remove any degenerate faces again
+  newFaces = newFaces.filter(face => (new Set(face)).size === face.length);
+  const newEdges = buildEdgesFromFacesRuntime(newFaces);
+  if (!newFaces.length || !newVerts.length) {
+    console.warn('Edge collapse decimation produced empty mesh! Returning original.');
     return model;
   }
   return {
     ...model,
-    V,
-    F,
-    E,
+    V: newVerts,
+    F: newFaces,
+    E: newEdges,
   };
 }
 
@@ -246,12 +435,21 @@ function computeFrameParams(vertices) {
 
 function setActiveModel(model, name) {
   MODEL = model;
+  if (MODEL === BASE_MODEL) {
+    // Defensive: ensure BASE_MODEL is never mutated
+    if (Object.isFrozen && !Object.isFrozen(BASE_MODEL)) {
+      console.warn('[setActiveModel] BASE_MODEL is not frozen!');
+    }
+  }
   const params = computeFrameParams(MODEL.V);
   MODEL_CY = params.cy;
   Z_HALF = params.zHalf;
   console.log(`[setActiveModel] MODEL.V.length=${MODEL.V.length}, MODEL.E.length=${MODEL.E.length}`);
   updateHud(name, MODEL.V.length, MODEL.E.length);
 }
+
+// Expose to global scope for UI/LOD integration
+window.setActiveModel = setActiveModel;
 
 function currentLodBucket() {
   return Math.round(DETAIL_LEVEL * 100);
@@ -280,7 +478,7 @@ function buildEdgesFromFacesRuntime(faces) {
   return E;
 }
 
-// Utility: filter edges to only those with valid vertex indices
+// Utility: filter edges to only those with valid vertex indices (engine schema only)
 function filterValidEdges(E, V) {
   const n = V.length;
   return (E || []).filter(e =>
@@ -290,55 +488,70 @@ function filterValidEdges(E, V) {
   );
 }
 
-function toRuntimeMesh(rawModel, obj) {
-  if (!rawModel || typeof rawModel !== 'object') {
-    throw new Error(`Invalid mesh for object '${obj.name}'`);
+function toRuntimeMesh(rawObjText, overrides = {}) {
+  if (typeof rawObjText !== 'string') {
+    throw new Error('Mesh definition must be an OBJ string.');
   }
-
-  // Canonical mesh format used by registry/import pipeline.
-  if (rawModel.format === 'indexed-polygons-v1' || (Array.isArray(rawModel.positions) && Array.isArray(rawModel.faces))) {
-    const V = (rawModel.positions || []).map((v) => [Number(v[0]) || 0, Number(v[1]) || 0, Number(v[2]) || 0]);
-    const F = (rawModel.faces || [])
-      .filter((f) => Array.isArray(f) && f.length >= 3)
-      .map((f) => f.map((idx) => Math.max(0, Math.floor(Number(idx) || 0))));
-    const E = (Array.isArray(rawModel.edges) && rawModel.edges.length
-      ? rawModel.edges
-          .filter((e) => Array.isArray(e) && e.length >= 2)
-          .map((e) => [Math.max(0, Math.floor(Number(e[0]) || 0)), Math.max(0, Math.floor(Number(e[1]) || 0))])
-      : buildEdgesFromFacesRuntime(F));
-    return {
-      V,
-      E: filterValidEdges(E, V),
-      F,
-      _meshFormat: 'indexed-polygons-v1',
-      _shadingMode: rawModel.shadingMode || obj.shadingMode || obj.shading || 'auto',
-      _creaseAngleDeg: Number.isFinite(rawModel.creaseAngleDeg) ? rawModel.creaseAngleDeg : obj.creaseAngleDeg,
-    };
+  const lines = rawObjText.split(/\r?\n/);
+  let lineNumber = 0;
+  const vertices = [];
+  const faces = [];
+  for (const line of lines) {
+    lineNumber++;
+    if (!line || line.startsWith('#')) continue;
+    const parts = line.trim().split(/\s+/);
+    const prefix = parts[0];
+    if (prefix === 'v') {
+      if (parts.length < 4) continue;
+      const vx = Number(parts[1]);
+      const vy = Number(parts[2]);
+      const vz = Number(parts[3]);
+      if (!Number.isFinite(vx) || !Number.isFinite(vy) || !Number.isFinite(vz)) {
+        console.warn(`[toRuntimeMesh] Invalid vertex at line ${lineNumber}:`, line);
+        continue;
+      }
+      vertices.push([vx, vy, vz]);
+    } else if (prefix === 'f') {
+      const rawIndices = parts.slice(1).map((token) => {
+        const [idx] = token.split('/');
+        const parsed = Number(idx);
+        return Number.isFinite(parsed) ? Math.max(0, parsed - 1) : -1;
+      });
+      if (rawIndices.length < 3 || rawIndices.some(idx => idx < 0)) {
+        console.warn(`[toRuntimeMesh] Invalid face at line ${lineNumber}:`, line);
+        continue;
+      }
+      // Fan triangulate any polygon with more than 3 vertices
+      for (let i = 1; i < rawIndices.length - 1; i++) {
+        const tri = [rawIndices[0], rawIndices[i], rawIndices[i + 1]];
+        if ((new Set(tri)).size === 3) {
+          faces.push(tri);
+        }
+      }
+    }
   }
-
-  // Legacy shape contract support.
-  const V = Array.isArray(rawModel.V) ? rawModel.V : [];
-  const F = Array.isArray(rawModel.F) ? rawModel.F : [];
-  const E = Array.isArray(rawModel.E) && rawModel.E.length ? rawModel.E : buildEdgesFromFacesRuntime(F);
+  console.log(`[toRuntimeMesh] Parsed OBJ: V=${vertices.length}, Triangles=${faces.length}`);
+  if (!vertices.length || !faces.length) {
+    console.warn('[toRuntimeMesh] OBJ missing vertices or faces. First lines:', lines.slice(0, 10));
+  }
+  const E = buildEdgesFromFacesRuntime(faces);
   return {
-    ...rawModel,
-    V,
-    E: filterValidEdges(E, V),
-    F,
-    _meshFormat: rawModel._meshFormat || 'legacy-vef',
-    _shadingMode: rawModel._shadingMode || obj.shadingMode || obj.shading || 'auto',
-    _creaseAngleDeg: Number.isFinite(rawModel._creaseAngleDeg) ? rawModel._creaseAngleDeg : obj.creaseAngleDeg,
+    V: vertices,
+    E: filterValidEdges(E, vertices),
+    F: faces,
+    _meshFormat: 'obj-inline',
+    _shadingMode: overrides.shadingMode || 'auto',
+    _creaseAngleDeg: overrides.creaseAngleDeg,
   };
 }
 
-function getDetailModel(obj) {
+// LOD/detail reduction operates ONLY on the cached mesh, never the point cloud
+function getDetailModel() {
+  if (!BASE_MODEL) throw new Error('No base mesh loaded');
   const percent = Math.max(GLOBAL_MIN_LOD_PERCENT, Math.round(DETAIL_LEVEL * 100));
-  // Always build at highest detail
-  const rawModel = obj.build({ detail: 1 });
-  let model = toRuntimeMesh(rawModel, obj);
-  // Decimate if needed
+  let model = BASE_MODEL;
   if (percent < 100) {
-    model = decimateMeshVertices(model, percent);
+    model = decimateMeshVertices(BASE_MODEL, percent);
   }
   return model;
 }
@@ -498,8 +711,13 @@ function getMorphNowVertices(nowMs) {
 }
 
 function startMorphToObject(obj, nowMs = performance.now()) {
-  const toModel = getDetailModel(obj);
+  // Morph to the current LOD mesh (never re-hull)
+  const toModel = getDetailModel();
   const fromModel = MORPH && MORPH.active ? { V: getMorphNowVertices(nowMs), E: [] } : MODEL;
+
+  if (toModel === BASE_MODEL && Object.isFrozen && !Object.isFrozen(BASE_MODEL)) {
+    console.warn('[startMorphToObject] BASE_MODEL is not frozen!');
+  }
 
   const meshFromPts = mapVerticesToTargetOrder(fromModel.V, toModel.V);
   const meshModel = {
@@ -531,6 +749,7 @@ function startMorphToObject(obj, nowMs = performance.now()) {
     meshModel,
   };
 
+  console.log(`[startMorphToObject] Morphing to ${obj.name}: V=${toModel.V.length}, E=${toModel.E.length}`);
   updateHud(`${obj.name} (morphing)`, toModel.V.length, toModel.E.length);
 }
 

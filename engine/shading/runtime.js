@@ -33,6 +33,7 @@ function drawGpuSceneModel(model, params) {
   if (!renderer) return false;
 
   try {
+    // Engine-owned mesh only
     return renderer.renderModel(model, params);
   } catch (err) {
     disableSceneGpuRenderer(err);

@@ -1,18 +1,21 @@
-/* ─────────────────────────────────────────────────────────────────────────
-   Rotation state
-───────────────────────────────────────────────────────────────────────── */
-let R          = mmul(mry(0.4), mrx(0.18)); // initial orientation
-let frameCount = 0;
 
-const AUTO_WX = 0.003;   // pitch
-const AUTO_WY = 0.007;   // yaw  (main spin)
-const AUTO_WZ = 0.0015;  // roll
-let wx = AUTO_WX, wy = AUTO_WY, wz = AUTO_WZ;
+/* ─────────────────────────────────────────────────────────────────────────
+   Rotation state (uses globals from globalVars.js: R, wx, wy, wz, frameCount, dragging)
+   AUTO_WX, AUTO_WY, AUTO_WZ are set after globals are loaded
+───────────────────────────────────────────────────────────────────────── */
+
+// Initialize rotation after math functions are available
+initRotation();
+
+AUTO_WX = 0.003;   // pitch
+AUTO_WY = 0.007;   // yaw  (main spin)
+AUTO_WZ = 0.0015;  // roll
+wx = AUTO_WX; wy = AUTO_WY; wz = AUTO_WZ;
 
 /* ─────────────────────────────────────────────────────────────────────────
    Input — mouse & touch
 ───────────────────────────────────────────────────────────────────────── */
-let dragging = false, lx = 0, ly = 0;
+// (lx, ly declared in globalVars.js)
 
 function onDown(cx, cy) {
   dragging = true;
@@ -28,6 +31,7 @@ function onMove(cx, cy) {
 }
 function onUp() { dragging = false; }
 
+canvas = document.getElementById('c');
 canvas.addEventListener('mousedown',  e => onDown(e.clientX, e.clientY));
 window.addEventListener('mouseup',    onUp);
 window.addEventListener('mousemove',  e => onMove(e.clientX, e.clientY));

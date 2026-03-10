@@ -1,47 +1,37 @@
 
 
-// Populate OBJECTS from window.WIREFRAME_MESHES for UI
 
-window.OBJECTS = [];
-if (window.WIREFRAME_MESHES) {
-  for (const [name, mesh] of Object.entries(window.WIREFRAME_MESHES)) {
-    // Use mesh.name if present, else fallback to filename key
-    const displayName = mesh.name || name;
-    let highLod = null;
-    if (Array.isArray(mesh.lods) && mesh.lods.length) {
-      // Find highest detail LOD only
-      highLod = mesh.lods.reduce((a, b) => (b.detail > a.detail ? b : a), mesh.lods[0]);
-    }
-    window.OBJECTS.push({
-      name: displayName,
-      build: () => {
-        // Always use highest detail LOD
-        if (highLod) {
-          return {
-            format: mesh.format || 'indexed-polygons-v1',
-            positions: highLod.positions,
-            faces: highLod.faces,
-            edges: highLod.edges,
-            shadingMode: mesh.shadingMode || highLod.shadingMode || 'auto',
-            creaseAngleDeg: mesh.creaseAngleDeg || highLod.creaseAngleDeg,
-          };
-        }
-        // No LODs, return as-is
-        return mesh;
-      },
-      shadingMode: mesh._shadingMode || mesh.shadingMode || mesh.shading || 'auto',
-      creaseAngleDeg: mesh._creaseAngleDeg || mesh.creaseAngleDeg,
-    });
-  }
-  // Sort alphabetically for dropdown
-  window.OBJECTS.sort((a, b) => a.name.localeCompare(b.name));
-}
 
-// Loader for static mesh data from window.WIREFRAME_MESHES
-window.loadMeshByName = function(name, callback) {
-  if (window.WIREFRAME_MESHES && window.WIREFRAME_MESHES[name]) {
-    callback(null, window.WIREFRAME_MESHES[name]);
-  } else {
-    callback(new Error('Mesh not found: ' + name));
-  }
-};
+// Engine now uses OBJ-style mesh files from meshes/ directory
+window.OBJECTS = (
+  window.MESH_LIBRARY || [
+    { key: 'acorn', name: 'Acorn', build: () => window.getMeshAcorn?.() },
+    { key: 'capsule', name: 'Capsule', build: () => window.getMeshCapsule?.() },
+    { key: 'cinquefoil-knot', name: 'Cinquefoil Knot', build: () => window.getMeshCinquefoilKnot?.() },
+    { key: 'cone', name: 'Cone', build: () => window.getMeshCone?.() },
+    { key: 'cube', name: 'Cube', build: () => window.getMeshCube?.() },
+    { key: 'cylinder', name: 'Cylinder', build: () => window.getMeshCylinder?.() },
+    { key: 'diamond', name: 'Diamond', build: () => window.getMeshDiamond?.() },
+    { key: 'hilbert-curve', name: 'Hilbert Curve', build: () => window.getMeshHilbertCurve?.() },
+    { key: 'house', name: 'House', build: () => window.getMeshHouse?.() },
+    { key: 'hyperboloid', name: 'Hyperboloid', build: () => window.getMeshHyperboloid?.() },
+    { key: 'icosahedron', name: 'Icosahedron', build: () => window.getMeshIcosahedron?.() },
+    { key: 'jerusalem-cube', name: 'Jerusalem Cube', build: () => window.getMeshJerusalemCube?.() },
+    { key: 'mandelbulb', name: 'Mandelbulb', build: () => window.getMeshMandelbulb?.() },
+    { key: 'menger-sponge', name: 'Menger Sponge', build: () => window.getMeshMengerSponge?.() },
+    { key: 'mobius-strip', name: 'Mobius Strip', build: () => window.getMeshMobiusStrip?.() },
+    { key: 'octahedron', name: 'Octahedron', build: () => window.getMeshOctahedron?.() },
+    { key: 'prism', name: 'Prism', build: () => window.getMeshPrism?.() },
+    { key: 'pyramid', name: 'Pyramid', build: () => window.getMeshPyramid?.() },
+    { key: 'sierpinski-pyramid', name: 'Sierpinski Pyramid', build: () => window.getMeshSierpinskiPyramid?.() },
+    { key: 'sierpinski-tetrahedron', name: 'Sierpinski Tetrahedron', build: () => window.getMeshSierpinskiTetrahedron?.() },
+    { key: 'sphere', name: 'Sphere', build: () => window.getMeshSphere?.() },
+    { key: 'spring', name: 'Spring', build: () => window.getMeshSpring?.() },
+    { key: 'star-prism', name: 'Star Prism', build: () => window.getMeshStarPrism?.() },
+    { key: 'tetrahedron', name: 'Tetrahedron', build: () => window.getMeshTetrahedron?.() },
+    { key: 'torus', name: 'Torus', build: () => window.getMeshTorus?.() },
+    { key: 'torus-knot', name: 'Torus Knot', build: () => window.getMeshTorusKnot?.() },
+    { key: 'tree', name: 'Tree', build: () => window.getMeshTree?.() },
+    { key: 'wine-glass', name: 'Wine Glass', build: () => window.getMeshWineGlass?.() },
+  ]
+).filter((entry) => typeof entry?.build === 'function');
