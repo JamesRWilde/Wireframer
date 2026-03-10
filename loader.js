@@ -24,7 +24,6 @@ window.OBJECTS = (
     { key: 'star-prism', name: 'Star Prism', build: () => window.getMeshStarPrism?.() },
     { key: 'torus', name: 'Torus', build: () => window.getMeshTorus?.() },
     { key: 'torus-knot', name: 'Torus Knot', build: () => window.getMeshTorusKnot?.() },
-    { key: 'tree', name: 'Tree', build: () => window.getMeshTree?.() },
     { key: 'wine-glass', name: 'Wine Glass', build: () => window.getMeshWineGlass?.() },
   ]
 ).filter((entry) => typeof entry?.build === 'function');

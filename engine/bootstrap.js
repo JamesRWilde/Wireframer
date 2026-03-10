@@ -37,7 +37,6 @@
     'meshes/tetrahedron.mesh.js',
     'meshes/torus-knot.mesh.js',
     'meshes/torus.mesh.js',
-    'meshes/tree.mesh.js',
     'meshes/wine-glass.mesh.js',
     // Engine core
     'engine/core.js',
