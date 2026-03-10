@@ -23,6 +23,7 @@
 body {
   background: var(--bg-solid);
   overflow: hidden;
+  font-family: 'Share Tech Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 }
 
 #bg,
@@ -447,6 +448,7 @@ canvas:active { cursor: grabbing; }
   letter-spacing: 0.42rem;
   color: var(--ui-object-label);
   text-transform: uppercase;
+  font-family: 'Share Tech Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 }
 #hint {
   font-size: 1rem;
@@ -454,4 +456,5 @@ canvas:active { cursor: grabbing; }
   color: var(--ui-hint);
   text-transform: uppercase;
   margin-top: 12px;
+  font-family: 'Share Tech Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 }
