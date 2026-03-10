@@ -1,3 +1,15 @@
+'use strict';
+
+// All globals declared in globalVars.js
+
+function resolveForegroundRenderMode() {
+  if (typeof foregroundRenderMode === 'undefined') foregroundRenderMode = 'unknown';
+  if (foregroundRenderMode !== 'unknown') return foregroundRenderMode;
+  const renderer = typeof getSceneGpuRenderer === 'function' ? getSceneGpuRenderer() : null;
+  foregroundRenderMode = renderer ? 'gpu' : 'cpu';
+  updateRendererHud(foregroundRenderMode);
+  return foregroundRenderMode;
+}
 
 'use strict';
 
@@ -14,6 +26,7 @@ function updateTelemetryHud(nowMs) {
   if (statFgMs) statFgMs.textContent = emaFgMs > 0 ? emaFgMs.toFixed(2) : '--';
 }
 
+
 function updateRendererHud(mode) {
   if (!statRenderer) return;
   if (mode === 'gpu') {
@@ -25,148 +38,76 @@ function updateRendererHud(mode) {
   }
 }
 
-function resolveForegroundRenderMode() {
-  if (foregroundRenderMode !== 'unknown') return foregroundRenderMode;
-  const renderer = getSceneGpuRenderer();
-  foregroundRenderMode = renderer ? 'gpu' : 'cpu';
-  updateRendererHud(foregroundRenderMode);
-  return foregroundRenderMode;
-}
+  function frame(nowMs = 0) {
+    requestAnimationFrame(frame);
 
-function fallbackToCpuForegroundMode() {
-  foregroundRenderMode = 'cpu';
-  updateRendererHud(foregroundRenderMode);
-}
+    const frameStartMs = performance.now();
 
-function frame(nowMs = 0) {
-  requestAnimationFrame(frame);
+    if (MIN_FRAME_INTERVAL_MS > 0 && lastFrameMs >= 0 && nowMs - lastFrameMs < MIN_FRAME_INTERVAL_MS) {
+      return;
+    }
+    // Engine-owned mesh only: enforce modular pipeline
+    const frameIntervalMs = lastPresentedFrameMs >= 0 ? (nowMs - lastPresentedFrameMs) : 0;
+    lastPresentedFrameMs = nowMs;
+    lastFrameMs = nowMs;
+    RENDER_FRAME_ID++;
 
-  const frameStartMs = performance.now();
-
-  if (MIN_FRAME_INTERVAL_MS > 0 && lastFrameMs >= 0 && nowMs - lastFrameMs < MIN_FRAME_INTERVAL_MS) {
-    return;
-  }
-  // Engine-owned mesh only: enforce modular pipeline
-  const frameIntervalMs = lastPresentedFrameMs >= 0 ? (nowMs - lastPresentedFrameMs) : 0;
-  lastPresentedFrameMs = nowMs;
-  lastFrameMs = nowMs;
-  RENDER_FRAME_ID++;
-
-  // Physics
-  const physStartMs = performance.now();
-  if (HOLD_ROTATION_FRAMES > 0) {
-    HOLD_ROTATION_FRAMES--;
-  } else {
-    applyEulerIncrementInPlace(R, wx, wy, wz);
-    if (++frameCount % 120 === 0) R = reorthogonalize(R);
-
-    if (!dragging) {
-      wx += (AUTO_WX - wx) * 0.04;
-      wy += (AUTO_WY - wy) * 0.04;
-      wz += (AUTO_WZ - wz) * 0.04;
+    // Physics
+    const physStartMs = performance.now();
+    if (HOLD_ROTATION_FRAMES > 0) {
+      HOLD_ROTATION_FRAMES--;
     } else {
-      wx *= 0.85;
-      wy *= 0.85;
-    }
-  }
-  const physMs = performance.now() - physStartMs;
+      applyEulerIncrementInPlace(R, wx, wy, wz);
+      if (++frameCount % 120 === 0) R = reorthogonalize(R);
 
-  // Draw
-  const bgStartMs = performance.now();
-  const backgroundOnSeparateCanvas = drawBackground(nowMs) === true;
-  const bgMs = performance.now() - bgStartMs;
-
-  const fgStartMs = performance.now();
-  let drewCpuForeground = false;
-  const modeResolved = resolveForegroundRenderMode();
-  const forceCpuForShading = !MORPH?.active && MODEL && MODEL._shadingMode === 'flat';
-  const mode = forceCpuForShading ? 'cpu' : modeResolved;
-
-  const setCpuCanvasHidden = (hidden) => {
-    if (!ctx || !ctx.canvas) return;
-    const displayValue = hidden ? 'none' : 'block';
-    if (ctx.canvas.style.display !== displayValue) {
-      ctx.canvas.style.display = displayValue;
-    }
-  };
-
-  const setGpuCanvasHidden = (hidden) => {
-    if (!fgCanvas) return;
-    const displayValue = hidden ? 'none' : 'block';
-    if (fgCanvas.style.display !== displayValue) {
-      fgCanvas.style.display = displayValue;
-    }
-  };
-
-  if (MORPH && MORPH.active) {
-    const tRaw = Math.max(0, Math.min(1, (nowMs - MORPH.startMs) / MORPH.durationMs));
-    const t = easeInOutCubic(tRaw);
-
-    // Proper point-to-point morph: each target-topology vertex moves from a mapped source point.
-    const mesh = MORPH.meshModel;
-    const fromPts = MORPH.meshFromPts;
-    const toPts = MORPH.meshToPts;
-    for (let i = 0; i < mesh.V.length; i++) {
-      const a = fromPts[i];
-      const b = toPts[i];
-      const v = mesh.V[i];
-      v[0] = a[0] + (b[0] - a[0]) * t;
-      v[1] = a[1] + (b[1] - a[1]) * t;
-      v[2] = a[2] + (b[2] - a[2]) * t;
-    }
-
-    const morphParams = computeFrameParams(mesh.V);
-    MODEL_CY = morphParams.cy;
-    Z_HALF = morphParams.zHalf;
-
-    // Dynamic geometry requires fresh normals each frame.
-    mesh._vertexNormals = null;
-    mesh._faceNormals = null;
-    mesh._triCornerNormals = null;
-    mesh._triCornerNormalsKey = null;
-
-    if (mode === 'gpu') {
-      const morphGpu = drawGpuSceneModel(mesh, {
-        fillAlpha: FILL_OPACITY,
-        wireAlpha: WIRE_OPACITY,
-        zoom: ZOOM,
-        modelCy: MODEL_CY,
-        zHalf: Z_HALF,
-        rotation: R,
-        width: W,
-        height: H,
-        theme: THEME,
-        lightDir: LIGHT_DIR,
-        viewDir: VIEW_DIR,
-        dynamic: true,
-      });
-
-      if (!morphGpu) {
-        fallbackToCpuForegroundMode();
+      if (!dragging) {
+        wx += (AUTO_WX - wx) * 0.04;
+        wy += (AUTO_WY - wy) * 0.04;
+        wz += (AUTO_WZ - wz) * 0.04;
       } else {
-        if (backgroundOnSeparateCanvas && cpuForegroundDrawnOnMainCanvas) {
-          ctx.clearRect(0, 0, W, H);
-        }
-        gpuSceneDrawnLastFrame = true;
+        wx *= 0.85;
+        wy *= 0.85;
       }
     }
+    const physMs = performance.now() - physStartMs;
 
-    if (mode === 'cpu' || foregroundRenderMode === 'cpu') {
-      if (gpuSceneDrawnLastFrame) {
-        clearGpuSceneCanvas();
-        gpuSceneDrawnLastFrame = false;
+    // Draw
+    const bgStartMs = performance.now();
+    const backgroundOnSeparateCanvas = drawBackground(nowMs) === true;
+    const bgMs = performance.now() - bgStartMs;
+
+    const fgStartMs = performance.now();
+    let drewCpuForeground = false;
+
+    // --- Morphing integration ---
+    if (window.morph && window.morph.advanceMorphFrame) window.morph.advanceMorphFrame();
+
+    const modeResolved = resolveForegroundRenderMode();
+    const mode = MODEL && MODEL._shadingMode === 'flat' ? 'cpu' : modeResolved;
+
+    const setCpuCanvasHidden = (hidden) => {
+      if (!ctx || !ctx.canvas) return;
+      const displayValue = hidden ? 'none' : 'block';
+      if (ctx.canvas.style.display !== displayValue) {
+        ctx.canvas.style.display = displayValue;
       }
-      if (backgroundOnSeparateCanvas) ctx.clearRect(0, 0, W, H);
-      drewCpuForeground = true;
-      drawSolidFillModel(mesh, 1);
-      if (WIRE_OPACITY > 0.001) drawWireframeModel(mesh, WIRE_OPACITY);
-    }
+    };
 
-    finalizeMorphIfDone(tRaw);
-  } else {
+    const setGpuCanvasHidden = (hidden) => {
+      if (!fgCanvas) return;
+      const displayValue = hidden ? 'none' : 'block';
+      if (fgCanvas.style.display !== displayValue) {
+        fgCanvas.style.display = displayValue;
+      }
+    };
+
+    // If morphing, render the morph mesh; else render MODEL
+    const morphing = window.morph && window.morph.isMorphing && window.morph.isMorphing();
+    const meshToRender = morphing && window.morph.getCurrentMorphMesh ? window.morph.getCurrentMorphMesh() : MODEL;
+
     let gpuDrawn = false;
     if (mode === 'gpu') {
-      gpuDrawn = drawGpuSceneModel(MODEL, {
+      gpuDrawn = drawGpuSceneModel(meshToRender, {
         fillAlpha: FILL_OPACITY,
         wireAlpha: WIRE_OPACITY,
         zoom: ZOOM,
@@ -178,6 +119,7 @@ function frame(nowMs = 0) {
         theme: THEME,
         lightDir: LIGHT_DIR,
         viewDir: VIEW_DIR,
+        dynamic: morphing,
       });
       setGpuCanvasHidden(!gpuDrawn);
       setCpuCanvasHidden(gpuDrawn);
@@ -195,10 +137,9 @@ function frame(nowMs = 0) {
       }
       if (backgroundOnSeparateCanvas) ctx.clearRect(0, 0, W, H);
       drewCpuForeground = true;
-      drawSolidFillModel(MODEL, 1);
-      if (WIRE_OPACITY > 0.001) drawWireframeModel(MODEL, WIRE_OPACITY);
+      drawSolidFillModel(meshToRender, 1);
+      if (WIRE_OPACITY > 0.001) drawWireframeModel(meshToRender, WIRE_OPACITY);
     } else if (backgroundOnSeparateCanvas && cpuForegroundDrawnOnMainCanvas) {
-      // Only clear once when switching back to full GPU rendering.
       ctx.clearRect(0, 0, W, H);
       gpuSceneDrawnLastFrame = true;
     } else {
@@ -207,7 +148,6 @@ function frame(nowMs = 0) {
         setCpuCanvasHidden(true);
       }
     }
-  }
 
   const fgMs = performance.now() - fgStartMs;
   const frameMs = performance.now() - frameStartMs;

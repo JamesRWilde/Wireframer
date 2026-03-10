@@ -64,8 +64,7 @@ function decimateMeshVerticesToCount(model, targetCount) {
 
 'use strict';
 
-// Ensure MORPH is always defined globally for all modules
-window.MORPH = null;
+// (No longer needed: morph state is managed in engine/morph.js)
 
 // Global minimum LOD percent (prevents decimation from removing all detail)
 // (declared in globalVars.js)
@@ -274,12 +273,12 @@ function loadMesh(mesh, name = 'Shape', options = {}) {
   if (!Array.isArray(mesh.V) || mesh.V.length < 3) throw new Error('Mesh must have at least 3 vertices');
   if (!Array.isArray(mesh.F) || mesh.F.length < 1) throw new Error('Mesh must have at least 1 face');
   console.log(`[loadMesh] Input: V=${mesh.V.length}, F=${mesh.F.length}`);
-  
+
   const V = mesh.V;
   const F = mesh.F;
   const E = buildEdgesFromFacesRuntime(F);
-  
-  BASE_MODEL = {
+
+  const newModel = {
     V,
     F,
     E: filterValidEdges(E, V),
@@ -287,14 +286,17 @@ function loadMesh(mesh, name = 'Shape', options = {}) {
     _shadingMode: 'auto',
     _creaseAngleDeg: undefined,
   };
-  
+
   // Set LOD range
-  LOD_RANGE = { min: window.LODManager.MIN_VERTS, max: BASE_MODEL.V.length };
+  LOD_RANGE = { min: window.LODManager.MIN_VERTS, max: newModel.V.length };
   // Set LOD to requested detail percent (default full detail)
   const clampedDetail = Math.max(0, Math.min(1, Number(detailPercent) || 1));
-  setDetailLevel(clampedDetail, name);
-  if (animateMorph && window.startMorphToObject) {
-    window.startMorphToObject({ name });
+  // If morphing, trigger morph from current MODEL to newModel
+  if (animateMorph && typeof window.morph === 'object' && window.morph.startMorph) {
+    window.morph.startMorph(MODEL, newModel, 1600, () => setActiveModel(newModel, name));
+  } else {
+    BASE_MODEL = newModel;
+    setDetailLevel(clampedDetail, name);
   }
 }
 window.loadMesh = loadMesh;
