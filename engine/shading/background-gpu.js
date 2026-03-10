@@ -56,7 +56,7 @@ function createGpuBackgroundRenderer(canvas) {
   `;
 
   const fragSrc = `
-    precision mediump float;
+    precision highp float;
 
     uniform vec3 u_color;
     varying float v_alpha;
