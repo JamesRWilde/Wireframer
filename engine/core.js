@@ -444,12 +444,16 @@ function decimateMeshVertices(model, percent) {
 const MODEL_CACHE = new Map();
 const MODEL_CACHE_LIMIT = 80;
 
+
 function updateHud(name, vertexCount, edgeCount, cy, zHalf) {
-  // ...existing code...
-  // Remove any degenerate faces again
-  // ...existing code...
+  // Update HUD telemetry for vertex and edge counts
+  if (typeof statV !== 'undefined' && statV && typeof statV.textContent !== 'undefined') {
+    statV.textContent = vertexCount != null ? vertexCount : '--';
+  }
+  if (typeof statE !== 'undefined' && statE && typeof statE.textContent !== 'undefined') {
+    statE.textContent = edgeCount != null ? edgeCount : '--';
+  }
   // cy and zHalf are now passed in for HUD updates
-  // (HUD update logic here, if any)
   return { cy, zHalf };
 }
 

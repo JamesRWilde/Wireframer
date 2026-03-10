@@ -23,6 +23,7 @@ const customGreenValue = document.getElementById('custom-green-value');
 const customBlueValue = document.getElementById('custom-blue-value');
 const customHex = document.getElementById('custom-hex');
 const customSwatch = document.getElementById('custom-swatch');
+
 // (statRenderer, statFps, statFrameMs, statPhysMs, statBgMs, statFgMs declared in globalVars.js)
 statRenderer = document.getElementById('stat-renderer');
 statFps = document.getElementById('stat-fps');
@@ -30,6 +31,10 @@ statFrameMs = document.getElementById('stat-frame-ms');
 statPhysMs = document.getElementById('stat-phys-ms');
 statBgMs = document.getElementById('stat-bg-ms');
 statFgMs = document.getElementById('stat-fg-ms');
+
+// Vertex and edge count HUD elements
+statV = document.getElementById('stat-v');
+statE = document.getElementById('stat-e');
 
 // (FILL_OPACITY, WIRE_OPACITY declared in globalVars.js)
 FILL_OPACITY = 0;

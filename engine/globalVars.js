@@ -76,6 +76,7 @@ let emaFgMs = 0;
 const TELEMETRY_ALPHA = 0.2;
 let HOLD_ROTATION_FRAMES = 0;
 
+
 // Telemetry DOM elements (optional - may not exist)
 let statFps = null;
 let statFrameMs = null;
@@ -83,6 +84,8 @@ let statPhysMs = null;
 let statBgMs = null;
 let statFgMs = null;
 let statRenderer = null;
+let statV = null;
+let statE = null;
 
 // Initialize rotation matrix with default orientation
 function initRotation() {
