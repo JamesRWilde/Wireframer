@@ -31,23 +31,37 @@ function onMove(cx, cy) {
 }
 function onUp() { dragging = false; }
 
-canvas = document.getElementById('c');
-canvas.addEventListener('mousedown',  e => onDown(e.clientX, e.clientY));
-window.addEventListener('mouseup',    onUp);
-window.addEventListener('mousemove',  e => onMove(e.clientX, e.clientY));
 
-canvas.addEventListener('touchstart', e => onDown(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-canvas.addEventListener('touchend',   onUp);
-canvas.addEventListener('touchmove',  e => {
-  e.preventDefault();
-  onMove(e.touches[0].clientX, e.touches[0].clientY);
-}, { passive: false });
+function attachInputListeners(canvas) {
+  if (!canvas) return;
+  // Remove any previous listeners by cloning the node (safe for this app)
+  const newCanvas = canvas.cloneNode(true);
+  canvas.parentNode.replaceChild(newCanvas, canvas);
+  canvas = newCanvas;
 
-canvas.addEventListener('wheel', (e) => {
-  // Let Ctrl+wheel keep browser/page zoom behavior.
-  if (e.ctrlKey) return;
-  e.preventDefault();
-  const factor = Math.exp(-e.deltaY * 0.0012);
-  ZOOM = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, ZOOM * factor));
-}, { passive: false });
+  canvas.addEventListener('mousedown',  e => onDown(e.clientX, e.clientY));
+  window.addEventListener('mouseup',    onUp);
+  window.addEventListener('mousemove',  e => onMove(e.clientX, e.clientY));
+
+  canvas.addEventListener('touchstart', e => onDown(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+  canvas.addEventListener('touchend',   onUp);
+  canvas.addEventListener('touchmove',  e => {
+    e.preventDefault();
+    onMove(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: false });
+
+  canvas.addEventListener('wheel', (e) => {
+    // Let Ctrl+wheel keep browser/page zoom behavior.
+    if (e.ctrlKey) return;
+    e.preventDefault();
+    const factor = Math.exp(-e.deltaY * 0.0012);
+    ZOOM = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, ZOOM * factor));
+  }, { passive: false });
+
+  // Expose for other modules if needed
+  window._inputCanvas = canvas;
+}
+
+// Initial attach
+attachInputListeners(document.getElementById('c'));
 

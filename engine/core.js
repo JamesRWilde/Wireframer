@@ -83,6 +83,7 @@ window.MORPH = null;
    Canvas
 ───────────────────────────────────────────────────────────────────────── */
 canvas = document.getElementById('c');
+if (typeof attachInputListeners === 'function') attachInputListeners(canvas);
 bgCanvas = document.getElementById('bg');
 fgCanvas = document.getElementById('fg');
 ctx    = canvas.getContext('2d', { alpha: true, desynchronized: true });

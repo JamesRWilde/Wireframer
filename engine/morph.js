@@ -72,6 +72,8 @@ function drawMorphPoints(nowMs, tRaw, t) {
     MORPH.active = false;
     setActiveModel(MORPH.toModel, MORPH.targetName);
     MORPH = null;
+    HOLD_ROTATION_FRAMES = 1;
+    dragging = false; // Always reset drag state after morph
   }
 }
 
@@ -80,7 +82,14 @@ function finalizeMorphIfDone(tRaw) {
   if (tRaw < 1) return;
 
   MORPH.active = false;
-  setActiveModel(MORPH.toModel, MORPH.targetName, MORPH.targetV, MORPH.targetE);
+  // Persist the morphed mesh as the new MODEL
+  if (MORPH && MORPH.meshModel) {
+    MODEL = MORPH.meshModel;
+    setActiveModel(MODEL, MORPH.targetName, MORPH.targetV, MORPH.targetE);
+  } else {
+    setActiveModel(MORPH.toModel, MORPH.targetName, MORPH.targetV, MORPH.targetE);
+  }
   MORPH = null;
   HOLD_ROTATION_FRAMES = 1;
+  dragging = false; // Ensure drag state is reset after morph
 }
