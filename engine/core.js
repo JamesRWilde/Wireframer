@@ -245,10 +245,22 @@ function getModelFrameData(model) {
   const r00 = R[0], r01 = R[1], r02 = R[2];
   const r10 = R[3], r11 = R[4], r12 = R[5];
   const r20 = R[6], r21 = R[7], r22 = R[8];
-  const fov = Math.min(W, H) * 0.90 * ZOOM;
+  let fov = Math.min(W, H) * 0.90 * ZOOM;
   const hw = W * 0.5;
   const hh = H * 0.5;
 
+  // Clamp ZOOM and Z_HALF to avoid degenerate projections
+  if (!Number.isFinite(ZOOM) || ZOOM < 0.01 || ZOOM > 1000) {
+    console.warn('[getModelFrameData] Invalid ZOOM:', ZOOM, 'Resetting to 1.0');
+    ZOOM = 1.0;
+    fov = Math.min(W, H) * 0.90 * ZOOM;
+  }
+  if (!Number.isFinite(Z_HALF) || Z_HALF < 1e-6 || Z_HALF > 1e6) {
+    console.warn('[getModelFrameData] Invalid Z_HALF:', Z_HALF, 'Resetting to 1.0');
+    Z_HALF = 1.0;
+  }
+
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, nanCount = 0;
   for (let i = 0; i < V.length; i++) {
     const v = V[i];
     const tx = r00 * v[0] + r01 * v[1] + r02 * v[2];
@@ -263,6 +275,41 @@ function getModelFrameData(model) {
     const p = P2[i];
     p[0] = hw + tx * fov / d;
     p[1] = hh - (ty - MODEL_CY) * fov / d;
+    if (!Number.isFinite(p[0]) || !Number.isFinite(p[1])) nanCount++;
+    if (p[0] < minX) minX = p[0];
+    if (p[0] > maxX) maxX = p[0];
+    if (p[1] < minY) minY = p[1];
+    if (p[1] > maxY) maxY = p[1];
+  }
+
+  // Debug: log projection stats
+  if (nanCount > 0 || minX === Infinity || maxX === -Infinity) {
+    console.error('[getModelFrameData] Projection produced NaN or degenerate points:', {nanCount, minX, maxX, minY, maxY, ZOOM, Z_HALF, MODEL_CY, fov, V: V.length});
+  } else {
+    console.log(`[getModelFrameData] P2 bounds: x=[${minX.toFixed(1)},${maxX.toFixed(1)}] y=[${minY.toFixed(1)},${maxY.toFixed(1)}] ZOOM=${ZOOM.toFixed(3)} Z_HALF=${Z_HALF.toFixed(3)} MODEL_CY=${MODEL_CY.toFixed(3)}`);
+  }
+
+  // If all points are off-canvas or NaN, fallback to default zoom/center
+  if (nanCount === V.length || maxX < 0 || minX > W || maxY < 0 || minY > H) {
+    console.warn('[getModelFrameData] All projected points off-canvas or NaN. Resetting ZOOM and MODEL_CY.');
+    ZOOM = 1.0;
+    MODEL_CY = 0;
+    fov = Math.min(W, H) * 0.90 * ZOOM;
+    for (let i = 0; i < V.length; i++) {
+      const v = V[i];
+      const tx = r00 * v[0] + r01 * v[1] + r02 * v[2];
+      const ty = r10 * v[0] + r11 * v[1] + r12 * v[2];
+      const tz = r20 * v[0] + r21 * v[1] + r22 * v[2];
+      const t = T[i];
+      t[0] = tx;
+      t[1] = ty;
+      t[2] = tz;
+      const d = tz + 3.0;
+      const p = P2[i];
+      p[0] = hw + tx * fov / d;
+      p[1] = hh - (ty - MODEL_CY) * fov / d;
+    }
+    console.log('[getModelFrameData] Fallback projection applied.');
   }
 
   model._frameData = { id: RENDER_FRAME_ID, T, P2 };
@@ -288,17 +335,9 @@ function loadMesh(mesh, name = 'Shape', options = {}) {
   } = options || {};
   console.log(`[loadMesh] Incoming mesh for ${name}: type=${typeof mesh}`);
   if (mesh === undefined || mesh === null) {
-    throw new Error(`[loadMesh] Mesh input is ${mesh === null ? 'null' : 'undefined'} for '${name}'.\n  - Source: build function or mesh file did not return a valid OBJ string.\n  - Check loader.js and meshes/${name.toLowerCase()}.mesh.js for correct export and build function.`);
+    throw new Error(`[loadMesh] Mesh input is ${mesh === null ? 'null' : 'undefined'} for '${name}'.\n  - Source: mesh file did not return a valid OBJ string.`);
   }
-  if (typeof mesh === 'string') {
-    console.log(`[loadMesh] Parsing OBJ string length=${mesh.length}`);
-    const meshFileName = options.meshFileName || `${name.toLowerCase()}.mesh.js`;
-    const meshType = options.meshType || 'OBJ';
-    mesh = toRuntimeMesh(mesh, { meshFileName, meshType });
-    console.log(`[loadMesh] After toRuntimeMesh: V=${mesh?.V?.length || 0}, F=${mesh?.F?.length || 0}`);
-  }
-  console.log(`[loadMesh] Parsed mesh counts: V=${mesh?.V?.length || 0}, F=${mesh?.F?.length || 0}`);
-  // Remove all explicit mesh load failure error messages and throws. Let engine fail naturally.
+  // OBJ-only: mesh is always a parsed mesh object
   if (!Array.isArray(mesh.V) || mesh.V.length < 3) {
     throw new Error(`[loadMesh] Mesh must have at least 3 vertices.\n  - mesh.V: ${mesh.V ? mesh.V.length : 'missing'}\n  - Mesh file: ${options.meshFileName || name}\n  - Mesh type: ${options.meshType || 'OBJ'}`);
   }
@@ -324,6 +363,27 @@ function loadMesh(mesh, name = 'Shape', options = {}) {
   LOD_RANGE = { min: window.LODManager.MIN_VERTS, max: newModel.V.length };
   // Set LOD to requested detail percent (default full detail)
   const clampedDetail = Math.max(0, Math.min(1, Number(detailPercent) || 1));
+
+  // --- AUTO-FIT CAMERA/FRUSTUM TO MODEL ---
+  // Compute model bounds and fit ZOOM so model fits viewport
+  const params = computeFrameParams(newModel.V);
+  // Use Z_HALF as a proxy for model radius
+  // Fit so model fits in view at ZOOM=1, then scale ZOOM if needed
+  // Camera sits at z = -3, so model at origin with radius Z_HALF should fit in frustum
+  // fov = Math.min(W, H) * 0.90 * ZOOM
+  // Projected size: s = fov * Z_HALF / (Z_HALF + 3)
+  // Want s <= 0.45 * min(W, H) (fit in 90% of viewport)
+  let fitZoom = 1.0;
+  if (params && typeof params.zHalf === 'number' && params.zHalf > 0 && typeof window !== 'undefined') {
+    const minDim = Math.min(window.innerWidth, window.innerHeight);
+    // Solve for ZOOM: (minDim * 0.90 * ZOOM) * params.zHalf / (params.zHalf + 3) = minDim * 0.45
+    // => ZOOM = 0.5 * (params.zHalf + 3) / params.zHalf
+    fitZoom = 0.5 * (params.zHalf + 3) / params.zHalf;
+    fitZoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, fitZoom));
+    ZOOM = fitZoom;
+    console.log(`[autoFitCamera] Z_HALF=${params.zHalf.toFixed(3)}, fitZoom=${fitZoom.toFixed(3)}`);
+  }
+
   // If morphing, trigger morph from current MODEL to newModel
   if (animateMorph && typeof window.morph === 'object' && window.morph.startMorph) {
     window.morph.startMorph(MODEL, newModel, 1600, () => setActiveModel(newModel, name));
@@ -492,13 +552,17 @@ function buildEdgesFromFacesRuntime(faces) {
     E.push([lo, hi]);
   }
 
-  for (const face of faces || []) {
-    const indices = face && face.indices ? face.indices : face;
-    if (!Array.isArray(indices) || indices.length < 2) continue;
-    for (let i = 0; i < indices.length; i++) {
-      addEdge(indices[i], indices[(i + 1) % indices.length]);
-    }
-  }
+      for (const face of faces || []) {
+        let indices = face && face.indices ? face.indices : face;
+        // If still not a flat array, try to flatten (handles nested arrays)
+        if (Array.isArray(indices) && indices.length === 1 && Array.isArray(indices[0])) {
+          indices = indices[0];
+        }
+        if (!Array.isArray(indices) || indices.length < 2) continue;
+        for (let i = 0; i < indices.length; i++) {
+          addEdge(indices[i], indices[(i + 1) % indices.length]);
+        }
+      }
 
   return E;
 }

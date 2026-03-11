@@ -120,57 +120,43 @@ function syncRenderToggles() {
 
 function initObjectSelector() {
   select.innerHTML = '';
-  // OBJECTS is now populated by loader.js with engine-first point cloud shapes only
+  // OBJ-only: populate selector and wire up events
   OBJECTS.forEach((obj, i) => {
     const opt = document.createElement('option');
     opt.value = i;
     opt.textContent = obj.name;
     select.appendChild(opt);
   });
-  // Auto-load the first object on init (no morph)
-  if (OBJECTS.length > 0 && typeof OBJECTS[0].build === 'function') {
+
+  // Auto-load the first object on init
+  if (OBJECTS.length > 0 && typeof window.loadObjMesh === 'function') {
     select.selectedIndex = 0;
     const obj = OBJECTS[0];
-    const mesh = obj.build();
-    console.log(`[UI] Loading initial object: ${obj.name}, mesh type: ${typeof mesh}, mesh defined: ${mesh !== undefined && mesh !== null}`);
-    if (mesh === undefined || mesh === null) {
-      console.error(`[UI] Mesh is undefined/null for object: ${obj.name}`);
-    }
-    if (window.loadMesh) {
+    window.loadObjMesh(obj.obj, obj.name).then(mesh => {
       window.loadMesh(mesh, obj.name, { detailPercent: Number(lodSlider.value) / 100 });
-    } else if (typeof loadMesh === 'function') {
-      loadMesh(mesh, obj.name, { detailPercent: Number(lodSlider.value) / 100 });
-    }
-    lodValue.textContent = `${lodSlider.value}%`;
+      lodValue.textContent = `${lodSlider.value}%`;
+    }).catch(err => {
+      console.error(`[UI] Failed to load OBJ for ${obj.name}:`, err);
+    });
   }
+
   select.onchange = () => {
     persistUiState();
     const obj = OBJECTS[select.selectedIndex];
-    if (obj && typeof obj.build === 'function') {
-      let mesh = obj.build();
-      const detailPercent = Number(lodSlider.value) / 100;
-      // Parse mesh string if needed
-      if (typeof mesh === 'string' && typeof window.toRuntimeMesh === 'function') {
-        mesh = window.toRuntimeMesh(mesh);
-      }
-      // Decimate mesh to current LOD before morphing
-      if (window.LODManager && typeof window.LODManager.decimateMeshByPercent === 'function') {
-        mesh = window.LODManager.decimateMeshByPercent(mesh, detailPercent);
-      }
-      console.log(`[UI] Object selected: ${obj.name} at LOD ${detailPercent}, mesh type: ${typeof mesh}, mesh defined: ${mesh !== undefined && mesh !== null}`);
-      if (mesh === undefined || mesh === null) {
-        console.error(`[UI] Mesh is undefined/null for object: ${obj.name} at LOD ${detailPercent}`);
-      }
-      const meshFileName = obj.key ? `${obj.key}.mesh.js` : 'unknown';
-      const meshType = 'OBJ';
-      if (window.loadMesh) {
-        window.loadMesh(mesh, obj.name, { detailPercent: 1, animateMorph: true, meshFileName, meshType });
-      } else if (typeof loadMesh === 'function') {
-        loadMesh(mesh, obj.name, { detailPercent: 1, animateMorph: true, meshFileName, meshType });
-      }
-      lodValue.textContent = `${lodSlider.value}%`;
+    if (obj && typeof window.loadObjMesh === 'function') {
+      window.loadObjMesh(obj.obj, obj.name).then(mesh => {
+        const detailPercent = Number(lodSlider.value) / 100;
+        if (window.LODManager && typeof window.LODManager.decimateMeshByPercent === 'function') {
+          mesh = window.LODManager.decimateMeshByPercent(mesh, detailPercent);
+        }
+        window.loadMesh(mesh, obj.name, { detailPercent: 1, animateMorph: true, meshFileName: obj.obj, meshType: 'OBJ' });
+        lodValue.textContent = `${lodSlider.value}%`;
+      }).catch(err => {
+        console.error(`[UI] Failed to load OBJ for ${obj.name}:`, err);
+      });
     }
   };
+
   lodSlider.oninput = () => {
     syncRenderToggles();
     if (!OBJECTS.length) return;
@@ -178,19 +164,15 @@ function initObjectSelector() {
     const obj = OBJECTS[select.selectedIndex];
     const percent = Number(lodSlider.value) / 100;
     lodValue.textContent = `${lodSlider.value}%`;
-    if (obj && typeof obj.build === 'function') {
-      const mesh = obj.build();
-      console.log(`[UI] LOD slider: ${obj.name} at percent ${percent}, mesh type: ${typeof mesh}, mesh defined: ${mesh !== undefined && mesh !== null}`);
-      if (mesh === undefined || mesh === null) {
-        console.error(`[UI] Mesh is undefined/null for object: ${obj.name} at percent ${percent}`);
-      }
-      const meshFileName = obj.key ? `${obj.key}.mesh.js` : 'unknown';
-      const meshType = 'OBJ';
-      if (window.loadMesh) {
-        window.loadMesh(mesh, obj.name, { detailPercent: percent, animateMorph: false, meshFileName, meshType });
-      } else if (typeof loadMesh === 'function') {
-        loadMesh(mesh, obj.name, { detailPercent: percent, animateMorph: false, meshFileName, meshType });
-      }
+    if (obj && typeof window.loadObjMesh === 'function') {
+      window.loadObjMesh(obj.obj, obj.name).then(mesh => {
+        if (window.LODManager && typeof window.LODManager.decimateMeshByPercent === 'function') {
+          mesh = window.LODManager.decimateMeshByPercent(mesh, percent);
+        }
+        window.loadMesh(mesh, obj.name, { detailPercent: percent, animateMorph: false, meshFileName: obj.obj, meshType: 'OBJ' });
+      }).catch(err => {
+        console.error(`[UI] Failed to load OBJ for ${obj.name}:`, err);
+      });
     }
   };
   lodSlider.onchange = lodSlider.oninput;
@@ -239,28 +221,7 @@ function initObjectSelector() {
     return;
   }
 
-  let selectedIndex = 0;
-  if (selectedShapeName) {
-    const found = OBJECTS.findIndex((obj) => obj.name === selectedShapeName);
-    if (found >= 0) selectedIndex = found;
-  }
-
-  select.value = String(selectedIndex);
-  if (OBJECTS[selectedIndex] && typeof OBJECTS[selectedIndex].build === 'function') {
-    const mesh = OBJECTS[selectedIndex].build();
-    console.log(`[UI] Restore state: ${OBJECTS[selectedIndex].name}, mesh type: ${typeof mesh}, mesh defined: ${mesh !== undefined && mesh !== null}`);
-    if (mesh === undefined || mesh === null) {
-      console.error(`[UI] Mesh is undefined/null for object: ${OBJECTS[selectedIndex].name} during restore state`);
-    }
-    const detailPercent = Number(lodSlider.value) / 100;
-    const meshFileName = OBJECTS[selectedIndex]?.key ? `${OBJECTS[selectedIndex].key}.mesh.js` : 'unknown';
-    const meshType = 'OBJ';
-    if (window.loadMesh) {
-      window.loadMesh(mesh, OBJECTS[selectedIndex].name, { detailPercent, animateMorph: true, meshFileName, meshType });
-    } else if (typeof loadMesh === 'function') {
-      loadMesh(mesh, OBJECTS[selectedIndex].name, { detailPercent, animateMorph: true, meshFileName, meshType });
-    }
-    lodValue.textContent = `${lodSlider.value}%`;
-  }
+  // OBJ-only: no legacy .mesh.js restore path needed
+  // All state restoration is handled by initObjectSelector
   persistUiState();
 }
