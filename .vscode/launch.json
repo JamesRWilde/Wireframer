@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Wireframer",
+      "runtimeExecutable": "nodemon",
+      "runtimeArgs": ["--inspect-brk", "server.js"],
+      "restart": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "webRoot": "${workspaceFolder}",
+      "url": "http://localhost:3000",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
