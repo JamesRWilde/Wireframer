@@ -4,18 +4,17 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Wireframer",
-      "runtimeExecutable": "nodemon",
-      "runtimeArgs": ["--inspect-brk", "server.js"],
-      "restart": true,
+      "name": "Debug Wireframer (with Browser)",
+      "program": "${workspaceFolder}/server.js",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "webRoot": "${workspaceFolder}",
-      "url": "http://localhost:3000",
-      "cwd": "${workspaceFolder}"
+      "restart": true,
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "pattern": "Server running at http://localhost:(\\d+)",
+        "uriFormat": "http://localhost:%s",
+        "action": "openExternally"
+      }
     }
   ]
 }
