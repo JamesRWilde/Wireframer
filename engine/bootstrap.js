@@ -11,6 +11,9 @@
     // Geometry/LOD (must be before core.js which uses LODManager)
     'engine/lod.js',
     // Mesh files (OBJ-style format)
+    'meshes/pinecone.mesh.js',
+    'meshes/house.mesh.js',
+    'meshes/acorn.mesh.js',
     'meshes/car.mesh.js',
     'meshes/airplane.mesh.js',
     'meshes/capsule.mesh.js',

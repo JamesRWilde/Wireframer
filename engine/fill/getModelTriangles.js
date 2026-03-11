@@ -3,11 +3,12 @@ function getModelTriangles(model) {
   if (!model || !model.F || !model.V) return [];
   const tris = [];
   for (const face of model.F) {
-    if (face.length === 3) {
-      tris.push([face[0], face[1], face[2]]);
-    } else if (face.length > 3) {
+    const indices = face && face.indices ? face.indices : face;
+    if (indices.length === 3) {
+      tris.push([indices[0], indices[1], indices[2]]);
+    } else if (indices.length > 3) {
       // Use engine's ear clipping for n-gons
-      const tri = triangulateFaceEarClipping(face, model.V);
+      const tri = triangulateFaceEarClipping(indices, model.V);
       for (const t of tri) tris.push(t);
     }
   }

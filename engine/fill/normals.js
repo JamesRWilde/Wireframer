@@ -27,7 +27,7 @@ function getModelFaceNormals(model, triFaces) {
   cz *= invCount;
 
   for (let i = 0; i < triFaces.length; i++) {
-    const tri = triFaces[i];
+    const tri = triFaces[i] && triFaces[i].indices ? triFaces[i].indices : triFaces[i];
     const a = V[tri[0]];
     const b = V[tri[1]];
     const c = V[tri[2]];
@@ -75,6 +75,12 @@ function getModelTriCornerNormals(model, triFaces) {
   const faceNormals = getModelFaceNormals(model, triFaces);
   const cornerNormals = new Array(triFaces.length);
 
+  if (model.triangleNormals) {
+    for (let i = 0; i < triFaces.length; i++) {
+      cornerNormals[i] = model.triangleNormals[i];
+    }
+    return cornerNormals;
+  }
   if (shadingMode === 'flat') {
     for (let i = 0; i < triFaces.length; i++) {
       const n = faceNormals[i];

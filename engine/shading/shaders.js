@@ -4,6 +4,7 @@ function createSceneGpuPrograms(gl) {
   const fillVertSrc = `
     attribute vec3 a_pos;
     attribute vec3 a_normal;
+    attribute vec2 a_uv;
     uniform vec3 u_r0;
     uniform vec3 u_r1;
     uniform vec3 u_r2;
@@ -12,6 +13,7 @@ function createSceneGpuPrograms(gl) {
     uniform float u_modelCy;
     uniform float u_depthScale;
     varying vec3 v_normal;
+    varying vec2 v_uv;
     vec3 applyRot(vec3 v) {
       return vec3(dot(u_r0, v), dot(u_r1, v), dot(u_r2, v));
     }
@@ -21,6 +23,7 @@ function createSceneGpuPrograms(gl) {
       float d = p.z + 3.0;
       gl_Position = vec4(p.x * u_projX / d, (p.y - u_modelCy) * u_projY / d, clamp(p.z * u_depthScale, -1.0, 1.0), 1.0);
       v_normal = n;
+      v_uv = a_uv;
     }
   `;
 
@@ -115,6 +118,7 @@ function createSceneGpuPrograms(gl) {
   const fillLoc = {
     aPos: gl.getAttribLocation(fillProgram, 'a_pos'),
     aNormal: gl.getAttribLocation(fillProgram, 'a_normal'),
+    aUV: gl.getAttribLocation(fillProgram, 'a_uv'),
     uR0: gl.getUniformLocation(fillProgram, 'u_r0'),
     uR1: gl.getUniformLocation(fillProgram, 'u_r1'),
     uR2: gl.getUniformLocation(fillProgram, 'u_r2'),

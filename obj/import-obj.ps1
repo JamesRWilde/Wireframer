@@ -56,8 +56,8 @@ foreach ($ObjFile in $ObjFiles) {
     }
     $MeshFile = Join-Path $MeshesDir ("$($ObjName.ToLower()).mesh.js")
     $ObjLines = Get-Content $ObjFile.FullName
-    # Only allow comments, v, and f lines (no mtllib, usemtl, vt, vn, etc)
-    $FilteredLines = $ObjLines | Where-Object { $_ -match '^(#|v |f )' }
+    # Preserve all geometry and grouping lines: v, vn, vt, f, g, o, s, and comments. Remove only material/texture lines.
+    $FilteredLines = $ObjLines | Where-Object { $_ -notmatch '^(mtllib|usemtl) ' }
     $ObjText = ($FilteredLines -join "`n")
     $MeshJs = 'window.getMesh' + $MeshName + ' = () => `
 ' + $ObjText + '

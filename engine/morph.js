@@ -16,10 +16,15 @@ let morphState = {
 function cloneMesh(mesh) {
   return {
     V: mesh.V.map(v => v.slice()),
-    F: mesh.F.map(f => f.slice()),
+    F: mesh.F.map(f => (Array.isArray(f) ? f.slice() : { ...f, indices: f.indices ? f.indices.slice() : undefined })),
     E: mesh.E.map(e => e.slice()),
     _shadingMode: mesh._shadingMode,
     _creaseAngleDeg: mesh._creaseAngleDeg,
+    groups: mesh.groups ? mesh.groups.slice() : undefined,
+    objects: mesh.objects ? mesh.objects.slice() : undefined,
+    smoothingGroups: mesh.smoothingGroups ? mesh.smoothingGroups.slice() : undefined,
+    triangleNormals: mesh.triangleNormals ? mesh.triangleNormals.map(n => n.map(x => x.slice())) : undefined,
+    triangleUVs: mesh.triangleUVs ? mesh.triangleUVs.map(uv => uv.map(x => x.slice())) : undefined,
   };
 }
 
@@ -37,10 +42,15 @@ function interpolateMeshes(fromMesh, toMesh, t) {
   }
   return {
     V,
-    F: toMesh.F.map(f => f.slice()),
+    F: toMesh.F.map(f => (Array.isArray(f) ? f.slice() : { ...f, indices: f.indices ? f.indices.slice() : undefined })),
     E: toMesh.E.map(e => e.slice()),
     _shadingMode: toMesh._shadingMode,
     _creaseAngleDeg: toMesh._creaseAngleDeg,
+    groups: toMesh.groups ? toMesh.groups.slice() : undefined,
+    objects: toMesh.objects ? toMesh.objects.slice() : undefined,
+    smoothingGroups: toMesh.smoothingGroups ? toMesh.smoothingGroups.slice() : undefined,
+    triangleNormals: toMesh.triangleNormals ? toMesh.triangleNormals.map(n => n.map(x => x.slice())) : undefined,
+    triangleUVs: toMesh.triangleUVs ? toMesh.triangleUVs.map(uv => uv.map(x => x.slice())) : undefined,
   };
 }
 

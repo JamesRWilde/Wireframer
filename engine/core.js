@@ -493,9 +493,10 @@ function buildEdgesFromFacesRuntime(faces) {
   }
 
   for (const face of faces || []) {
-    if (!Array.isArray(face) || face.length < 2) continue;
-    for (let i = 0; i < face.length; i++) {
-      addEdge(face[i], face[(i + 1) % face.length]);
+    const indices = face && face.indices ? face.indices : face;
+    if (!Array.isArray(indices) || indices.length < 2) continue;
+    for (let i = 0; i < indices.length; i++) {
+      addEdge(indices[i], indices[(i + 1) % indices.length]);
     }
   }
 
@@ -532,7 +533,15 @@ function toRuntimeMesh(rawObjText, overrides = {}) {
   }
   let lineNumber = 0;
   const vertices = [];
+  const normals = [];
+  const uvs = [];
+  // OBJ can have multiple unique (v,vt,vn) per logical vertex, so we need to build a unique vertex list for each combination
+  const uniqueVerts = [];
+  const vertMap = new Map(); // key: v/vt/vn string, value: index in uniqueVerts
   const faces = [];
+  let currentGroup = null;
+  let currentObject = null;
+  let currentSmoothing = null;
   const failingLines = [];
   for (const line of lines) {
     lineNumber++;
@@ -553,42 +562,117 @@ function toRuntimeMesh(rawObjText, overrides = {}) {
           continue;
         }
         vertices.push([vx, vy, vz]);
+      } else if (prefix === 'vn') {
+        if (parts.length < 4) continue;
+        const nx = Number(parts[1]);
+        const ny = Number(parts[2]);
+        const nz = Number(parts[3]);
+        if (!Number.isFinite(nx) || !Number.isFinite(ny) || !Number.isFinite(nz)) continue;
+        normals.push([nx, ny, nz]);
+      } else if (prefix === 'vt') {
+        if (parts.length < 3) continue;
+        const u = Number(parts[1]);
+        const v = Number(parts[2]);
+        if (!Number.isFinite(u) || !Number.isFinite(v)) continue;
+        uvs.push([u, v]);
       } else if (prefix === 'f') {
-        const rawIndices = parts.slice(1).map((token) => {
-          const idx = token.split('/')[0];
-          const parsed = Number(idx);
-          return Number.isFinite(parsed) ? Math.max(0, parsed - 1) : -1;
-        });
-        if (rawIndices.length < 3) {
+        // Parse faces with v, v/vt, v//vn, v/vt/vn, and negative indices
+        const rawTokens = parts.slice(1);
+        if (rawTokens.length < 3) {
           failingLines.push(`[${lineNumber}] Malformed face (too few indices): '${line}'`);
           continue;
         }
-        const outOfBounds = rawIndices.filter(idx => idx < 0 || idx >= vertices.length);
+        // Parse each face vertex, extracting all indices
+        const faceVerts = [];
+        for (const token of rawTokens) {
+          // token: v, v/vt, v//vn, v/vt/vn
+          const fields = token.split('/');
+          // Vertex index
+          let vIdx = Number(fields[0]);
+          if (!Number.isFinite(vIdx) || vIdx === 0) {
+            faceVerts.push({v: -1, vt: null, vn: null});
+            continue;
+          }
+          if (vIdx > 0) {
+            vIdx = vIdx - 1;
+          } else if (vIdx < 0) {
+            vIdx = vertices.length + vIdx;
+          }
+          // Texture index
+          let vtIdx = null;
+          if (fields.length > 1 && fields[1] !== '') {
+            vtIdx = Number(fields[1]);
+            if (Number.isFinite(vtIdx)) {
+              vtIdx = vtIdx > 0 ? vtIdx - 1 : uvs.length + vtIdx;
+            } else {
+              vtIdx = null;
+            }
+          }
+          // Normal index
+          let vnIdx = null;
+          if (fields.length > 2 && fields[2] !== '') {
+            vnIdx = Number(fields[2]);
+            if (Number.isFinite(vnIdx)) {
+              vnIdx = vnIdx > 0 ? vnIdx - 1 : normals.length + vnIdx;
+            } else {
+              vnIdx = null;
+            }
+          }
+          faceVerts.push({v: vIdx, vt: vtIdx, vn: vnIdx});
+        }
+        // Check for out-of-bounds
+        const outOfBounds = faceVerts.filter(idx => idx.v < 0 || idx.v >= vertices.length);
         if (outOfBounds.length > 0) {
-          failingLines.push(`[${lineNumber}] Out-of-bounds face indices: '${line}' | Invalid indices: ${outOfBounds.join(', ')}`);
+          failingLines.push(`[${lineNumber}] Out-of-bounds face indices: '${line}' | Invalid indices: ${outOfBounds.map(x=>x.v).join(', ')}`);
           continue;
         }
-        for (let i = 1; i < rawIndices.length - 1; i++) {
-          const tri = [rawIndices[0], rawIndices[i], rawIndices[i + 1]];
+        function getOrCreateVertIdx(v, vt, vn) {
+          const key = `${v}/${vt !== null ? vt : ''}/${vn !== null ? vn : ''}`;
+          if (vertMap.has(key)) return vertMap.get(key);
+          const pos = vertices[v] || [0,0,0];
+          const uv = (vt !== null && uvs[vt]) ? uvs[vt] : [0,0];
+          const norm = (vn !== null && normals[vn]) ? normals[vn] : [0,0,0];
+          const fullVert = [pos[0], pos[1], pos[2], uv[0], uv[1], norm[0], norm[1], norm[2]];
+          const idx = uniqueVerts.length;
+          uniqueVerts.push(fullVert);
+          vertMap.set(key, idx);
+          return idx;
+        }
+        for (let i = 1; i < faceVerts.length - 1; i++) {
+          const tri = [
+            getOrCreateVertIdx(faceVerts[0].v, faceVerts[0].vt, faceVerts[0].vn),
+            getOrCreateVertIdx(faceVerts[i].v, faceVerts[i].vt, faceVerts[i].vn),
+            getOrCreateVertIdx(faceVerts[i+1].v, faceVerts[i+1].vt, faceVerts[i+1].vn)
+          ];
           if ((new Set(tri)).size === 3) {
-            faces.push(tri);
+            faces.push({
+              indices: tri,
+              group: currentGroup,
+              object: currentObject,
+              smoothing: currentSmoothing
+            });
           }
         }
+      } else if (prefix === 'g') {
+        // Group line
+        currentGroup = parts.length > 1 ? parts.slice(1).join(' ') : null;
+        continue;
+      } else if (prefix === 'o') {
+        // Object line
+        currentObject = parts.length > 1 ? parts.slice(1).join(' ') : null;
+        continue;
+      } else if (prefix === 's') {
+        // Smoothing group line
+        currentSmoothing = parts.length > 1 ? parts[1] : null;
+        continue;
       } else if (
-        prefix === 'vt' ||
-        prefix === 'vn' ||
-        prefix === 'usemtl' ||
         prefix === 'mtllib' ||
-        prefix === 'o' ||
-        prefix === 'g' ||
-        prefix === 's'
+        prefix === 'usemtl'
       ) {
-        // Silently skip unsupported but valid OBJ lines
+        // Ignore material/texture assignment lines
         continue;
       } else {
         // Only log actual parsing failures, not unsupported but valid lines
-        // Optionally, log unknown lines for diagnostics if needed
-        // continue;
         continue;
       }
     } catch (err) {
@@ -599,12 +683,12 @@ function toRuntimeMesh(rawObjText, overrides = {}) {
     }
   }
   window.lastMeshParseErrors = failingLines;
-  console.log(`[toRuntimeMesh] parse complete: V=${vertices.length}, F=${faces.length}, errors=${failingLines.length}, duration=${Date.now()-parseStart}ms`);
-  if (vertices.length === 0 || faces.length === 0 || failingLines.length > 0) {
+  console.log(`[toRuntimeMesh] parse complete: uniqueVerts=${uniqueVerts.length}, F=${faces.length}, errors=${failingLines.length}, duration=${Date.now()-parseStart}ms`);
+  if (uniqueVerts.length === 0 || faces.length === 0 || failingLines.length > 0) {
     console.error('[toRuntimeMesh] Mesh load failure:', {
       meshFile: overrides.meshFileName || 'unknown',
       meshType: overrides.meshType || 'OBJ',
-      vertices: vertices.length,
+      vertices: uniqueVerts.length,
       faces: faces.length,
       errors: failingLines.slice(0, 10),
       errorCount: failingLines.length
@@ -612,7 +696,23 @@ function toRuntimeMesh(rawObjText, overrides = {}) {
     throw new Error('[toRuntimeMesh] Mesh load failure');
   }
   // Validate before returning mesh object
-  const meshObj = { V: vertices, F: faces };
+  // F: array of { indices: [a,b,c], group, object, smoothing }
+  // F: array of { indices: [a,b,c], group, object, smoothing }
+  const meshObj = {
+    V: uniqueVerts, // [x, y, z, u, v, nx, ny, nz]
+    F: faces, // { indices: [a,b,c], group, object, smoothing }
+    groups: Array.from(new Set(faces.map(f => f.group).filter(Boolean))),
+    objects: Array.from(new Set(faces.map(f => f.object).filter(Boolean))),
+    smoothingGroups: Array.from(new Set(faces.map(f => f.smoothing).filter(Boolean)))
+  };
+  meshObj.E = buildEdgesFromFacesRuntime(faces.map(f => f.indices));
+  meshObj.triangles = faces.map(f => f.indices);
+  meshObj.triangleGroups = faces.map(f => f.group);
+  meshObj.triangleObjects = faces.map(f => f.object);
+  meshObj.triangleSmoothing = faces.map(f => f.smoothing);
+  // Expose per-corner normals and UVs for renderer
+  meshObj.triangleNormals = faces.map(f => f.indices.map(i => [uniqueVerts[i][5], uniqueVerts[i][6], uniqueVerts[i][7]]));
+  meshObj.triangleUVs = faces.map(f => f.indices.map(i => [uniqueVerts[i][3], uniqueVerts[i][4]]));
   if (meshObj === undefined || meshObj === null) {
     console.error('[toRuntimeMesh] Returned mesh object is undefined/null.', meshObj);
     throw new Error('[toRuntimeMesh] Returned mesh object is undefined/null');

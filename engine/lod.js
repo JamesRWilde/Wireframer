@@ -8,11 +8,16 @@ class LODManager {
   static deepCopyMesh(model) {
     return {
       V: model.V.map(v => v.slice()),
-      F: model.F.map(f => f.slice()),
+      F: model.F.map(f => (Array.isArray(f) ? f.slice() : { ...f, indices: f.indices ? f.indices.slice() : undefined })),
       E: model.E ? model.E.map(e => e.slice()) : [],
       _meshFormat: model._meshFormat,
       _shadingMode: model._shadingMode,
       _creaseAngleDeg: model._creaseAngleDeg,
+      groups: model.groups ? model.groups.slice() : undefined,
+      objects: model.objects ? model.objects.slice() : undefined,
+      smoothingGroups: model.smoothingGroups ? model.smoothingGroups.slice() : undefined,
+      triangleNormals: model.triangleNormals ? model.triangleNormals.map(n => n.map(x => x.slice())) : undefined,
+      triangleUVs: model.triangleUVs ? model.triangleUVs.map(uv => uv.map(x => x.slice())) : undefined,
     };
   }
 
@@ -35,7 +40,8 @@ class LODManager {
       return LODManager.deepCopyMesh(model._lodCache.get(cacheKey));
     }
     const V = model.V;
-    const F = model.F;
+    // Support both array-of-arrays and array-of-objects with .indices
+    const F = Array.isArray(model.F) && typeof model.F[0] === 'object' && model.F[0].indices ? model.F.map(f => f.indices) : model.F;
     // Bounding box
     let minX = Infinity, maxX = -Infinity;
     let minY = Infinity, maxY = -Infinity;

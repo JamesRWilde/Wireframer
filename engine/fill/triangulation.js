@@ -47,8 +47,8 @@ function triangulateFaceEarClipping(face, V) {
 
   // Ear clipping algorithm for simple polygons
   // Returns array of [a, b, c] indices into face[]
-  const n = face.length;
-  const indices = Array.from({ length: n }, (_, i) => i);
+  const n = indices.length;
+  const idxArr = Array.from({ length: n }, (_, i) => i);
   const triangles = [];
   let guard = 0;
   function isConvex(i0, i1, i2) {
@@ -71,33 +71,33 @@ function triangulateFaceEarClipping(face, V) {
     const v = (dot00 * dot12 - dot01 * dot02) * invDenom;
     return u >= -1e-8 && v >= -1e-8 && (u + v) <= 1 + 1e-8;
   }
-  while (indices.length > 3 && guard++ < 100) {
+  while (idxArr.length > 3 && guard++ < 100) {
     let earFound = false;
-    for (let i = 0; i < indices.length; i++) {
-      const i0 = indices[(i + indices.length - 1) % indices.length];
-      const i1 = indices[i];
-      const i2 = indices[(i + 1) % indices.length];
+    for (let i = 0; i < idxArr.length; i++) {
+      const i0 = idxArr[(i + idxArr.length - 1) % idxArr.length];
+      const i1 = idxArr[i];
+      const i2 = idxArr[(i + 1) % idxArr.length];
       if (!isConvex(i0, i1, i2)) continue;
       // Check if any other point is inside the triangle
       let hasPoint = false;
-      for (let j = 0; j < indices.length; j++) {
-        if (j === (i + indices.length - 1) % indices.length || j === i || j === (i + 1) % indices.length) continue;
-        if (pointInTriangle(proj[indices[j]], proj[i0], proj[i1], proj[i2])) {
+      for (let j = 0; j < idxArr.length; j++) {
+        if (j === (i + idxArr.length - 1) % idxArr.length || j === i || j === (i + 1) % idxArr.length) continue;
+        if (pointInTriangle(proj[idxArr[j]], proj[i0], proj[i1], proj[i2])) {
           hasPoint = true;
           break;
         }
       }
       if (hasPoint) continue;
       // Ear found
-      triangles.push([face[i0], face[i1], face[i2]]);
-      indices.splice(i, 1);
+      triangles.push([indices[i0], indices[i1], indices[i2]]);
+      idxArr.splice(i, 1);
       earFound = true;
       break;
     }
     if (!earFound) break; // No ear found, probably non-simple polygon
   }
-  if (indices.length === 3) {
-    triangles.push([face[indices[0]], face[indices[1]], face[indices[2]]]);
+  if (idxArr.length === 3) {
+    triangles.push([indices[idxArr[0]], indices[idxArr[1]], indices[idxArr[2]]]);
   }
   return triangles;
 }

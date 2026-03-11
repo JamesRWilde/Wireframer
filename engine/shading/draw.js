@@ -89,6 +89,12 @@ function createSceneGpuDraw(gl, canvas, shaderPack, bufferStore) {
       gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fillNormalBuffer);
       gl.enableVertexAttribArray(fillLoc.aNormal);
       gl.vertexAttribPointer(fillLoc.aNormal, 3, gl.FLOAT, false, 0, 0);
+      // If UVs are present, bind them (future-proof for textureless UV debug)
+      if (buffers.fillUVBuffer && fillLoc.aUV !== undefined) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fillUVBuffer);
+        gl.enableVertexAttribArray(fillLoc.aUV);
+        gl.vertexAttribPointer(fillLoc.aUV, 2, gl.FLOAT, false, 0, 0);
+      }
 
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);

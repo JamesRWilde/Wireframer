@@ -1,6 +1,10 @@
 ﻿// Engine now uses OBJ-style mesh files from meshes/ directory
 window.OBJECTS = (
   (window.MESH_LIBRARY || [
+    { key: 'dog', name: 'Dog', build: () => window.getMeshDog?.() },
+    { key: 'pinecone', name: 'Pinecone', build: () => window.getMeshPinecone?.() },
+    { key: 'house', name: 'House', build: () => window.getMeshHouse?.() },
+    { key: 'acorn', name: 'Acorn', build: () => window.getMeshAcorn?.() },
     { key: 'car', name: 'Car', build: () => window.getMeshCar?.() },
     { key: 'airplane', name: 'Airplane', build: () => window.getMeshAirplane?.() },
     { key: 'dog', name: 'Dog', build: () => {
@@ -152,6 +156,10 @@ window.OBJECTS = (
     } },
   ])
 ).filter((entry) => typeof entry?.build === 'function');
+
+
+
+
 
 
 
