@@ -10,8 +10,8 @@
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<canvas id="bg" aria-hidden="true"></canvas>
-<canvas id="fg" aria-hidden="true"></canvas>
+<canvas id="bg" aria-hidden="false" tabindex="-1"></canvas>
+<canvas id="fg" aria-hidden="false" tabindex="-1"></canvas>
 <canvas id="c"></canvas>
 <div id="ui">
 <div id="title">
@@ -73,7 +73,7 @@
 <div class="panel-title">Opacity</div>
 <label id="fill-control" for="fill-opacity">
 <span>Fill</span>
-<input id="fill-opacity" type="range" min="0" max="100" step="1" value="0" />
+<input id="fill-opacity" type="range" min="0" max="100" step="1" value="100" />
 <span id="fill-opacity-value">0%</span>
 </label>
 
@@ -127,8 +127,8 @@
 </div>
 
 
-<!-- App bootstrap loader: loads all modules in correct order -->
-<script src="engine/bootstrap.js"></script>
+<!-- App entry: import the startApp module which initializes and boots on load -->
+<script type="module" src="engine/core/loop/startApp.js"></script>
 </body>
 </html>
 

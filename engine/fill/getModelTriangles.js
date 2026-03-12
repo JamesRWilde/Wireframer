@@ -1,9 +1,11 @@
 // Engine-owned triangulation: returns array of [a,b,c] triangle indices for all faces in model.F
-function getModelTriangles(model) {
-  if (!model || !model.F || !model.V) return [];
+import { triangulateFaceEarClipping } from './triangulation.js';
+
+export function getModelTriangles(model) {
+  if (!model?.F || !model?.V) return [];
   const tris = [];
   for (const face of model.F) {
-    let indices = face && face.indices ? face.indices : face;
+    let indices = face?.indices ?? face;
     // If still not a flat array, try to flatten (handles nested arrays)
     if (Array.isArray(indices) && indices.length === 1 && Array.isArray(indices[0])) {
       indices = indices[0];
@@ -18,5 +20,3 @@ function getModelTriangles(model) {
   }
   return tris;
 }
-// Expose globally for all engine modules
-window.getModelTriangles = getModelTriangles;

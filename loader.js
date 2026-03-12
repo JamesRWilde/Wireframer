@@ -1,50 +1,31 @@
-﻿// Dynamically generate OBJECTS from meshes/*.obj files
-window.OBJECTS = [
-  'capsule.obj',
-  'cinquefoil-knot.obj',
-  'cone.obj',
-  'cube.obj',
-  'cylinder.obj',
-  'diamond.obj',
-  'icosahedron.obj',
-  'jerusalem-cube.obj',
-  'menger-sponge.obj',
-  'mobius-strip.obj',
-  'octahedron.obj',
-  'prism.obj',
-  'pyramid.obj',
-  'sierpinski-pyramid.obj',
-  'sphere.obj',
-  'spring.obj',
-  'star-prism.obj',
-  'torus-knot.obj',
-  'torus.obj',
-  'wine-glass.obj'
-].map(filename => {
-  const key = filename.replace(/\.obj$/i, '');
-  // Convert to Title Case for display
-  const name = key.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-  return { key, name, obj: `meshes/${filename}` };
-});
+﻿'use strict';
+import { OBJECTS } from './loader/objectList.js';
+import { toRuntimeMesh } from './engine/mesh/parsing/toRuntimeMesh.js';
 
-// Utility to load OBJ file and parse
-window.loadObjMesh = async function(objPath, name) {
+// Utility to load OBJ file and parse; parser is imported explicitly so its
+// code is bundled. After parsing we hand the mesh to the engine loader which
+// will update MODEL and UI telemetry.
+globalThis.loadObjMesh = async function(objPath, name) {
   const resp = await fetch(objPath);
   if (!resp.ok) throw new Error('Failed to fetch OBJ: ' + objPath);
   const objText = await resp.text();
-  return toRuntimeMesh(objText, { meshFileName: objPath, meshType: 'OBJ' });
+  const mesh = toRuntimeMesh(objText, { meshFileName: objPath, meshType: 'OBJ' });
+
+  if (globalThis.loadMesh) {
+    try {
+      // engine.loadMesh returns the normalized model copy and handles BASE_MODEL/LOD
+      const result = globalThis.loadMesh(mesh, name || objPath, { animateMorph: false });
+      // loadMesh now sets the active model itself, but older versions may not
+      if (result && typeof globalThis.setActiveModel === 'function') {
+        globalThis.setActiveModel(result, name || objPath);
+      }
+    } catch (err) {
+      console.error('[loadObjMesh] engine.loadMesh failed', err);
+    }
+  }
+
+  return mesh;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
+globalThis.OBJECTS = OBJECTS;
 

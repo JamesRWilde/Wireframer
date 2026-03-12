@@ -1,0 +1,36 @@
+import { presetSwatches, PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, SHUFFLE_SWATCH_NAME } from '../dom-state.js';
+import { toHex } from '../color-utils/toHex.js';
+import { toRgbCss } from '../color-utils/toRgbCss.js';
+import { setCustomRgb } from './setCustomRgb.js';
+import { randomPresetRgb } from './randomPresetRgb.js';
+
+export function initPresetSwatches() {
+  if (!presetSwatches) return;
+  presetSwatches.innerHTML = '';
+  PRESET_SWATCH_BUTTONS.length = 0;
+
+  for (const preset of PRESET_SWATCHES) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'preset-swatch';
+    button.title = `${preset.name} (${toHex(preset.rgb)})`;
+    button.setAttribute('aria-label', `${preset.name} preset ${toHex(preset.rgb)}`);
+    button.style.setProperty('--swatch-color', toRgbCss(preset.rgb));
+    button.addEventListener('click', () => {
+      setCustomRgb(preset.rgb, { persist: true, apply: true });
+    });
+
+    presetSwatches.appendChild(button);
+    PRESET_SWATCH_BUTTONS.push({ button, rgb: preset.rgb });
+  }
+
+  const shuffleButton = document.createElement('button');
+  shuffleButton.type = 'button';
+  shuffleButton.className = 'preset-swatch is-shuffle';
+  shuffleButton.title = `${SHUFFLE_SWATCH_NAME} random preset`;
+  shuffleButton.setAttribute('aria-label', `${SHUFFLE_SWATCH_NAME} random preset`);
+  shuffleButton.addEventListener('click', () => {
+    setCustomRgb(randomPresetRgb(), { persist: true, apply: true });
+  });
+  presetSwatches.appendChild(shuffleButton);
+}

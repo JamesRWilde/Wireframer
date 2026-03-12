@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wireframe Viewer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<canvas id="fg" aria-hidden="true"></canvas>
+<canvas id="c"></canvas>
+<div id="ui">
+<div id="title">
+<h1>Wireframe</h1>
+<p>3D Object Viewer</p>
+</div>
+
+<div id="controls">
+<section class="control-panel" id="shape-panel">
+<div class="panel-title">Shape</div>
+<select id="obj-select" aria-label="Object selector" title="Object selector"></select>
+</section>
+
+<section class="control-panel" id="custom-color-control">
+<div id="custom-color-title" class="panel-title">Color</div>
+<label id="theme-control" for="theme-mode">
+<span>Theme</span>
+<select id="theme-mode" aria-label="Theme mode" title="Theme mode">
+<option value="dark">Dark</option>
+<option value="light">Light</option>
+</select>
+</label>
+<div id="preset-swatches" aria-label="Color presets"></div>
+
+<label class="rgb-row" for="custom-red">
+<span class="rgb-key">R</span>
+<input id="custom-red" type="range" min="0" max="255" step="1" value="95" />
+<span id="custom-red-value" class="rgb-value">95</span>
+</label>
+
+<label class="rgb-row" for="custom-green">
+<span class="rgb-key">G</span>
+<input id="custom-green" type="range" min="0" max="255" step="1" value="188" />
+<span id="custom-green-value" class="rgb-value">188</span>
+</label>
+
+<label class="rgb-row" for="custom-blue">
+<span class="rgb-key">B</span>
+<input id="custom-blue" type="range" min="0" max="255" step="1" value="230" />
+<span id="custom-blue-value" class="rgb-value">230</span>
+</label>
+
+<div id="custom-preview">
+<span id="custom-hex">#5FBCE6</span>
+<span id="custom-swatch" aria-hidden="true"></span>
+</div>
+</section>
+
+<section class="control-panel" id="lod-panel">
+<div class="panel-title">LOD</div>
+<label id="lod-control" for="lod-slider">
+<span>Level</span>
+<input id="lod-slider" type="range" min="0" max="100" step="1" value="100" />
+<span id="lod-value">100%</span>
+</label>
+</section>
+
+<section class="control-panel" id="opacity-panel">
+<div class="panel-title">Opacity</div>
+<label id="fill-control" for="fill-opacity">
+<span>Fill</span>
+<input id="fill-opacity" type="range" min="0" max="100" step="1" value="0" />
+<span id="fill-opacity-value">0%</span>
+</label>
+
+<label id="wire-control" for="wire-opacity">
+<span>Wireframe</span>
+<input id="wire-opacity" type="range" min="0" max="100" step="1" value="100" />
+<span id="wire-opacity-value">100%</span>
+</label>
+</section>
+
+<section class="control-panel" id="background-panel">
+<div class="panel-title">Background</div>
+<label id="bg-density-control" for="bg-density">
+<span>Density</span>
+<input id="bg-density" type="range" min="0" max="220" step="1" value="100" />
+<span id="bg-density-value">100%</span>
+</label>
+
+<label id="bg-velocity-control" for="bg-velocity">
+<span>Velocity</span>
+<input id="bg-velocity" type="range" min="0" max="220" step="1" value="100" />
+<span id="bg-velocity-value">100%</span>
+</label>
+
+<label id="bg-opacity-control" for="bg-opacity">
+<span>Opacity</span>
+<input id="bg-opacity" type="range" min="0" max="100" step="1" value="100" />
+<span id="bg-opacity-value">100%</span>
+</label>
+</section>
+
+<section class="control-panel" id="info-panel">
+<div class="panel-title">Info</div>
+<div id="stats">
+<span>Vertices <span id="stat-v">--</span></span>
+<span>Edges <span id="stat-e">--</span></span>
+<span>Renderer <span id="stat-renderer">--</span></span>
+<span>FPS <span id="stat-fps">--</span></span>
+<span>Frame ms <span id="stat-frame-ms">--</span></span>
+<span>Phys ms <span id="stat-phys-ms">--</span></span>
+<span>Bg ms <span id="stat-bg-ms">--</span></span>
+<span>Fg ms <span id="stat-fg-ms">--</span></span>
+</div>
+</section>
+</div>
+</div>
+
+<div id="footer">
+<div id="obj-label"></div>
+<div id="hint">Drag to rotate • Scroll to zoom</div>
+</div>
+
+
+<!-- App bootstrap loader: loads all modules in correct order -->
+<script src="engine/bootstrap.js"></script>
+</body>
+</html>
+
+
+
+

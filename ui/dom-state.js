@@ -1,51 +1,57 @@
 'use strict';
 
-const select = document.getElementById('obj-select');
-const themeMode = document.getElementById('theme-mode');
-const lodSlider = document.getElementById('lod-slider');
-const lodValue = document.getElementById('lod-value');
-const fillOpacity = document.getElementById('fill-opacity');
-const fillOpacityValue = document.getElementById('fill-opacity-value');
-const wireOpacity = document.getElementById('wire-opacity');
-const wireOpacityValue = document.getElementById('wire-opacity-value');
-const bgDensity = document.getElementById('bg-density');
-const bgDensityValue = document.getElementById('bg-density-value');
-const bgVelocity = document.getElementById('bg-velocity');
-const bgVelocityValue = document.getElementById('bg-velocity-value');
-const bgOpacity = document.getElementById('bg-opacity');
-const bgOpacityValue = document.getElementById('bg-opacity-value');
-const presetSwatches = document.getElementById('preset-swatches');
-const customRed = document.getElementById('custom-red');
-const customGreen = document.getElementById('custom-green');
-const customBlue = document.getElementById('custom-blue');
-const customRedValue = document.getElementById('custom-red-value');
-const customGreenValue = document.getElementById('custom-green-value');
-const customBlueValue = document.getElementById('custom-blue-value');
-const customHex = document.getElementById('custom-hex');
-const customSwatch = document.getElementById('custom-swatch');
+import { setStatRenderer, setStatFps, setStatFrameMs, setStatPhysMs, setStatBgMs, setStatFgMs, setStatV, setStatE } from './statsState.js';
 
-// (statRenderer, statFps, statFrameMs, statPhysMs, statBgMs, statFgMs declared in globalVars.js)
-statRenderer = document.getElementById('stat-renderer');
-statFps = document.getElementById('stat-fps');
-statFrameMs = document.getElementById('stat-frame-ms');
-statPhysMs = document.getElementById('stat-phys-ms');
-statBgMs = document.getElementById('stat-bg-ms');
-statFgMs = document.getElementById('stat-fg-ms');
+let THEME = null;
+export const select = document.getElementById('obj-select');
+export const themeMode = document.getElementById('theme-mode');
+export const lodSlider = document.getElementById('lod-slider');
+export const lodValue = document.getElementById('lod-value');
+export const fillOpacity = document.getElementById('fill-opacity');
+export const fillOpacityValue = document.getElementById('fill-opacity-value');
+export const wireOpacity = document.getElementById('wire-opacity');
+export const wireOpacityValue = document.getElementById('wire-opacity-value');
+export const bgDensity = document.getElementById('bg-density');
+export const bgDensityValue = document.getElementById('bg-density-value');
+export const bgVelocity = document.getElementById('bg-velocity');
+export const bgVelocityValue = document.getElementById('bg-velocity-value');
+export const bgOpacity = document.getElementById('bg-opacity');
+export const bgOpacityValue = document.getElementById('bg-opacity-value');
+export const presetSwatches = document.getElementById('preset-swatches');
+export const customRed = document.getElementById('custom-red');
+export const customGreen = document.getElementById('custom-green');
+export const customBlue = document.getElementById('custom-blue');
+export const customRedValue = document.getElementById('custom-red-value');
+export const customGreenValue = document.getElementById('custom-green-value');
+export const customBlueValue = document.getElementById('custom-blue-value');
+export const customHex = document.getElementById('custom-hex');
+export const customSwatch = document.getElementById('custom-swatch');
 
-// Vertex and edge count HUD elements
-statV = document.getElementById('stat-v');
-statE = document.getElementById('stat-e');
+// register telemetry stat elements
+setStatRenderer(document.getElementById('stat-renderer'));
+setStatFps(document.getElementById('stat-fps'));
+setStatFrameMs(document.getElementById('stat-frame-ms'));
+setStatPhysMs(document.getElementById('stat-phys-ms'));
+setStatBgMs(document.getElementById('stat-bg-ms'));
+setStatFgMs(document.getElementById('stat-fg-ms'));
+setStatV(document.getElementById('stat-v'));
+setStatE(document.getElementById('stat-e'));
 
-// (FILL_OPACITY, WIRE_OPACITY declared in globalVars.js)
-FILL_OPACITY = 0;
-WIRE_OPACITY = 1;
+
+// Local stat DOM element references
+const statRenderer = document.getElementById('stat-renderer');
+const statFps = document.getElementById('stat-fps');
+const statFrameMs = document.getElementById('stat-frame-ms');
+const statPhysMs = document.getElementById('stat-phys-ms');
+const statBgMs = document.getElementById('stat-bg-ms');
+const statFgMs = document.getElementById('stat-fg-ms');
+const statV = document.getElementById('stat-v');
+const statE = document.getElementById('stat-e');
 
 // Static seam overlap tuning for dense meshes (engine-owned mesh only).
 const DENSE_SEAM_EXPAND_PX = 0.56;
 
-const CUSTOM_RGB_KEY = 'wireframer.customRgb';
-const CUSTOM_RGB_DEFAULT = [95, 188, 230];
-const PRESET_SWATCHES = [
+export const PRESET_SWATCHES = [
   { name: 'Ruby', rgb: [235, 64, 52] },
   { name: 'Orange', rgb: [255, 136, 0] },
   { name: 'Sun', rgb: [255, 214, 10] },
@@ -61,20 +67,19 @@ const PRESET_SWATCHES = [
   { name: 'Coral', rgb: [255, 108, 78] },
   { name: 'Mint', rgb: [94, 236, 170] },
 ];
-const SHUFFLE_SWATCH_NAME = 'Shuffle';
-const PRESET_SWATCH_BUTTONS = [];
+export const SHUFFLE_SWATCH_NAME = 'Shuffle';
+export const PRESET_SWATCH_BUTTONS = [];
+// THEME is declared above
+export const CUSTOM_RGB_KEY = 'wireframer.customRgb';
+export const CUSTOM_RGB_DEFAULT = [95, 188, 230];
+export let CUSTOM_RGB = CUSTOM_RGB_DEFAULT.slice();
+export let THEME_MODE = 'dark';
 
-// (THEME declared in globalVars.js)
-THEME = null;
-let CUSTOM_RGB = CUSTOM_RGB_DEFAULT.slice();
-let THEME_MODE = 'dark';
-
-// (LIGHT_DIR, VIEW_DIR declared in globalVars.js)
-LIGHT_DIR = (() => {
+export let LIGHT_DIR = (() => {
   const x = -0.38;
   const y = 0.74;
   const z = -0.56;
   const l = Math.hypot(x, y, z);
   return [x / l, y / l, z / l];
 })();
-VIEW_DIR = [0, 0, -1];
+export let VIEW_DIR = [0, 0, -1];
