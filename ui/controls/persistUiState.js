@@ -1,4 +1,6 @@
 import { OBJECTS } from '../../loader/objectList.js';
+const UI_STATE_KEY = 'wireframer.uiState';
+
 import {
   themeMode,
   lodSlider,
