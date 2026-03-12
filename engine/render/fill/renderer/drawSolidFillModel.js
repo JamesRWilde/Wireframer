@@ -34,61 +34,12 @@ export function drawSolidFillModel(model, alphaScale = 1) {
 
   const shadingMode = getModelShadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
-  let triCornerNormals = null;
   const seamExpandPx = useSmoothShading ? (globalThis.DENSE_SEAM_EXPAND_PX ?? 0) : 0;
-  if (useSmoothShading) {
-    // compute face normals using the rotated (camera space) vertices in T
-    const faceNormals = new Array(triFaces.length);
-    for (let i = 0; i < triFaces.length; i++) {
-      const [a, b, c] = triFaces[i];
-      const v0 = T[a], v1 = T[b], v2 = T[c];
-      const ux = v1[0] - v0[0], uy = v1[1] - v0[1], uz = v1[2] - v0[2];
-      const vx = v2[0] - v0[0], vy = v2[1] - v0[1], vz = v2[2] - v0[2];
-      let nx = uy * vz - uz * vy;
-      let ny = uz * vx - ux * vz;
-      let nz = ux * vy - uy * vx;
-      const nl = Math.hypot(nx, ny, nz);
-      if (nl < 1e-9) {
-        faceNormals[i] = [0, 0, 1];
-      } else {
-        faceNormals[i] = [nx / nl, ny / nl, nz / nl];
-      }
-    }
-    // adjacency: which faces meet each vertex
-    const Vcount = T.length;
-    const vertexToFaces = Array.from({ length: Vcount }, () => []);
-    for (let i = 0; i < triFaces.length; i++) {
-      const tri = triFaces[i];
-      vertexToFaces[tri[0]].push(i);
-      vertexToFaces[tri[1]].push(i);
-      vertexToFaces[tri[2]].push(i);
-    }
-    // crease threshold
-    const crease = Number.isFinite(model._creaseAngleDeg) ? model._creaseAngleDeg : 62;
-    const cosThreshold = Math.cos((crease * Math.PI) / 180);
-    triCornerNormals = new Array(triFaces.length);
-    for (let i = 0; i < triFaces.length; i++) {
-      const tri = triFaces[i];
-      const nRef = faceNormals[i];
-      const corner = [];
-      for (let c = 0; c < 3; c++) {
-        const vi = tri[c];
-        let nx = 0, ny = 0, nz = 0;
-        const adj = vertexToFaces[vi];
-        for (let j = 0; j < adj.length; j++) {
-          const fn = faceNormals[adj[j]];
-          const dot = nRef[0]*fn[0] + nRef[1]*fn[1] + nRef[2]*fn[2];
-          if (dot >= cosThreshold) {
-            nx += fn[0]; ny += fn[1]; nz += fn[2];
-          }
-        }
-        const nl = Math.hypot(nx, ny, nz);
-        if (nl < 1e-9) corner.push(nRef);
-        else corner.push([nx / nl, ny / nl, nz / nl]);
-      }
-      triCornerNormals[i] = corner;
-    }
-  }
+  // use the shared helper for corner normals (model-space); this mirrors the
+  // reference implementation exactly and avoids subtle camera-space bugs.
+  const triCornerNormals = useSmoothShading
+    ? getModelTriCornerNormals(model, triFaces)
+    : null;
 
   const triOrder = new Array(triFaces.length);
   for (let i = 0; i < triFaces.length; i++) {
