@@ -22,18 +22,13 @@ export function computeTriangleShadeColor(normal, useSmoothShading) {
   const nh = Math.max(0, useSmoothShading ? nhRaw : Math.abs(nhRaw));
   const spec = Math.pow(nh, useSmoothShading ? 24 : 18);
 
-  const ambient = 0.26;
-  const diffuse = 0.72 * ndotl;
-  const specular = useSmoothShading ? 0.18 * spec : 0.3 * spec;
-  // ensure we never produce an extremely dark color that blends
-  // into the background; the minimum light value was observed to
-  // produce a completely invisible fill when THEME.shadeDark==bg
+  // soften the gradient by raising ambient and reducing diffuse weight
+  // this prevents most of the model from appearing flat except for a few
+  // faces directly facing the light.
+  const ambient = 0.40;
+  const diffuse = 0.50 * ndotl;
+  const specular = useSmoothShading ? 0.10 * spec : 0.15 * spec;
   let lit = ambient + diffuse + specular;
-  lit = Math.max(lit, 0.30);              // enforce visible floor
   lit = Math.max(0, Math.min(1, lit));
-  // debug: occasionally log theme to spot bad values
-  if (window.DEBUG_LOG_THEME && Math.random() < 0.001) {
-    console.log('[computeTriangleShadeColor] theme', THEME, 'nx', nx, 'lit', lit);
-  }
   return lerpColor(THEME.shadeDark, THEME.shadeBright, lit);
 }
