@@ -75,10 +75,16 @@ export const CUSTOM_RGB_DEFAULT = [95, 188, 230];
 export let CUSTOM_RGB = CUSTOM_RGB_DEFAULT.slice();
 export let THEME_MODE = 'dark';
 
+// light direction vector in world space; should point from surface toward
+// the light source.  The reference engine used [0.5,0.8,0.6], which is
+// above and slightly behind the camera, giving a soft ceiling‑lamp effect.
+// Earlier builds accidentally negated the z component which placed the
+// light in front of the object, producing the weird interior‑edge highlights
+// you complained about.
 export let LIGHT_DIR = (() => {
-  const x = -0.38;
-  const y = 0.74;
-  const z = -0.56;
+  const x = 0.38;   // right/left component (positive = right)
+  const y = 0.74;   // up component
+  const z = 0.56;   // away from camera (positive = behind viewer)
   const l = Math.hypot(x, y, z);
   return [x / l, y / l, z / l];
 })();
