@@ -2,23 +2,17 @@ import { lerpColor } from '../../../../ui/color-utils/lerpColor.js';
 
 export function computeTriangleShadeColor(normal, useSmoothShading) {
   // Safe fallbacks when app hasn't initialized globals yet
-  // rotate the light direction into camera space using the same R matrix
-  let LIGHT_DIR = globalThis.LIGHT_DIR ?? [0, 0, 1];
+  // use the pre-rotated camera-space light direction computed at frame
+  // setup; fall back to the world-space vector if not available.
+  const LIGHT_DIR = globalThis.LIGHT_DIR_CAM || globalThis.LIGHT_DIR || [0,0,1];
   const VIEW_DIR = globalThis.VIEW_DIR ?? [0, 0, 1];
   const THEME = globalThis.THEME ?? { shadeDark: '#000000', shadeBright: '#ffffff' };
-  const R = globalThis.PHYSICS_STATE?.R;
-  if (R) {
-    LIGHT_DIR = [
-      R[0]*LIGHT_DIR[0] + R[1]*LIGHT_DIR[1] + R[2]*LIGHT_DIR[2],
-      R[3]*LIGHT_DIR[0] + R[4]*LIGHT_DIR[1] + R[5]*LIGHT_DIR[2],
-      R[6]*LIGHT_DIR[0] + R[7]*LIGHT_DIR[1] + R[8]*LIGHT_DIR[2],
-    ];
-  }
 
   let nx = normal[0];
   let ny = normal[1];
   let nz = normal[2];
-  // ensure normal is oriented towards light for flat shading
+  // for flat shading we want the normal pointing toward the light; since
+  // lighting is now in camera space, simply flip if the dot is negative.
   if (!useSmoothShading) {
     const dot = nx * LIGHT_DIR[0] + ny * LIGHT_DIR[1] + nz * LIGHT_DIR[2];
     if (dot < 0) {

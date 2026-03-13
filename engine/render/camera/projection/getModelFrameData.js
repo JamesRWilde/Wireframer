@@ -54,5 +54,19 @@ export function getModelFrameData(model) {
 
   const id = state.RENDER_FRAME_ID;
   model._frameData = { id, T, P2, zHalf };
+
+  // also update a cached light direction in camera space so lighting can
+  // reuse it without recomputing per-triangle.  normals produced by
+  // resolveTriangleNormal are already in camera/physics space, so the
+  // light vector must be rotated by the same R matrix each frame once.
+  if (Rmat) {
+    const ld = globalThis.LIGHT_DIR || [0,0,1];
+    globalThis.LIGHT_DIR_CAM = [
+      r00*ld[0] + r01*ld[1] + r02*ld[2],
+      r10*ld[0] + r11*ld[1] + r12*ld[2],
+      r20*ld[0] + r21*ld[1] + r22*ld[2],
+    ];
+  }
+
   return model._frameData;
 }
