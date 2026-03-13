@@ -55,16 +55,16 @@ export function getModelFrameData(model) {
   const id = state.RENDER_FRAME_ID;
   model._frameData = { id, T, P2, zHalf };
 
-  // also update a cached light direction in camera space so lighting can
-  // reuse it without recomputing per-triangle.  normals produced by
-  // resolveTriangleNormal are already in camera/physics space, so the
-  // light vector must be rotated by the same R matrix each frame once.
+  // For a fixed light source in world space, we need to transform normals
+  // from the rotated coordinate system back to world space. Store the
+  // inverse rotation matrix (transpose for orthogonal matrices) so lighting
+  // can transform normals to world space for consistent illumination.
   if (Rmat) {
-    const ld = globalThis.LIGHT_DIR || [0,0,1];
-    globalThis.LIGHT_DIR_CAM = [
-      r00*ld[0] + r01*ld[1] + r02*ld[2],
-      r10*ld[0] + r11*ld[1] + r12*ld[2],
-      r20*ld[0] + r21*ld[1] + r22*ld[2],
+    globalThis.LIGHT_DIR_CAM = null; // Not needed - we transform normals instead
+    globalThis.R_INV = [
+      r00, r10, r20,  // First column of R^T
+      r01, r11, r21,  // Second column of R^T  
+      r02, r12, r22   // Third column of R^T
     ];
   }
 

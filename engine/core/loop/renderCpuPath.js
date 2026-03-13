@@ -4,6 +4,7 @@ import { drawWireframeModel } from '../../render/wireframe/drawWireframeModel.js
 import { setCpuCanvasHidden } from './setCpuCanvasHidden.js';
 import { setGpuCanvasHidden } from './setGpuCanvasHidden.js';
 import { project } from '../../render/camera/projection/project.js';
+import { getOrCreateWireLayer } from '../getOrCreateWireLayer.js';
 
 function drawAxes(ctx) {
   const R = globalThis.PHYSICS_STATE.R;
@@ -39,30 +40,65 @@ export function renderCpuPath(meshToRender, backgroundOnSeparateCanvas) {
   // always clear the main canvas before drawing; it doesn't hurt even if the
   // background is on another layer, and guarantees no ghosting occurs.
   if (ctx) {
-    if (window.DEBUG_CLEAR) {
-      console.debug('[renderCpuPath] clearing canvas', ctx.canvas && ctx.canvas.id, 'W,H', globalThis.W, globalThis.H);
+    if (globalThis.DEBUG_CLEAR) {
+      console.debug('[renderCpuPath] clearing canvas', ctx.canvas?.id, 'W,H', globalThis.W, globalThis.H);
     }
     ctx.save();
     // also reset transform just in case it drifted
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, globalThis.W, globalThis.H);
     ctx.restore();
-    if (window.DEBUG_CLEAR) console.debug('[renderCpuPath] cleared main canvas');
+    if (globalThis.DEBUG_CLEAR) console.debug('[renderCpuPath] cleared main canvas');
   }
+  // Always clear the fill layer before drawing
+  if (globalThis.fillLayerCtx && globalThis.fillLayerCanvas) {
+    globalThis.fillLayerCtx.setTransform(1, 0, 0, 1, 0, 0);
+    globalThis.fillLayerCtx.clearRect(0, 0, globalThis.W, globalThis.H);
+  }
+  // Draw fill to its own layer (full alpha)
   drawSolidFillModel(meshToRender, 1);
-  // for extra safety in debug builds, we can also clear after drawing; this
-  // won't affect release performance but helps confirm behaviour.
-  if (window.DEBUG_CLEAR && ctx) {
+
+  // Draw wireframe to its own offscreen layer (full alpha)
+  let wireLayer = getOrCreateWireLayer();
+  const wireCtx = wireLayer.ctx;
+  wireCtx.clearRect(0, 0, globalThis.W, globalThis.H);
+  // Temporarily swap global ctx for wireframe rendering
+  const prevCtx = globalThis.ctx;
+  globalThis.ctx = wireCtx;
+  drawWireframeModel(meshToRender, 1); // always draw at full alpha, composite later
+  globalThis.ctx = prevCtx;
+
+  // Two-pass compositing: back wireframe under fill, front wireframe over fill (explicit context and mode)
+  if (ctx) {
+    const w = globalThis.W, h = globalThis.H;
+    // 1. Draw back-facing wireframe edges to a temp layer
+    const backWireLayer = document.createElement('canvas');
+    backWireLayer.width = w;
+    backWireLayer.height = h;
+    const backWireCtx = backWireLayer.getContext('2d');
+    drawWireframeModel(meshToRender, 1, backWireCtx, 'back');
+
     ctx.save();
-    ctx.setTransform(1,0,0,1,0,0);
-    ctx.clearRect(0, 0, globalThis.W, globalThis.H);
+    ctx.globalCompositeOperation = 'source-over';
+    // 2. Composite back wireframe under fill, modulated by (1 - fill opacity)
+    // When fill is opaque (100%), back wireframe is completely hidden
+    // When fill is transparent, back wireframe becomes visible
+    if (globalThis.FILL_OPACITY < 0.999) {
+      ctx.globalAlpha = globalThis.WIRE_OPACITY * (1 - globalThis.FILL_OPACITY);
+      ctx.drawImage(backWireLayer, 0, 0);
+    }
+    // 3. Draw fill layer with its opacity
+    ctx.globalAlpha = globalThis.FILL_OPACITY;
+    ctx.drawImage(globalThis.fillLayerCanvas, 0, 0);
+    // 4. Draw front-facing/silhouette wireframe edges on top
+    // Front wireframe visibility is modulated by wire opacity
+    drawWireframeModel(meshToRender, 1, ctx, 'front');
+    ctx.globalAlpha = 1;
     ctx.restore();
-    console.debug('[renderCpuPath] post-clear main canvas');
   }
-  if (globalThis.WIRE_OPACITY > 0.001) drawWireframeModel(meshToRender, globalThis.WIRE_OPACITY);
 
   // show orientation axes for debugging rotation
-  if (window.DEBUG_SHOW_AXES && ctx) {
+  if (globalThis.DEBUG_SHOW_AXES && ctx) {
     drawAxes(ctx);
   }
 

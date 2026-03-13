@@ -13,7 +13,7 @@ export function attachInputListeners(canvas) {
     if (!globalThis.PHYSICS_STATE) {
       globalThis.PHYSICS_STATE = {
         wx:0, wy:0, wz:0,
-        AUTO_WX:0.02, AUTO_WY:0.03, AUTO_WZ:0.005,
+        AUTO_WX:0.01, AUTO_WY:0.015, AUTO_WZ:0.0025,
         R: null,
         dragging: false,
         HOLD_ROTATION_FRAMES: 0,

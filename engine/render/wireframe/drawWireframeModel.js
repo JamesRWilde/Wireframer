@@ -2,93 +2,69 @@
 
 import { getModelFrameData } from '../camera/projection/getModelFrameData.js';
 import { rgbA } from '../../../ui/color-utils/rgbA.js';
-import { lerpColor } from '../../../ui/color-utils/lerpColor.js';
+import { relativeLuminance } from '../../../ui/color-utils/relativeLuminance.js';
+import { classifyEdges } from './classifyEdges.js';
 
 const DEPTH_BUCKETS = 12;
 const buckets = Array.from({ length: DEPTH_BUCKETS }, () => []);
 
-export function drawWireframeModel(model, alphaScale = 1) {
-  if (!model?.V?.length) {
-    return;
-  }
-  if (!model?.E?.length) {
-    return;
-  }
-  if (window.DEBUG_FORCE_WIRE) {
-    // always draw wire when debug override enabled
-  } else {
-    if (alphaScale <= 0.001 || globalThis.WIRE_OPACITY <= 0.001) {
-      if (!globalThis.__warnedNoWire) {
-        globalThis.__warnedNoWire = true;
-      }
-      return;
-    }
-  }
+export function drawWireframeModel(model, alphaScale = 1, ctxOverride = null, mode = 'all') {
+  if (!model?.V?.length || !model?.E?.length) return;
+  if (alphaScale <= 0.001 || globalThis.WIRE_OPACITY <= 0.001) return;
   const wireStrength = Math.max(0, Math.min(1, alphaScale));
-
-  // Engine-owned mesh only
   const frameData = getModelFrameData(model);
   if (!frameData) return;
-  const T = frameData.T;
-  const P2 = frameData.P2;
-
-  for (let i = 0; i < DEPTH_BUCKETS; i++) buckets[i].length = 0;
-  // depth bucketing requires Z_HALF; default to 1 if missing
-  const zHalf = (typeof globalThis.Z_HALF === 'number' && isFinite(globalThis.Z_HALF)) ? globalThis.Z_HALF : 1;
-  for (const edge of model.E) {
-    const a = edge[0];
-    const b = edge[1];
-    const z = (T[a][2] + T[b][2]) * 0.5;
-    let t = (zHalf - z) / (zHalf * 2);
-    if (!Number.isFinite(t)) t = 0;
-    t = Math.max(0, Math.min(0.999, t));
-    const idx = Math.floor(t * DEPTH_BUCKETS);
-    if (idx >= 0 && idx < DEPTH_BUCKETS) {
-      buckets[idx].push(edge);
-    }
-  }
-
-  const ctx = globalThis.ctx;
+  const { T, P2 } = frameData;
+  const ctx = ctxOverride || globalThis.ctx;
   ctx.save();
+  // Compute a high-contrast wireframe color based on the fill color
+  let fillRgb = globalThis.THEME?.fill ?? [0, 200, 120];
+  let fillLum = relativeLuminance(fillRgb);
+  // Use white for dark fills, black for bright fills
+  let contrastWire = fillLum > 0.5 ? [0,0,0] : [255,255,255];
+  const edgeColorA = globalThis.DEBUG_FORCE_RED ? 'rgba(255,0,0,0.5)' : rgbA(contrastWire, 1);
+  const edgeColorB = globalThis.DEBUG_FORCE_RED ? 'rgba(255,0,0,0.8)' : rgbA(contrastWire, 1);
+  // Apply both WIRE_OPACITY slider and alphaScale for proper compositing
+  const wireAlpha = globalThis.WIRE_OPACITY * wireStrength;
 
-  const edgeColorA = window.DEBUG_FORCE_RED ? 'rgba(255,0,0,0.5)' : rgbA(globalThis.THEME.wireA, 0.11 * wireStrength);
-  const edgeColorB = window.DEBUG_FORCE_RED ? 'rgba(255,0,0,0.8)' : rgbA(globalThis.THEME.wireB, 0.17 * wireStrength);
-
-  ctx.lineWidth = 4.5;
-  ctx.strokeStyle = window.DEBUG_FORCE_WIRE ? 'rgba(255,255,255,0.9)' : edgeColorA;
-  ctx.beginPath();
-  for (const [a, b] of model.E) {
-    ctx.moveTo(P2[a][0], P2[a][1]);
-    ctx.lineTo(P2[b][0], P2[b][1]);
+  // Classify edges if mode filtering is needed
+  let edgeClassification = null;
+  if (mode === 'front' || mode === 'back') {
+    edgeClassification = classifyEdges(model, T);
   }
-  ctx.stroke();
 
-  ctx.lineWidth = 1.8;
-  ctx.strokeStyle = window.DEBUG_FORCE_WIRE ? 'rgba(255,255,255,0.9)' : edgeColorB;
-  ctx.beginPath();
-  for (const [a, b] of model.E) {
-    ctx.moveTo(P2[a][0], P2[a][1]);
-    ctx.lineTo(P2[b][0], P2[b][1]);
+  function shouldDrawEdge(edge) {
+    if (!edgeClassification) return true;
+    const lo = Math.min(edge[0], edge[1]);
+    const hi = Math.max(edge[0], edge[1]);
+    const key = `${lo}|${hi}`;
+    const cls = edgeClassification.get(key);
+    if (mode === 'front') return cls === 'front' || cls === 'silhouette';
+    if (mode === 'back') return cls === 'back' || cls === 'silhouette';
+    return true;
   }
-  ctx.stroke();
-  ctx.restore();
 
-  if (window.DEBUG_EDGE_COUNT) console.log('[drawWireframeModel] edges', model.E.length);
-
-  ctx.lineWidth = 0.82 + 0.3 * wireStrength;
-  for (let i = 0; i < DEPTH_BUCKETS; i++) {
-    if (!buckets[i].length) continue;
-    const t = (i + 0.5) / DEPTH_BUCKETS;
-    const edgeAlpha = (0.06 + Math.pow(t, 1.35) * 0.94) * wireStrength;
-    const alp = edgeAlpha.toFixed(3);
-    // Bias toward brighter depth tones so wireframe remains readable on black.
-    const c = lerpColor(globalThis.THEME.wireNear, globalThis.THEME.wireFar, 0.2 + t * 0.8);
-    ctx.strokeStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alp})`;
+  ctx.lineWidth = 0.1;
+  for (const edge of model.E) {
+    if (!shouldDrawEdge(edge)) continue;
+    ctx.globalAlpha = wireAlpha;
+    ctx.strokeStyle = globalThis.DEBUG_FORCE_WIRE ? 'rgba(255,255,255,0.9)' : edgeColorA;
     ctx.beginPath();
-    for (const [a, bi] of buckets[i]) {
-      ctx.moveTo(P2[a][0], P2[a][1]);
-      ctx.lineTo(P2[bi][0], P2[bi][1]);
-    }
+    ctx.moveTo(P2[edge[0]][0], P2[edge[0]][1]);
+    ctx.lineTo(P2[edge[1]][0], P2[edge[1]][1]);
     ctx.stroke();
   }
+  ctx.lineWidth = 0.1;
+  for (const edge of model.E) {
+    if (!shouldDrawEdge(edge)) continue;
+    ctx.globalAlpha = wireAlpha;
+    ctx.strokeStyle = globalThis.DEBUG_FORCE_WIRE ? 'rgba(255,255,255,0.9)' : edgeColorB;
+    ctx.beginPath();
+    ctx.moveTo(P2[edge[0]][0], P2[edge[0]][1]);
+    ctx.lineTo(P2[edge[1]][0], P2[edge[1]][1]);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+  if (globalThis.DEBUG_EDGE_COUNT) console.log('[drawWireframeModel] edges', model.E.length);
 }

@@ -4,9 +4,9 @@ if (!globalThis.PHYSICS_STATE) {
 		wx: 0,
 		wy: 0,
 		wz: 0,
-		AUTO_WX: 0.02,   // faster auto-pitch
-		AUTO_WY: 0.03,   // faster auto-yaw
-		AUTO_WZ: 0.005,  // slight roll
+		AUTO_WX: 0.01,   // slower auto-pitch
+		AUTO_WY: 0.015,  // slower auto-yaw
+		AUTO_WZ: 0.0025, // slight roll
 		R: null, // rotation matrix - initialized by initializeRotation()
 		dragging: false,
 		HOLD_ROTATION_FRAMES: 0,

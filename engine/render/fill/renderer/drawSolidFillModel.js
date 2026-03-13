@@ -2,8 +2,7 @@ import { getModelFrameData } from '../../camera/projection/getModelFrameData.js'
 import { getModelTriangles } from '../getModelTriangles.js';
 import { getModelShadingMode } from '../normals/getModelShadingMode.js';
 import { getModelTriCornerNormals } from '../normals/getModelTriCornerNormals.js';
-import { sortTriangles } from './sortTriangles.js';
-import { renderTrianglesToLayer } from './renderTrianglesToLayer.js';
+// ...existing code...
 import { computeTriangleShadeColor } from '../lighting/computeTriangleShadeColor.js';
 import { resolveTriangleNormal } from '../lighting/resolveTriangleNormal.js';
 import { expandTriangleForSeam } from '../raster/expandTriangleForSeam.js';
@@ -15,8 +14,8 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   const W = globalThis.W;
   const H = globalThis.H;
 
-  const opacity = globalThis.FILL_OPACITY * alphaScale;
-  if (!model || !model.V?.length || opacity <= 0.001) return;
+  let opacity = globalThis.FILL_OPACITY * alphaScale;
+  if (!model?.V?.length || opacity <= 0.001) return;
   if (!fillLayerCtx || !fillLayerCanvas) {
     console.warn('[drawSolidFillModel] missing fillLayerCtx/canvas');
     return;
@@ -27,7 +26,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   const { T, P2 } = frameData;
 
   const triFaces = getModelTriangles(model);
-  if (!triFaces || !triFaces.length) return;
+  if (!triFaces?.length) return;
 
   fillLayerCtx.setTransform(1, 0, 0, 1, 0, 0);
   fillLayerCtx.clearRect(0, 0, W, H);
@@ -49,6 +48,12 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   triOrder.sort((a, b) => b.z - a.z);
 
   fillLayerCtx.globalCompositeOperation = 'source-over';
+  const fillSlider = globalThis.FILL_OPACITY * alphaScale;
+  // If fill opacity is 100%, force triangles to be drawn fully opaque
+  const fillAlpha = (fillSlider >= 0.999) ? 1 : fillSlider;
+  if (globalThis.DEBUG_LOG_FILL) {
+    console.debug('[drawSolidFillModel] FILL_OPACITY slider:', globalThis.FILL_OPACITY, 'alphaScale:', alphaScale, 'fillSlider:', fillSlider, 'fillAlpha:', fillAlpha);
+  }
   for (const item of triOrder) {
     const [a, b, c] = item.tri;
     const ax = P2[a][0], ay = P2[a][1];
@@ -62,19 +67,14 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     if (!normal) continue;
 
     const shadeColor = computeTriangleShadeColor(normal, useSmoothShading);
-    if (window.DEBUG_LOG_FILL && item.triIndex === 0) {
-      console.debug('[drawSolidFillModel] sample shadeColor', shadeColor);
+    if (globalThis.DEBUG_LOG_FILL && item.triIndex === 0) {
+      console.debug('[drawSolidFillModel] sample shadeColor', shadeColor, 'fillAlpha used for triangle:', fillAlpha);
     }
     const tri2d = expandTriangleForSeam([[ax, ay], [bx, by], [cx, cy]], seamExpandPx);
-    fillTriangleOnLayer(fillLayerCtx, tri2d, shadeColor);
+    // Guarantee alpha=1 for triangles if fillAlpha is 1
+    fillTriangleOnLayer(fillLayerCtx, tri2d, shadeColor, fillAlpha);
   }
 
-  const ctx = globalThis.ctx;
-  if (ctx) {
-    ctx.save();
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = opacity;
-    ctx.drawImage(fillLayerCanvas, 0, 0);
-    ctx.restore();
-  }
+  // No need to set globalAlpha here; triangles are drawn with correct alpha
+  // The compositing step will use globalAlpha = 1
 }
