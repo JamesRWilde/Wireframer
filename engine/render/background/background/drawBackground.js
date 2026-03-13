@@ -38,6 +38,64 @@ import { drawParticles } from './drawParticles.js';
 // Particle array (persists across frames)
 let particles = [];
 
+// Worker state for parallel particle computation
+let worker = null;
+let workerReady = false;
+let workerInitialized = false;
+let pendingWorkerParticles = null;
+
+/**
+ * initBackgroundWorker - Initializes the particle computation worker
+ * 
+ * @returns {boolean} True if worker was initialized
+ */
+function initBackgroundWorker() {
+  if (workerInitialized) return workerReady;
+  workerInitialized = true;
+  
+  if (typeof Worker === 'undefined') return false;
+  
+  try {
+    worker = new Worker(
+      new URL('../../../../workers/background-worker.js', import.meta.url).href,
+      { type: 'module' }
+    );
+    
+    worker.onmessage = (event) => {
+      const { type, data, count } = event.data;
+      if (type === 'ready') {
+        workerReady = true;
+      } else if (type === 'particles') {
+        pendingWorkerParticles = { data, count };
+      } else if (type === 'error') {
+        console.error('[BackgroundWorker]', event.data.message);
+        workerReady = false;
+      }
+    };
+    
+    worker.onerror = () => {
+      workerReady = false;
+    };
+    
+    const canvasState = getBackgroundCanvas();
+    if (canvasState) {
+      worker.postMessage({
+        type: 'init',
+        width: canvasState.w,
+        height: canvasState.h,
+        density: globalThis.BG_PARTICLE_DENSITY_PCT ?? 1,
+        speed: globalThis.BG_PARTICLE_VELOCITY_PCT ?? 1,
+        themeMode: globalThis.THEME_MODE ?? 'dark'
+      });
+    }
+    
+    return true;
+  } catch (error) {
+    console.warn('[BackgroundWorker] Failed to initialize:', error);
+    return false;
+  }
+}
+
 /**
  * drawBackground - Renders the animated particle background
  * 
@@ -60,6 +118,56 @@ export function drawBackground(nowMs) {
   // Get theme colors for background and particles
   const { bgColor, particleColor } = getBackgroundColors();
 
+  // Try to initialize worker on first call
+  if (!workerInitialized) {
+    initBackgroundWorker();
+  }
+
+  // Worker path: compute particles on background thread
+  if (workerReady) {
+    // Get current slider values to send to worker
+    const density = globalThis.BG_PARTICLE_DENSITY_PCT ?? 1;
+    const speed = globalThis.BG_PARTICLE_VELOCITY_PCT ?? 1;
+    const opacity = globalThis.BG_PARTICLE_OPACITY_PCT ?? 1;
+    const themeMode = globalThis.THEME_MODE ?? 'dark';
+    
+    // Send slider values and trigger particle computation
+    worker.postMessage({ 
+      type: 'update', 
+      timestamp: nowMs ?? performance.now(),
+      density,
+      speed,
+      opacity,
+      themeMode
+    });
+    
+    // Draw background base color
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, w, h);
+    
+    // Draw using previous frame's particle data (one-frame latency)
+    if (pendingWorkerParticles) {
+      const { data, count } = pendingWorkerParticles;
+      
+      ctx.save();
+      ctx.globalCompositeOperation = globalThis.THEME_MODE === 'light' ? 'multiply' : 'screen';
+      
+      for (let i = 0; i < count; i++) {
+        const idx = i * 4;
+        ctx.globalAlpha = data[idx + 3] * opacity;
+        ctx.fillStyle = particleColor;
+        ctx.beginPath();
+        ctx.arc(data[idx], data[idx + 1], data[idx + 2], 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      ctx.restore();
+    }
+    
+    return true;
+  }
+
+  // Fallback: main thread particle computation (original code)
   // Seed particles if needed (first frame or after resize)
   const { velScale, opacityScale, themeAlphaBoost } = seedParticlesIfNeeded(particles, w, h);
   
