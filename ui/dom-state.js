@@ -75,12 +75,19 @@ export const CUSTOM_RGB_DEFAULT = [95, 188, 230];
 export let CUSTOM_RGB = CUSTOM_RGB_DEFAULT.slice();
 export let THEME_MODE = 'dark';
 
-// light direction vector in world space; this is a distant directional
-// light so only the direction matters.  to guarantee the light ends up well
-// outside the mesh (no matter how it rotates) we simply make it straight
-// down from above.  any normal pointing upward will be lit, everything else
-// will fall toward the dark — the knot should now light on its exterior
-// surfaces only.
-export let LIGHT_DIR = [0, 1, 0];
+// light direction vector in world space; the source should be high above
+// and distinctly to one side of the viewer.  previous attempts were either
+// too centred (downward) or only slightly offset, failing to light the
+// outside surfaces of the knot.  this vector has a strong upward component
+// along with a hefty right‑ward bias, putting the light off to the side but
+// still well above the object like a ceiling fixture hung over and to the
+// right of the viewer's position.
+export let LIGHT_DIR = (() => {
+  const x = 0.8;   // right of camera
+  const y = 1.2;   // very high overhead
+  const z = 0.3;   // slightly behind
+  const l = Math.hypot(x, y, z);
+  return [x / l, y / l, z / l];
+})();
 
 export let VIEW_DIR = [0, 0, -1];
