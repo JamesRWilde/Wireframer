@@ -1,16 +1,42 @@
 import { computeFrameParams } from '../../render/camera/projection/computeFrameParams.js';
 
 export function fitCameraToModel(model) {
+  if (!model?.V?.length) return;
+
+  // Compute bounding box
+  let minX = Infinity, maxX = -Infinity;
+  let minY = Infinity, maxY = -Infinity;
+  for (const v of model.V) {
+    if (v[0] < minX) minX = v[0];
+    if (v[0] > maxX) maxX = v[0];
+    if (v[1] < minY) minY = v[1];
+    if (v[1] > maxY) maxY = v[1];
+  }
+
+  const sizeX = maxX - minX;
+  const sizeY = maxY - minY;
+  const maxExtent = Math.max(sizeX, sizeY);
+
   // sync frame parameters directly
   const params = computeFrameParams(model.V);
-  // update globals used by projection and depth bucketing
   if (typeof params.cy === 'number') globalThis.MODEL_CY = params.cy;
   if (typeof params.zHalf === 'number') globalThis.Z_HALF = params.zHalf;
 
-  if (params?.zHalf > 0) {
-    let fitZoom = 0.5 * (params.zHalf + 3) / params.zHalf;
-    fitZoom = Math.max(globalThis.ZOOM_MIN ?? 0.45, Math.min(globalThis.ZOOM_MAX ?? 2.75, fitZoom));
-    globalThis.ZOOM = fitZoom;
-    console.log(`[loadMesh-autoFitCamera] MODEL_CY=${params.cy?.toFixed(3)}, Z_HALF=${params.zHalf.toFixed(3)}, fitZoom=${fitZoom.toFixed(3)}`);
+  // Set expanded zoom bounds
+  globalThis.ZOOM_MIN = 0.1;
+  globalThis.ZOOM_MAX = 10;
+
+  if (maxExtent > 0) {
+    // Projection: screenPos = dim/2 + coord * (minDim * 0.9 * ZOOM) / (z + 3)
+    // For object at z=0 (center), d = 3
+    // To fit maxExtent to targetScreenFraction of minDim:
+    //   maxExtent * (minDim * 0.9 * ZOOM) / 3 = minDim * targetFraction
+    //   ZOOM = 3 * targetFraction / (0.9 * maxExtent)
+    
+    const targetFraction = 0.5;
+    const fitZoom = (3 * targetFraction) / (0.9 * maxExtent);
+    
+    globalThis.ZOOM = Math.max(globalThis.ZOOM_MIN, Math.min(globalThis.ZOOM_MAX, fitZoom));
+    console.log(`[fitCameraToModel] bbox=[${sizeX.toFixed(2)}, ${sizeY.toFixed(2)}], maxExtent=${maxExtent.toFixed(3)}, ZOOM=${globalThis.ZOOM.toFixed(3)}`);
   }
 }
