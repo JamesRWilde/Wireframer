@@ -49,9 +49,9 @@ export function createSceneGpuBufferStore(gl, supportsUint32) {
         fillPosData[o] = v[0];
         fillPosData[o + 1] = v[1];
         fillPosData[o + 2] = v[2];
-        // Use per-corner normals from meshObj if available
-        if (model.triangleNormals && model.triangleNormals[i]) {
-          const n = model.triangleNormals[i][c];
+        // Use per-corner normals from triCornerNormals (computed above)
+        if (triCornerNormals && triCornerNormals[i]) {
+          const n = triCornerNormals[i][c];
           fillNormalData[o] = n[0];
           fillNormalData[o + 1] = n[1];
           fillNormalData[o + 2] = n[2];
@@ -132,8 +132,9 @@ export function createSceneGpuBufferStore(gl, supportsUint32) {
         fillPosData[o] = v[0];
         fillPosData[o + 1] = v[1];
         fillPosData[o + 2] = v[2];
-        if (model.triangleNormals && model.triangleNormals[i]) {
-          const n = model.triangleNormals[i][c];
+        // Use per-corner normals from triCornerNormals (computed above)
+        if (triCornerNormals && triCornerNormals[i]) {
+          const n = triCornerNormals[i][c];
           fillNormalData[o] = n[0];
           fillNormalData[o + 1] = n[1];
           fillNormalData[o + 2] = n[2];
