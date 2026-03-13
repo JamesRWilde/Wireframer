@@ -1,6 +1,7 @@
 import { OBJECTS } from '../../loader/objectList.js';
+import { persistUiState } from './persistUiState.js';
 
-export function initObjectSelector() {
+export function initObjectSelector(restoredShapeName = null) {
   console.debug('[initObjectSelector] called, OBJECTS length', OBJECTS.length);
   const select = document.getElementById('obj-select');
   if (!select) {
@@ -16,11 +17,22 @@ export function initObjectSelector() {
     select.appendChild(opt);
   });
 
-  // Auto-load the first object on init
+  // Load the restored shape if provided, otherwise load the first object
   if (OBJECTS.length > 0 && typeof globalThis.loadObjMesh === 'function') {
-    select.selectedIndex = 0;
-    console.debug('[initObjectSelector] auto-loading first object', OBJECTS[0].name);
-    globalThis.loadObjMesh(OBJECTS[0].obj, OBJECTS[0].name);
+    let loadIndex = 0;
+    if (restoredShapeName) {
+      const foundIndex = OBJECTS.findIndex(obj => obj.name === restoredShapeName);
+      if (foundIndex >= 0) {
+        loadIndex = foundIndex;
+        console.debug('[initObjectSelector] restoring shape', restoredShapeName);
+      } else {
+        console.debug('[initObjectSelector] restored shape not found, loading first object', OBJECTS[0].name);
+      }
+    } else {
+      console.debug('[initObjectSelector] auto-loading first object', OBJECTS[0].name);
+    }
+    select.selectedIndex = loadIndex;
+    globalThis.loadObjMesh(OBJECTS[loadIndex].obj, OBJECTS[loadIndex].name);
   }
 
   select.addEventListener('change', () => {
@@ -28,6 +40,7 @@ export function initObjectSelector() {
     console.debug('[initObjectSelector] selection changed', idx);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       globalThis.loadObjMesh(OBJECTS[idx].obj, OBJECTS[idx].name);
+      persistUiState();
     }
   });
 }

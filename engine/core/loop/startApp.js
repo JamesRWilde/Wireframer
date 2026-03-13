@@ -71,7 +71,19 @@ export function startApp() {
   if (fillOpacity) fillOpacity.value = '100';
   if (wireOpacity) wireOpacity.value = '100';
 
-  initObjectSelector();
+  // restore previous UI state (shape selection, theme, slider values)
+  // must happen before initObjectSelector so we can pass the saved shape
+  let restoredShapeName = null;
+  try {
+    restoredShapeName = restoreUiState();
+    if (restoredShapeName) {
+      console.debug('[startApp] restored UI state, selected shape', restoredShapeName);
+    }
+  } catch (e) {
+    console.warn('[startApp] restoreUiState failed', e);
+  }
+
+  initObjectSelector(restoredShapeName);
   // attach pointer listeners to rotate/zoom the model.  the reference
   // engine uses the cpu canvas (#c) because the foreground canvas (#fg) has
   // `pointer-events: none` and cannot receive events.  using the fg canvas
@@ -84,15 +96,6 @@ export function startApp() {
     // update ctx at all.
   } catch (e) {
     console.warn('[startApp] attachInputListeners failed', e);
-  }
-  // restore previous UI state (shape selection, theme, slider values)
-  try {
-    const restored = restoreUiState();
-    if (restored) {
-      console.debug('[startApp] restored UI state, selected shape', restored);
-    }
-  } catch (e) {
-    console.warn('[startApp] restoreUiState failed', e);
   }
 
   // ensure sliders call syncRenderToggles when changed
