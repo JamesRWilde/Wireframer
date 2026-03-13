@@ -35,11 +35,11 @@ export function initObjectSelector(restoredShapeName = null) {
     globalThis.loadObjMesh(OBJECTS[loadIndex].obj, OBJECTS[loadIndex].name);
   }
 
-  select.addEventListener('change', () => {
+  select.addEventListener('change', async () => {
     const idx = Number(select.value);
     console.debug('[initObjectSelector] selection changed', idx);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
-      globalThis.loadObjMesh(OBJECTS[idx].obj, OBJECTS[idx].name);
+      await globalThis.loadObjMesh(OBJECTS[idx].obj, OBJECTS[idx].name);
       persistUiState();
     }
   });

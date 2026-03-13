@@ -7,6 +7,8 @@ import { attachInputListeners } from '../../physics/input/attachInputListeners.j
 import '../../../loader.js';
 import '../../mesh/loader/loadMesh.js';
 import '../modelState.js';
+// expose morph API globally for finalizeModel and renderScene
+import '../../morph/initMorphApi.js';
 import { initObjectSelector } from '../../../ui/controls/initObjectSelector.js';
 import { frame } from './frame.js';
 import { initializeRotation } from '../../math/math3d/initializeRotation.js';

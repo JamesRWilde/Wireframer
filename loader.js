@@ -14,7 +14,7 @@ globalThis.loadObjMesh = async function(objPath, name) {
   if (globalThis.loadMesh) {
     try {
       // engine.loadMesh returns the normalized model copy and handles BASE_MODEL/LOD
-      const result = globalThis.loadMesh(mesh, name || objPath, { animateMorph: false });
+      const result = globalThis.loadMesh(mesh, name || objPath, { animateMorph: true });
       // loadMesh now sets the active model itself, but older versions may not
       if (result && typeof globalThis.setActiveModel === 'function') {
         globalThis.setActiveModel(result, name || objPath);
