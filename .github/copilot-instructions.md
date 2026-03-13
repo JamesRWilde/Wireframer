@@ -6,3 +6,6 @@
 * Codebase has a one function per file architecture and this includes helpers. Avoid creating monoliths and break them up when encountered to properly respect this architecture.
 * Long running multi logic functions should be avoided and broken up into sub functions again respecting the one function per file rules.
 * This codebase is in active enhancement from its MVP beginnings, as such not all changes will be easy fixes. If refactoring is justified then do so especially where it means closer adherence to the other rules.
+* Always be on the lookout for ways to improve the codebase and implement those improvements when you see them, do not wait for user to ask for improvements. This includes but is not limited to refactoring, code cleanup, file cleanup, and architecture improvements.
+* When making changes to the codebase, always consider the impact on the overall architecture and future enhancements. Do not make changes that would hinder future development or make it more difficult.
+* Codebase is heavily commented and this is a requirement for all code. Always add comments when adding new code or modifying existing code. Comments should explain the purpose of the code, how it works, and any important details that would be helpful for future developers working on the codebase.
