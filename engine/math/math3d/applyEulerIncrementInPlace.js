@@ -1,5 +1,5 @@
 export function applyEulerIncrementInPlace(R, ax, ay, az) {
-  if (!R || R.length !== 9) return R;
+  if (R?.length !== 9) return R;
   if ((ax === 0 || !Number.isFinite(ax)) && (ay === 0 || !Number.isFinite(ay)) && (az === 0 || !Number.isFinite(az))) {
     return R;
   }

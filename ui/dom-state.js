@@ -2,7 +2,7 @@
 
 import { setStatRenderer, setStatFps, setStatFrameMs, setStatPhysMs, setStatBgMs, setStatFgMs, setStatV, setStatE } from './statsState.js';
 
-let THEME = null;
+const THEME = null;
 export const select = document.getElementById('obj-select');
 export const themeMode = document.getElementById('theme-mode');
 export const lodSlider = document.getElementById('lod-slider');
@@ -72,8 +72,8 @@ export const PRESET_SWATCH_BUTTONS = [];
 // THEME is declared above
 export const CUSTOM_RGB_KEY = 'wireframer.customRgb';
 export const CUSTOM_RGB_DEFAULT = [95, 188, 230];
-export let CUSTOM_RGB = CUSTOM_RGB_DEFAULT.slice();
-export let THEME_MODE = 'dark';
+export const CUSTOM_RGB = CUSTOM_RGB_DEFAULT.slice();
+export const THEME_MODE = 'dark';
 
 // light direction vector in world space; the source should be high above
 // and distinctly to one side of the viewer.  previous attempts were either
@@ -82,7 +82,7 @@ export let THEME_MODE = 'dark';
 // along with a hefty right‑ward bias, putting the light off to the side but
 // still well above the object like a ceiling fixture hung over and to the
 // right of the viewer's position.
-export let LIGHT_DIR = (() => {
+export const LIGHT_DIR = (() => {
   const x = 0.8;   // right of camera
   const y = 1.2;   // very high overhead
   const z = 0.3;   // slightly behind
@@ -90,4 +90,4 @@ export let LIGHT_DIR = (() => {
   return [x / l, y / l, z / l];
 })();
 
-export let VIEW_DIR = [0, 0, -1];
+export const VIEW_DIR = [0, 0, -1];

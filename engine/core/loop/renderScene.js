@@ -1,9 +1,6 @@
 import { drawBackground } from '../../render/background/background/drawBackground.js';
-import { resolveForegroundRenderMode } from './resolveForegroundRenderMode.js';
-import { renderGpuPath } from './renderGpuPath.js';
 import { renderCpuPath } from './renderCpuPath.js';
 import { handleOtherCases } from './handleOtherCases.js';
-import { state } from './loopState.js';
 
 export function renderScene(nowMs) {
   // bail out if there's no active model yet
@@ -22,9 +19,6 @@ export function renderScene(nowMs) {
   let drewCpuForeground = false;
 
   if (globalThis.morph?.advanceMorphFrame) globalThis.morph.advanceMorphFrame();
-
-  // force CPU path for debugging – ignore GPU entirely
-  const mode = 'cpu';
 
   const morphing = globalThis.morph?.isMorphing?.() ?? false;
   const meshToRender = morphing ? globalThis.morph?.getCurrentMorphMesh?.() ?? currentModel : currentModel;

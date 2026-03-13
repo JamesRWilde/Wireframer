@@ -28,7 +28,7 @@ export function updatePhysics() {
       globalThis.PHYSICS_STATE.wy += (globalThis.PHYSICS_STATE.AUTO_WY - globalThis.PHYSICS_STATE.wy) * 0.04;
       globalThis.PHYSICS_STATE.wz += (globalThis.PHYSICS_STATE.AUTO_WZ - globalThis.PHYSICS_STATE.wz) * 0.04;
 
-      if (window.DEBUG_LOG_PHYSICS) {
+      if (globalThis.DEBUG_LOG_PHYSICS) {
         console.log('[updatePhysics] wx,wy,wz',
                     globalThis.PHYSICS_STATE.wx.toFixed(3),
                     globalThis.PHYSICS_STATE.wy.toFixed(3),

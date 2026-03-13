@@ -1,5 +1,4 @@
 import { state } from '../../../core/loop/loopState.js';
-import { project } from './project.js';
 
 export function getModelFrameData(model) {
   if (!model?.V?.length) return null;
@@ -29,8 +28,8 @@ export function getModelFrameData(model) {
     Math.min(100, 0.5 * Math.hypot(Rmat[0], Rmat[3], Rmat[6])));
 
   // compute constants once per frame for projection
-  const w = window.innerWidth;
-  const h = window.innerHeight;
+  const w = globalThis.innerWidth;
+  const h = globalThis.innerHeight;
   const fov = Math.min(w, h) * 0.9 * globalThis.ZOOM;
   const halfW = w * 0.5;
   const halfH = h * 0.5;

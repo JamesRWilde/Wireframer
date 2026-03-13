@@ -6,7 +6,7 @@ let __lastRafMs = 0;
 export function frame(nowMs = 0) {
   if (__lastRafMs) {
     const diff = nowMs - __lastRafMs;
-    if (window.DEBUG_RAF) console.log('[frame] rAF interval', diff.toFixed(2));
+    if (globalThis.DEBUG_RAF) console.log('[frame] rAF interval', diff.toFixed(2));
   }
   __lastRafMs = nowMs;
   requestAnimationFrame(frame);

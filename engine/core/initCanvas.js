@@ -22,8 +22,8 @@ export function initCanvas() {
   // resize all canvases to match viewport
   // make sure all canvases have matching resolution to viewport
   function syncSize() {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    const w = globalThis.innerWidth;
+    const h = globalThis.innerHeight;
     // update global dimensions so other modules can use them reliably
     globalThis.W = w;
     globalThis.H = h;
@@ -46,13 +46,13 @@ export function initCanvas() {
     }
     console.debug('[initCanvas] synced canvas sizes', w, h);
   }
-  if (typeof window !== 'undefined') {
+  if (typeof globalThis !== 'undefined' && typeof globalThis.addEventListener === 'function') {
     syncSize();
-    window.addEventListener('resize', syncSize);
+    globalThis.addEventListener('resize', syncSize);
     // also keep globals up to date on resize
-    window.addEventListener('resize', () => {
-      globalThis.W = window.innerWidth;
-      globalThis.H = window.innerHeight;
+    globalThis.addEventListener('resize', () => {
+      globalThis.W = globalThis.innerWidth;
+      globalThis.H = globalThis.innerHeight;
     });
   }
 

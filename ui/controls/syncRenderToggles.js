@@ -32,7 +32,7 @@ export function syncRenderToggles() {
   fillOpacityValue.textContent = `${Math.round(globalThis.FILL_OPACITY * 100)}%`;
   globalThis.WIRE_OPACITY = Number(wireOpacity.value) / 100;
   wireOpacityValue.textContent = `${Math.round(globalThis.WIRE_OPACITY * 100)}%`;
-  if (window.DEBUG_LOG_TOGGLES) {
+  if (globalThis.DEBUG_LOG_TOGGLES) {
     console.debug('[syncRenderToggles] FILL_OPACITY', globalThis.FILL_OPACITY,
                   'WIRE_OPACITY', globalThis.WIRE_OPACITY);
   }

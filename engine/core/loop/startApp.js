@@ -2,7 +2,6 @@ import { initCanvas } from '../initCanvas.js';
 // import physicsState early so its initialization code runs and sets up
 // wx/wy/wz/AUTO_* defaults before the main loop starts.
 import '../../physics/physicsState.js';
-import { attachInputListeners } from '../../physics/input/attachInputListeners.js';
 // bring in loader and mesh loader side-effects (globals) before any mesh operations
 import '../../../loader.js';
 import '../../mesh/loader/loadMesh.js';
@@ -13,12 +12,10 @@ import { initObjectSelector } from '../../../ui/controls/initObjectSelector.js';
 import { frame } from './frame.js';
 import { initializeRotation } from '../../math/math3d/initializeRotation.js';
 import { R } from '../../math/math3d/R.js';
-import { initPresetSwatches } from '../../../ui/theme/initPresetSwatches.js';
-import { readCustomRgb } from '../../../ui/theme/readCustomRgb.js';
-import { setCustomRgb } from '../../../ui/theme/setCustomRgb.js';
-import { setThemeMode } from '../../../ui/theme/setThemeMode.js';
 import { syncRenderToggles } from '../../../ui/controls/syncRenderToggles.js';
-import { restoreUiState } from '../../../ui/controls/restoreUiState.js';
+import { attachSliderListeners } from './attachSliderListeners.js';
+import { initThemeControls } from './initThemeControls.js';
+import { restoreStateAndAttachInput } from './restoreStateAndAttachInput.js';
 import {
   bgDensity,
   bgVelocity,
@@ -32,13 +29,13 @@ export function startApp() {
   // initialize rotation matrix before starting the frame loop
   initializeRotation();
   // ensure zoom parameters exist so scrolling doesn't produce NaN
-  if (typeof globalThis.ZOOM !== 'number' || !isFinite(globalThis.ZOOM)) {
-    globalThis.ZOOM = 1.0;
+  if (typeof globalThis.ZOOM !== 'number' || !Number.isFinite(globalThis.ZOOM)) {
+    globalThis.ZOOM = 1;
   }
-  if (typeof globalThis.ZOOM_MIN !== 'number' || !isFinite(globalThis.ZOOM_MIN)) {
+  if (typeof globalThis.ZOOM_MIN !== 'number' || !Number.isFinite(globalThis.ZOOM_MIN)) {
     globalThis.ZOOM_MIN = 0.45;
   }
-  if (typeof globalThis.ZOOM_MAX !== 'number' || !isFinite(globalThis.ZOOM_MAX)) {
+  if (typeof globalThis.ZOOM_MAX !== 'number' || !Number.isFinite(globalThis.ZOOM_MAX)) {
     globalThis.ZOOM_MAX = 2.75;
   }
   // note: pipeline mirrors referenceCode fill renderer and camera math
@@ -73,65 +70,18 @@ export function startApp() {
   if (fillOpacity) fillOpacity.value = '100';
   if (wireOpacity) wireOpacity.value = '100';
 
-  // restore previous UI state (shape selection, theme, slider values)
-  // must happen before initObjectSelector so we can pass the saved shape
-  let restoredShapeName = null;
-  try {
-    restoredShapeName = restoreUiState();
-    if (restoredShapeName) {
-      console.debug('[startApp] restored UI state, selected shape', restoredShapeName);
-    }
-  } catch (e) {
-    console.warn('[startApp] restoreUiState failed', e);
-  }
-
+  // restore UI state (shape selection, theme, slider values) and attach input listeners
+  const restoredShapeName = restoreStateAndAttachInput();
   initObjectSelector(restoredShapeName);
-  // attach pointer listeners to rotate/zoom the model.  the reference
-  // engine uses the cpu canvas (#c) because the foreground canvas (#fg) has
-  // `pointer-events: none` and cannot receive events.  using the fg canvas
-  // earlier broke drag/zoom entirely.
-  try {
-    const cpuCanvas = document.getElementById('c');
-    attachInputListeners(cpuCanvas);
-    // if the helper replaced the canvas node, don't change ctx; input lives on
-    // cpuCanvas while drawing still happens on fg (via ctx), so no need to
-    // update ctx at all.
-  } catch (e) {
-    console.warn('[startApp] attachInputListeners failed', e);
-  }
 
   // ensure sliders call syncRenderToggles when changed
-  try {
-    const sliders = [
-      {name:'bgDensity',el:bgDensity},
-      {name:'bgVelocity',el:bgVelocity},
-      {name:'bgOpacity',el:bgOpacity},
-      {name:'fillOpacity',el:fillOpacity},
-      {name:'wireOpacity',el:wireOpacity},
-    ];
-    sliders.forEach(({name,el}) => {
-      if (!el) console.warn('[startApp] slider missing', name);
-      else {
-        el.addEventListener('input', () => {
-          try { syncRenderToggles(); } catch (e) { console.warn('[startApp] slider syncRenderToggles error', e); }
-        });
-      }
-    });
-    // LOD slider needs special handling to trigger decimation
-    if (lodSlider) {
-      lodSlider.addEventListener('input', () => {
-        try {
-          syncRenderToggles();
-          if (typeof globalThis.setDetailLevel === 'function') {
-            globalThis.setDetailLevel(Number(lodSlider.value) / 100);
-          }
-        } catch (e) { console.warn('[startApp] lodSlider syncRenderToggles error', e); }
-      });
-    }
-    console.debug('[startApp] attached slider listeners', sliders.map(s=>s.name));
-  } catch (e) {
-    console.warn('[startApp] failed to attach slider listeners', e);
-  }
+  attachSliderListeners([
+    { name: 'bgDensity', el: bgDensity },
+    { name: 'bgVelocity', el: bgVelocity },
+    { name: 'bgOpacity', el: bgOpacity },
+    { name: 'fillOpacity', el: fillOpacity },
+    { name: 'wireOpacity', el: wireOpacity },
+  ], lodSlider, globalThis.setDetailLevel);
   // initialize render toggles (opacity/density/velocity) from UI
   try {
     console.debug('[startApp] calling syncRenderToggles');
@@ -141,26 +91,8 @@ export function startApp() {
     console.warn('[startApp] syncRenderToggles failed', e);
   }
   // Initialize UI theme controls (populate swatches and apply saved color)
-  try {
-    initPresetSwatches();
-    const saved = readCustomRgb();
-    if (saved) setCustomRgb(saved, { persist: false, apply: true });
-    // set theme mode from DOM control if present
-    if (typeof document !== 'undefined' && document.getElementById('theme-mode')) {
-      const tm = document.getElementById('theme-mode');
-      setThemeMode(tm.value, { apply: true });
-      // listen for changes
-      tm.addEventListener('input', () => {
-        setThemeMode(tm.value, { apply: true });
-        try { persistUiState(); } catch {};
-      });
-      tm.addEventListener('change', () => tm.dispatchEvent(new Event('input')));
-    }
-  } catch (e) {
-    // Non-critical: keep app running if theme init fails
-    // eslint-disable-next-line no-console
-    console.warn('Theme init failed', e);
-  }
+  initThemeControls();
+
   requestAnimationFrame(frame);
   console.debug('[startApp] debug flags', {
     FORCE_FILL: globalThis.DEBUG_FORCE_FILL,
@@ -172,7 +104,7 @@ export function startApp() {
 }
 
 // When loaded as the application entry point, initialize canvas and start.
-if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+if (typeof document !== 'undefined') {
   try {
     initCanvas();
   } catch (e) {

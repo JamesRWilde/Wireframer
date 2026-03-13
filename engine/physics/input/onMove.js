@@ -1,5 +1,5 @@
 export function onMove(cx, cy) {
-  if (!globalThis.PHYSICS_STATE || !globalThis.PHYSICS_STATE.dragging) return;
+  if (!globalThis.PHYSICS_STATE?.dragging) return;
   const prevX = typeof globalThis.PHYSICS_STATE.lastPointerX === 'number' ? globalThis.PHYSICS_STATE.lastPointerX : cx;
   const prevY = typeof globalThis.PHYSICS_STATE.lastPointerY === 'number' ? globalThis.PHYSICS_STATE.lastPointerY : cy;
   const dx = cx - prevX, dy = cy - prevY;

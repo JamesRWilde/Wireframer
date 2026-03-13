@@ -30,7 +30,7 @@ export function computeTriangleShadeColor(normal, useSmoothShading) {
   // Balanced lighting: moderate ambient, strong diffuse, subtle specular
   const ambient = 0.26;
   const diffuse = 0.72 * ndotl;
-  const specular = useSmoothShading ? 0.18 * spec : 0.30 * spec;
+  const specular = useSmoothShading ? 0.18 * spec : 0.3 * spec;
   const lit = Math.max(0, Math.min(1, ambient + diffuse + specular));
   return lerpColor(THEME.shadeDark, THEME.shadeBright, lit);
 }
