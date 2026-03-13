@@ -12,7 +12,7 @@ if (!globalThis.buildEdgesFromFacesRuntime) {
 }
 
 export function loadMesh(mesh, name = 'Shape', options = {}) {
-  console.debug('[loadMesh] called', name, 'mesh', mesh && mesh.V?.length, 'vertices');
+  console.debug('[loadMesh] called', name, 'mesh', mesh?.V?.length, 'vertices');
   const {
     animateMorph = false,
     detailPercent = 1,

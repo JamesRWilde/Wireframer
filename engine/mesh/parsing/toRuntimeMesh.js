@@ -12,9 +12,6 @@ export function toRuntimeMesh(rawObjText, overrides = {}) {
     console.error('[toRuntimeMesh] Input mesh is not a string.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ', inputType: typeof rawObjText });
     throw new Error('Mesh definition must be an OBJ string.');
   }
-  // Debug logging removed to avoid console spam
-  const parseStart = Date.now();
-
   // split + validate lines
   const lines = validateRawObjText(rawObjText, overrides);
 
