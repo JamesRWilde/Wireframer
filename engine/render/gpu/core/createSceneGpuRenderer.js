@@ -1,3 +1,15 @@
+// Import shader program creation
+// Compiles vertex and fragment shaders for fill and wire rendering
+import { createSceneGpuPrograms } from '../shaders/createSceneGpuPrograms.js';
+
+// Import buffer store creation
+// Manages vertex buffers for fill positions, normals, and wire edges
+import { createSceneGpuBufferStore } from '../buffers/createSceneGpuBufferStore.js';
+
+// Import draw API creation
+// Provides renderModel and clear functions for WebGL rendering
+import { createSceneGpuDraw } from '../draw/createSceneGpuDraw.js';
+
 export function createSceneGpuRenderer(canvas) {
   if (!canvas) return null;
 
@@ -18,6 +30,9 @@ export function createSceneGpuRenderer(canvas) {
     canvas.getContext('experimental-webgl', glOpts);
 
   if (!gl) return null;
+  
+  // Store the WebGL context globally for easy access by clearGpuSceneCanvas
+  globalThis.gpuGl = gl;
 
   const supportsUint32 = !!gl.getExtension('OES_element_index_uint') ||
     (typeof WebGL2RenderingContext !== 'undefined' && gl instanceof WebGL2RenderingContext);

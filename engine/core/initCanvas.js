@@ -45,12 +45,16 @@ export function initCanvas() {
   // The 'c' id is kept for backward compatibility with existing HTML
   const cpuCanvas = document.getElementById('c');
   
-  // Grab the foreground canvas - this is the primary drawing surface
+  // Grab the foreground canvas - this is the primary drawing surface for CPU rendering
   // It's positioned on top of other canvases via CSS z-index
   globalThis.fgCanvas = document.getElementById('fg');
   
+  // Grab the GPU canvas - dedicated canvas for WebGL rendering
+  // This is separate from fgCanvas because a canvas can only have one context type
+  globalThis.gpuCanvas = document.getElementById('gpu');
+  
   // Get the 2D rendering context from the foreground canvas
-  // This becomes the primary ctx that most rendering code uses
+  // This becomes the primary ctx that most CPU rendering code uses
   globalThis.ctx = globalThis.fgCanvas ? globalThis.fgCanvas.getContext('2d') : null;
   
   // Fallback: if fg canvas isn't available, use the cpu canvas as primary context
@@ -101,10 +105,16 @@ export function initCanvas() {
       bgCanvas.height = h;
     }
     
-    // Resize the foreground canvas (primary drawing surface)
+    // Resize the foreground canvas (primary drawing surface for CPU rendering)
     if (globalThis.fgCanvas) {
       globalThis.fgCanvas.width = w;
       globalThis.fgCanvas.height = h;
+    }
+    
+    // Resize the GPU canvas (dedicated WebGL rendering surface)
+    if (globalThis.gpuCanvas) {
+      globalThis.gpuCanvas.width = w;
+      globalThis.gpuCanvas.height = h;
     }
     
     // Resize the offscreen fill layer canvas

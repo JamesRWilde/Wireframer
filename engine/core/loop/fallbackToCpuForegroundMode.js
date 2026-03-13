@@ -16,6 +16,9 @@
  *   a user notification, logging analytics, or attempting alternative GPU paths).
  */
 
+// Import loop state to update the cached render mode
+import { state } from './loopState.js';
+
 // Import the HUD update function to display the current render mode
 // This shows "GPU" or "CPU" in the stats display so users know which path is active
 import { updateRendererHud } from './updateRendererHud.js';
@@ -31,11 +34,11 @@ import { updateRendererHud } from './updateRendererHud.js';
  * but typically slower than WebGL for complex scenes.
  */
 export function fallbackToCpuForegroundMode() {
-  // Update the global render mode to CPU
+  // Update the render mode to CPU in loop state
   // This variable is read by the frame loop to determine which rendering path to use
-  foregroundRenderMode = 'cpu';
+  state.foregroundRenderMode = 'cpu';
   
   // Update the HUD display to show "CPU" instead of "GPU"
   // This helps users understand why performance might be different
-  updateRendererHud(foregroundRenderMode);
+  updateRendererHud(state.foregroundRenderMode);
 }

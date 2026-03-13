@@ -1,15 +1,22 @@
-let SCENE_GPU = null;
-let SCENE_GPU_FAILED = false;
+// Import the GPU renderer factory function
+// Creates WebGL context, shaders, and buffer management
+import { createSceneGpuRenderer } from '../core/createSceneGpuRenderer.js';
+
+// Import shared GPU renderer state
+import { gpuState } from './sceneGpuState.js';
 
 export function getSceneGpuRenderer() {
-  if (SCENE_GPU || SCENE_GPU_FAILED) return SCENE_GPU;
-  const fg = globalThis.fgCanvas;
-  if (!fg) {
-    SCENE_GPU_FAILED = true;
+  if (gpuState.renderer || gpuState.failed) return gpuState.renderer;
+  
+  // Use the dedicated GPU canvas for WebGL rendering
+  // This is separate from fgCanvas which has a 2D context
+  const gpuCanvas = globalThis.gpuCanvas;
+  if (!gpuCanvas) {
+    gpuState.failed = true;
     return null;
   }
 
-  SCENE_GPU = createSceneGpuRenderer(fg);
-  if (!SCENE_GPU) SCENE_GPU_FAILED = true;
-  return SCENE_GPU;
+  gpuState.renderer = createSceneGpuRenderer(gpuCanvas);
+  if (!gpuState.renderer) gpuState.failed = true;
+  return gpuState.renderer;
 }

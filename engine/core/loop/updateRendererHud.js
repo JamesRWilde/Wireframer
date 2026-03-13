@@ -8,13 +8,15 @@
  * 
  * ARCHITECTURE ROLE:
  *   Called by resolveForegroundRenderMode() when the render mode is determined,
- *   and by fallbackToCpuForegroundMode() when switching from GPU to CPU.
- *   Updates a DOM element to display the current mode.
+ *   by fallbackToCpuForegroundMode() when switching from GPU to CPU, and by
+ *   toggleRendererMode() when the user manually toggles the mode. Updates a
+ *   DOM element to display the current mode.
  * 
- * WHY THIS EXISTS:
- *   The app automatically selects GPU rendering when available and falls back
- *   to CPU when GPU fails. Showing the current mode helps users understand
- *   why performance might differ from expectations.
+ * TOGGLE FUNCTIONALITY:
+ *   When GPU is supported, the renderer stat becomes a clickable toggle button
+ *   (initialized by initRendererToggle.js). Clicking it switches between GPU
+ *   and CPU modes. The visual styling (cursor, underline) is applied during
+ *   initialization, not by this function.
  */
 
 // Import the DOM element reference for the renderer stat display

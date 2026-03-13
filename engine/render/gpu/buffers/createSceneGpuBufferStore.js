@@ -1,3 +1,11 @@
+// Import face-to-triangle conversion
+// Converts n-gon faces to triangles for GPU rendering
+import { getModelTriangles } from '../../fill/getModelTriangles.js';
+
+// Import corner normal computation
+// Computes per-vertex normals for smooth shading
+import { getModelTriCornerNormals } from '../../fill/normals/getModelTriCornerNormals.js';
+
 export function createSceneGpuBufferStore(gl, supportsUint32) {
   const modelCache = new WeakMap();
 

@@ -70,6 +70,10 @@ import { initThemeControls } from './initThemeControls.js';
 // Import UI state restoration and input listener attachment
 import { restoreStateAndAttachInput } from './restoreStateAndAttachInput.js';
 
+// Import renderer toggle initialization
+// Makes the renderer stat in the HUD a clickable toggle button
+import { initRendererToggle } from './initRendererToggle.js';
+
 // Import DOM element references for sliders
 import {
   bgDensity,
@@ -169,7 +173,12 @@ export function startApp() {
   // This creates preset swatches and applies saved custom colors
   initThemeControls();
 
-  // Step 11: Start the animation loop
+  // Step 11: Initialize renderer toggle functionality
+  // Makes the renderer stat in the HUD a clickable toggle button
+  // Only enables if GPU rendering is supported
+  initRendererToggle();
+
+  // Step 12: Start the animation loop
   // This kicks off requestAnimationFrame which will call frame() repeatedly
   requestAnimationFrame(frame);
   

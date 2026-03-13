@@ -26,6 +26,17 @@ import { drawBackground } from '../../render/background/background/drawBackgroun
 // Draws solid fill and wireframe using Canvas 2D
 import { renderCpuPath } from './renderCpuPath.js';
 
+// Import the GPU foreground renderer
+// Draws using WebGL for hardware-accelerated rendering
+import { renderGpuPath } from './renderGpuPath.js';
+
+// Import the render mode resolver
+// Determines whether to use GPU or CPU based on WebGL availability
+import { resolveForegroundRenderMode } from './resolveForegroundRenderMode.js';
+
+// Import loop state to read the current render mode
+import { state } from './loopState.js';
+
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU
 import { handleOtherCases } from './handleOtherCases.js';
@@ -77,13 +88,30 @@ export function renderScene(nowMs) {
   const morphing = globalThis.morph?.isMorphing?.() ?? false;
   const meshToRender = morphing ? globalThis.morph?.getCurrentMorphMesh?.() ?? currentModel : currentModel;
 
-  // Step 5: Render foreground using CPU path
-  // Currently always uses CPU path (GPU path is disabled in this configuration)
-  drewCpuForeground = renderCpuPath(meshToRender, backgroundOnSeparateCanvas);
+  // Step 5: Resolve render mode if not yet determined
+  // This checks WebGL availability and caches the result in state.foregroundRenderMode
+  resolveForegroundRenderMode();
+
+  // Step 6: Render foreground using GPU or CPU path based on resolved mode
+  // GPU path is preferred when available for better performance
+  // CPU path is the fallback for systems without WebGL support
+  let gpuDrawn = false;
+  if (state.foregroundRenderMode === 'gpu') {
+    // Attempt GPU rendering
+    gpuDrawn = renderGpuPath(meshToRender, morphing);
+    // If GPU failed, renderGpuPath already called fallbackToCpuForegroundMode
+    // which updated state.foregroundRenderMode to 'cpu'
+    if (!gpuDrawn) {
+      drewCpuForeground = renderCpuPath(meshToRender, backgroundOnSeparateCanvas);
+    }
+  } else {
+    // Use CPU rendering path
+    drewCpuForeground = renderCpuPath(meshToRender, backgroundOnSeparateCanvas);
+  }
   
-  // Step 6: Ensure GPU canvas isn't accidentally shown
-  // This handles edge cases where GPU canvas might be visible from a previous frame
-  handleOtherCases(backgroundOnSeparateCanvas, false);
+  // Step 7: Manage canvas visibility based on rendering mode
+  // This handles edge cases where canvases might be visible from a previous frame
+  handleOtherCases(backgroundOnSeparateCanvas, gpuDrawn);
 
   // Calculate foreground rendering time
   const fgMs = performance.now() - fgStartMs;

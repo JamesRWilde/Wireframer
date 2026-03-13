@@ -28,7 +28,8 @@ body {
 
 #bg,
 #c,
-#fg {
+#fg,
+#gpu {
   position: fixed;
   inset: 0;
 }
@@ -45,6 +46,12 @@ body {
 #fg {
   z-index: 2;
   pointer-events: none;
+}
+
+#gpu {
+  z-index: 2;
+  pointer-events: none;
+  display: none;
 }
 
 canvas {
@@ -434,6 +441,18 @@ canvas:active { cursor: grabbing; }
   color: var(--ui-stats);
   text-transform: uppercase;
   line-height: 1.45;
+}
+
+/* renderer toggle button styling */
+.renderer-toggle {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  transition: color 0.15s, text-decoration-color 0.15s;
+}
+.renderer-toggle:hover {
+  color: var(--ui-control-hover-fg);
+  text-decoration-color: var(--ui-control-hover-border);
 }
 
 /* bottom-centre label */

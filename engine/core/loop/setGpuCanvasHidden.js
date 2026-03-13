@@ -1,41 +1,45 @@
 /**
- * setGpuCanvasHidden.js - GPU Canvas Visibility Control (No-Op)
+ * setGpuCanvasHidden.js - GPU Canvas Visibility Control
  * 
  * PURPOSE:
- *   This is a no-op placeholder for GPU canvas visibility control. In the current
- *   architecture, the GPU canvas (foreground canvas) is kept visible at all times
- *   to prevent confusion during diagnostics and debugging.
+ *   Controls the visibility of the GPU canvas element by toggling its CSS display
+ *   property. This is used to show/hide the GPU canvas based on which rendering
+ *   path (GPU or CPU) is currently active.
  * 
  * ARCHITECTURE ROLE:
- *   Called by renderCpuPath and renderGpuPath for API consistency with
- *   setCpuCanvasHidden. However, unlike the CPU canvas, the GPU canvas
- *   (foreground canvas) is intentionally kept visible.
+ *   Called by renderGpuPath and renderCpuPath to manage canvas visibility.
+ *   The GPU canvas should be visible when using GPU rendering and hidden
+ *   when using CPU rendering to avoid visual conflicts.
  * 
- * WHY NO-OP:
- *   The foreground canvas serves as the primary drawing surface for both GPU
- *   and CPU rendering paths. Hiding it would:
- *   - Make debugging harder (can't see what's on the canvas)
- *   - Cause confusion about which canvas is active
- *   - Potentially break the CPU path which draws to the foreground canvas
- * 
- *   Instead of hiding, we rely on proper clearing and compositing to prevent
- *   visual artifacts from stale content.
+ * WHY CSS DISPLAY:
+ *   We use CSS display (none/block) rather than visibility or opacity because:
+ *   - display: none removes the element from layout (no rendering overhead)
+ *   - It's simpler than managing z-index or opacity
+ *   - It prevents any interaction with the hidden canvas
  */
 
 /**
- * setGpuCanvasHidden - Placeholder for GPU canvas visibility control
+ * setGpuCanvasHidden - Shows or hides the GPU canvas
  * 
- * @param {boolean} hidden - Whether to hide the canvas (ignored in current implementation)
+ * @param {boolean} hidden - Whether to hide the canvas (true) or show it (false)
  * 
- * This function is intentionally a no-op. The parameter is accepted for API
- * consistency but not used. The foreground canvas remains visible at all times.
+ * This function is idempotent - it only updates the DOM if the current display
+ * value differs from the target value, avoiding unnecessary DOM mutations.
  */
 export function setGpuCanvasHidden(hidden) {
-  // Intentionally a no-op: keep foreground canvas visible at all times
-  // This prevents the CPU path from hiding it and confusing diagnostics
+  // Get the GPU canvas element
+  const gpuCanvas = globalThis.gpuCanvas;
   
-  // Suppress unused variable warning - parameter is required for API consistency
-  /* eslint-disable no-unused-vars */
-  const _ = hidden;
-  /* eslint-enable no-unused-vars */
+  // Guard: if canvas doesn't exist, nothing to do
+  if (!gpuCanvas) return;
+  
+  // Determine the target CSS display value
+  // 'none' hides the element, 'block' shows it as a block element
+  const displayValue = hidden ? 'none' : 'block';
+  
+  // Only update DOM if the value actually changed
+  // This avoids unnecessary DOM mutations which can trigger style recalculations
+  if (gpuCanvas.style.display !== displayValue) {
+    gpuCanvas.style.display = displayValue;
+  }
 }

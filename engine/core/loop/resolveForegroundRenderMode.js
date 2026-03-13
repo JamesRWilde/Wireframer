@@ -24,6 +24,9 @@ import { state } from './loopState.js';
 // Import HUD updater to display the current render mode (GPU/CPU)
 import { updateRendererHud } from './updateRendererHud.js';
 
+// Import GPU renderer getter to check if GPU is available
+import { getSceneGpuRenderer } from '../../render/gpu/runtime/getSceneGpuRenderer.js';
+
 /**
  * resolveForegroundRenderMode - Determines and caches the foreground render mode
  * 
@@ -43,9 +46,8 @@ export function resolveForegroundRenderMode() {
   if (state.foregroundRenderMode !== 'unknown') return state.foregroundRenderMode;
   
   // Check if GPU renderer is available
-  // getSceneGpuRenderer is a global function that returns the GPU renderer
-  // if WebGL is available and initialized successfully
-  const renderer = typeof getSceneGpuRenderer === 'function' ? getSceneGpuRenderer() : null;
+  // getSceneGpuRenderer returns the GPU renderer if WebGL is available and initialized
+  const renderer = getSceneGpuRenderer();
   
   // Determine mode based on GPU renderer availability
   // If renderer exists, use GPU; otherwise fall back to CPU
