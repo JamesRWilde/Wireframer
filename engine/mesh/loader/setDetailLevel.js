@@ -16,3 +16,6 @@ export function setDetailLevel(percent, name = 'Shape') {
     globalThis.setActiveModel(globalThis.CURRENT_LOD_MODEL, name);
   }
 }
+
+// Expose globally for UI slider handler
+globalThis.setDetailLevel = setDetailLevel;

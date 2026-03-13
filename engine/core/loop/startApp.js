@@ -9,6 +9,8 @@ import '../../mesh/loader/loadMesh.js';
 import '../modelState.js';
 // expose morph API globally for finalizeModel and renderScene
 import '../../morph/initMorphApi.js';
+// expose LODManager globally for setDetailLevel
+import '../../mesh/lod/LODManager.js';
 import { initObjectSelector } from '../../../ui/controls/initObjectSelector.js';
 import { frame } from './frame.js';
 import { initializeRotation } from '../../math/math3d/initializeRotation.js';
@@ -108,7 +110,6 @@ export function startApp() {
       {name:'bgOpacity',el:bgOpacity},
       {name:'fillOpacity',el:fillOpacity},
       {name:'wireOpacity',el:wireOpacity},
-      {name:'lodSlider',el:lodSlider}
     ];
     sliders.forEach(({name,el}) => {
       if (!el) console.warn('[startApp] slider missing', name);
@@ -118,6 +119,17 @@ export function startApp() {
         });
       }
     });
+    // LOD slider needs special handling to trigger decimation
+    if (lodSlider) {
+      lodSlider.addEventListener('input', () => {
+        try {
+          syncRenderToggles();
+          if (typeof globalThis.setDetailLevel === 'function') {
+            globalThis.setDetailLevel(Number(lodSlider.value) / 100);
+          }
+        } catch (e) { console.warn('[startApp] lodSlider syncRenderToggles error', e); }
+      });
+    }
     console.debug('[startApp] attached slider listeners', sliders.map(s=>s.name));
   } catch (e) {
     console.warn('[startApp] failed to attach slider listeners', e);
