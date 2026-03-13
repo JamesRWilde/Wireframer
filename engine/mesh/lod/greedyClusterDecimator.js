@@ -73,8 +73,8 @@ export function greedyClusterDecimator(model, targetFaces) {
     };
     model._lodCache.set(cacheKey, decimated);
     if (model._lodCache.size > 12) {
-        const firstKey = Array.from(model._lodCache.keys()).next().value;
+        const firstKey = Array.from(model._lodCache.keys())[0];
         model._lodCache.delete(firstKey);
     }
-    return require('./deepCopyMesh.js')(decimated);
+    return deepCopyMesh(decimated);
 }
