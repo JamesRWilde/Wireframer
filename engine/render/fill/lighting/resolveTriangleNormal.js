@@ -14,14 +14,29 @@ export function resolveTriangleNormal(item, T, triCornerNormals, useSmoothShadin
 
   let nx, ny, nz;
   if (useSmoothShading) {
-    // normals are already provided in camera space by precomputing them from
-    // the transformed vertices in drawSolidFillModel.  Just sum the corner
-    // normals passed in.
+    // triCornerNormals are stored in model space; rotate them each frame
+    // by the current physics rotation matrix so lighting behaves as if the
+    // object spins under a fixed light source.
     const cn = triCornerNormals[item.triIndex];
-    const na = cn[0], nb = cn[1], nc = cn[2];
-    nx = na[0] + nb[0] + nc[0];
-    ny = na[1] + nb[1] + nc[1];
-    nz = na[2] + nb[2] + nc[2];
+    const R = globalThis.PHYSICS_STATE?.R;
+    if (R) {
+      const rotate = v => [
+        R[0]*v[0] + R[1]*v[1] + R[2]*v[2],
+        R[3]*v[0] + R[4]*v[1] + R[5]*v[2],
+        R[6]*v[0] + R[7]*v[1] + R[8]*v[2],
+      ];
+      const na = rotate(cn[0]);
+      const nb = rotate(cn[1]);
+      const nc = rotate(cn[2]);
+      nx = na[0] + nb[0] + nc[0];
+      ny = na[1] + nb[1] + nc[1];
+      nz = na[2] + nb[2] + nc[2];
+    } else {
+      const na = cn[0], nb = cn[1], nc = cn[2];
+      nx = na[0] + nb[0] + nc[0];
+      ny = na[1] + nb[1] + nc[1];
+      nz = na[2] + nb[2] + nc[2];
+    }
   } else {
     nx = uy * vz - uz * vy;
     ny = uz * vx - ux * vz;
