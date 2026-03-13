@@ -14,9 +14,10 @@
  * FRAME PIPELINE:
  *   1. Check if frame should run (FPS limiting)
  *   2. Update rotation physics
- *   3. Render scene (background + foreground)
- *   4. Collect and update telemetry
- *   5. Update telemetry HUD display
+ *   3. Check frame budget and adjust quality
+ *   4. Render scene (background + foreground)
+ *   5. Collect and update telemetry
+ *   6. Update telemetry HUD display
  */
 
 // Import loop state for frame tracking and timing
@@ -37,6 +38,9 @@ import { shouldRunFrame } from './shouldRunFrame.js';
 // Import telemetry collector - smooths and stores timing metrics
 import { updateTelemetry } from './updateTelemetry.js';
 
+// Import frame budget manager for adaptive quality
+import { updateFrameTime, checkBudget } from './frameBudget.js';
+
 /**
  * runFrame - Executes all operations for a single animation frame
  * 
@@ -46,9 +50,10 @@ import { updateTelemetry } from './updateTelemetry.js';
  * This function is the core of the animation loop. It:
  * 1. Checks if this frame should be skipped (FPS limiting)
  * 2. Updates physics (rotation, input handling)
- * 3. Renders the scene (background particles + 3D model)
- * 4. Collects performance metrics
- * 5. Updates the telemetry HUD display
+ * 3. Checks frame budget and adjusts rendering quality
+ * 4. Renders the scene (background particles + 3D model)
+ * 5. Collects performance metrics
+ * 6. Updates the telemetry HUD display
  */
 export function runFrame(nowMs = 0) {
   // Record frame start time for performance measurement
@@ -73,8 +78,13 @@ export function runFrame(nowMs = 0) {
   // This handles auto-rotation, angular velocity decay, and input integration
   // Returns the time spent on physics for telemetry
   const physMs = updatePhysics();
+
+  // Step 2: Check frame budget and adjust quality level
+  // This tracks rolling average frame time and adjusts rendering quality
+  // to maintain target FPS when the system is under load
+  checkBudget();
   
-  // Step 2: Render the scene (background + foreground)
+  // Step 3: Render the scene (background + foreground)
   // Returns timing metrics and rendering state
   // Note: we used to guard against zero opacity values here, but that forced
   // sliders to jump back to opaque when dragged to 0. The sliders now
@@ -84,11 +94,14 @@ export function runFrame(nowMs = 0) {
   // Calculate total frame time
   const frameMs = performance.now() - frameStartMs;
 
-  // Step 3: Update telemetry with timing metrics
+  // Step 4: Update frame budget tracking with this frame's time
+  updateFrameTime(frameMs);
+
+  // Step 5: Update telemetry with timing metrics
   // This smooths values using EMA and stores them for HUD display
   updateTelemetry(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs);
   
-  // Step 4: Update the telemetry HUD display
+  // Step 6: Update the telemetry HUD display
   // This is throttled to avoid expensive DOM updates every frame
   updateTelemetryHud(nowMs);
   
