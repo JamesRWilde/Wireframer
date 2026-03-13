@@ -1,31 +1,99 @@
+/**
+ * runFrame.js - Single Frame Execution Logic
+ * 
+ * PURPOSE:
+ *   Executes all per-frame operations: physics updates, scene rendering, and
+ *   telemetry collection. This is the workhorse function called by frame()
+ *   each animation frame. It orchestrates the entire frame pipeline.
+ * 
+ * ARCHITECTURE ROLE:
+ *   Called by frame() which handles requestAnimationFrame scheduling.
+ *   runFrame() focuses purely on the work to be done each frame, making
+ *   it testable independently of the animation loop.
+ * 
+ * FRAME PIPELINE:
+ *   1. Check if frame should run (FPS limiting)
+ *   2. Update rotation physics
+ *   3. Render scene (background + foreground)
+ *   4. Collect and update telemetry
+ *   5. Update telemetry HUD display
+ */
+
+// Import loop state for frame tracking and timing
 import { state } from './loopState.js';
+
+// Import physics update function - handles rotation and input
 import { updatePhysics } from './updatePhysics.js';
+
+// Import scene renderer - draws background and foreground
 import { renderScene } from './renderScene.js';
+
+// Import telemetry HUD updater - displays stats in the UI
 import { updateTelemetryHud } from './updateTelemetryHud.js';
+
+// Import frame throttling check - skips frames if running too fast
 import { shouldRunFrame } from './shouldRunFrame.js';
+
+// Import telemetry collector - smooths and stores timing metrics
 import { updateTelemetry } from './updateTelemetry.js';
 
+/**
+ * runFrame - Executes all operations for a single animation frame
+ * 
+ * @param {number} [nowMs=0] - Current timestamp from requestAnimationFrame
+ *   Used for timing calculations and animation interpolation
+ * 
+ * This function is the core of the animation loop. It:
+ * 1. Checks if this frame should be skipped (FPS limiting)
+ * 2. Updates physics (rotation, input handling)
+ * 3. Renders the scene (background particles + 3D model)
+ * 4. Collects performance metrics
+ * 5. Updates the telemetry HUD display
+ */
 export function runFrame(nowMs = 0) {
-  // entry log removed
+  // Record frame start time for performance measurement
   const frameStartMs = performance.now();
 
+  // Check if this frame should be skipped due to FPS limiting
+  // Returns frame interval in ms, or null if frame should be skipped
   const frameIntervalMs = shouldRunFrame(nowMs);
   if (frameIntervalMs === null) return;
+  
+  // Update frame timing state
+  // lastPresentedFrameMs tracks when frames are actually rendered (not skipped)
+  // lastFrameMs tracks the most recent frame attempt
   state.lastPresentedFrameMs = nowMs;
   state.lastFrameMs = nowMs;
+  
+  // Increment frame counter
+  // Used for throttled operations (e.g., telemetry updates every N frames)
   state.RENDER_FRAME_ID++;
 
+  // Step 1: Update rotation physics
+  // This handles auto-rotation, angular velocity decay, and input integration
+  // Returns the time spent on physics for telemetry
   const physMs = updatePhysics();
-  // note: we used to guard against zero values here, but that forced the
-  // sliders to jump back to opaque when the user dragged them to 0.  The
-  // sliders themselves now initialise correctly in startApp, so keep the
-  // frame loop pure and allow genuine transparency.
+  
+  // Step 2: Render the scene (background + foreground)
+  // Returns timing metrics and rendering state
+  // Note: we used to guard against zero opacity values here, but that forced
+  // sliders to jump back to opaque when dragged to 0. The sliders now
+  // initialize correctly in startApp, so we allow genuine transparency.
   const { bgMs, fgMs, drewCpuForeground, backgroundOnSeparateCanvas } = renderScene(nowMs);
 
+  // Calculate total frame time
   const frameMs = performance.now() - frameStartMs;
 
+  // Step 3: Update telemetry with timing metrics
+  // This smooths values using EMA and stores them for HUD display
   updateTelemetry(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs);
+  
+  // Step 4: Update the telemetry HUD display
+  // This is throttled to avoid expensive DOM updates every frame
   updateTelemetryHud(nowMs);
+  
+  // Update frame loop state for next frame's canvas management
+  // This tracks whether CPU foreground is on the main canvas, which affects
+  // clearing and compositing decisions in subsequent frames
   globalThis.FRAME_LOOP_STATE.cpuForegroundDrawnOnMainCanvas = drewCpuForeground && backgroundOnSeparateCanvas;
-  // exit log removed
 }
