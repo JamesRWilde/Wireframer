@@ -40,10 +40,7 @@ export function drawBackground(nowMs) {
     console.debug('[drawBackground] failed to get 2D context');
     return false;
   }
-  // optional debug: log every second
-  if (drawCount % 60 === 0) {
-    console.debug('[drawBackground] frame', drawCount);
-  }
+  // optional debug logs have been removed to avoid console spam
 
   const w = canvas.width = canvas.clientWidth || canvas.width;
   const h = canvas.height = canvas.clientHeight || canvas.height;
@@ -108,7 +105,7 @@ export function drawBackground(nowMs) {
       ? `rgba(${custom[0]},${custom[1]},${custom[2]},1)`
       : 'rgba(200,220,255,1)';
   }
-  if (drawCount % 60 === 0) console.debug('[drawBackground] particle color', color);
+  // debug color log removed
 
 
   for (let p of particles) {
