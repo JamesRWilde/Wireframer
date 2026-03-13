@@ -75,17 +75,12 @@ export const CUSTOM_RGB_DEFAULT = [95, 188, 230];
 export let CUSTOM_RGB = CUSTOM_RGB_DEFAULT.slice();
 export let THEME_MODE = 'dark';
 
-// light direction vector in world space; surface normals are dotted with
-// this value so it must point *toward* the light.  We want a strong ceiling
-// lamp that sits well outside the model, above and off to the side relative
-// to the viewer.  The reference value was only mildly offset; to get proper
-// exterior illumination of the knot we use a much more extreme vector.
-export let LIGHT_DIR = (() => {
-  // the initial unnormalised vector points left/up/behind
-  const x = -0.7;    // leftwards bias
-  const y = 1.0;     // high overhead component
-  const z = 0.8;     // behind the viewer
-  const l = Math.hypot(x, y, z);
-  return [x / l, y / l, z / l];
-})();
+// light direction vector in world space; this is a distant directional
+// light so only the direction matters.  to guarantee the light ends up well
+// outside the mesh (no matter how it rotates) we simply make it straight
+// down from above.  any normal pointing upward will be lit, everything else
+// will fall toward the dark — the knot should now light on its exterior
+// surfaces only.
+export let LIGHT_DIR = [0, 1, 0];
+
 export let VIEW_DIR = [0, 0, -1];
