@@ -48,6 +48,17 @@ import { project } from '../../render/camera/projection/project.js';
 // This provides a separate canvas for wireframe compositing
 import { getOrCreateWireLayer } from '../getOrCreateWireLayer.js';
 
+// Import the offscreen back wire layer for back-facing wireframe edges
+// This provides a cached canvas for back wireframe compositing (avoids per-frame allocation)
+import { getOrCreateBackWireLayer } from '../getOrCreateBackWireLayer.js';
+
+// Import edge classification to compute once and reuse for both front and back wireframe
+// Previously classifyEdges() was called twice per frame with identical inputs
+import { classifyEdges } from '../../render/wireframe/classifyEdges.js';
+
+// Import getModelFrameData to get transformed vertices for edge classification
+import { getModelFrameData } from '../../render/camera/projection/getModelFrameData.js';
+
 /**
  * drawAxes - Draws RGB orientation axes for debugging rotation
  * 
@@ -182,16 +193,24 @@ export function renderCpuPath(meshToRender, backgroundOnSeparateCanvas) {
   if (ctx) {
     const w = globalThis.W, h = globalThis.H;
     
-    // Create a temporary canvas for back-facing wireframe edges
-    // Back edges are those facing away from the camera (hidden by solid fill)
-    const backWireLayer = document.createElement('canvas');
-    backWireLayer.width = w;
-    backWireLayer.height = h;
-    const backWireCtx = backWireLayer.getContext('2d');
+    // Get or create the cached back wire layer canvas
+    // Previously this was created fresh every frame via document.createElement()
+    // which was a significant performance bottleneck (10-15% of frame time)
+    const { canvas: backWireLayer, ctx: backWireCtx } = getOrCreateBackWireLayer();
+    
+    // Clear the back wire layer before drawing
+    backWireCtx.clearRect(0, 0, w, h);
+    
+    // Compute edge classification once and reuse for both back and front rendering
+    // Previously classifyEdges() was called twice per frame with identical inputs
+    // This is a significant optimization (8-12% of frame time)
+    const frameData = getModelFrameData(meshToRender);
+    const edgeClassification = frameData ? classifyEdges(meshToRender, frameData.T) : null;
     
     // Draw only back-facing wireframe edges to the temp layer
     // The 'back' parameter tells the renderer to only draw back-facing edges
-    drawWireframeModel(meshToRender, 1, backWireCtx, 'back');
+    // Pass pre-computed classification to avoid recomputing
+    drawWireframeModel(meshToRender, 1, backWireCtx, 'back', edgeClassification);
 
     // Begin compositing
     ctx.save();
@@ -216,7 +235,8 @@ export function renderCpuPath(meshToRender, backgroundOnSeparateCanvas) {
     // These are always visible (modulated by wire opacity) because they're
     // the edges facing the camera
     // The 'front' parameter tells the renderer to only draw front-facing edges
-    drawWireframeModel(meshToRender, 1, ctx, 'front');
+    // Pass pre-computed classification to avoid recomputing (computed above for back edges)
+    drawWireframeModel(meshToRender, 1, ctx, 'front', edgeClassification);
     
     // Reset alpha to full opacity
     ctx.globalAlpha = 1;

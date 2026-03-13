@@ -10,7 +10,20 @@ import { drawWireframeEdges } from './drawWireframeEdges.js';
 const DEPTH_BUCKETS = 12;
 const buckets = Array.from({ length: DEPTH_BUCKETS }, () => []);
 
-export function drawWireframeModel(model, alphaScale = 1, ctxOverride = null, mode = 'all') {
+/**
+ * drawWireframeModel - Draws wireframe edges for a 3D model
+ * 
+ * @param {Object} model - Model object with vertices V, edges E, faces F
+ * @param {number} alphaScale - Alpha multiplier for wire opacity (default 1)
+ * @param {CanvasRenderingContext2D} ctxOverride - Optional context to draw to (default: globalThis.ctx)
+ * @param {string} mode - Edge filter mode: 'all', 'front', or 'back' (default 'all')
+ * @param {Map<string, string>} precomputedClassification - Optional pre-computed edge classification
+ *   When provided, skips the expensive classifyEdges() call. This is used when rendering
+ *   both front and back edges in sequence to avoid computing classification twice.
+ * 
+ * @returns {void}
+ */
+export function drawWireframeModel(model, alphaScale = 1, ctxOverride = null, mode = 'all', precomputedClassification = null) {
   if (!model?.V?.length || !model?.E?.length) return;
   if (alphaScale <= 0.001 || globalThis.WIRE_OPACITY <= 0.001) return;
 
@@ -30,7 +43,11 @@ export function drawWireframeModel(model, alphaScale = 1, ctxOverride = null, mo
   const edgeColorB = globalThis.DEBUG_FORCE_RED ? 'rgba(255,0,0,0.8)' : rgbA(contrastWire, 1);
   const wireAlpha = globalThis.WIRE_OPACITY * wireStrength;
 
-  const edgeClassification = mode === 'front' || mode === 'back' ? classifyEdges(model, T) : null;
+  // Use pre-computed classification if provided, otherwise compute it
+  // This avoids computing classification twice when rendering both front and back edges
+  const edgeClassification = mode === 'front' || mode === 'back'
+    ? (precomputedClassification || classifyEdges(model, T))
+    : null;
   const shouldDrawEdge = createEdgeFilter(mode, edgeClassification);
 
   drawWireframeEdges({ model, P2, ctx, wireAlpha, edgeColor: globalThis.DEBUG_FORCE_WIRE ? 'rgba(255,255,255,0.9)' : edgeColorA, shouldDrawEdge });
