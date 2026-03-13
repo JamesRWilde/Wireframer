@@ -55,18 +55,7 @@ export function getModelFrameData(model) {
   const id = state.RENDER_FRAME_ID;
   model._frameData = { id, T, P2, zHalf };
 
-  // For a fixed light source in world space, we need to transform normals
-  // from the rotated coordinate system back to world space. Store the
-  // inverse rotation matrix (transpose for orthogonal matrices) so lighting
-  // can transform normals to world space for consistent illumination.
-  if (Rmat) {
-    globalThis.LIGHT_DIR_CAM = null; // Not needed - we transform normals instead
-    globalThis.R_INV = [
-      r00, r10, r20,  // First column of R^T
-      r01, r11, r21,  // Second column of R^T  
-      r02, r12, r22   // Third column of R^T
-    ];
-  }
+  // Lighting is now computed in view space, no need for R_INV
 
   return model._frameData;
 }

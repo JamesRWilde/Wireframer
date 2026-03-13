@@ -16,16 +16,6 @@ export function runFrame(nowMs = 0) {
   state.RENDER_FRAME_ID++;
 
   const physMs = updatePhysics();
-
-  // Always update R_INV for correct static lighting
-  const Rmat = globalThis.PHYSICS_STATE?.R;
-  if (Rmat) {
-    globalThis.R_INV = [
-      Rmat[0], Rmat[3], Rmat[6],
-      Rmat[1], Rmat[4], Rmat[7],
-      Rmat[2], Rmat[5], Rmat[8]
-    ];
-  }
   // note: we used to guard against zero values here, but that forced the
   // sliders to jump back to opaque when the user dragged them to 0.  The
   // sliders themselves now initialise correctly in startApp, so keep the
