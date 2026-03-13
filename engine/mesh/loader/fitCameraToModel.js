@@ -37,6 +37,5 @@ export function fitCameraToModel(model) {
     const fitZoom = (3 * targetFraction) / (0.9 * maxExtent);
     
     globalThis.ZOOM = Math.max(globalThis.ZOOM_MIN, Math.min(globalThis.ZOOM_MAX, fitZoom));
-    console.log(`[fitCameraToModel] bbox=[${sizeX.toFixed(2)}, ${sizeY.toFixed(2)}], maxExtent=${maxExtent.toFixed(3)}, ZOOM=${globalThis.ZOOM.toFixed(3)}`);
   }
 }

@@ -20,9 +20,7 @@ export function loadMesh(mesh, name = 'Shape', options = {}) {
     meshType = 'OBJ',
   } = options || {};
 
-  console.log(`[loadMesh] Incoming mesh for ${name}: type=${typeof mesh}`);
   validateMesh(mesh, name, meshFileName, meshType);
-  console.log(`[loadMesh] Input: V=${mesh.V.length}, F=${mesh.F.length}`);
 
   const V = mesh.V;
   const F = mesh.F;

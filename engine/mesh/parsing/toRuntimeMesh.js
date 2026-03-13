@@ -21,7 +21,6 @@ export function toRuntimeMesh(rawObjText, overrides = {}) {
   // parse into raw data
   const {uniqueVerts, faces, failingLines} = parseObjLines(lines, overrides);
   globalThis.lastMeshParseErrors = failingLines;
-  console.log(`[toRuntimeMesh] parse complete: uniqueVerts=${uniqueVerts.length}, F=${faces.length}, errors=${failingLines.length}, duration=${Date.now()-parseStart}ms`);
 
   // check for parse errors
   checkParseResults(uniqueVerts, faces, failingLines, overrides);
