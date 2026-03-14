@@ -24,38 +24,34 @@ let _cache = null;
 let _pending = null;
 
 /**
- * getObjectList - Fetches the list of available mesh objects from the server
+ * getObjectList - Returns the list of available mesh objects
  * 
- * Returns a cached result on subsequent calls. The server scans the meshes/
- * directory and returns all .obj files with transformed display names.
+ * Returns a cached result on subsequent calls.
  * 
  * @returns {Promise<Array<{key: string, name: string, obj: string}>>}
  *   Array of mesh objects sorted alphabetically by key
  */
 export function getObjectList() {
-  // Return cached result immediately (including empty array from failed request)
   if (_cache !== null) return Promise.resolve(_cache);
   
-  // Return in-flight request if one is already pending
-  if (_pending !== null) return _pending;
+  // Static mesh list (no server API needed for static hosting)
+  const meshes = [
+    "airplane.obj", "capsule.obj", "cinquefoil-knot.obj", "cone.obj",
+    "cube.obj", "cylinder.obj", "diamond.obj", "drone.obj",
+    "icosahedron.obj", "jerusalem-cube.obj", "menger-sponge.obj",
+    "mobius-strip.obj", "octahedron.obj", "prism.obj", "pyramid.obj",
+    "sierpinski-pyramid.obj", "sphere.obj", "spring.obj", "star-prism.obj",
+    "torus-knot.obj", "torus.obj", "tree.obj", "wine-glass.obj"
+  ];
   
-  // Fetch from server endpoint
-  _pending = fetch('/api/meshes')
-    .then(resp => {
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      return resp.json();
-    })
-    .then(list => {
-      _cache = list;
-      _pending = null;
-      return list;
-    })
-    .catch(err => {
-      console.warn('[objectList] Failed to load mesh list from server:', err.message);
-      _cache = [];
-      _pending = null;
-      return [];
-    });
+  const list = meshes
+    .map(f => ({
+      key: f.replace(/\.obj$/, ''),
+      name: f.replace(/\.obj$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+      obj: `/meshes/${f}`
+    }))
+    .sort((a, b) => a.key.localeCompare(b.key));
   
-  return _pending;
+  _cache = list;
+  return Promise.resolve(list);
 }
