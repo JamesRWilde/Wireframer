@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * packParticles.js - Particle Data Packer
  *

@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * updateParticles.js - Particle Position and Alpha Updater
  *

@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * lerpColor.js - Linear Color Interpolation
  *

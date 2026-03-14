@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * initParticles.js - Particle Array Initializer
  *

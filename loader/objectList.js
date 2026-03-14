@@ -33,11 +33,11 @@ let _pending = null;
  *   Array of mesh objects sorted alphabetically by key
  */
 export function getObjectList() {
-  // Return cached result immediately
-  if (_cache) return Promise.resolve(_cache);
+  // Return cached result immediately (including empty array from failed request)
+  if (_cache !== null) return Promise.resolve(_cache);
   
   // Return in-flight request if one is already pending
-  if (_pending) return _pending;
+  if (_pending !== null) return _pending;
   
   // Fetch from server endpoint
   _pending = fetch('/api/meshes')

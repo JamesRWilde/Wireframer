@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * resolveTriangleNormal.js - Surface Normal Resolver for Triangles
  *

@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * fillTriangle.js - Canvas Triangle Filler
  *

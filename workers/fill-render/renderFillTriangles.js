@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * renderFillTriangles.js - Fill Triangle Renderer
  *

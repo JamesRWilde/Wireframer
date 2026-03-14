@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * computeTriangleShadeColor.js - Blinn-Phong Shading for Triangles
  *

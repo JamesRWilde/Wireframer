@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * background-worker.js - Background Particle Computation Worker
  *

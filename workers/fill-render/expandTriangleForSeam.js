@@ -1,9 +1,3 @@
-"use strict";
-
-"use strict";
-
-"use strict";
-
 /**
  * expandTriangleForSeam.js - Seam Expansion for Triangles
  *

@@ -1,3 +1,24 @@
+function fillNormalized3(out, v, fallback) {
+  const x = Number(v?.[0]);
+  const y = Number(v?.[1]);
+  const z = Number(v?.[2]);
+  const l = Math.hypot(x, y, z);
+  if (!Number.isFinite(l) || l < 1e-6) {
+    out[0] = fallback[0]; out[1] = fallback[1]; out[2] = fallback[2];
+    return out;
+  }
+  out[0] = x / l; out[1] = y / l; out[2] = z / l;
+  return out;
+}
+
+function fillColor01(out, rgb, fallback) {
+  const src = rgb || fallback;
+  out[0] = (src?.[0] ?? 0) / 255;
+  out[1] = (src?.[1] ?? 0) / 255;
+  out[2] = (src?.[2] ?? 0) / 255;
+  return out;
+}
+
 export function createSceneGpuDraw(gl, canvas, shaderPack, bufferStore) {
   const IDENTITY3 = [1, 0, 0, 0, 1, 0, 0, 0, 1];
   const tmpLight = new Float32Array(3);
@@ -10,47 +31,26 @@ export function createSceneGpuDraw(gl, canvas, shaderPack, bufferStore) {
   const { fillProgram, wireProgram, fillLoc, wireLoc } = shaderPack;
   const { getModelBuffers, updateDynamicBuffers } = bufferStore;
 
-  function fillNormalized3(out, v, fallback) {
-    const x = Number(v && v[0]);
-    const y = Number(v && v[1]);
-    const z = Number(v && v[2]);
-    const l = Math.hypot(x, y, z);
-    if (!Number.isFinite(l) || l < 1e-6) {
-      out[0] = fallback[0]; out[1] = fallback[1]; out[2] = fallback[2];
-      return out;
-    }
-    out[0] = x / l; out[1] = y / l; out[2] = z / l;
-    return out;
-  }
-
-  function fillColor01(out, rgb, fallback) {
-    const src = rgb || fallback;
-    out[0] = (src[0] || 0) / 255;
-    out[1] = (src[1] || 0) / 255;
-    out[2] = (src[2] || 0) / 255;
-    return out;
-  }
-
   function toRowMajorRotation(m) {
     return Array.isArray(m) && m.length === 9 ? m : IDENTITY3;
   }
 
   function setProjectionUniforms(programLoc, params) {
     const minDim = Math.min(params.width, params.height);
-    const fov = minDim * 0.90 * params.zoom;
+    const fov = minDim * 0.9 * params.zoom;
     const projX = (2 * fov) / Math.max(1, params.width);
     const projY = (2 * fov) / Math.max(1, params.height);
     const depthScale = 1 / Math.max(1.5, params.zHalf * 2.5);
     gl.uniform1f(programLoc.uProjX, projX);
     gl.uniform1f(programLoc.uProjY, projY);
-    gl.uniform1f(programLoc.uModelCy, params.modelCy || 0);
+    gl.uniform1f(programLoc.uModelCy, params.modelCy ?? 0);
     gl.uniform1f(programLoc.uDepthScale, depthScale);
   }
 
   function renderModel(model, params) {
-    if (!params || !params.theme || !params.width || !params.height) return false;
-      // Engine-owned mesh only
-      const buffers = getModelBuffers(model);
+    if (!params?.theme || !params?.width || !params?.height) return false;
+    // Engine-owned mesh only
+    const buffers = getModelBuffers(model);
     if (!buffers) return false;
 
     if (params.dynamic === true && !updateDynamicBuffers(model, buffers)) return false;

@@ -86,10 +86,10 @@ globalThis.loadObjMesh = async function(objPath, name) {
 
 // Load the dynamic object list and expose it globally
 // getObjectList() fetches from /api/meshes which scans the meshes/ directory
-getObjectList().then(list => {
-  globalThis.OBJECTS = list;
-}).catch(err => {
+try {
+  globalThis.OBJECTS = await getObjectList();
+} catch (err) {
   console.error('[loader] Failed to load object list:', err);
   globalThis.OBJECTS = [];
-});
+}
 
