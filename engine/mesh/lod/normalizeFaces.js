@@ -17,6 +17,8 @@
  *   and avoid format-specific code paths.
  */
 
+"use strict";
+
 /**
  * normalizeFaces - Normalizes face data to consistent array format
  * 

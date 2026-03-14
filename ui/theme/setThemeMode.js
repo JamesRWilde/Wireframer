@@ -14,6 +14,8 @@
  *   - 'dark': Dark background with light text
  */
 
+"use strict";
+
 import { themeMode } from '../dom-state.js';
 import { applyPalette } from './applyPalette.js';
 

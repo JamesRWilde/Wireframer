@@ -10,6 +10,8 @@
  *   Provides simple component-wise color comparison.
  */
 
+"use strict";
+
 /**
  * rgbEquals - Checks if two RGB colors are exactly equal
  * 

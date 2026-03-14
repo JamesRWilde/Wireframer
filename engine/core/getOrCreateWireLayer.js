@@ -19,6 +19,8 @@
  *   - Can be cleared independently each frame without affecting other layers
  */
 
+"use strict";
+
 /**
  * getOrCreateWireLayer - Returns or creates the offscreen wireframe canvas
  * 

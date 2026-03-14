@@ -8,7 +8,13 @@
  * ARCHITECTURE ROLE:
  *   Called when user adjusts color sliders to get current input values.
  *   Provides safe access to input values with fallback.
+ * 
+ * DATA FORMAT:
+ *   - Reads from <input type="range"> or <input type="number"> elements for R, G, B.
+ *   - Returns [r, g, b] with values clamped to 0-255.
  */
+
+"use strict";
 
 import { clampByte } from '../color-utils/clampByte.js';
 import { customRed, customGreen, customBlue, CUSTOM_RGB } from '../dom-state.js';
@@ -16,7 +22,7 @@ import { customRed, customGreen, customBlue, CUSTOM_RGB } from '../dom-state.js'
 /**
  * getCustomRgbFromInputs - Gets RGB values from input elements
  * 
- * @returns {Array<number>} RGB color [r, g, b] with values 0-255
+ * @returns {number[]} RGB color [r, g, b] with values 0-255
  * 
  * The function:
  * 1. Reads values from R, G, B input elements

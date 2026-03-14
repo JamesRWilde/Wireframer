@@ -14,6 +14,8 @@
  *   where R, G, B are linear (not sRGB) values
  */
 
+"use strict";
+
 import { linearChannel } from './linearChannel.js';
 
 /**

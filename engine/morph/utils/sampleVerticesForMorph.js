@@ -21,6 +21,8 @@
  *   the sample count ensures real-time performance even for complex meshes.
  */
 
+"use strict";
+
 /**
  * sampleVerticesForMorph - Randomly samples vertices from a mesh
  * 

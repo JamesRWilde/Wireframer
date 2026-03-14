@@ -18,6 +18,8 @@
  *   - Compute normalization scales
  */
 
+"use strict";
+
 /**
  * computeBoundingBox - Computes axis-aligned bounding box of vertices
  * 

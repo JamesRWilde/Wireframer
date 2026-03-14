@@ -16,6 +16,8 @@
  *   - morphStep: Accepts time as a parameter
  */
 
+"use strict";
+
 // Import morph state for reading/updating animation state
 import { morphState } from '../morphState.js';
 

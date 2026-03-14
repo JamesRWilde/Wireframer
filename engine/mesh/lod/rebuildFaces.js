@@ -22,6 +22,8 @@
  *   These would cause rendering artifacts and should be removed.
  */
 
+"use strict";
+
 /**
  * rebuildFaces - Rebuilds faces after vertex clustering
  * 

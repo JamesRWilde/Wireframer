@@ -14,6 +14,8 @@
  *   - 100-220% slider: 2.4-5.08x density (linear with different slope)
  */
 
+"use strict";
+
 /**
  * mapDensitySliderScale - Maps slider percentage to density scale
  * 

@@ -22,7 +22,7 @@
  *   8. Set as active model
  */
 
-'use strict';
+"use strict";
 
 // Import edge filtering to remove degenerate edges
 import { filterValidEdges } from './filterValidEdges.js';

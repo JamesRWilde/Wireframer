@@ -1,6 +1,24 @@
-'use strict';
+/**
+ * dom-state.js - Shared DOM element and color state
+ *
+ * PURPOSE:
+ *   Centralizes references to commonly used DOM elements and theme state.
+ *   This module exports live bindings that other modules can read/write
+ *   to keep UI state in sync.
+ *
+ * ARCHITECTURE ROLE:
+ *   Acts as the single source of truth for DOM elements (inputs, stats, etc.)
+ *   and theme-related constants (custom colors, presets, light direction) used
+ *   across the application.
+ *
+ * DATA FORMAT:
+ *   - Exports DOM elements (inputs, display elements) as `HTMLElement` references.
+ *   - Exports theme constants such as CUSTOM_RGB, PRESET_SWATCHES, and vectors.
+ */
 
-import { setStatRenderer, setStatFps, setStatFrameMs, setStatPhysMs, setStatBgMs, setStatFgMs, setStatV, setStatE } from './statsState.js';
+"use strict";
+
+import { statsState } from './statsState.js';
 
 const THEME = null;
 export const select = document.getElementById('obj-select');
@@ -27,15 +45,16 @@ export const customBlueValue = document.getElementById('custom-blue-value');
 export const customHex = document.getElementById('custom-hex');
 export const customSwatch = document.getElementById('custom-swatch');
 
-// register telemetry stat elements
-setStatRenderer(document.getElementById('stat-renderer'));
-setStatFps(document.getElementById('stat-fps'));
-setStatFrameMs(document.getElementById('stat-frame-ms'));
-setStatPhysMs(document.getElementById('stat-phys-ms'));
-setStatBgMs(document.getElementById('stat-bg-ms'));
-setStatFgMs(document.getElementById('stat-fg-ms'));
-setStatV(document.getElementById('stat-v'));
-setStatE(document.getElementById('stat-e'));
+
+// Assign stat DOM elements directly to statsState object
+statsState.statRenderer = document.getElementById('stat-renderer');
+statsState.statFps = document.getElementById('stat-fps');
+statsState.statFrameMs = document.getElementById('stat-frame-ms');
+statsState.statPhysMs = document.getElementById('stat-phys-ms');
+statsState.statBgMs = document.getElementById('stat-bg-ms');
+statsState.statFgMs = document.getElementById('stat-fg-ms');
+statsState.statV = document.getElementById('stat-v');
+statsState.statE = document.getElementById('stat-e');
 
 
 // Local stat DOM element references

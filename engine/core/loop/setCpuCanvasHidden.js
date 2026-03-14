@@ -18,6 +18,8 @@
  *   - It prevents any interaction with the hidden canvas
  */
 
+"use strict";
+
 /**
  * setCpuCanvasHidden - Shows or hides the CPU canvas
  * 

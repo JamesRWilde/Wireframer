@@ -20,6 +20,8 @@
  *   This rotates points in the XY plane while leaving Z unchanged.
  */
 
+"use strict";
+
 /**
  * mrz - Creates a 3x3 rotation matrix for Z-axis rotation
  * 

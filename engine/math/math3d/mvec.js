@@ -16,6 +16,8 @@
  *   This is equivalent to: result = M * p
  */
 
+"use strict";
+
 /**
  * mvec - Multiplies a 3x3 matrix by a 3D vector
  * 

@@ -15,6 +15,8 @@
  *   internal state directly. This is safer and more maintainable.
  */
 
+"use strict";
+
 // Import morph state to update active flag
 import { morphState } from '../morphState.js';
 

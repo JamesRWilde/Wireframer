@@ -10,6 +10,8 @@
  *   Used for UI theme color definitions.
  */
 
+"use strict";
+
 /**
  * toRgbaCss - Creates CSS rgba() string
  * 

@@ -20,6 +20,8 @@
  *   This allows background particles to show through transparent foreground areas.
  */
 
+"use strict";
+
 // Import background state to wire up the background canvas reference
 // This coupling is necessary because the background renderer needs direct canvas access
 import { bgState } from '../render/background/backgroundState.js';

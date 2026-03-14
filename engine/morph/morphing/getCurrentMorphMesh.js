@@ -15,6 +15,8 @@
  *   getting the current mesh without exposing internal state details.
  */
 
+"use strict";
+
 // Import morph state to check if morph is active
 import { morphState } from '../morphState.js';
 

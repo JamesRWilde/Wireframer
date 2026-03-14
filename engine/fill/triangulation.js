@@ -25,6 +25,8 @@
  *   - Robust with proper floating-point tolerance
  */
 
+"use strict";
+
 // Import helper functions for the ear clipping algorithm
 import { signedArea2 } from './signedArea2.js';
 import { isConvex } from './isConvex.js';

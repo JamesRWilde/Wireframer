@@ -16,7 +16,7 @@
  *   (positive) or reflex (negative), relative to the polygon's winding order.
  */
 
-'use strict';
+"use strict";
 
 /**
  * isConvex - Checks if a vertex forms a convex angle in a polygon

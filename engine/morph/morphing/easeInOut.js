@@ -19,6 +19,8 @@
  *   to slow, providing natural-looking motion.
  */
 
+"use strict";
+
 /**
  * easeInOut - Applies ease-in-out easing to a linear progress value
  * 

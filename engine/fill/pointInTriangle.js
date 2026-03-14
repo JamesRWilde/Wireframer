@@ -16,7 +16,7 @@
  *   the point is inside the triangle.
  */
 
-'use strict';
+"use strict";
 
 /**
  * pointInTriangle - Tests if a point lies inside a triangle

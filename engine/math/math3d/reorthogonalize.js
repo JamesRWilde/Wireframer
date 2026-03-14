@@ -22,6 +22,8 @@
  *   and perpendicular to each other).
  */
 
+"use strict";
+
 /**
  * reorthogonalize - Restores a rotation matrix to orthonormal form
  * 

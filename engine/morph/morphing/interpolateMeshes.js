@@ -17,6 +17,8 @@
  *   4. Copy face/edge structure from target mesh
  */
 
+"use strict";
+
 /**
  * interpolateMeshes - Interpolates between two meshes
  * 

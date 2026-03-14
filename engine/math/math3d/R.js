@@ -18,6 +18,8 @@
  *   stale references after reassignment.
  */
 
+"use strict";
+
 /**
  * R - Global rotation matrix reference
  * 

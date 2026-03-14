@@ -16,6 +16,8 @@
  *   Batching reduces draw calls from O(edges) to O(1).
  */
 
+"use strict";
+
 /**
  * drawWireframeEdges - Draws wireframe edges on canvas using batched Path2D
  * 

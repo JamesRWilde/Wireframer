@@ -16,6 +16,8 @@
  *   maintainable and makes it easy to add new sliders in the future.
  */
 
+"use strict";
+
 // Import the function that reads slider values and updates global render parameters
 // This syncs FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM to globals
 import { syncRenderToggles } from '../../../ui/controls/syncRenderToggles.js';

@@ -20,6 +20,8 @@
  *   npx serve . -l 5500
  */
 
+"use strict";
+
 // Express.js - lightweight web framework for serving static files
 const express = require('express');
 

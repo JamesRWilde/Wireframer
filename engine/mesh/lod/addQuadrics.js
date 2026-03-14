@@ -17,6 +17,8 @@
  *   summing the error contributions from multiple faces.
  */
 
+"use strict";
+
 /**
  * addQuadrics - Adds two quadric error metrics
  * 

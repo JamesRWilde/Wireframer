@@ -17,6 +17,8 @@
  *   the edge count and causing rendering issues.
  */
 
+"use strict";
+
 /**
  * collectEdges - Extracts unique edges from adjacency graph
  * 

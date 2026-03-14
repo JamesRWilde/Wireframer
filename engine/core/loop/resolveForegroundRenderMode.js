@@ -18,6 +18,8 @@
  *   4. Cache the result and update the HUD display
  */
 
+"use strict";
+
 // Import loop state to read/write the cached render mode
 import { state } from './loopState.js';
 

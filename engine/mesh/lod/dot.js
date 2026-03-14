@@ -20,6 +20,8 @@
  *   - a · a = |a|² (squared magnitude)
  */
 
+"use strict";
+
 /**
  * dot - Computes the dot product of two 3D vectors
  * 

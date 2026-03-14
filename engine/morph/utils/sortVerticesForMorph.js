@@ -17,6 +17,8 @@
  *   3. Return sorted array
  */
 
+"use strict";
+
 // Import the vertex comparison function for sorting
 import { compareMorphVertices } from './compareMorphVertices.js';
 

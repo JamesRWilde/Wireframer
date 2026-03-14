@@ -17,6 +17,8 @@
  *   and reusing the canvas, we eliminate this overhead entirely.
  */
 
+"use strict";
+
 /**
  * getOrCreateBackWireLayer - Returns or creates the offscreen back wireframe canvas
  * 

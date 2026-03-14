@@ -16,6 +16,8 @@
  *   custom properties (variables) that cascade throughout the UI.
  */
 
+"use strict";
+
 // Import the function to create clickable preset color swatches in the UI
 // These provide quick access to curated color combinations
 import { initPresetSwatches } from '../../../ui/theme/initPresetSwatches.js';

@@ -21,6 +21,8 @@
  *   for the desired level of detail.
  */
 
+"use strict";
+
 /**
  * computeClusterParams - Computes spatial grid parameters for clustering
  * 

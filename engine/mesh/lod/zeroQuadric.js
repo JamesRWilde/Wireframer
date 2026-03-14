@@ -16,6 +16,8 @@
  *   without any unwanted initial bias.
  */
 
+"use strict";
+
 /**
  * zeroQuadric - Creates a zero quadric error metric
  * 

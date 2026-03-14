@@ -14,6 +14,8 @@
  *   - 100-220% slider: 2.8-5.68x velocity (linear with different slope)
  */
 
+"use strict";
+
 /**
  * mapVelocitySliderScale - Maps slider percentage to velocity scale
  * 

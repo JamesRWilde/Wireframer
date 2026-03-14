@@ -18,9 +18,11 @@
  *   the MODEL is updated but UI stats or telemetry aren't synchronized.
  */
 
+"use strict";
+
 // Import stat display helpers to update vertex/edge counts in the HUD
 // These return DOM element references that are cached in statsState.js
-import { getStatV, getStatE } from '../../ui/statsState.js';
+import { statsState } from '../../ui/statsState.js';
 
 // Import render mode resolver to update GPU/CPU indicator when model changes
 // The render mode may need to be re-evaluated based on the new model's complexity
@@ -72,8 +74,8 @@ export function setActiveModel(model, name = '') {
   // These stats help users understand model complexity and LOD effects
   // We use optional chaining (?.) because the model might be null
   // The nullish coalescing operator (??) provides '--' as fallback text
-  const statV = getStatV();
-  const statE = getStatE();
+  const statV = statsState.statV;
+  const statE = statsState.statE;
   if (statV) statV.textContent = model?.V?.length ?? '--';
   if (statE) statE.textContent = model?.E?.length ?? '--';
 

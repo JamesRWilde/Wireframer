@@ -30,7 +30,8 @@
  */
 export function getModelShadingMode(model, triFaces) {
   // Get explicit mode or default to 'auto'
-  const mode = (model && model._shadingMode) || 'auto';
+  // Use optional chaining for conciseness per SonarQube S6582
+  const mode = model?.__shadingMode || 'auto';
   
   // Return explicit mode if set
   if (mode === 'flat' || mode === 'smooth') return mode;

@@ -18,7 +18,7 @@
  *   The build function returns the engine's internal mesh format with V, F, E arrays.
  */
 
-'use strict';
+"use strict";
 
 /**
  * Initializes the object registry as an IIFE to avoid polluting global scope.

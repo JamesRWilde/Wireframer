@@ -16,6 +16,8 @@
  *   a user notification, logging analytics, or attempting alternative GPU paths).
  */
 
+"use strict";
+
 // Import loop state to update the cached render mode
 import { state } from './loopState.js';
 

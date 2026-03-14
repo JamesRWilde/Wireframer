@@ -23,6 +23,8 @@
  *   preserves the mesh's overall shape while reducing complexity.
  */
 
+"use strict";
+
 /**
  * clusterVertices - Merges vertices within spatial cells
  * 

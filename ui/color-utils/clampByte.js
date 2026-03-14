@@ -10,6 +10,8 @@
  *   Provides consistent byte clamping across color utilities.
  */
 
+"use strict";
+
 /**
  * clampByte - Clamps a value to valid byte range [0, 255]
  * 

@@ -9,11 +9,17 @@
  *   Called by buildCustomTheme to ensure UI text meets WCAG contrast standards.
  *   Iteratively adjusts colors toward white or black until contrast is met.
  * 
+ * DATA FORMAT:
+ *   - fg/bg: [r, g, b] arrays (0-255)
+ *   - minRatio: contrast ratio (e.g., 4.5 for WCAG AA)
+ * 
  * ALGORITHM:
  *   1. Check if current contrast meets minimum
  *   2. If not, try mixing toward white and black
  *   3. Return first color that meets minimum, or best found
  */
+
+"use strict";
 
 import { contrastRatio } from '../color-utils/contrastRatio.js';
 import { mixRgb } from '../color-utils/mixRgb.js';

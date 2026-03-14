@@ -16,6 +16,8 @@
  *   - obj: Relative path to OBJ file in meshes/ directory
  */
 
+"use strict";
+
 /**
  * OBJECTS - Array of available mesh objects
  * 

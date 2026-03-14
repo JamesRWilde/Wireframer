@@ -16,6 +16,8 @@
  *   fallback without requiring callers to check multiple globals.
  */
 
+"use strict";
+
 /**
  * getDetailModel - Gets the current LOD model with fallback
  * 

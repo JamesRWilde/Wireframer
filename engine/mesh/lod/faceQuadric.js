@@ -24,6 +24,8 @@
  *   The squared distance from point p to the plane is: p^T * Q * p
  */
 
+"use strict";
+
 // Import vector normalization
 import { normalize } from './normalize.js';
 

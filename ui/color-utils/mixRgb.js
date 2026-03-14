@@ -10,6 +10,8 @@
  *   Used extensively for generating UI colors from base color.
  */
 
+"use strict";
+
 /**
  * mixRgb - Mixes two colors with linear interpolation
  * 

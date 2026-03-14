@@ -21,6 +21,8 @@
  *   rotationally symmetric shapes.
  */
 
+"use strict";
+
 /**
  * compareMorphVertices - Compares two vertices for morph ordering
  * 

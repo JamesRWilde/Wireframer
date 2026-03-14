@@ -17,6 +17,8 @@
  *   - The app automatically selects GPU when available, falls back to CPU
  */
 
+"use strict";
+
 // Import the GPU scene renderer - handles all WebGL operations
 // This includes shader compilation, buffer setup, and draw calls
 import { drawGpuSceneModel } from '../../render/gpu/runtime/drawGpuSceneModel.js';

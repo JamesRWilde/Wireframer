@@ -25,6 +25,8 @@
  *   - emaFgMs: Foreground render time
  */
 
+"use strict";
+
 // Import loop state and smoothing constant
 import { state, TELEMETRY_ALPHA } from './loopState.js';
 

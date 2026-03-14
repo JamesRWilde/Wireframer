@@ -18,7 +18,7 @@
  *   for exact comparison with cross products.
  */
 
-'use strict';
+"use strict";
 
 /**
  * signedArea2 - Computes twice the signed area of a 2D polygon

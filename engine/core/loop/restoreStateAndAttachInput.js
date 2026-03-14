@@ -18,6 +18,8 @@
  *   in startApp without clear benefit.
  */
 
+"use strict";
+
 // Import the input listener attachment function
 // Sets up mouse/touch handlers for model rotation and zoom
 import { attachInputListeners } from '../../physics/input/attachInputListeners.js';

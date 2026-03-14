@@ -1,3 +1,17 @@
+/**
+ * initPresetSwatches.js - Preset Swatch UI Initializer
+ *
+ * PURPOSE:
+ *   Builds the preset color swatch UI and wires click handlers for selecting
+ *   preset colors or generating a random preset.
+ *
+ * ARCHITECTURE ROLE:
+ *   Initializes the preset swatch section of the theme controls during app startup.
+ *   Provides the user with quick access to pre-defined and random custom colors.
+ */
+
+"use strict";
+
 import { presetSwatches, PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, SHUFFLE_SWATCH_NAME } from '../dom-state.js';
 import { toHex } from '../color-utils/toHex.js';
 import { toRgbCss } from '../color-utils/toRgbCss.js';

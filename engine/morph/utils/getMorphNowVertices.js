@@ -17,6 +17,8 @@
  *   4. Interpolate each sampled point between source and target
  */
 
+"use strict";
+
 // Import cubic easing function for smooth animation
 import { easeInOutCubic } from './easeInOutCubic.js';
 
@@ -33,24 +35,24 @@ import { easeInOutCubic } from './easeInOutCubic.js';
  */
 export function getMorphNowVertices(nowMs) {
   // Return empty array if no morph is active
-  if (!window.morph || !window.morph.active) return [];
-  
+  if (!globalThis.morph?.active) return [];
+
   // Calculate raw progress (0-1) from elapsed time
-  const tRaw = Math.max(0, Math.min(1, (nowMs - window.morph.startTime) / window.morph.duration));
-  
+  const tRaw = Math.max(0, Math.min(1, (nowMs - globalThis.morph.startTime) / globalThis.morph.duration));
+
   // Apply cubic easing for smooth animation
   const t = easeInOutCubic(tRaw);
-  
+
   // Create array for interpolated vertices
-  const V = new Array(window.morph.sampleCount);
-  
+  const V = new Array(globalThis.morph.sampleCount);
+
   // Interpolate each sampled point
-  for (let i = 0; i < window.morph.sampleCount; i++) {
-    const a = window.morph.fromPts[i];
-    const b = window.morph.toPts[i];
+  for (let i = 0; i < globalThis.morph.sampleCount; i++) {
+    const a = globalThis.morph.fromPts[i];
+    const b = globalThis.morph.toPts[i];
     // Linear interpolation: a + (b - a) * t
     V[i] = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
   }
-  
+
   return V;
 }

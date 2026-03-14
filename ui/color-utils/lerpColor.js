@@ -10,6 +10,8 @@
  *   theme colors based on lighting intensity.
  */
 
+"use strict";
+
 /**
  * lerpColor - Linearly interpolates between two colors
  * 

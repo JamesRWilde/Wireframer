@@ -17,6 +17,8 @@
  *   4. Otherwise, calls greedyClusterDecimator to reduce faces
  */
 
+"use strict";
+
 // Import the greedy cluster decimation algorithm
 // This groups nearby vertices and merges them to reduce face count
 import { greedyClusterDecimator } from './greedyClusterDecimator.js';

@@ -14,6 +14,8 @@
  *   consistent key regardless of edge direction.
  */
 
+"use strict";
+
 /**
  * buildEdgeToFacesMap - Builds map from edges to their adjacent faces
  * 

@@ -21,6 +21,8 @@
  *   minimizes quadric error, but the midpoint is a good approximation.
  */
 
+"use strict";
+
 /**
  * optimalPosition - Computes optimal position for merged vertex
  * 

@@ -19,7 +19,7 @@
  *   - stopMorph: Stops the current morph animation
  */
 
-'use strict';
+"use strict";
 
 // Import morph API functions
 import { startMorph } from './morphing/startMorph.js';

@@ -17,6 +17,8 @@
  *   4. Subsequent frames call advanceMorphFrame to interpolate
  */
 
+"use strict";
+
 // Import morph state for updating animation parameters
 import { morphState } from '../morphState.js';
 

@@ -17,6 +17,8 @@
  *   process, causing visual artifacts and data loss.
  */
 
+"use strict";
+
 /**
  * cloneMesh - Creates a deep copy of a mesh object
  * 

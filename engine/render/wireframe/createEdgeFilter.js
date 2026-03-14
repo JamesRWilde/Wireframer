@@ -15,6 +15,8 @@
  *   - 'back': Draw back-facing and silhouette edges
  */
 
+"use strict";
+
 /**
  * createEdgeFilter - Creates edge filter function for selective rendering
  * 

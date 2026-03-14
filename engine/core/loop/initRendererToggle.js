@@ -17,8 +17,10 @@
  *   - Clicking toggles between 'gpu' and 'cpu' modes via toggleRendererMode
  */
 
+"use strict";
+
 // Import the DOM element reference for the renderer stat display
-import { getStatRenderer } from '../../../ui/statsState.js';
+import { statsState } from '../../../ui/statsState.js';
 
 // Import the toggle function
 import { toggleRendererMode } from './toggleRendererMode.js';
@@ -40,7 +42,7 @@ import { getSceneGpuRenderer } from '../../render/gpu/runtime/getSceneGpuRendere
  */
 export function initRendererToggle() {
   // Get the renderer stat DOM element
-  const statRenderer = getStatRenderer();
+  const statRenderer = statsState.statRenderer;
   
   // Guard: if element doesn't exist, nothing to initialize
   if (!statRenderer) return;

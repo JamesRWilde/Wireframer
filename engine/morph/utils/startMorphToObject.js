@@ -19,6 +19,8 @@
  *   5. Update HUD to show morphing status
  */
 
+"use strict";
+
 // Import model accessor with LOD fallback
 import { getDetailModel } from './getDetailModel.js';
 

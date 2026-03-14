@@ -1,3 +1,17 @@
+/**
+ * updateCustomColorUi.js - Custom Color UI Updater
+ *
+ * PURPOSE:
+ *   Synchronizes the UI inputs and display elements with the current custom color
+ *   selection stored in the application state.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called when custom color values change (either via sliders or preset swatches)
+ *   to ensure the UI reflects the latest RGB values and updates the active swatch.
+ */
+
+"use strict";
+
 import { customRed, customGreen, customBlue, customRedValue, customGreenValue, customBlueValue, customHex, customSwatch, PRESET_SWATCH_BUTTONS, CUSTOM_RGB } from '../dom-state.js';
 import { toHex } from '../color-utils/toHex.js';
 import { toRgbCss } from '../color-utils/toRgbCss.js';

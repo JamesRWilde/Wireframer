@@ -1,3 +1,21 @@
+/**
+ * buildCustomTheme.js - Build Custom Theme Palette
+ *
+ * PURPOSE:
+ *   Generates a theme palette (colors and CSS variables) based on a custom
+ *   base RGB color and the current theme mode (light/dark).
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by theme management code to compute UI colors that respect contrast
+ *   requirements and provide a consistent look across the app.
+ *
+ * DATA FORMAT:
+ *   - rgbInput: [r, g, b] base color values (0-255)
+ *   - Returns an object containing named colors and uiVars (CSS variables)
+ */
+
+"use strict";
+
 import { clampByte } from '../color-utils/clampByte.js';
 import { mixRgb } from '../color-utils/mixRgb.js';
 import { toRgbCss } from '../color-utils/toRgbCss.js';

@@ -17,8 +17,10 @@
  *   3. Check frame budget and adjust quality
  *   4. Render scene (background + foreground)
  *   5. Collect and update telemetry
- *   6. Update telemetry HUD display
+ *   6. Update the telemetry HUD display
  */
+
+"use strict";
 
 // Import loop state for frame tracking and timing
 import { state } from './loopState.js';

@@ -1,81 +1,49 @@
 /**
- * statsState.js - Telemetry DOM Element Registry
- * 
+ * statsState.js - Telemetry DOM Element Registry (Object Reference Version)
+ *
  * PURPOSE:
- *   Manages references to DOM elements used for displaying performance
- *   statistics and telemetry data in the UI.
- * 
+ *   Exports a single object holding references to DOM elements used for displaying
+ *   performance statistics and telemetry data in the UI. No getter/setter abstractions.
+ *
  * ARCHITECTURE ROLE:
- *   Provides getter/setter functions for stat display elements.
- *   Used by updateTelemetryHud to update displayed statistics.
- * 
- * STAT ELEMENTS:
- *   - Renderer: Current rendering mode (GPU/CPU)
- *   - FPS: Frames per second
- *   - FrameMs: Total frame time in milliseconds
- *   - PhysMs: Physics update time in milliseconds
- *   - BgMs: Background render time in milliseconds
- *   - FgMs: Foreground render time in milliseconds
- *   - V: Vertex count
- *   - E: Edge count
+ *   Allows direct assignment and access to stat display elements from any module
+ *   via a single shared object. Used by updateTelemetryHud and stat-setter modules.
+ *
+ * USAGE:
+ *   import { statsState } from './statsState.js';
+ *   statsState.statRenderer = document.getElementById('stat-renderer');
+ *   statsState.statFps.textContent = '60';
+ *
+ * NOTE:
+ *   All legacy getter/setter functions and named exports have been removed.
+ *   Use the statsState object directly for all stat DOM element references.
  */
 
-/** @type {HTMLElement|null} Renderer mode display element */
-let _statRenderer = null;
+"use strict";
 
-/** @type {HTMLElement|null} FPS display element */
-let _statFps = null;
+/**
+ * @typedef {Object} StatsState
+ * @property {HTMLElement|null} statRenderer - Renderer mode display element
+ * @property {HTMLElement|null} statFps - FPS display element
+ * @property {HTMLElement|null} statFrameMs - Frame time display element
+ * @property {HTMLElement|null} statPhysMs - Physics time display element
+ * @property {HTMLElement|null} statBgMs - Background render time display element
+ * @property {HTMLElement|null} statFgMs - Foreground render time display element
+ * @property {HTMLElement|null} statV - Vertex count display element
+ * @property {HTMLElement|null} statE - Edge count display element
+ */
 
-/** @type {HTMLElement|null} Frame time display element */
-let _statFrameMs = null;
-
-/** @type {HTMLElement|null} Physics time display element */
-let _statPhysMs = null;
-
-/** @type {HTMLElement|null} Background render time display element */
-let _statBgMs = null;
-
-/** @type {HTMLElement|null} Foreground render time display element */
-let _statFgMs = null;
-
-/** @type {HTMLElement|null} Vertex count display element */
-let _statV = null;
-
-/** @type {HTMLElement|null} Edge count display element */
-let _statE = null;
-
-// Setter functions for stat DOM elements
-/** @param {HTMLElement} el - Renderer stat element */
-export function setStatRenderer(el) { _statRenderer = el; }
-/** @param {HTMLElement} el - FPS stat element */
-export function setStatFps(el) { _statFps = el; }
-/** @param {HTMLElement} el - Frame time stat element */
-export function setStatFrameMs(el) { _statFrameMs = el; }
-/** @param {HTMLElement} el - Physics time stat element */
-export function setStatPhysMs(el) { _statPhysMs = el; }
-/** @param {HTMLElement} el - Background time stat element */
-export function setStatBgMs(el) { _statBgMs = el; }
-/** @param {HTMLElement} el - Foreground time stat element */
-export function setStatFgMs(el) { _statFgMs = el; }
-/** @param {HTMLElement} el - Vertex count stat element */
-export function setStatV(el) { _statV = el; }
-/** @param {HTMLElement} el - Edge count stat element */
-export function setStatE(el) { _statE = el; }
-
-// Getter functions for stat DOM elements
-/** @returns {HTMLElement|null} Renderer stat element */
-export function getStatRenderer() { return _statRenderer; }
-/** @returns {HTMLElement|null} FPS stat element */
-export function getStatFps() { return _statFps; }
-/** @returns {HTMLElement|null} Frame time stat element */
-export function getStatFrameMs() { return _statFrameMs; }
-/** @returns {HTMLElement|null} Physics time stat element */
-export function getStatPhysMs() { return _statPhysMs; }
-/** @returns {HTMLElement|null} Background time stat element */
-export function getStatBgMs() { return _statBgMs; }
-/** @returns {HTMLElement|null} Foreground time stat element */
-export function getStatFgMs() { return _statFgMs; }
-/** @returns {HTMLElement|null} Vertex count stat element */
-export function getStatV() { return _statV; }
-/** @returns {HTMLElement|null} Edge count stat element */
-export function getStatE() { return _statE; }
+/**
+ * Shared stats state object for all stat DOM element references.
+ * @type {StatsState}
+ */
+export const statsState = {
+	statRenderer: null,
+	statFps: null,
+	statFrameMs: null,
+	statPhysMs: null,
+	statBgMs: null,
+	statFgMs: null,
+	statV: null,
+	statE: null
+};

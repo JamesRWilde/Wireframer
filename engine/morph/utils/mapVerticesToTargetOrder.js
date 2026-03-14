@@ -23,6 +23,14 @@
  *   small sphere can morph into a large cube meaningfully.
  */
 
+"use strict";
+
+import { randomSample } from './randomSample.js';
+import { getBounds } from './getBounds.js';
+import { normalizePoint } from './normalizePoint.js';
+import { findNearestIndex } from './findNearestIndex.js';
+
+
 /**
  * mapVerticesToTargetOrder - Maps source vertices to target vertex order
  * 
@@ -44,68 +52,9 @@ export function mapVerticesToTargetOrder(sourceVertices, targetVertices) {
   const MAX_MORPH_POINTS = 300;
   const sampleCount = Math.min(MAX_MORPH_POINTS, nSource, nTarget);
 
-  /**
-   * randomSample - Randomly samples elements from an array
-   * @param {Array} arr - Source array
-   * @param {number} count - Number of samples
-   * @returns {Array} Random sample of elements
-   */
-  function randomSample(arr, count) {
-    const n = arr.length;
-    if (count >= n) return arr.slice();
-    const result = [];
-    const used = new Set();
-    while (result.length < count) {
-      const idx = Math.floor(Math.random() * n);
-      if (!used.has(idx)) {
-        used.add(idx);
-        result.push(arr[idx]);
-      }
-    }
-    return result;
-  }
-
   // Sample random subsets from both meshes
   const sourceSample = randomSample(sourceVertices, sampleCount);
   const targetSample = randomSample(targetVertices, sampleCount);
-
-  /**
-   * getBounds - Computes bounding box of vertices
-   * @param {Array<Array<number>>} vertices - Vertex positions
-   * @returns {Object} Bounding box with min/max and scale factors
-   */
-  function getBounds(vertices) {
-    let minX = Infinity, minY = Infinity, minZ = Infinity;
-    let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
-    for (const [x, y, z] of vertices) {
-      if (x < minX) minX = x;
-      if (y < minY) minY = y;
-      if (z < minZ) minZ = z;
-      if (x > maxX) maxX = x;
-      if (y > maxY) maxY = y;
-      if (z > maxZ) maxZ = z;
-    }
-    return {
-      minX, minY, minZ,
-      sx: Math.max(1e-6, maxX - minX),  // Scale factor X (avoid division by zero)
-      sy: Math.max(1e-6, maxY - minY),  // Scale factor Y
-      sz: Math.max(1e-6, maxZ - minZ),  // Scale factor Z
-    };
-  }
-
-  /**
-   * normalizePoint - Normalizes a point to unit cube
-   * @param {Array<number>} v - Point [x, y, z]
-   * @param {Object} b - Bounding box
-   * @returns {Array<number>} Normalized point [0-1, 0-1, 0-1]
-   */
-  function normalizePoint(v, b) {
-    return [
-      (v[0] - b.minX) / b.sx,
-      (v[1] - b.minY) / b.sy,
-      (v[2] - b.minZ) / b.sz,
-    ];
-  }
 
   // Compute bounding boxes and normalize samples
   const sourceBounds = getBounds(sourceSample);
@@ -117,28 +66,8 @@ export function mapVerticesToTargetOrder(sourceVertices, targetVertices) {
   // For each target point, find the closest unused source point
   const used = new Array(sourceNorm.length).fill(false);
   const mapped = new Array(targetNorm.length);
-  
   for (let j = 0; j < targetNorm.length; j++) {
-    let bestIdx = 0;
-    let bestDist = Infinity;
-    
-    // Find nearest unused source point
-    for (let i = 0; i < sourceNorm.length; i++) {
-      if (used[i]) continue;
-      
-      // Compute squared distance (avoid sqrt for performance)
-      const dx = sourceNorm[i][0] - targetNorm[j][0];
-      const dy = sourceNorm[i][1] - targetNorm[j][1];
-      const dz = sourceNorm[i][2] - targetNorm[j][2];
-      const d2 = dx * dx + dy * dy + dz * dz;
-      
-      if (d2 < bestDist) {
-        bestDist = d2;
-        bestIdx = i;
-      }
-    }
-    
-    // Mark source point as used and store mapping
+    const bestIdx = findNearestIndex(sourceNorm, targetNorm[j], used);
     used[bestIdx] = true;
     mapped[j] = [sourceSample[bestIdx][0], sourceSample[bestIdx][1], sourceSample[bestIdx][2]];
   }
@@ -146,24 +75,8 @@ export function mapVerticesToTargetOrder(sourceVertices, targetVertices) {
   // Map all target vertices to their nearest matched source point
   const mappedFull = new Array(nTarget);
   for (let j = 0; j < nTarget; j++) {
-    let bestIdx = 0;
-    let bestDist = Infinity;
-    
-    // Find nearest mapped source point
-    for (let i = 0; i < mapped.length; i++) {
-      const dx = mapped[i][0] - targetVertices[j][0];
-      const dy = mapped[i][1] - targetVertices[j][1];
-      const dz = mapped[i][2] - targetVertices[j][2];
-      const d2 = dx * dx + dy * dy + dz * dz;
-      
-      if (d2 < bestDist) {
-        bestDist = d2;
-        bestIdx = i;
-      }
-    }
-    
+    const bestIdx = findNearestIndex(mapped, targetVertices[j]);
     mappedFull[j] = mapped[bestIdx];
   }
-  
   return mappedFull;
 }

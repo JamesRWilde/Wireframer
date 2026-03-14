@@ -10,6 +10,8 @@
  *   Provides reference point for determining normal direction.
  */
 
+"use strict";
+
 /**
  * computeMeshCenter - Computes centroid of mesh vertices
  * 

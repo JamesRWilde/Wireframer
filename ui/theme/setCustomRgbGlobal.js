@@ -8,7 +8,12 @@
  * ARCHITECTURE ROLE:
  *   Called during initialization to sync global and module state.
  *   Provides backwards compatibility for code using globalThis.CUSTOM_RGB.
+ * 
+ * DATA FORMAT:
+ *   - val: Array [r, g, b] with 0-255 values.
  */
+
+"use strict";
 
 /**
  * setCustomRgbGlobal - Sets globalThis.CUSTOM_RGB

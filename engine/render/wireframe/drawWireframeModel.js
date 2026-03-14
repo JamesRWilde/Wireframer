@@ -1,3 +1,21 @@
+/**
+ * drawWireframeModel.js - Wireframe Edge Rendering
+ *
+ * PURPOSE:
+ *   Renders the model's wireframe edges on a canvas using 2D drawing APIs.
+ *   Used for the wireframe overlay in the CPU rendering path.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called by the CPU renderer and other debug rendering paths. It computes
+ *   view-space projection for vertices, classifies edges (front/back), and
+ *   draws edges with appropriate styling and alpha blending.
+ *
+ * DATA FORMAT:
+ *   - model: { V: Array<[x,y,z]>, E: Array<[i,j]>, F: Array<[i,j,k]> }
+ *   - frameData: { T: Array<[x,y,z]> (transformed vertices), P2: Array<[x,y]> (projected 2D points) }
+ *   - Edge classification: Map<string, 'front'|'back'|'both'>
+ */
+
 "use strict";
 
 import { getModelFrameData } from '../camera/projection/getModelFrameData.js';

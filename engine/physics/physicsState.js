@@ -24,6 +24,8 @@
  *   simplifies the codebase.
  */
 
+"use strict";
+
 // Initialize PHYSICS_STATE if it doesn't already exist
 // This guard allows the module to be imported multiple times safely
 if (!globalThis.PHYSICS_STATE) {

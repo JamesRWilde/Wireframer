@@ -31,7 +31,7 @@
 export function sortTriangles(triFaces, T) {
   // Reuse cached array to avoid allocating objects every frame
   let triOrder = triFaces._triOrderCache;
-  if (!triOrder || triOrder.length !== triFaces.length) {
+  if (triOrder?.length !== triFaces.length) {
     // Allocate new cache if size changed
     triOrder = new Array(triFaces.length);
     for (let i = 0; i < triFaces.length; i++) {

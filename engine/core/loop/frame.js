@@ -20,6 +20,8 @@
  *   5. Browser calls frame() again ~16ms later
  */
 
+"use strict";
+
 // Import the runFrame function that performs the actual per-frame work
 // This includes physics updates, rendering, and telemetry updates
 import { runFrame } from './runFrame.js';

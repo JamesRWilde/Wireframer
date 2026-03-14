@@ -19,6 +19,8 @@
  *   This rotates points in the YZ plane while leaving X unchanged.
  */
 
+"use strict";
+
 /**
  * mrx - Creates a 3x3 rotation matrix for X-axis rotation
  * 

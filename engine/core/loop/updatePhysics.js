@@ -18,6 +18,8 @@
  *   - Rotation matrix is periodically re-orthogonalized to prevent numerical drift
  */
 
+"use strict";
+
 // Import the function that applies Euler angle increments to the rotation matrix
 // This updates the rotation matrix in-place based on angular velocities
 import { applyEulerIncrementInPlace } from '../../math/math3d/applyEulerIncrementInPlace.js';

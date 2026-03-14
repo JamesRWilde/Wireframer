@@ -17,6 +17,8 @@
  *   - Ctrl+wheel: Browser zoom (passthrough)
  */
 
+"use strict";
+
 // Import the mouse/touch move handler
 import { onMove } from './onMove.js';
 

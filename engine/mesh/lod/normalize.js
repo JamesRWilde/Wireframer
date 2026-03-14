@@ -17,6 +17,8 @@
  *   The result has the same direction as v but magnitude 1.
  */
 
+"use strict";
+
 /**
  * normalize - Normalizes a 3D vector to unit length
  * 
@@ -28,7 +30,7 @@
 export function normalize(v) {
   // Compute vector magnitude
   // Use || 1 fallback to avoid division by zero for zero vectors
-  const len = Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]) || 1;
+  const len = Math.hypot(v[0], v[1], v[2]) || 1;
   
   // Divide each component by magnitude to get unit vector
   return [v[0]/len, v[1]/len, v[2]/len];

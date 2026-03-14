@@ -10,6 +10,8 @@
  *   Provides consistent rgba string formatting.
  */
 
+"use strict";
+
 /**
  * rgbA - Creates CSS rgba() string from RGB and alpha
  * 

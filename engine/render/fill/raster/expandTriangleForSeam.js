@@ -1,18 +1,21 @@
+
 /**
  * expandTriangleForSeam.js - Triangle Seam Expansion
- * 
+ *
  * PURPOSE:
  *   Expands triangle vertices outward from centroid to prevent visible seams
  *   between adjacent triangles in smooth-shaded meshes.
- * 
+ *
  * ARCHITECTURE ROLE:
  *   Called by fill renderer before rasterizing triangles.
  *   Eliminates thin gaps that can appear between triangles due to rounding.
- * 
+ *
  * WHY EXPANSION IS NEEDED:
  *   When triangles share edges, sub-pixel rounding can leave tiny gaps.
  *   Expanding each triangle slightly ensures edges overlap, eliminating gaps.
  */
+
+import { expandPointFromCentroid } from './expandPointFromCentroid.js';
 
 /**
  * expandTriangleForSeam - Expands triangle vertices outward from centroid
@@ -37,7 +40,7 @@ export function expandTriangleForSeam(tri2d, seamExpandPx) {
   const cy = tri2d[2][1];
 
   // Return original vertices if expansion is disabled
-  if (!(seamExpandPx > 0)) {
+  if (seamExpandPx <= 0) {
     return [[ax, ay], [bx, by], [cx, cy]];
   }
 
@@ -45,27 +48,10 @@ export function expandTriangleForSeam(tri2d, seamExpandPx) {
   const mx = (ax + bx + cx) / 3;
   const my = (ay + by + cy) / 3;
 
-  /**
-   * expandPoint - Moves a point outward from centroid
-   * @param {number} px - Point X coordinate
-   * @param {number} py - Point Y coordinate
-   * @returns {Array<number>} Expanded point [x, y]
-   */
-  function expandPoint(px, py) {
-    // Vector from centroid to point
-    let dx = px - mx;
-    let dy = py - my;
-    const dl = Math.hypot(dx, dy);
-    
-    // Return original if point is at centroid (avoid division by zero)
-    if (dl <= 1e-6) return [px, py];
-    
-    // Normalize direction and apply expansion
-    dx /= dl;
-    dy /= dl;
-    return [px + dx * seamExpandPx, py + dy * seamExpandPx];
-  }
-
-  // Expand all three vertices
-  return [expandPoint(ax, ay), expandPoint(bx, by), expandPoint(cx, cy)];
+  // Expand all three vertices using helper
+  return [
+    expandPointFromCentroid(ax, ay, mx, my, seamExpandPx),
+    expandPointFromCentroid(bx, by, mx, my, seamExpandPx),
+    expandPointFromCentroid(cx, cy, mx, my, seamExpandPx)
+  ];
 }

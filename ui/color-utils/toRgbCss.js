@@ -10,6 +10,8 @@
  *   CSS color values for UI elements.
  */
 
+"use strict";
+
 /**
  * toRgbCss - Creates CSS rgb() string
  * 

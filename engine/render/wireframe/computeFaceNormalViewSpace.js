@@ -14,6 +14,8 @@
  *   This ensures normals always point outward from the mesh.
  */
 
+"use strict";
+
 /**
  * computeFaceNormalViewSpace - Computes outward-facing normal for a triangle
  * 

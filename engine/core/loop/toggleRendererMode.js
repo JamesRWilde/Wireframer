@@ -18,6 +18,8 @@
  *   - Clears the CPU canvas when switching to GPU to prevent stale content
  */
 
+"use strict";
+
 // Import loop state to read/write the cached render mode
 import { state } from './loopState.js';
 

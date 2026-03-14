@@ -16,6 +16,8 @@
  *   directly throughout the codebase.
  */
 
+"use strict";
+
 // Import morph state to check active flag
 import { morphState } from '../morphState.js';
 

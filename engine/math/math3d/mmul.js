@@ -16,6 +16,8 @@
  *   Where m[row][col] = array[row * 3 + col]
  */
 
+"use strict";
+
 /**
  * mmul - Multiplies two 3x3 matrices
  * 

@@ -24,6 +24,8 @@
  *   9. Return deep copy to prevent cache pollution
  */
 
+"use strict";
+
 // Import mesh deep copy utility
 import { deepCopyMesh } from './deepCopyMesh.js';
 

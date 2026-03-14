@@ -14,6 +14,8 @@
  *   Luminance calculations require linear (non-gamma) values.
  */
 
+"use strict";
+
 /**
  * linearChannel - Converts sRGB channel to linear RGB
  * 

@@ -18,7 +18,7 @@
  */
 
 import { state } from '../../../core/loop/loopState.js';
-import { sendToWorker, getCachedResult, isWorkerAvailable } from './vertexTransformBridge.js';
+import { sendToWorker, getCachedResult } from './vertexTransformBridge.js';
 
 /**
  * convertFlatToNested - Converts flat Float32Array to nested array format

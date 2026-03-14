@@ -18,6 +18,8 @@
  *   imports (one import instead of many).
  */
 
+"use strict";
+
 /**
  * state - Shared mutable state for the main render loop
  * 

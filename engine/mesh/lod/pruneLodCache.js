@@ -21,6 +21,8 @@
  *   while older entries are less likely to be reused.
  */
 
+"use strict";
+
 /**
  * pruneLodCache - Removes oldest cache entry if cache exceeds max size
  * 

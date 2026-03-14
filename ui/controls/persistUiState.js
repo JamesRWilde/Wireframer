@@ -1,3 +1,19 @@
+/**
+ * persistUiState.js - Persist UI Control State
+ *
+ * PURPOSE:
+ *   Saves the current state of UI controls (sliders, theme mode, selected shape)
+ *   into localStorage so it can be restored on next load.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called whenever UI controls change to keep the user's preferences persistent.
+ *
+ * DATA FORMAT:
+ *   - Stores a JSON object with keys like selectedShapeName, themeMode, lod, fillOpacity, etc.
+ */
+
+"use strict";
+
 import { OBJECTS } from '../../loader/objectList.js';
 const UI_STATE_KEY = 'wireframer.uiState';
 

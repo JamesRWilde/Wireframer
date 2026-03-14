@@ -16,6 +16,8 @@
  *   duplicate entries.
  */
 
+"use strict";
+
 /**
  * buildAdjacency - Builds vertex adjacency graph from faces
  * 

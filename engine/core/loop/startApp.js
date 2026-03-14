@@ -28,6 +28,8 @@
  *   15. Animation loop start
  */
 
+"use strict";
+
 // Import canvas initialization - sets up all canvas elements and resize handling
 import { initCanvas } from '../initCanvas.js';
 

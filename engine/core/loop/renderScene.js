@@ -18,6 +18,8 @@
  *   4. Canvas state management
  */
 
+"use strict";
+
 // Import the background particle renderer
 // Draws animated ambient particles on the background canvas
 import { drawBackground } from '../../render/background/background/drawBackground.js';

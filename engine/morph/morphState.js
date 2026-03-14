@@ -21,6 +21,8 @@
  *   - onComplete: Callback to invoke when morph completes
  */
 
+"use strict";
+
 /**
  * morphState - Shared mutable state for morphing operations
  * 

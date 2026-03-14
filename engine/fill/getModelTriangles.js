@@ -17,6 +17,8 @@
  *   that don't contain any other vertices) until only triangles remain.
  */
 
+"use strict";
+
 // Import the ear clipping triangulation algorithm
 // This handles n-gon faces by decomposing them into triangles
 import { triangulateFaceEarClipping } from './triangulation.js';

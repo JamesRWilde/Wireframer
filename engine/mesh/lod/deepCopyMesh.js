@@ -18,6 +18,8 @@
  *   the original mesh for future decimation operations.
  */
 
+"use strict";
+
 /**
  * deepCopyMesh - Creates a deep copy of a mesh object
  * 

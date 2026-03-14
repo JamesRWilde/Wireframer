@@ -1,7 +1,24 @@
-import { readUiState } from './readUiState.js';
-import { clampNumber } from './clampNumber.js';
-const UI_STATE_KEY = 'wireframer.uiState';
+/**
+ * restoreUiState.js - Restore UI Control State
+ *
+ * PURPOSE:
+ *   Restores slider/control values from localStorage and applies them to the UI.
+ *   Ensures values are clamped and migrates legacy state formats.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called on app initialization to restore the user's last-known UI configuration.
+ *   Also persists a migrated, cleaned-up state shape back to localStorage.
+ *
+ * DATA FORMAT:
+ *   - Stored state is JSON with keys like lod, fillOpacity, bgDensity, etc.
+ */
 
+"use strict";
+
+import { readUiState } from './readUiState.js';
+import { applyClampedValue } from './applyClampedValue.js';
+import { applyThemeMode } from './applyThemeMode.js';
+import { buildMigratedState } from './buildMigratedState.js';
 import {
   lodSlider,
   fillOpacity,
@@ -9,31 +26,9 @@ import {
   bgDensity,
   bgVelocity,
   bgOpacity,
-  themeMode,
 } from '../dom-state.js';
 
-function applyClampedValue({ state, key, element, min, max, defaultValue }) {
-  if (!(key in state) || !element) return;
-  element.value = String(clampNumber(state[key], min, max, defaultValue));
-}
-
-function applyThemeMode(state) {
-  if (!themeMode || !('themeMode' in state)) return;
-  themeMode.value = state.themeMode === 'light' ? 'light' : 'dark';
-}
-
-function buildMigratedState(state) {
-  return {
-    selectedShapeName: state.selectedShapeName || null,
-    themeMode: state.themeMode || 'dark',
-    lod: 'lod' in state ? state.lod : Number(lodSlider.value),
-    fillOpacity: 'fillOpacity' in state ? state.fillOpacity : Number(fillOpacity.value),
-    wireOpacity: 'wireOpacity' in state ? state.wireOpacity : Number(wireOpacity.value),
-    bgDensity: 'bgDensity' in state ? state.bgDensity : Number(bgDensity.value),
-    bgVelocity: 'bgVelocity' in state ? state.bgVelocity : Number(bgVelocity.value),
-    bgOpacity: 'bgOpacity' in state ? state.bgOpacity : Number(bgOpacity.value),
-  };
-}
+const UI_STATE_KEY = 'wireframer.uiState';
 
 export function restoreUiState() {
   const state = readUiState();

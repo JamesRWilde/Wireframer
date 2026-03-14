@@ -24,6 +24,8 @@
  *   updated to reflect this new connectivity.
  */
 
+"use strict";
+
 /**
  * updateAdjacency - Updates adjacency graph after edge collapse
  * 

@@ -31,7 +31,7 @@
  */
 export function getModelFaceNormals(model, triFaces) {
   // Return cached normals if available and valid
-  if (model._faceNormals && model._faceNormals.length === triFaces.length) return model._faceNormals;
+  if (model._faceNormals?.length === triFaces.length) return model._faceNormals;
 
   const V = model.V;
   const faceNormals = new Array(triFaces.length);
@@ -52,8 +52,8 @@ export function getModelFaceNormals(model, triFaces) {
 
   // Compute normal for each face
   for (let i = 0; i < triFaces.length; i++) {
-    // Handle both raw arrays and objects with indices property
-    const tri = triFaces[i] && triFaces[i].indices ? triFaces[i].indices : triFaces[i];
+    // Handle both raw arrays and objects with indices property using optional chaining
+    const tri = triFaces[i]?.indices ?? triFaces[i];
     const a = V[tri[0]];
     const b = V[tri[1]];
     const c = V[tri[2]];

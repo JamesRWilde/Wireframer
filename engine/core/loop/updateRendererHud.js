@@ -19,8 +19,10 @@
  *   initialization, not by this function.
  */
 
+"use strict";
+
 // Import the DOM element reference for the renderer stat display
-import { getStatRenderer } from '../../../ui/statsState.js';
+import { statsState } from '../../../ui/statsState.js';
 
 /**
  * updateRendererHud - Updates the renderer mode display in the HUD
@@ -34,7 +36,7 @@ import { getStatRenderer } from '../../../ui/statsState.js';
  */
 export function updateRendererHud(mode) {
   // Get the DOM element for the renderer stat display
-  const statRenderer = getStatRenderer();
+  const statRenderer = statsState.statRenderer;
   
   // Guard: if element doesn't exist, nothing to update
   if (!statRenderer) return;

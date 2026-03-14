@@ -15,6 +15,8 @@
  *   these values makes it easy to adjust LOD behavior globally.
  */
 
+"use strict";
+
 /**
  * GLOBAL_MIN_LOD_PERCENT - Global minimum LOD percentage
  * 

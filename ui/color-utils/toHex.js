@@ -10,6 +10,8 @@
  *   color values in hex format.
  */
 
+"use strict";
+
 import { clampByte } from './clampByte.js';
 
 /**

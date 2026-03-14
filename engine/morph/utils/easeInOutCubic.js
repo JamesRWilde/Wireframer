@@ -19,6 +19,8 @@
  *   This creates a more pronounced S-curve than quadratic easing.
  */
 
+"use strict";
+
 /**
  * easeInOutCubic - Applies cubic ease-in-out easing to a linear progress value
  * 

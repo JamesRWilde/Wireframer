@@ -22,6 +22,8 @@
  *   of vertices (O(n²)).
  */
 
+"use strict";
+
 /**
  * assignVerticesToCells - Assigns vertices to a 3D spatial grid
  * 

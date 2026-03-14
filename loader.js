@@ -20,7 +20,7 @@
  *   4. Engine updates MODEL and UI telemetry automatically
  */
 
-'use strict';
+"use strict";
 
 // Import the curated list of available 3D objects
 // Each entry has: { key, name, obj } where obj is the file path

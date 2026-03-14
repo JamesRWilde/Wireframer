@@ -9,11 +9,16 @@
  *   Called when theme changes (color selection, mode toggle).
  *   Updates both global THEME object and CSS custom properties.
  * 
+ * DATA FORMAT:
+ *   - Custom theme palette contains color arrays and CSS variable strings.
+ *
  * THEME APPLICATION:
  *   1. Builds complete palette from base color
  *   2. Sets globalThis.THEME for runtime access
  *   3. Updates CSS variables for UI styling
  */
+
+"use strict";
 
 import { buildCustomTheme } from './buildCustomTheme.js';
 import { CUSTOM_RGB } from '../dom-state.js';

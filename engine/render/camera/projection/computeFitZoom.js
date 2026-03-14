@@ -30,19 +30,17 @@
  * 4. Clamps result to valid zoom range
  */
 export function computeFitZoom(params) {
-  // Validate params and check for browser environment
-  if (!params || !params.zHalf || params.zHalf <= 0 || typeof window === 'undefined') {
-    return 1.0;
+  // Validate params and check for browser environment using optional chaining and globalThis.window
+  // Compare globalThis.window directly with undefined per SonarQube S7741
+  if (!params?.zHalf || params.zHalf <= 0 || globalThis.window === undefined) {
+    return 1;
   }
-  
-  // Get minimum viewport dimension
-  const minDim = Math.min(window.innerWidth, window.innerHeight);
-  
+
   // Calculate fit zoom using derived formula:
   // ZOOM = 0.5 * (zHalf + 3) / zHalf
   // This ensures model fills ~45% of viewport height
   const fitZoom = 0.5 * (params.zHalf + 3) / params.zHalf;
-  
+
   // Clamp to valid zoom range
   return Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, fitZoom));
 }

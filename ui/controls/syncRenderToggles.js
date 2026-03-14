@@ -1,3 +1,20 @@
+/**
+ * syncRenderToggles.js - Render Control Sync
+ *
+ * PURPOSE:
+ *   Syncs UI slider values for rendering options (LOD, opacity, particle density, etc.)
+ *   into global runtime state and updates their displayed percentages.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called whenever the render control sliders change (or during initialization)
+ *   to keep the UI and global rendering configuration in sync.
+ *
+ * DATA FORMAT:
+ *   - Global state values are stored as 0-1 percentages (e.g., 0.75 for 75%).
+ */
+
+"use strict";
+
 import {
   lodSlider, lodValue,
   bgDensity, bgDensityValue,

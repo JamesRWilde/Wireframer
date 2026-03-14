@@ -1,3 +1,19 @@
+/**
+ * randomPresetRgb.js - Random Preset RGB Generator
+ *
+ * PURPOSE:
+ *   Generates a random RGB color that meets contrast and saturation heuristics
+ *   for use as a preset custom color swatch.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by the theme UI when selecting a random preset color. Ensures generated
+ *   colors are bright and varied enough to appear distinct from default themes.
+ *
+ * @returns {number[]} RGB array [r, g, b]
+ */
+
+"use strict";
+
 import { hsvToRgb } from '../color-utils/hsvToRgb.js';
 import { relativeLuminance } from '../color-utils/relativeLuminance.js';
 
@@ -13,8 +29,10 @@ export function randomPresetRgb() {
     const spread = max - min;
     const lum = relativeLuminance(rgb);
 
+    // Accept only colors with enough contrast and saturation.
     if (spread >= 90 && max >= 150 && lum >= 0.17) return rgb;
   }
 
+  // Fallback: return a moderately saturated, bright color.
   return hsvToRgb(Math.random(), 0.82, 0.86);
 }

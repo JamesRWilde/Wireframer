@@ -24,6 +24,8 @@
  *        = a*x² + 2*b*x*y + 2*c*x*z + 2*d*x + e*y² + 2*f*y*z + 2*g*y + h*z² + 2*i*z + j
  */
 
+"use strict";
+
 /**
  * evaluateQuadric - Evaluates quadric error metric at a point
  * 

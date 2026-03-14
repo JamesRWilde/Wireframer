@@ -1,3 +1,21 @@
+/**
+ * readCustomRgb.js - Read Custom RGB from Local Storage
+ *
+ * PURPOSE:
+ *   Reads the saved custom RGB color from localStorage, with validation and fallbacks.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used during initialization to restore the user's saved custom color.
+ *   Ensures values are clamped and defaults are used on corruption.
+ *
+ * DATA FORMAT:
+ *   - Stored in localStorage as JSON array [r,g,b].
+ *
+ * @returns {number[]} RGB array [r, g, b]
+ */
+
+"use strict";
+
 import { CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT } from '../dom-state.js';
 import { clampByte } from '../color-utils/clampByte.js';
 

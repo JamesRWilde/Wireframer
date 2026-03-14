@@ -15,6 +15,8 @@
  *   - Silhouette: edge has both front and back facing adjacent faces
  */
 
+"use strict";
+
 /**
  * determineEdgeClassification - Classifies an edge based on adjacent faces
  * 

@@ -17,6 +17,8 @@
  *   4. If complete, finalize and invoke callback
  */
 
+"use strict";
+
 // Import morph state for reading/updating animation state
 import { morphState } from '../morphState.js';
 

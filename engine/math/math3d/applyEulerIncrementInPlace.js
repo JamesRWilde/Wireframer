@@ -20,6 +20,8 @@
  *   which reduces garbage collection pressure and improves performance.
  */
 
+"use strict";
+
 /**
  * applyEulerIncrementInPlace - Applies Euler angle rotation to a matrix in-place
  * 

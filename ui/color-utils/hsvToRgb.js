@@ -15,6 +15,8 @@
  *   - V: Value/Brightness (0-1, 0=black, 1=full brightness)
  */
 
+"use strict";
+
 /**
  * hsvToRgb - Converts HSV color to RGB
  * 

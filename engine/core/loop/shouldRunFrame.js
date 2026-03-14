@@ -16,6 +16,8 @@
  *   Otherwise, returns the frame interval for FPS calculation.
  */
 
+"use strict";
+
 // Import loop state and frame interval constant
 import { state, MIN_FRAME_INTERVAL_MS } from './loopState.js';
 

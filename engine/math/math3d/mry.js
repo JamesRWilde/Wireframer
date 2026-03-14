@@ -19,6 +19,8 @@
  *   This rotates points in the XZ plane while leaving Y unchanged.
  */
 
+"use strict";
+
 /**
  * mry - Creates a 3x3 rotation matrix for Y-axis rotation
  * 

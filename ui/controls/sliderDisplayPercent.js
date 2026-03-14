@@ -10,6 +10,8 @@
  *   Provides consistent percentage calculation across all slider controls.
  */
 
+"use strict";
+
 /**
  * sliderDisplayPercent - Converts slider value to display percentage
  * 

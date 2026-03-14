@@ -16,6 +16,8 @@
  *   the model's depth and form.
  */
 
+"use strict";
+
 // Import matrix multiplication for combining rotations
 import { mmul } from './mmul.js';
 

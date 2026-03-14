@@ -18,6 +18,8 @@
  *   - It prevents any interaction with the hidden canvas
  */
 
+"use strict";
+
 /**
  * setGpuCanvasHidden - Shows or hides the GPU canvas
  * 

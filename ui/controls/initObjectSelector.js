@@ -1,3 +1,23 @@
+/**
+ * initObjectSelector.js - Object Selector Initialization
+ *
+ * PURPOSE:
+ *   Populates the object selection dropdown with available 3D meshes and
+ *   wires up change handlers to load the selected mesh.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called during app startup to initialize the object selector UI.
+ *   Handles restoring a previously selected shape and persisting selection.
+ *
+ * DATA FORMAT:
+ *   - OBJECTS is an array of { name, obj } entries representing meshes.
+ *   - The select element stores the selected index as its value.
+ *
+ * @param {string|null} restoredShapeName - Optional name of shape to restore
+ */
+
+"use strict";
+
 import { OBJECTS } from '../../loader/objectList.js';
 import { persistUiState } from './persistUiState.js';
 

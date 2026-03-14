@@ -15,6 +15,8 @@
  *   Minimum ratios: 4.5:1 for normal text, 3:1 for large text
  */
 
+"use strict";
+
 import { relativeLuminance } from './relativeLuminance.js';
 
 /**

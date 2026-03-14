@@ -15,6 +15,8 @@
  *   No offscreen canvases, no compositing layers.
  */
 
+"use strict";
+
 // Import GPU canvas clearing for when switching from GPU to CPU mode
 import { clearGpuSceneCanvas } from '../../render/gpu/runtime/clearGpuSceneCanvas.js';
 

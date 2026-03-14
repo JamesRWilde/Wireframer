@@ -24,6 +24,8 @@
  *   are preserved during simplification.
  */
 
+"use strict";
+
 // Import optimal position calculation for merged vertex
 import { optimalPosition } from './optimalPosition.js';
 

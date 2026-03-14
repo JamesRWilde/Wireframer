@@ -10,6 +10,8 @@
  *   Provides consistent numeric validation across the application.
  */
 
+"use strict";
+
 /**
  * clampNumber - Clamps a value to a range with fallback
  * 

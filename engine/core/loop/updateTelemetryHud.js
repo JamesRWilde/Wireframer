@@ -17,11 +17,13 @@
  *   performance overhead that would skew the very stats we're measuring.
  */
 
+"use strict";
+
 // Import loop state and throttle interval
 import { state, TELEMETRY_UI_INTERVAL_MS } from './loopState.js';
 
 // Import DOM element references for stat displays
-import { getStatFps, getStatFrameMs, getStatPhysMs, getStatBgMs, getStatFgMs } from '../../../ui/statsState.js';
+import { statsState } from '../../../ui/statsState.js';
 
 /**
  * writeStat - Helper to safely update a DOM element's text content
@@ -57,19 +59,11 @@ export function updateTelemetryHud(nowMs) {
   // Each entry has a DOM element and the formatted value to display
   const stats = [
     // FPS: calculated from frame interval (1000ms / interval = frames per second)
-    { el: getStatFps(), val: state.emaFpsFrameIntervalMs > 0.0001 ? String(Math.round(1000 / state.emaFpsFrameIntervalMs)) : '--' },
-    
-    // Frame time: total time for one frame (physics + bg + fg)
-    { el: getStatFrameMs(), val: state.emaFrameMs > 0 ? state.emaFrameMs.toFixed(2) : '--' },
-    
-    // Physics time: time spent updating rotation and input
-    { el: getStatPhysMs(), val: state.emaPhysMs > 0 ? state.emaPhysMs.toFixed(2) : '--' },
-    
-    // Background time: time spent rendering particle background
-    { el: getStatBgMs(), val: state.emaBgMs > 0 ? state.emaBgMs.toFixed(2) : '--' },
-    
-    // Foreground time: time spent rendering 3D model
-    { el: getStatFgMs(), val: state.emaFgMs > 0 ? state.emaFgMs.toFixed(2) : '--' },
+    { el: statsState.statFps, val: state.emaFpsFrameIntervalMs > 0.0001 ? String(Math.round(1000 / state.emaFpsFrameIntervalMs)) : '--' },
+    { el: statsState.statFrameMs, val: state.emaFrameMs > 0 ? state.emaFrameMs.toFixed(2) : '--' },
+    { el: statsState.statPhysMs, val: state.emaPhysMs > 0 ? state.emaPhysMs.toFixed(2) : '--' },
+    { el: statsState.statBgMs, val: state.emaBgMs > 0 ? state.emaBgMs.toFixed(2) : '--' },
+    { el: statsState.statFgMs, val: state.emaFgMs > 0 ? state.emaFgMs.toFixed(2) : '--' },
   ];
   
   // Show breakdown of foreground time (fill vs wire) when perf data is available
@@ -80,7 +74,7 @@ export function updateTelemetryHud(nowMs) {
     const avgWire = (globalThis._perf.wireMs / globalThis._perf.frameCount).toFixed(2);
     
     // Add breakdown stat (overwrites the basic fgMs display)
-    stats.push({ el: getStatFgMs(), val: `fill:${avgFill} wire:${avgWire}` });
+    stats.push({ el: statsState.statFgMs, val: `fill:${avgFill} wire:${avgWire}` });
     
     // Reset counters for the next measurement epoch
     globalThis._perf.fillMs = 0;

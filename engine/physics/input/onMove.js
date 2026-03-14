@@ -22,6 +22,8 @@
  *   - The 0.007 factor controls sensitivity
  */
 
+"use strict";
+
 /**
  * onMove - Handles pointer movement for model rotation
  * 
