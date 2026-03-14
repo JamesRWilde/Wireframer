@@ -115,7 +115,7 @@ export function renderMeshUnified(model, ctx) {
     if (wireAlpha > 0.001) {
       ctx.globalAlpha = wireAlpha;
       ctx.strokeStyle = edgeColor;
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 0.2;
       ctx.stroke();
     }
   }
