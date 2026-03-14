@@ -2,61 +2,60 @@
  * objectList.js - Mesh Object Registry
  * 
  * PURPOSE:
- *   Defines the list of available 3D mesh objects for user selection.
+ *   Dynamically loads the list of available 3D mesh objects by scanning
+ *   the meshes/ directory via the server's /api/meshes endpoint.
  *   Provides metadata (key, display name, file path) for each mesh.
  * 
  * ARCHITECTURE ROLE:
- *   Imported by initObjectSelector to populate the mesh dropdown.
- *   Used by loadObjMesh to resolve mesh file paths.
+ *   Imported by initObjectSelector and loader.js to populate the mesh dropdown.
+ *   The server scans the meshes/ directory and returns all .obj files.
  * 
- * MESH FORMAT:
- *   Each entry has:
- *   - key: Filename without extension (used as identifier)
- *   - name: Human-readable title case name (for UI display)
- *   - obj: Relative path to OBJ file in meshes/ directory
+ * USAGE:
+ *   import { getObjectList } from './objectList.js';
+ *   const objects = await getObjectList();
  */
 
 "use strict";
 
+/** @type {Array<{key: string, name: string, obj: string}>|null} */
+let _cache = null;
+
+/** @type {Promise|null} */
+let _pending = null;
+
 /**
- * OBJECTS - Array of available mesh objects
+ * getObjectList - Fetches the list of available mesh objects from the server
  * 
- * @type {Array<{key: string, name: string, obj: string}>}
+ * Returns a cached result on subsequent calls. The server scans the meshes/
+ * directory and returns all .obj files with transformed display names.
  * 
- * Each object contains:
- * - key: Filename without .obj extension
- * - name: Title case display name
- * - obj: Relative path to OBJ file
+ * @returns {Promise<Array<{key: string, name: string, obj: string}>>}
+ *   Array of mesh objects sorted alphabetically by key
  */
-export const OBJECTS = [
-  'capsule.obj',
-  'cinquefoil-knot.obj',
-  'cone.obj',
-  'cube.obj',
-  'cylinder.obj',
-  'diamond.obj',
-  'icosahedron.obj',
-  'jerusalem-cube.obj',
-  'menger-sponge.obj',
-  'mobius-strip.obj',
-  'octahedron.obj',
-  'prism.obj',
-  'pyramid.obj',
-  'sierpinski-pyramid.obj',
-  'sphere.obj',
-  'spring.obj',
-  'star-prism.obj',
-  'torus-knot.obj',
-  'torus.obj',
-  'wine-glass.obj'
-].map(filename => {
-  // Extract key by removing .obj extension
-  const key = filename.replace(/\.obj$/i, '');
+export function getObjectList() {
+  // Return cached result immediately
+  if (_cache) return Promise.resolve(_cache);
   
-  // Convert to Title Case for display:
-  // 1. Replace hyphens with spaces
-  // 2. Capitalize first letter of each word
-  const name = key.replaceAll('-', ' ').replaceAll(/\b\w/g, c => c.toUpperCase());
+  // Return in-flight request if one is already pending
+  if (_pending) return _pending;
   
-  return { key, name, obj: `meshes/${filename}` };
-});
+  // Fetch from server endpoint
+  _pending = fetch('/api/meshes')
+    .then(resp => {
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      return resp.json();
+    })
+    .then(list => {
+      _cache = list;
+      _pending = null;
+      return list;
+    })
+    .catch(err => {
+      console.warn('[objectList] Failed to load mesh list from server:', err.message);
+      _cache = [];
+      _pending = null;
+      return [];
+    });
+  
+  return _pending;
+}

@@ -22,9 +22,9 @@
 
 "use strict";
 
-// Import the curated list of available 3D objects
-// Each entry has: { key, name, obj } where obj is the file path
-import { OBJECTS } from './loader/objectList.js';
+// Import the dynamic mesh list loader
+// Fetches available .obj files from the server's /api/meshes endpoint
+import { getObjectList } from './loader/objectList.js';
 
 // Import the OBJ parser that converts raw OBJ text to engine mesh format
 // This is imported explicitly (not dynamically) so it's bundled in the output
@@ -84,7 +84,12 @@ globalThis.loadObjMesh = async function(objPath, name) {
   return mesh;
 };
 
-// Export the object list to global scope so the UI can populate shape selectors
-// This is the same array imported from objectList.js, now available as window.OBJECTS
-globalThis.OBJECTS = OBJECTS;
+// Load the dynamic object list and expose it globally
+// getObjectList() fetches from /api/meshes which scans the meshes/ directory
+getObjectList().then(list => {
+  globalThis.OBJECTS = list;
+}).catch(err => {
+  console.error('[loader] Failed to load object list:', err);
+  globalThis.OBJECTS = [];
+});
 

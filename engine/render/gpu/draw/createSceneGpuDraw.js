@@ -64,6 +64,10 @@ export function createSceneGpuDraw(gl, canvas, shaderPack, bufferStore) {
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
+    // Note: Backface culling disabled for proper OBJ support
+    // OBJ files can have mixed winding, double-sided faces, or complex geometry
+    // Rely on depth sorting (painter's algorithm) instead
+    gl.disable(gl.CULL_FACE);
 
     const fillAlpha = Math.max(0, Math.min(1, Number(params.fillAlpha) || 0));
     const wireAlpha = Math.max(0, Math.min(1, Number(params.wireAlpha) || 0));

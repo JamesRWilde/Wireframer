@@ -63,8 +63,7 @@ export function renderFillTriangles({ T, P2, triFaces, triCornerNormals, useSmoo
     const bx = P2[b][0], by = P2[b][1];
     const cx = P2[c][0], cy = P2[c][1];
 
-    // Backface culling: discard triangles facing away from the camera.
-    // area2 is twice the signed area of the projected triangle.
+    // Skip degenerate triangles (near-zero area)
     const area2 = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
     if (Math.abs(area2) < 0.2) continue;
 

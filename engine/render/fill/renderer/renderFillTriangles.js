@@ -20,7 +20,7 @@ export function renderFillTriangles({
     const cx = P2[c][0], cy = P2[c][1];
 
     const area2 = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
-    if (Math.abs(area2) < 0.2) continue;
+    if (Math.abs(area2) < 0.2) continue; // Skip degenerate triangles
 
     const normal = resolveTriangleNormal(item, T, triCornerNormals, useSmoothShading);
     if (!normal) continue;

@@ -42,6 +42,29 @@ const port = 3000;
 // Express automatically sets correct Content-Type headers based on file extensions
 app.use(express.static(path.join(__dirname)));
 
+// Dynamic mesh listing endpoint - scans meshes/ directory for .obj files
+// Returns JSON array of { key, name, obj } objects for the shape selector
+app.get('/api/meshes', (req, res) => {
+  const fs = require('node:fs');
+  const meshesDir = path.join(__dirname, 'meshes');
+  
+  try {
+    const files = fs.readdirSync(meshesDir)
+      .filter(f => f.toLowerCase().endsWith('.obj'))
+      .sort()
+      .map(filename => {
+        const key = filename.replace(/\.obj$/i, '');
+        const name = key.replaceAll('-', ' ').replaceAll(/\b\w/g, c => c.toUpperCase());
+        return { key, name, obj: `meshes/${filename}` };
+      });
+    
+    res.json(files);
+  } catch (err) {
+    console.error('[api/meshes] Failed to read meshes directory:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Start listening for incoming HTTP requests
 // The callback logs the URL so developers know where to open the app
 app.listen(port, () => {

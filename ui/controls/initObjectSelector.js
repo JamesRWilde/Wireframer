@@ -18,10 +18,13 @@
 
 "use strict";
 
-import { OBJECTS } from '../../loader/objectList.js';
+import { getObjectList } from '../../loader/objectList.js';
 import { persistUiState } from './persistUiState.js';
 
-export function initObjectSelector(restoredShapeName = null) {
+export async function initObjectSelector(restoredShapeName = null) {
+  // Fetch the dynamic list of available meshes from the server
+  const OBJECTS = await getObjectList();
+  
   console.debug('[initObjectSelector] called, OBJECTS length', OBJECTS.length);
   const select = document.getElementById('obj-select');
   if (!select) {
@@ -60,7 +63,7 @@ export function initObjectSelector(restoredShapeName = null) {
     console.debug('[initObjectSelector] selection changed', idx);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       await globalThis.loadObjMesh(OBJECTS[idx].obj, OBJECTS[idx].name);
-      persistUiState();
+      persistUiState(OBJECTS);
     }
   });
 }

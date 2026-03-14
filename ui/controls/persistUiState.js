@@ -14,7 +14,6 @@
 
 "use strict";
 
-import { OBJECTS } from '../../loader/objectList.js';
 const UI_STATE_KEY = 'wireframer.uiState';
 
 import {
@@ -27,11 +26,15 @@ import {
   bgOpacity,
 } from '../dom-state.js';
 
-export function persistUiState() {
+/**
+ * persistUiState - Saves current UI state to localStorage
+ * @param {Array<{key: string, name: string, obj: string}>} objects - The mesh object list
+ */
+export function persistUiState(objects = []) {
   const select = document.getElementById('obj-select');
   const selectedIndex = Number(select ? select.value : Number.NaN);
-  const selectedObject = Number.isInteger(selectedIndex) && selectedIndex >= 0 && selectedIndex < OBJECTS.length
-    ? OBJECTS[selectedIndex]
+  const selectedObject = Number.isInteger(selectedIndex) && selectedIndex >= 0 && selectedIndex < objects.length
+    ? objects[selectedIndex]
     : null;
 
   const payload = {
