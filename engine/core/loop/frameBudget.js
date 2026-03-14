@@ -66,7 +66,7 @@ export function updateFrameTime(frameMs) {
  * 
  * @returns {number} Average frame time in milliseconds
  */
-export function getAverageFrameTime() {
+function getAverageFrameTime() {
   if (frameTimeCount === 0) return 0;
 
   let sum = 0;
@@ -162,63 +162,3 @@ export function checkBudget() {
   return currentQuality;
 }
 
-/**
- * getQualityLevel - Gets the current quality level
- * 
- * @returns {string} 'high', 'medium', or 'low'
- */
-export function getQualityLevel() {
-  return currentQuality;
-}
-
-/**
- * shouldSkipFill - Whether to skip fill rendering at current quality
- * 
- * @returns {boolean} True if fill should be skipped
- */
-export function shouldSkipFill() {
-  return currentQuality === 'low';
-}
-
-/**
- * shouldUseSpecular - Whether to use specular highlights
- * 
- * @returns {boolean} True if specular should be used
- */
-export function shouldUseSpecular() {
-  return currentQuality === 'high';
-}
-
-/**
- * shouldUseSmoothShading - Whether to use smooth shading
- * 
- * @returns {boolean} True if smooth shading should be used
- */
-export function shouldUseSmoothShading() {
-  return currentQuality !== 'low';
-}
-
-/**
- * getLodScale - Gets LOD reduction factor for current quality
- * 
- * @returns {number} LOD scale (1.0 = full, 0.5 = half detail)
- */
-export function getLodScale() {
-  switch (currentQuality) {
-    case 'high': return 1;
-    case 'medium': return 0.7;
-    case 'low': return 0.4;
-    default: return 1;
-  }
-}
-
-/**
- * resetBudget - Resets budget tracking (e.g., after model change)
- */
-export function resetBudget() {
-  frameTimeIndex = 0;
-  frameTimeCount = 0;
-  upgradeCounter = 0;
-  downgradeCounter = 0;
-  currentQuality = 'high';
-}
