@@ -60,7 +60,7 @@ export function physics() {
     
     // Apply Euler angle increments based on current angular velocities
     // This updates the rotation matrix in-place
-    applyEulerIncrementInPlace(currentR, globalThis.PHYSICS_STATE.wx, globalThis.PHYSICS_STATE.wy, globalThis.PHYSICS_STATE.wz);
+    applyEulerIncrement(currentR, globalThis.PHYSICS_STATE.wx, globalThis.PHYSICS_STATE.wy, globalThis.PHYSICS_STATE.wz);
     
     // Periodically re-orthogonalize the rotation matrix
     // Numerical errors accumulate over time, causing the matrix to drift
