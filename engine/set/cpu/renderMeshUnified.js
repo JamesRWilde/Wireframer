@@ -61,7 +61,7 @@ export function renderMeshUnified(model, ctx) {
 
   // Get wire color (contrast with fill)
   let fillRgb = globalThis.THEME?.fill ?? [0, 200, 120];
-  const fillLum = GetUiColorRelativeLuminance(fillRgb);
+  const fillLum = relativeLuminance(fillRgb);
   const contrastWire = fillLum > 0.5 ? [0, 0, 0] : [255, 255, 255];
   const edgeColor = rgbaString(contrastWire, 1);
 

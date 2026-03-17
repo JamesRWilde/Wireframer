@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineMorphApi.js - Morph API Initialization
+ * morphApi.js - Morph API Initialization
  * 
  * PURPOSE:
  *   Initializes the morphing API and exposes it globally. The morphing system

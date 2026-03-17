@@ -6,7 +6,7 @@
  *   Ensures all expected keys exist and provides safe defaults.
  *
  * ARCHITECTURE ROLE:
- *   Used by SetUiRestoreState to persist a clean, validated state shape back to localStorage.
+ *   Used by restoreState to persist a clean, validated state shape back to localStorage.
  *
  * @param {Object} state - Raw state object read from localStorage
  * @returns {Object} Normalized UI state object

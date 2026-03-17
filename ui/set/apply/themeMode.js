@@ -6,7 +6,7 @@
  *   Ensures the UI control reflects the restored mode value.
  *
  * ARCHITECTURE ROLE:
- *   Used by SetUiRestoreState to apply the saved theme mode when the app initializes.
+ *   Used by restoreState to apply the saved theme mode when the app initializes.
  *
  * @param {Object} state - Deserialized UI state object from localStorage
  */

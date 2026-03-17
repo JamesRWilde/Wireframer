@@ -32,9 +32,9 @@ import { linearChannel }from '@ui/get/color/linearChannel.js';
  */
 export function relativeLuminance(rgb) {
   // Convert sRGB channels to linear RGB
-  const r = GetUiColorLinearChannel(rgb[0]);
-  const g = GetUiColorLinearChannel(rgb[1]);
-  const b = GetUiColorLinearChannel(rgb[2]);
+  const r = linearChannel(rgb[0]);
+  const g = linearChannel(rgb[1]);
+  const b = linearChannel(rgb[2]);
   
   // WCAG relative luminance formula
   // Weights reflect human eye sensitivity to different colors

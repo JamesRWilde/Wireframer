@@ -27,9 +27,9 @@ export function presetSwatches() {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'preset-swatch';
-    button.title = `${preset.name} (${GetUiColorToHex(preset.rgb)})`;
-    button.setAttribute('aria-label', `${preset.name} preset ${GetUiColorToHex(preset.rgb)}`);
-    button.style.setProperty('--swatch-color', GetUiColorToRgbCss(preset.rgb));
+    button.title = `${preset.name} (${toHex(preset.rgb)})`;
+    button.setAttribute('aria-label', `${preset.name} preset ${toHex(preset.rgb)}`);
+    button.style.setProperty('--swatch-color', toRgbCss(preset.rgb));
     button.addEventListener('click', () => {
       customRgb(preset.rgb, { persist: true, apply: true });
     });

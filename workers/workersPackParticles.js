@@ -1,5 +1,5 @@
 /**
- * GetWorkersPackParticles.js - Particle Data Packer
+ * packParticles.js - Particle Data Packer
  *
  * PURPOSE:
  *   Packs the particle array into a Float32Array for transfer to the main thread.

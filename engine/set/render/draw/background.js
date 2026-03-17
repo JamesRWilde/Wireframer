@@ -60,7 +60,7 @@ export function background(nowMs) {
   const { velScale, opacityScale, themeAlphaBoost } = seedParticles(particles, w, h);
   const now = nowMs ?? performance.now();
 
-  SetWorkersUpdateParticles(particles, w, h, now, velScale, opacityScale, themeAlphaBoost);
+  updateParticles(particles, w, h, now, velScale, opacityScale, themeAlphaBoost);
 
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, w, h);

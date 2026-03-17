@@ -6,7 +6,7 @@
  *   Ensures UI controls always display a valid value within allowed bounds.
  *
  * ARCHITECTURE ROLE:
- *   Utility used by SetUiRestoreState to consistently apply saved state values
+ *   Utility used by restoreState to consistently apply saved state values
  *   to the UI controls while enforcing min/max ranges.
  *
  * @param {Object} params
@@ -21,5 +21,5 @@ import { clampNumber }from '@ui/get/color/clampNumber.js';
 
 export function clampedValue({ state, key, element, min, max, defaultValue }) {
   if (!(key in state) || !element) return;
-  element.value = String(GetUiColorClampNumber(state[key], min, max, defaultValue));
+  element.value = String(clampNumber(state[key], min, max, defaultValue));
 }

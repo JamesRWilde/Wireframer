@@ -8,7 +8,7 @@
  * 
  * ARCHITECTURE ROLE:
  *   Called by renderScene each frame when a morph is active. Part of the
- *   morph API exposed globally via InitMeshEngineMorphApi.js.
+ *   morph API exposed globally via morphApi.js.
  * 
  * HOW IT WORKS:
  *   1. Calculate raw progress (0-1) from elapsed time

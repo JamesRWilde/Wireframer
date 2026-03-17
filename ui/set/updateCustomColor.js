@@ -28,10 +28,10 @@ export function updateCustomColor() {
   if (customRedValue) customRedValue.textContent = String(r);
   if (customGreenValue) customGreenValue.textContent = String(g);
   if (customBlueValue) customBlueValue.textContent = String(b);
-  if (customHex) customHex.textContent = GetUiColorToHex(CUSTOM_RGB);
-  if (customSwatch) customSwatch.style.background = GetUiColorToRgbCss(CUSTOM_RGB);
+  if (customHex) customHex.textContent = toHex(CUSTOM_RGB);
+  if (customSwatch) customSwatch.style.background = toRgbCss(CUSTOM_RGB);
 
   for (const entry of PRESET_SWATCH_BUTTONS) {
-    entry.button.classList.toggle('is-active', GetUiColorRgbEquals(entry.rgb, CUSTOM_RGB));
+    entry.button.classList.toggle('is-active', rgbEquals(entry.rgb, CUSTOM_RGB));
   }
 }

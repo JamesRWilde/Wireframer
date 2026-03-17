@@ -7,7 +7,7 @@
  *   wants to cancel an in-progress animation.
  * 
  * ARCHITECTURE ROLE:
- *   Part of the morph API exposed globally via InitMeshEngineMorphApi.js. Can be
+ *   Part of the morph API exposed globally via morphApi.js. Can be
  *   called to interrupt a morph animation.
  * 
  * WHY SEPARATE:

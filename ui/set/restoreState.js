@@ -1,5 +1,5 @@
 /**
- * SetUiRestoreState.js - Restore UI Control State
+ * restoreState.js - Restore UI Control State
  *
  * PURPOSE:
  *   Restores slider/control values from localStorage and applies them to the UI.

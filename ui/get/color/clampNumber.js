@@ -6,7 +6,7 @@
  *   Used by UI controls to validate and constrain slider/input values.
  * 
  * ARCHITECTURE ROLE:
- *   Called by SetUiRestoreState and other UI functions to safely clamp values.
+ *   Called by restoreState and other UI functions to safely clamp values.
  *   Provides consistent numeric validation across the application.
  */
 

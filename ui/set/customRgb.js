@@ -28,7 +28,7 @@ import {customRed,customGreen,customBlue} from '@ui/state/dom.js';
 
 export function customRgb(rgb, options = {}) {
   const { persist = true, apply = true } = options;
-  const newRgb = [GetUiColorClampByte(rgb[0]), GetUiColorClampByte(rgb[1]), GetUiColorClampByte(rgb[2])];
+  const newRgb = [clampByte(rgb[0]), clampByte(rgb[1]), clampByte(rgb[2])];
 
   // Update module-exported binding (used by other modules) and global fallback.
   try {
@@ -40,6 +40,6 @@ export function customRgb(rgb, options = {}) {
   globalThis.CUSTOM_RGB = newRgb;
 
   updateCustomColor();
-  if (persist) SetUiPersistCustomRgb();
+  if (persist) customRgb();
   if (apply) palette();
 }

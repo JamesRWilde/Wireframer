@@ -25,7 +25,7 @@ export function customRgb() {
     if (!saved) return CUSTOM_RGB_DEFAULT.slice();
     const parsed = JSON.parse(saved);
     if (!Array.isArray(parsed) || parsed.length !== 3) return CUSTOM_RGB_DEFAULT.slice();
-    return [GetUiColorClampByte(parsed[0]), GetUiColorClampByte(parsed[1]), GetUiColorClampByte(parsed[2])];
+    return [clampByte(parsed[0]), clampByte(parsed[1]), clampByte(parsed[2])];
   } catch {
     return CUSTOM_RGB_DEFAULT.slice();
   }

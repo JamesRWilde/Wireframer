@@ -8,7 +8,7 @@
  * 
  * ARCHITECTURE ROLE:
  *   Called by renderScene each frame to determine which mesh to render.
- *   Part of the morph API exposed globally via InitMeshEngineMorphApi.js.
+ *   Part of the morph API exposed globally via morphApi.js.
  * 
  * WHY SEPARATE:
  *   This accessor provides a clean interface for checking morph state and

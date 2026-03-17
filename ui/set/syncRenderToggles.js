@@ -22,17 +22,17 @@ import { state as persistState }from '@ui/set/persist/state.js';
 
 export function syncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;
-  lodValue.textContent = `${GetUiSliderDisplayPercent(lodSlider)}%`;
+  lodValue.textContent = `${sliderDisplayPercent(lodSlider)}%`;
 
   const rawDensity = Number(bgDensity.value);
   const densityPct = rawDensity / 100;
   globalThis.BG_PARTICLE_DENSITY_PCT = densityPct;
-  bgDensityValue.textContent = `${GetUiSliderDisplayPercent(bgDensity)}%`;
+  bgDensityValue.textContent = `${sliderDisplayPercent(bgDensity)}%`;
 
   const rawVelocity = Number(bgVelocity.value);
   const velocityPct = rawVelocity / 100;
   globalThis.BG_PARTICLE_VELOCITY_PCT = velocityPct;
-  bgVelocityValue.textContent = `${GetUiSliderDisplayPercent(bgVelocity)}%`;
+  bgVelocityValue.textContent = `${sliderDisplayPercent(bgVelocity)}%`;
 
   const rawOpacity = Number(bgOpacity.value);
   const opacityPct = rawOpacity / 100;

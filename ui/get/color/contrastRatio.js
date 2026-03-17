@@ -34,8 +34,8 @@ import { relativeLuminance }from '@ui/get/color/relativeLuminance.js';
  */
 export function contrastRatio(a, b) {
   // Get relative luminance for both colors
-  const la = GetUiColorRelativeLuminance(a);
-  const lb = GetUiColorRelativeLuminance(b);
+  const la = relativeLuminance(a);
+  const lb = relativeLuminance(b);
   
   // Identify lighter and darker
   const light = Math.max(la, lb);

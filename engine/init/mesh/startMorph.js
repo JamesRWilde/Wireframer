@@ -8,7 +8,7 @@
  * 
  * ARCHITECTURE ROLE:
  *   Called by finalizeModel when loading a new mesh with animation enabled.
- *   Part of the morph API exposed globally via InitMeshEngineMorphApi.js.
+ *   Part of the morph API exposed globally via morphApi.js.
  * 
  * HOW IT WORKS:
  *   1. Clones both source and target meshes to prevent mutation

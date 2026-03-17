@@ -24,6 +24,6 @@ export function hud(nowMs) {
   }
 
   for (const {el, val} of stats) {
-    SetUiWriteStat(el, val);
+    writeStat(el, val);
   }
 }

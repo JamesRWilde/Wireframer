@@ -1,4 +1,4 @@
-import { normalizeVector3 } from '@engine/set/gpu/render/GetGpuEngineNormalizeVector3.js';
+import { normalizeVector3 } from '@engine/get/gpu/normalizeVector3.js';
 import { convertRgbToNormalized } from '@engine/set/gpu/render/convertRgbToNormalized.js';
 import { toRowMajorRotation } from '@engine/set/gpu/render/toRowMajorRotation.js';
 import { projectionUniforms } from '@engine/set/gpu/scene/projectionUniforms.js';
@@ -33,8 +33,8 @@ export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays
     gl.uniform3f(fillLoc.uR0, rot[0], rot[1], rot[2]);
     gl.uniform3f(fillLoc.uR1, rot[3], rot[4], rot[5]);
     gl.uniform3f(fillLoc.uR2, rot[6], rot[7], rot[8]);
-    gl.uniform3fv(fillLoc.uLightDir, GetGpuEngineNormalizeVector3(tmpLight, params.lightDir, [-0.38, 0.74, -0.56]));
-    gl.uniform3fv(fillLoc.uViewDir, GetGpuEngineNormalizeVector3(tmpView, params.viewDir, [0, 0, -1]));
+    gl.uniform3fv(fillLoc.uLightDir, normalizeVector3(tmpLight, params.lightDir, [-0.38, 0.74, -0.56]));
+    gl.uniform3fv(fillLoc.uViewDir, normalizeVector3(tmpView, params.viewDir, [0, 0, -1]));
     gl.uniform3fv(fillLoc.uShadeDark, convertRgbToNormalized(tmpShadeDark, params.theme.shadeDark, [35, 48, 64]));
     gl.uniform3fv(fillLoc.uShadeBright, convertRgbToNormalized(tmpShadeBright, params.theme.shadeBright, [120, 180, 230]));
     gl.uniform1f(fillLoc.uAlpha, fillAlpha);

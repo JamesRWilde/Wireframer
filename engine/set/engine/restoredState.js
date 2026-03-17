@@ -13,12 +13,12 @@ import { restoreState }from '@ui/set/restoreState.js';
 export function restoredState() {
   let restoredShapeName = null;
   try {
-    restoredShapeName = SetUiRestoreState();
+    restoredShapeName = restoreState();
     if (restoredShapeName) {
       console.debug('[startApp] restored UI state, selected shape', restoredShapeName);
     }
   } catch (e) {
-    console.warn('[startApp] SetUiRestoreState failed', e);
+    console.warn('[startApp] restoreState failed', e);
   }
   return restoredShapeName;
 }

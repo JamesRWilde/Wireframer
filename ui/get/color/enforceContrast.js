@@ -40,7 +40,7 @@ import { mixRgb }from '@ui/get/color/mixRgb.js';
  */
 export function enforceContrast(fg, bg, minRatio) {
   // Check current contrast
-  const current = GetUiColorContrastRatio(fg, bg);
+  const current = contrastRatio(fg, bg);
   if (current >= minRatio) return fg;
 
   // Track best color found
@@ -52,8 +52,8 @@ export function enforceContrast(fg, bg, minRatio) {
     const t = i / 24;
     
     // Try mixing toward white
-    const towardWhite = GetUiColorMixRgb(fg, [255, 255, 255], t);
-    const cw = GetUiColorContrastRatio(towardWhite, bg);
+    const towardWhite = mixRgb(fg, [255, 255, 255], t);
+    const cw = contrastRatio(towardWhite, bg);
     if (cw > bestRatio) {
       bestRatio = cw;
       best = towardWhite;
@@ -61,8 +61,8 @@ export function enforceContrast(fg, bg, minRatio) {
     if (cw >= minRatio) return towardWhite;
 
     // Try mixing toward black
-    const towardBlack = GetUiColorMixRgb(fg, [0, 0, 0], t);
-    const cb = GetUiColorContrastRatio(towardBlack, bg);
+    const towardBlack = mixRgb(fg, [0, 0, 0], t);
+    const cb = contrastRatio(towardBlack, bg);
     if (cb > bestRatio) {
       bestRatio = cb;
       best = towardBlack;

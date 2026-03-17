@@ -35,7 +35,7 @@ import {customRed,customGreen,customBlue,themeMode} from '@ui/state/dom.js';
  */
 export function palette() {
   // Build complete theme palette from base color
-  const palette = SetUiBuildCustomTheme(CUSTOM_RGB);
+  const palette = bldCustomTheme(CUSTOM_RGB);
   
   // Set global THEME for runtime access by renderers
   globalThis.THEME = palette;

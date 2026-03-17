@@ -22,17 +22,17 @@ export function randomPresetRgb() {
     const hue = Math.random();
     const saturation = 0.68 + Math.random() * 0.28;
     const value = 0.74 + Math.random() * 0.23;
-    const rgb = GetUiColorHsvToRgb(hue, saturation, value);
+    const rgb = hsvToRgb(hue, saturation, value);
 
     const max = Math.max(rgb[0], rgb[1], rgb[2]);
     const min = Math.min(rgb[0], rgb[1], rgb[2]);
     const spread = max - min;
-    const lum = GetUiColorRelativeLuminance(rgb);
+    const lum = relativeLuminance(rgb);
 
     // Accept only colors with enough contrast and saturation.
     if (spread >= 90 && max >= 150 && lum >= 0.17) return rgb;
   }
 
   // Fallback: return a moderately saturated, bright color.
-  return GetUiColorHsvToRgb(Math.random(), 0.82, 0.86);
+  return hsvToRgb(Math.random(), 0.82, 0.86);
 }

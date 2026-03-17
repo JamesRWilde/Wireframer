@@ -1,5 +1,5 @@
 /**
- * InitWorkersParticles.js - Particle Array Initializer
+ * particles.js - Particle Array Initializer
  *
  * PURPOSE:
  *   Initializes the global particles array based on the current state.
