@@ -16,8 +16,8 @@
 
 "use strict";
 
-import { themeMode } from './domState.js';
-import { applyPalette } from './applyPalette.js';
+import { themeMode } from '../domState.js';
+import { applyPalette } from '../applyPalette.js';
 
 /**
  * setThemeMode - Sets application theme mode

@@ -24,7 +24,7 @@ import {
   wireOpacity, wireOpacityValue,
 } from './domState.js';
 import { sliderDisplayPercent } from './sliderDisplayPercent.js';
-import { persistUiState } from './persistUiState.js';
+import { persistUiState } from './persist/persistUiState.js';
 
 export function syncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;

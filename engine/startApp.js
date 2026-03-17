@@ -49,7 +49,7 @@ import '../render/modelState.js';
 import '../mesh/initMorphApi.js';
 
 // Import UI initialization functions
-import { initObjectSelector } from '../ui/initObjectSelector.js';
+import { initObjectSelector } from '../ui/init/initObjectSelector.js';
 
 // Import the frame loop entry point
 import { frame } from './frame.js';

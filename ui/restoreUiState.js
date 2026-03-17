@@ -15,7 +15,7 @@
 
 "use strict";
 
-import { readUiState } from './readUiState.js';
+import { readUiState } from './read/readUiState.js';
 import { applyClampedValue } from './applyClampedValue.js';
 import { applyThemeMode } from './applyThemeMode.js';
 import { buildMigratedState } from './buildMigratedState.js';

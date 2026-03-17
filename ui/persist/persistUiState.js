@@ -24,7 +24,7 @@ import {
   bgDensity,
   bgVelocity,
   bgOpacity,
-} from './domState.js';
+} from '../domState.js';
 
 /**
  * persistUiState - Saves current UI state to localStorage

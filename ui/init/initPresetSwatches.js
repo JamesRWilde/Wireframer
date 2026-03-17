@@ -12,11 +12,11 @@
 
 "use strict";
 
-import { presetSwatches, PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, SHUFFLE_SWATCH_NAME } from './domState.js';
-import { toHex } from './color/toHex.js';
-import { toRgbCss } from './color/toRgbCss.js';
-import { setCustomRgb } from './setCustomRgb.js';
-import { randomPresetRgb } from './randomPresetRgb.js';
+import { presetSwatches, PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, SHUFFLE_SWATCH_NAME } from '../domState.js';
+import { toHex } from '../color/toHex.js';
+import { toRgbCss } from '../color/toRgbCss.js';
+import { setCustomRgb } from '../set/setCustomRgb.js';
+import { randomPresetRgb } from '../randomPresetRgb.js';
 
 export function initPresetSwatches() {
   if (!presetSwatches) return;

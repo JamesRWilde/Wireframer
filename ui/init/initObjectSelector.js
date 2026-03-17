@@ -18,8 +18,8 @@
 
 "use strict";
 
-import { getObjectList } from '../render/meshObjectList.js';
-import { persistUiState } from './persistUiState.js';
+import { getObjectList } from '../../render/meshObjectList.js';
+import { persistUiState } from '../persist/persistUiState.js';
 
 export async function initObjectSelector(restoredShapeName = null) {
   // Fetch the dynamic list of available meshes from the server
