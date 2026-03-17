@@ -300,6 +300,7 @@ canvas:active { cursor: grabbing; }
 }
 
 #fill-control {
+  margin-top: 0.42rem;
   display: flex;
   align-items: center;
   justify-content: space-between;

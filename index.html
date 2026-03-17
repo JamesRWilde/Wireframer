@@ -24,6 +24,23 @@
 <section class="control-panel" id="shape-panel">
 <div class="panel-title">Shape</div>
 <select id="obj-select" aria-label="Object selector" title="Object selector"></select>
+<label id="lod-control" for="lod-slider">
+<span>Detail</span>
+<input id="lod-slider" type="range" min="0" max="100" step="1" value="100" />
+<span id="lod-value">100%</span>
+</label>
+
+<label id="fill-control" for="fill-opacity">
+<span>Fill</span>
+<input id="fill-opacity" type="range" min="0" max="100" step="1" value="100" />
+<span id="fill-opacity-value">0%</span>
+</label>
+
+<label id="wire-control" for="wire-opacity">
+<span>Wireframe</span>
+<input id="wire-opacity" type="range" min="0" max="100" step="1" value="100" />
+<span id="wire-opacity-value">100%</span>
+</label>
 </section>
 
 <section class="control-panel" id="custom-color-control">
@@ -61,29 +78,7 @@
 </div>
 </section>
 
-<section class="control-panel" id="lod-panel">
-<div class="panel-title">LOD</div>
-<label id="lod-control" for="lod-slider">
-<span>Level</span>
-<input id="lod-slider" type="range" min="0" max="100" step="1" value="100" />
-<span id="lod-value">100%</span>
-</label>
-</section>
 
-<section class="control-panel" id="opacity-panel">
-<div class="panel-title">Opacity</div>
-<label id="fill-control" for="fill-opacity">
-<span>Fill</span>
-<input id="fill-opacity" type="range" min="0" max="100" step="1" value="100" />
-<span id="fill-opacity-value">0%</span>
-</label>
-
-<label id="wire-control" for="wire-opacity">
-<span>Wireframe</span>
-<input id="wire-opacity" type="range" min="0" max="100" step="1" value="100" />
-<span id="wire-opacity-value">100%</span>
-</label>
-</section>
 
 <section class="control-panel" id="background-panel">
 <div class="panel-title">Background</div>
