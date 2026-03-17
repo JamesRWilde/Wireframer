@@ -28,7 +28,7 @@ import { matrixY }from '@engine/get/render/rotation/matrixY.js';
 import { matrixX }from '@engine/get/render/rotation/matrixX.js';
 
 // Import the global rotation matrix reference
-from '@engine/state/render/rotationMatrixRef.js';
+import {R} from '@engine/state/render/rotationMatrixRef.js';
 
 /**
  * rotationInitialize - Sets up the initial rotation matrix

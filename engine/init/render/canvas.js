@@ -1,4 +1,4 @@
-from '@engine/state/render/background/backgroundState.js';
+import {bgState} from '@engine/state/render/background/backgroundState.js';
 import { syncCanvasSize }from '@engine/set/render/syncCanvasSize.js';
 
 export function canvas() {

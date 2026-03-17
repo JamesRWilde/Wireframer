@@ -20,7 +20,7 @@
 "use strict";
 
 // Import morph state for updating animation parameters
-from '@engine/state/mesh/morph.js';
+import {morphState} from '@engine/state/mesh/morph.js';
 
 // Import mesh cloning to prevent mutation of original meshes
 import { clone }from '@engine/init/mesh/clone.js';

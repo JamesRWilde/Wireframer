@@ -20,7 +20,7 @@
 "use strict";
 
 // Import morph state for reading/updating animation state
-from '@engine/state/mesh/morph.js';
+import {morphState} from '@engine/state/mesh/morph.js';
 
 // Import easing function for smooth animation
 import {easeOut}from '@engine/get/mesh/easeOut.js';

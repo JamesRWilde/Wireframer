@@ -23,8 +23,8 @@
 import { edgesFromFacesRuntime }from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 
 // Register helper globally so callers don't have to import it repeatedly
-if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
-  globalThis.InitMeshEngineBuildEdgesFromFacesRuntime = InitMeshEngineBuildEdgesFromFacesRuntime;
+if (!globalThis.edgesFromFacesRuntime) {
+  globalThis.edgesFromFacesRuntime = edgesFromFacesRuntime;
 }
 
 /**
@@ -48,14 +48,12 @@ export function object(uniqueVerts, faces) {
   };
   
   // Ensure edge builder is available (parsing may run before loader.js)
-  if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
-    // eslint-disable-next-line import/no-cycle
-    const { edgesFromFacesRuntime } = require(''./edgesFromFacesRuntime.js');
-    globalThis.InitMeshEngineBuildEdgesFromFacesRuntime = InitMeshEngineBuildEdgesFromFacesRuntime;
+  if (!globalThis.edgesFromFacesRuntime) {
+    globalThis.edgesFromFacesRuntime = edgesFromFacesRuntime;
   }
   
   // Build edges from face indices for wireframe rendering
-  meshObj.E = globalThis.InitMeshEngineBuildEdgesFromFacesRuntime ? globalThis.InitMeshEngineBuildEdgesFromFacesRuntime(faces.map(f => f.indices)) : [];
+  meshObj.E = globalThis.edgesFromFacesRuntime ? globalThis.edgesFromFacesRuntime(faces.map(f => f.indices)) : [];
   
   // Extract triangle indices for rendering
   meshObj.triangles = faces.map(f => f.indices);

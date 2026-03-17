@@ -1,4 +1,3 @@
-;
 
 export function averageTime() {
   if (state.frameTimeCount === 0) return 0;

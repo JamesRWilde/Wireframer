@@ -20,10 +20,11 @@
 
 import {objectList}from '@engine/get/render/objectList.js';
 import { state }from '@ui/get/read/state.js';
+import { state as persistState }from '@ui/set/persist/state.js';
 
 export async function initObjectSelector(restoredShapeName = null) {
   // Fetch the dynamic list of available meshes from the server
-  const OBJECTS = await getObjectList();
+  const OBJECTS = await objectList();
   
   console.debug('[initObjectSelector] called, OBJECTS length', OBJECTS.length);
   const select = document.getElementById('obj-select');
@@ -63,7 +64,7 @@ export async function initObjectSelector(restoredShapeName = null) {
     console.debug('[initObjectSelector] selection changed', idx);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       await globalThis.loadObjMesh(OBJECTS[idx].obj, OBJECTS[idx].name);
-      SetUiPersistState(OBJECTS);
+      persistState(OBJECTS);
     }
   });
 }

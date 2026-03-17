@@ -22,7 +22,7 @@
 "use strict";
 
 // Import the DOM element reference for the renderer stat display
-from '@ui/state/stats.js';
+import {statsState} from '@ui/state/stats.js';
 
 /**
  * SetEngineRendererHud - Updates the renderer mode display in the HUD

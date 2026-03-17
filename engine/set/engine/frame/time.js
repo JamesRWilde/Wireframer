@@ -1,4 +1,3 @@
-;
 
 export function time(frameMs) {
   state.frameTimes[state.frameTimeIndex] = frameMs;

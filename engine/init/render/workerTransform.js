@@ -1,11 +1,10 @@
-;
 
 export function workerTransform() {
   if (state.worker) return true;
 
   try {
     state.worker = new Worker(
-      new URL(''./vertex-transform-worker.js', import.meta.url).href,
+      new URL('./vertex-transform-worker.js', import.meta.url).href,
       { type: 'module' }
     );
     state.workerAvailable = true;

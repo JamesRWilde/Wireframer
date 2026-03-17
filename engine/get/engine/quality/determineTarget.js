@@ -1,4 +1,3 @@
-;
 
 export function determineTarget(avgFrameTime) {
   if (avgFrameTime > state.BUDGET_LOW) return 'low';

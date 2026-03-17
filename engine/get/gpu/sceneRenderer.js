@@ -3,7 +3,7 @@
 import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 // Import shared GPU renderer state
-from '@engine/state/gpu/scene.js';
+import {gpuState} from '@engine/state/gpu/scene.js';
 
 export function sceneRenderer() {
   if (gpuState.renderer || gpuState.failed) return gpuState.renderer;

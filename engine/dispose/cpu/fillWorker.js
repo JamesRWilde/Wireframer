@@ -1,4 +1,3 @@
-;
 
 export function fillWorker() {
   if (state.worker) {

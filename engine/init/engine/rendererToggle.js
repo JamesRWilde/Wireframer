@@ -20,7 +20,7 @@
 "use strict";
 
 // Import the DOM element reference for the renderer stat display
-from '@ui/state/stats.js';
+import {statsState} from '@ui/state/stats.js';
 
 // Import the toggle function
 import { mode }from '@engine/set/engine/renderer/mode.js';
@@ -61,7 +61,7 @@ export function rendererToggle() {
   
   // Add click event listener to toggle between GPU and CPU modes
   statRenderer.addEventListener('click', () => {
-    SetEngineRendererMode();
+    mode();
   });
   
   // Add visual styling to indicate it's clickable

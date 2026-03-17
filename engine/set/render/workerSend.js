@@ -1,4 +1,3 @@
-;
 import { workerTransform }from '@engine/init/render/workerTransform.js';
 
 export function workerSend(vertices, rotation, fov, halfW, halfH, modelCy, frameId) {

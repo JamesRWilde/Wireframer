@@ -19,7 +19,7 @@ import { state }from '@ui/get/read/state.js';
 import { clampedValue }from '@ui/set/apply/clampedValue.js';
 import { themeMode }from '@ui/set/apply/themeMode.js';
 import { bldMigratedState }from '@ui/init/bldMigratedState.js';
-from '@ui/state/dom.js';
+import {select,themeMode,bgDensity,bgVelocity,bgOpacity,fillOpacity,wireOpacity} from '@ui/state/dom.js';
 
 const UI_STATE_KEY = 'wireframer.uiState';
 

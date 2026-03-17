@@ -1,4 +1,3 @@
-;
 
 export function workerTerminate() {
   if (state.worker) {

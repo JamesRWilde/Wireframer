@@ -1,4 +1,3 @@
-;
 
 export function fillWorker(width, height) {
   if (state.worker) return true;
@@ -13,7 +12,7 @@ export function fillWorker(width, height) {
     state.offscreenCanvas = new OffscreenCanvas(width, height);
 
     state.worker = new Worker(
-      new URL(''./fill-render-worker.js', import.meta.url).href,
+      new URL('./fill-render-worker.js', import.meta.url).href,
       { type: 'module' }
     );
     state.workerAvailable = true;

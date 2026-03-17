@@ -18,7 +18,7 @@
 "use strict";
 
 // Import morph state to update active flag
-from '@engine/state/mesh/morph.js';
+import {morphState} from '@engine/state/mesh/morph.js';
 
 /**
  * DisposeMeshEngineStopMorph - Stops the current morph animation

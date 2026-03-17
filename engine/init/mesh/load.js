@@ -119,4 +119,4 @@ export function load(mesh, name = 'Shape', options = {}) {
 }
 
 // Expose for engine modules
-globalThis.InitMeshEngineLoad = InitMeshEngineLoad;
+globalThis.InitMeshEngineLoad = load;

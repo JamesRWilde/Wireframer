@@ -13,7 +13,7 @@
 
 "use strict";
 
-from '@ui/state/dom.js';
+import {customRed,customGreen,customBlue} from '@ui/state/dom.js';
 
 export function customRgb() {
   try {

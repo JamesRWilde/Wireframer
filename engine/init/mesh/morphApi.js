@@ -35,9 +35,9 @@ globalThis.MORPH_DURATION_MS = 1600;
 // Expose morph API globally so InitMeshEngineFinalizeModel and renderScene can use it
 // This avoids circular imports while providing a clean API
 globalThis.morph = {
-  InitMeshEngineStartMorph,
-  InitMeshEngineAdvanceMorphFrame,
-  GetMeshEngineCurrentMorph,
-  GetMeshEngineIsMorphing,
-  DisposeMeshEngineStopMorph,
+  startMorph,
+  advanceMorphFrame,
+  currentMorph,
+  isMorphing,
+  stopMorph,
 };

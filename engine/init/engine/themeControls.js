@@ -37,6 +37,7 @@ import { themeMode }from '@ui/set/apply/themeMode.js';
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences
 import { state }from '@ui/get/read/state.js';
+import { state as persistState }from '@ui/set/persist/state.js';
 
 /**
  * InitEngineThemeControls - Initializes the theme system and wires up event handlers
@@ -84,7 +85,7 @@ export function themeControls() {
         // Persist the new theme mode to localStorage
         // Wrapped in try/catch because persistence is non-critical
         try {
-          SetUiPersistState();
+          persistState();
         } catch {
           // Ignore persistence errors - theme still works for this session
         }
