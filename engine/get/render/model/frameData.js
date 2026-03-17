@@ -1,4 +1,4 @@
-import { state }from '@ui/get/read/state.js';
+import { state }from '@engine/state/engine/loop.js';
 import { workerSend }from '@engine/set/render/workerSend.js';
 import { cachedTransformResult }from '@engine/get/render/cachedTransformResult.js';
 import { convertFlatToNested }from '@engine/get/render/convertFlatToNested.js';

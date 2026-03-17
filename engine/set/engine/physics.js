@@ -29,7 +29,7 @@ import {applyEulerIncrement}from '@engine/get/render/applyEulerIncrement.js';
 import { reorthogonalize }from '@engine/get/render/reorthogonalize.js';
 
 // Import loop state for frame counting
-import { state }from '@ui/get/read/state.js';
+import { state }from '@engine/state/engine/loop.js';
 
 /**
  * physics - Updates rotation physics for the current frame

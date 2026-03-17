@@ -37,7 +37,7 @@ import {gpuPath}from '@engine/set/render/gpuPath.js';
 import { foregroundRenderMode }from '@engine/get/engine/foregroundRenderMode.js';
 
 // Import loop state to read the current render mode
-import { state }from '@ui/get/read/state.js';
+import { state }from '@engine/state/engine/loop.js';
 
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU

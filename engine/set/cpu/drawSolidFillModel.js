@@ -24,7 +24,7 @@ import { sendRenderCommand }from '@engine/set/cpu/fill/sendRenderCommand.js';
 
 import { fillCachedFrame }from '@engine/get/cpu/fillCachedFrame.js';
 import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
-import { state }from '@ui/get/read/state.js';
+import { state }from '@engine/state/engine/loop.js';
 
 // Track if worker has been initialized
 let workerInitialized = false;

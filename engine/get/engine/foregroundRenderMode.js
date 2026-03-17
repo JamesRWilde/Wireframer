@@ -21,7 +21,7 @@
 "use strict";
 
 // Import loop state to read/write the cached render mode
-import { state }from '@ui/get/read/state.js';
+import { state }from '@engine/state/engine/loop.js';
 
 // Import HUD updater to display the current render mode (GPU/CPU)
 import { hud }from '@engine/set/engine/renderer/hud.js';
