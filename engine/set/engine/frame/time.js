@@ -1,7 +1,7 @@
-import { state }from "@engine/state/engine/loop.js";
+import { budgetState, WINDOW_SIZE } from '@engine/set/engine/frame/budgetState.js';
 
 export function time(frameMs) {
-  state.frameTimes[state.frameTimeIndex] = frameMs;
-  state.frameTimeIndex = (state.frameTimeIndex + 1) % state.WINDOW_SIZE;
-  if (state.frameTimeCount < state.WINDOW_SIZE) state.frameTimeCount++;
+  budgetState.frameTimes[budgetState.frameTimeIndex] = frameMs;
+  budgetState.frameTimeIndex = (budgetState.frameTimeIndex + 1) % WINDOW_SIZE;
+  if (budgetState.frameTimeCount < WINDOW_SIZE) budgetState.frameTimeCount++;
 }

@@ -32,7 +32,7 @@ import { physics }from '@engine/set/engine/physics.js';
 import {scene}from '@engine/set/render/scene.js';
 
 // Import telemetry HUD updater - displays stats in the UI
-import { hud }from '@engine/set/engine/renderer/hud.js';
+import { hud }from '@engine/set/engine/telemetry/hud.js';
 
 // Import frame throttling check - skips frames if running too fast
 import { shouldRunFrame }from '@engine/get/engine/shouldRunFrame.js';

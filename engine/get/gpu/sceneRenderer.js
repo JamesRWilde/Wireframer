@@ -6,11 +6,12 @@ export function sceneRenderer() {
   
   const gpuCanvas = globalThis.gpuCanvas;
   if (!gpuCanvas) {
+    console.warn('[sceneRenderer-get] no gpuCanvas');
     gpuState.failed = true;
     return null;
   }
 
   gpuState.renderer = createSceneRenderer(gpuCanvas);
-  if (!gpuState.renderer) gpuState.failed = true;
+  if (!gpuState.renderer) { console.warn('[sceneRenderer-get] createSceneRenderer failed'); gpuState.failed = true; }
   return gpuState.renderer;
 }

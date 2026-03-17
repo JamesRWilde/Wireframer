@@ -1,10 +1,10 @@
-import { state }from "@engine/state/engine/loop.js";
+import { budgetState } from '@engine/set/engine/frame/budgetState.js';
 
 export function averageTime() {
-  if (state.frameTimeCount === 0) return 0;
+  if (budgetState.frameTimeCount === 0) return 0;
   let sum = 0;
-  for (let i = 0; i < state.frameTimeCount; i++) {
-    sum += state.frameTimes[i];
+  for (let i = 0; i < budgetState.frameTimeCount; i++) {
+    sum += budgetState.frameTimes[i];
   }
-  return sum / state.frameTimeCount;
+  return sum / budgetState.frameTimeCount;
 }

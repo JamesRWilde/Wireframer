@@ -72,7 +72,9 @@ export function mode() {
   // Clear canvases based on the new mode
   if (newMode === 'cpu') {
     // Switching to CPU: clear GPU canvas to prevent stale content
-    sceneCanvas();
+    const gpuGl = globalThis.gpuGl;
+    const gpuCanvas = globalThis.gpuCanvas;
+    if (gpuGl && gpuCanvas) sceneCanvas(gpuGl, gpuCanvas);
   } else {
     // Switching to GPU: clear CPU canvas to prevent stale content
     // The GPU canvas will be cleared by the GPU renderer on next frame

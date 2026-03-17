@@ -1,4 +1,4 @@
-import * as statefrom "@engine/state/render/background/worker.js";
+import { fillState as state } from "@engine/state/cpu/fillRenderBridge.js";
 
 export function fillWorker(width, height) {
   if (state.worker) return true;
@@ -13,7 +13,7 @@ export function fillWorker(width, height) {
     state.offscreenCanvas = new OffscreenCanvas(width, height);
 
     state.worker = new Worker(
-      new URL('../state/gpu/fillWorker.js', import.meta.url).href,
+      new URL('../../state/gpu/fillWorker.js', import.meta.url).href,
       { type: 'module' }
     );
     state.workerAvailable = true;

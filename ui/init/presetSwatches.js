@@ -15,7 +15,7 @@
 
 import { toHex }from '@ui/get/color/toHex.js';
 import { toRgbCss }from '@ui/get/color/toRgbCss.js';
-import { customRgb }from '@ui/get/read/customRgb.js';
+import { customRgb }from '@ui/set/customRgb.js';
 import { randomPresetRgb }from '@ui/get/randomPresetRgb.js';
 import { PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, presetSwatches as presetSwatchesEl, SHUFFLE_SWATCH_NAME }from '@ui/state/dom.js';
 

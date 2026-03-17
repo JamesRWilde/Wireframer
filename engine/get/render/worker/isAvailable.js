@@ -1,5 +1,5 @@
-import * as statefrom "@engine/state/render/background/worker.js";
+import { transformState } from "@engine/state/render/vertexTransformBridge.js";
 
 export function isAvailable() {
-  return state.workerAvailable;
+  return transformState.workerAvailable;
 }

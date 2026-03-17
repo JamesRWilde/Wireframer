@@ -1,2 +1,2 @@
-import * as statefrom '@ui/get/read/state.js';
-export function pendingWorkerParticles() { return state.pendingWorkerParticles; }
+import { workerState } from '@engine/state/render/background/worker.js';
+export function pendingWorkerParticles() { return workerState.pendingWorkerParticles; }

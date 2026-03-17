@@ -2,7 +2,7 @@ import {canvas}from '@engine/get/render/background/canvas.js';
 import {colors}from '@engine/get/render/background/colors.js';
 import { seedParticles }from '@engine/set/render/seedParticles.js';
 import { workersUpdateParticles }from '@workers/workersUpdateParticles.js';
-import {particles}from '@engine/set/render/draw/particles.js';
+import { particles as drawParticlesFn }from '@engine/set/render/draw/particles.js';
 import { backgroundWorker }from '@engine/init/render/backgroundWorker.js';
 import { isBackgroundWorkerReady }from '@engine/get/render/isBackgroundWorkerReady.js';
 import { pendingWorkerParticles }from '@engine/get/render/pendingWorkerParticles.js';
@@ -12,11 +12,11 @@ let particles = [];
 let workerInitialized = false;
 
 export function background(nowMs) {
-  const canvasState = getBackgroundCanvas();
+  const canvasState = canvas();
   if (!canvasState) return false;
   const { ctx, w, h } = canvasState;
 
-  const { bgColor, particleColor } = getBackgroundColors();
+  const { bgColor, particleColor } = colors();
 
   if (!workerInitialized) {
     backgroundWorker();
@@ -60,14 +60,14 @@ export function background(nowMs) {
   const { velScale, opacityScale, themeAlphaBoost } = seedParticles(particles, w, h);
   const now = nowMs ?? performance.now();
 
-  updateParticles(particles, w, h, now, velScale, opacityScale, themeAlphaBoost);
+  workersUpdateParticles(particles, w, h, now, velScale, opacityScale, themeAlphaBoost);
 
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, w, h);
 
   ctx.save();
   ctx.globalCompositeOperation = globalThis.THEME_MODE === 'light' ? 'multiply' : 'screen';
-  drawParticles(ctx, particles, particleColor, opacityScale, themeAlphaBoost);
+  drawParticlesFn(ctx, particles, particleColor, opacityScale, themeAlphaBoost);
   ctx.restore();
 
   if (particles.length === 0) console.debug('[drawBackground] no particles to draw');

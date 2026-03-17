@@ -1,5 +1,5 @@
-import * as statefrom "@engine/state/render/background/worker.js";
+import { fillState } from "@engine/state/cpu/fillRenderBridge.js";
 
 export function isFillWorkerAvailable() {
-  return state.workerAvailable && state.workerReady;
+  return fillState.workerAvailable && fillState.workerReady;
 }

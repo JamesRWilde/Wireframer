@@ -1,19 +1,19 @@
-import { state }from "@engine/state/engine/loop.js";
+import { budgetState } from "@engine/set/engine/frame/budgetState.js";
 import { averageTime }from '@engine/get/engine/frame/averageTime.js';
 import { determineTarget }from '@engine/get/engine/quality/determineTarget.js';
 import { qualityApplyChange }from '@engine/set/engine/qualityApplyChange.js';
 
 export function budget() {
   const avgFrameTime = averageTime();
-  if (avgFrameTime === 0) return state.currentQuality;
+  if (avgFrameTime === 0) return budgetState.currentQuality;
 
   const targetQuality = determineTarget(avgFrameTime);
   if (targetQuality === null) {
-    state.upgradeCounter = 0;
-    state.downgradeCounter = 0;
+    budgetState.upgradeCounter = 0;
+    budgetState.downgradeCounter = 0;
   } else {
     qualityApplyChange(targetQuality, avgFrameTime);
   }
 
-  return state.currentQuality;
+  return budgetState.currentQuality;
 }

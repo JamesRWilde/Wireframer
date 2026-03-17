@@ -30,8 +30,8 @@
  * @param {boolean} supportsUint32 - Whether the context supports 32-bit indices.
  * @returns {Object|null} The GPU buffer store for the model, or null if invalid.
  */
-import {triangles}from '@engine/get/render/model/triangles.js';
-import {triCornerNormals}from '@engine/get/render/model/triCornerNormals.js';
+import { triangles as modelTriangles }from '@engine/get/render/model/triangles.js';
+import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
 import { wirePosData }from '@engine/init/gpu/create/wirePosData.js';
 import { fillBuffers }from '@engine/init/gpu/create/fillBuffers.js';
 import { edgeIndexData }from '@engine/init/gpu/create/edgeIndexData.js';
@@ -42,13 +42,13 @@ export function buildModelBuffers(gl, model, supportsUint32) {
 
   // Compute triangle faces for the model (handles n-gons)
   // Do not mutate the model, as some may be frozen (e.g., BASE_MODEL)
-  let triFaces = model.triangles || model._triFaces || getModelTriangles(model);
+  let triFaces = model.triangles || model._triFaces || modelTriangles(model);
   if (!triFaces?.length) return null;
   // Each face is either an array of indices or an object with .indices
   triFaces = triFaces.map(f => f?.indices ?? f);
 
   // Compute per-corner normals for smooth shading
-  const triCornerNormals = getModelTriCornerNormals(model, triFaces);
+  const triCornerNormals = getTriCornerNormals(model, triFaces);
   if (triCornerNormals?.length !== triFaces.length) return null;
 
   const vertexCount = model.V.length;
@@ -57,7 +57,7 @@ export function buildModelBuffers(gl, model, supportsUint32) {
 
   // Delegate wireframe vertex buffer creation
   // Packs all model vertex positions ([x, y, z]) into a contiguous Float32Array
-  const wirePosData = wirePosData(model);
+  const wirePosDataArr = wirePosData(model);
 
   // Delegate fill buffer creation (positions, normals, UVs, source indices)
   // Packs all triangle corner attributes into contiguous arrays for fill rendering
@@ -75,7 +75,7 @@ export function buildModelBuffers(gl, model, supportsUint32) {
   const edgeIndexBuffer = gl.createBuffer();
   let fillUVBuffer = null;
   gl.bindBuffer(gl.ARRAY_BUFFER, wirePosBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, wirePosData, gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, wirePosDataArr, gl.STATIC_DRAW);
   gl.bindBuffer(gl.ARRAY_BUFFER, fillPosBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, fillPosData, gl.DYNAMIC_DRAW);
   gl.bindBuffer(gl.ARRAY_BUFFER, fillNormalBuffer);

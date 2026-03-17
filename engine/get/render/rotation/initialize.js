@@ -41,19 +41,5 @@ import {R} from '@engine/state/render/rotationMatrixRef.js';
  * Falls back to identity matrix if rotation functions aren't available.
  */
 export function initialize() {
-  // Check if rotation functions are available
-  if (typeof mry === 'function' && typeof mrx === 'function' && typeof mmul === 'function') {
-    // Create initial rotation: Ry(0.4) * Rx(0.18)
-    // This combines a horizontal turn with a slight tilt
-    R.value = matrixMultiply3x3(matrixY(0.4), matrixX(0.18));
-  } else {
-    // Fallback: identity matrix (no rotation)
-    // This is a 4x4 matrix but only the 3x3 rotation part is used
-    R.value = [
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1
-    ];
-  }
+  R.value = matrixMultiply3x3(matrixY(0.4), matrixX(0.18));
 }

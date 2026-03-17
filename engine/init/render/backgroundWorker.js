@@ -1,5 +1,5 @@
-import * as statefrom '@ui/get/read/state.js';
-import {canvas}from '@engine/get/render/background/canvas.js';
+import { workerState as state } from '@engine/state/render/background/worker.js';
+import {canvas} from '@engine/get/render/background/canvas.js';
 
 export function backgroundWorker() {
   if (state.workerInitialized) return state.workerReady;
@@ -9,7 +9,7 @@ export function backgroundWorker() {
   
   try {
     state.worker = new Worker(
-      new URL('../../workers/workersBackground.js', import.meta.url).href,
+      new URL('../../../workers/workersBackground.js', import.meta.url).href,
       { type: 'module' }
     );
     
@@ -29,7 +29,7 @@ export function backgroundWorker() {
       state.workerReady = false;
     };
     
-    const canvasState = getBackgroundCanvas();
+    const canvasState = canvas();
     if (canvasState) {
       state.worker.postMessage({
         type: 'init',

@@ -11,21 +11,21 @@
  * @param {Object} buffers - The GPU buffer store to update.
  * @returns {boolean} True if update succeeded, false if model is invalid.
  */
-import {triangles}from '@engine/get/render/model/triangles.js';
-import {triCornerNormals}from '@engine/get/render/model/triCornerNormals.js';
+import { triangles as modelTriangles }from '@engine/get/render/model/triangles.js';
+import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
 
 export function dynamicBuffers(gl, model, buffers) {
   // Defensive: must have valid model and buffers
   if (!model || !buffers) return false;
 
   // Compute triangle faces for the model (handles n-gons)
-  let triFaces = model.triangles || model._triFaces || getModelTriangles(model);
+  let triFaces = model.triangles || model._triFaces || modelTriangles(model);
   if (!triFaces?.length) return false;
   // Each face is either an array of indices or an object with .indices
   triFaces = triFaces.map(f => f?.indices ?? f);
 
   // Compute per-corner normals for smooth shading
-  const triCornerNormals = getModelTriCornerNormals(model, triFaces);
+  const triCornerNormals = getTriCornerNormals(model, triFaces);
   if (triCornerNormals?.length !== triFaces.length) return false;
 
   const fillVertexCount = triFaces.length * 3;

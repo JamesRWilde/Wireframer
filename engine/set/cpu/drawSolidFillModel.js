@@ -16,9 +16,9 @@ import { fillWorker } from '@engine/init/cpu/fillWorker.js';
  */
 
 import { frameData }from '@engine/get/render/model/frameData.js';
-import {triangles}from '@engine/get/render/model/triangles.js';
-import {shadingMode}from '@engine/get/cpu/model/shadingMode.js';
-import {triCornerNormals}from '@engine/get/render/model/triCornerNormals.js';
+import { triangles as modelTriangles }from '@engine/get/render/model/triangles.js';
+import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.js';
+import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
 import { trianglesCpu }from '@engine/set/render/fill/trianglesCpu.js';
 import { sendRenderCommand }from '@engine/set/cpu/fill/sendRenderCommand.js';
 
@@ -48,19 +48,19 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     return;
   }
 
-  const frameData = frameData(model);
-  if (!frameData) return;
-  const { T, P2 } = frameData;
+  const fd = frameData(model);
+  if (!fd) return;
+  const { T, P2 } = fd;
 
-  const triFaces = getModelTriangles(model);
+  const triFaces = modelTriangles(model);
   if (!triFaces?.length) return;
 
-  const shadingMode = shadingMode(model, triFaces);
+  const shadingMode = getShadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
   const seamExpandPx = useSmoothShading ? (globalThis.DENSE_SEAM_EXPAND_PX ?? 0) : 0;
 
-  const triCornerNormals = useSmoothShading
-    ? getModelTriCornerNormals(model, triFaces)
+  const triCornerNormalsResult = useSmoothShading
+    ? getTriCornerNormals(model, triFaces)
     : null;
 
   const fillSlider = globalThis.FILL_OPACITY * alphaScale;
@@ -80,7 +80,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
       T,
       P2,
       triFaces,
-      triCornerNormals,
+      triCornerNormalsResult,
       useSmoothShading,
       theme,
       fillAlpha,
@@ -133,7 +133,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     triOrder,
     P2,
     T,
-    triCornerNormals,
+    triCornerNormalsResult,
     useSmoothShading,
     seamExpandPx,
     fillLayerCtx,

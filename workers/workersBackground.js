@@ -25,14 +25,14 @@ onmessage = (event) => {
         state.density = density || 1;
         state.speed = speed || 1;
         state.themeMode = themeMode || 'dark';
-        particles(state, particles);
+        workersParticles(state, particles);
         postMessage({ type: 'ready' });
         break;
 
       case 'update': {
         if (density && density !== state.density) {
           state.density = density;
-          particles(state, particles);
+          workersParticles(state, particles);
         }
         if (speed !== undefined) {
           state.speed = speed;
@@ -45,8 +45,8 @@ onmessage = (event) => {
         const opacityScale = event.data.opacity || 1;
         const themeAlphaBoost = state.themeMode === 'light' ? 1.75 : 1;
 
-        updateParticles(particles, state.width, state.height, timestamp || 0, velScale, opacityScale, themeAlphaBoost);
-        const data = packParticles(particles);
+        workersUpdateParticles(particles, state.width, state.height, timestamp || 0, velScale, opacityScale, themeAlphaBoost);
+        const data = workersPackParticles(particles);
         postMessage({ type: 'particles', data, count: particles.length }, [data.buffer]);
         break;
       }
@@ -54,7 +54,7 @@ onmessage = (event) => {
       case 'resize': {
         state.width = width;
         state.height = height;
-        particles(state, particles);
+        workersParticles(state, particles);
         break;
       }
     }

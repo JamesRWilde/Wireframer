@@ -1,2 +1,2 @@
-import * as statefrom '@ui/get/read/state.js';
-export function isBackgroundWorkerReady() { return state.workerReady; }
+import { workerState } from '@engine/state/render/background/worker.js';
+export function isBackgroundWorkerReady() { return workerState.workerReady; }

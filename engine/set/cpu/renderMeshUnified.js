@@ -22,11 +22,11 @@
 "use strict";
 
 import { frameData }from '@engine/get/render/model/frameData.js';
-import {triangles}from '@engine/get/render/model/triangles.js';
-import {shadingMode}from '@engine/get/cpu/model/shadingMode.js';
-import {triCornerNormals}from '@engine/get/render/model/triCornerNormals.js';
-import {triangleNormalCpu}from '@engine/get/render/resolve/triangleNormalCpu.js';
-import {triangleCpu}from '@engine/get/render/compute/triangleCpu.js';
+import { triangles as modelTriangles }from '@engine/get/render/model/triangles.js';
+import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.js';
+import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
+import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/resolve/triangleNormalCpu.js';
+import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/compute/triangleCpu.js';
 import { relativeLuminance }from '@ui/get/color/relativeLuminance.js';
 import { rgbaString }from '@ui/get/color/rgbaString.js';
 
@@ -40,19 +40,19 @@ export function renderMeshUnified(model, ctx) {
   if (!model?.V?.length || !model?.F?.length || !ctx) return;
 
   // Get transformed vertices
-  const frameData = frameData(model);
-  if (!frameData) return;
-  const { T, P2 } = frameData;
+  const fd = frameData(model);
+  if (!fd) return;
+  const { T, P2 } = fd;
 
   // Get triangle faces
-  const triFaces = getModelTriangles(model);
+  const triFaces = modelTriangles(model);
   if (!triFaces?.length) return;
 
   // Get shading mode and normals
-  const shadingMode = shadingMode(model, triFaces);
+  const shadingMode = getShadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
   const triCornerNormals = useSmoothShading
-    ? getModelTriCornerNormals(model, triFaces)
+    ? getTriCornerNormals(model, triFaces)
     : null;
 
   // Get opacities

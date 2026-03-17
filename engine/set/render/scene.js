@@ -22,7 +22,7 @@
 
 // Import the background particle renderer
 // Draws animated ambient particles on the background canvas
-import {background}from '@engine/set/gpu/render/background.js';
+import { background as drawBackground }from '@engine/set/render/draw/background.js';
 
 // Import the CPU foreground renderer
 // Draws solid fill and wireframe using Canvas 2D
@@ -30,7 +30,7 @@ import { cpuPath }from '@engine/set/render/cpuPath.js';
 
 // Import the GPU foreground renderer
 // Draws using WebGL for hardware-accelerated rendering
-import {gpuPath}from '@engine/set/render/gpuPath.js';
+import { gpuPath as renderGpuPath }from '@engine/set/render/gpuPath.js';
 
 // Import the render mode resolver
 // Determines whether to use GPU or CPU based on WebGL availability

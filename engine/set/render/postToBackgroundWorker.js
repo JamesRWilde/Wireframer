@@ -1,2 +1,2 @@
-import * as statefrom '@ui/get/read/state.js';
-export function postToBackgroundWorker(msg) { if (state.worker) state.worker.postMessage(msg); }
+import { workerState } from '@engine/state/render/background/worker.js';
+export function postToBackgroundWorker(msg) { if (workerState.worker) workerState.worker.postMessage(msg); }

@@ -25,14 +25,14 @@ import { detailLevel }from '@engine/set/mesh/detailLevel.js';
  * @param {Object} newModelCopy - The processed mesh model to activate
  * @param {boolean} animateMorph - Whether to animate the transition
  * @param {string} name - Display name for the model
- * @param {number} detailLevel - LOD detail level (0-1)
+ * @param {number} detailLevelPct - LOD detail level (0-1)
  * 
  * This function:
  * 1. Stores the new model as BASE_MODEL for LOD control
  * 2. If animateMorph is true and there's an old model, starts a morph animation
  * 3. Otherwise, directly sets the detail level (instant transition)
  */
-export function finalizeModel(newModelCopy, animateMorph, name, detailLevel) {
+export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct) {
   // Get the current model (if any) for morph source
   const oldModel = globalThis.MODEL;
   
@@ -45,11 +45,11 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevel) {
     // Morph animation: smooth transition from old to new model
     // The callback sets the detail level after morph completes
     globalThis.morph.startMorph(oldModel, newModelCopy, globalThis.MORPH_DURATION_MS, () => {
-      detailLevel(detailLevel, name);
+      detailLevel(detailLevelPct, name);
     });
   } else {
     // Instant transition: directly set the detail level
     // This immediately activates the new model at the specified LOD
-    detailLevel(detailLevel, name);
+    detailLevel(detailLevelPct, name);
   }
 }

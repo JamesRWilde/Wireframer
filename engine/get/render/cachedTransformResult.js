@@ -1,5 +1,5 @@
-import * as statefrom "@engine/state/render/background/worker.js";
+import { transformState } from "@engine/state/render/vertexTransformBridge.js";
 
 export function cachedTransformResult() {
-  return state.cachedResult ? { ...state.cachedResult, frameId: state.cachedFrameId } : null;
+  return transformState.cachedResult ? { ...transformState.cachedResult, frameId: transformState.cachedFrameId } : null;
 }

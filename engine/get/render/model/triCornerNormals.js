@@ -26,16 +26,16 @@
  *   // cornerNormals[i][c] gives the normal for corner c of triangle i
  */
 
-import { shadingMode }from '@engine/get/cpu/model/shadingMode.js';
-import { faceNormals }from '@engine/get/cpu/model/faceNormals.js';
+import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.js';
+import { faceNormals as computeFaceNormals }from '@engine/get/cpu/model/faceNormals.js';
 import {sumNormals}from '@engine/get/cpu/geometry/sumNormals.js';
 import { buildVertexToFaces }from '@engine/init/cpu/buildVertexToFaces.js';
 import {flatNormals}from '@engine/get/cpu/geometry/flatNormals.js';
-import {triNormals}from '@engine/get/cpu/geometry/triNormals.js';
+import { triNormals as computeTriNormals }from '@engine/get/cpu/geometry/triNormals.js';
 
 export function triCornerNormals(model, triFaces) {
   // Determine shading mode ('flat', 'smooth', or 'auto')
-  const shadingMode = shadingMode(model, triFaces);
+  const shadingMode = getShadingMode(model, triFaces);
   // Use crease angle if present, otherwise default to 62 degrees
   const crease = Number.isFinite(model._creaseAngleDeg) ? model._creaseAngleDeg : 62;
   // Build a cache key for the current normal computation
@@ -47,10 +47,10 @@ export function triCornerNormals(model, triFaces) {
   }
 
   // 2. Compute face normals for all triangles
-  const faceNormals = faceNormals(model, triFaces);
+  const faceNormals = computeFaceNormals(model, triFaces);
 
   // 3. Use precomputed triangleNormals if available
-  const triNormals = triNormals(model, triFaces.length);
+  const triNormals = computeTriNormals(model, triFaces.length);
   if (triNormals) return triNormals;
 
   // 4. Flat shading: assign face normal to all corners

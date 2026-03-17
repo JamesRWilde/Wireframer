@@ -1,32 +1,32 @@
-import { state }from "@engine/state/engine/loop.js";
+import { budgetState, DOWNGRADE_THRESHOLD, UPGRADE_THRESHOLD } from "@engine/set/engine/frame/budgetState.js";
 import { priority }from '@engine/get/engine/quality/priority.js';
 
 export function qualityApplyChange(targetQuality, avgFrameTime) {
-  const isDowngrade = priority(targetQuality) < priority(state.currentQuality);
-  const isUpgrade = priority(targetQuality) > priority(state.currentQuality);
+  const isDowngrade = priority(targetQuality) < priority(budgetState.currentQuality);
+  const isUpgrade = priority(targetQuality) > priority(budgetState.currentQuality);
 
   if (isDowngrade) {
-    state.downgradeCounter++;
-    state.upgradeCounter = 0;
-    if (state.downgradeCounter >= state.DOWNGRADE_THRESHOLD) {
-      state.currentQuality = targetQuality;
-      state.downgradeCounter = 0;
+    budgetState.downgradeCounter++;
+    budgetState.upgradeCounter = 0;
+    if (budgetState.downgradeCounter >= DOWNGRADE_THRESHOLD) {
+      budgetState.currentQuality = targetQuality;
+      budgetState.downgradeCounter = 0;
       if (globalThis.DEBUG_BUDGET) {
         console.log('[frameBudget] Downgraded to', targetQuality.toUpperCase(), 'quality (avg:', avgFrameTime.toFixed(2), 'ms)');
       }
     }
   } else if (isUpgrade) {
-    state.upgradeCounter++;
-    state.downgradeCounter = 0;
-    if (state.upgradeCounter >= state.UPGRADE_THRESHOLD) {
-      state.currentQuality = targetQuality;
-      state.upgradeCounter = 0;
+    budgetState.upgradeCounter++;
+    budgetState.downgradeCounter = 0;
+    if (budgetState.upgradeCounter >= UPGRADE_THRESHOLD) {
+      budgetState.currentQuality = targetQuality;
+      budgetState.upgradeCounter = 0;
       if (globalThis.DEBUG_BUDGET) {
         console.log('[frameBudget] Upgraded to', targetQuality.toUpperCase(), 'quality (avg:', avgFrameTime.toFixed(2), 'ms)');
       }
     }
   } else {
-    state.upgradeCounter = 0;
-    state.downgradeCounter = 0;
+    budgetState.upgradeCounter = 0;
+    budgetState.downgradeCounter = 0;
   }
 }

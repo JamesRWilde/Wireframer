@@ -1,16 +1,19 @@
+import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 import { sceneCanvas }from '@engine/set/gpu/clear/sceneCanvas.js';
 import { renderMeshUnified }from '@engine/set/cpu/renderMeshUnified.js';
+import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { axes }from '@engine/set/render/draw/axes.js';
 
 export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
   const ctx = globalThis.ctx;
   
-  canvasHidden(false);
+  // Show CPU canvas, hide GPU canvas (matching original renderCpuPath)
+  canvasCpuHidden(false);
   canvasHidden(true);
   
   if (globalThis.FRAME_LOOP_STATE.gpuSceneDrawnLastFrame) {
-    sceneCanvas();
+    const _r = sceneRenderer(); if (_r?.gl) sceneCanvas(_r.gl, globalThis.gpuCanvas);
     globalThis.FRAME_LOOP_STATE.gpuSceneDrawnLastFrame = false;
   }
   

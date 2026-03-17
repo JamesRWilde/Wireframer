@@ -1,9 +1,9 @@
-import * as statefrom "@engine/state/render/background/worker.js";
+import { transformState } from "@engine/state/render/vertexTransformBridge.js";
 
 export function workerTerminate() {
-  if (state.worker) {
-    state.worker.terminate();
-    state.worker = null;
-    state.workerAvailable = false;
+  if (transformState.worker) {
+    transformState.worker.terminate();
+    transformState.worker = null;
+    transformState.workerAvailable = false;
   }
 }

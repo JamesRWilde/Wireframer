@@ -6,9 +6,11 @@ export const WINDOW_SIZE = 30;
 export const UPGRADE_THRESHOLD = 15;
 export const DOWNGRADE_THRESHOLD = 5;
 
-export const frameTimes = new Float32Array(WINDOW_SIZE);
-export let frameTimeIndex = 0;
-export let frameTimeCount = 0;
-export let currentQuality = 'high';
-export let upgradeCounter = 0;
-export let downgradeCounter = 0;
+export const budgetState = {
+  frameTimes: new Float32Array(30),
+  frameTimeIndex: 0,
+  frameTimeCount: 0,
+  currentQuality: 'high',
+  upgradeCounter: 0,
+  downgradeCounter: 0,
+};

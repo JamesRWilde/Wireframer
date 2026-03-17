@@ -25,7 +25,7 @@ import {CUSTOM_RGB,CUSTOM_RGB_KEY,customRed,customGreen,customBlue} from '@ui/st
 
 import { clampByte }from '@ui/get/color/clampByte.js';
 import { updateCustomColor }from '@ui/set/updateCustomColor.js';
-import { customRgb }from '@ui/get/read/customRgb.js';
+import { customRgb as readCustomRgb }from '@ui/get/read/customRgb.js';
 import { palette }from '@ui/set/apply/palette.js';
 
 export function customRgb(rgb, options = {}) {
@@ -42,6 +42,6 @@ export function customRgb(rgb, options = {}) {
   globalThis.CUSTOM_RGB = newRgb;
 
   updateCustomColor();
-  if (persist) customRgb();
+  if (persist) readCustomRgb();
   if (apply) palette();
 }

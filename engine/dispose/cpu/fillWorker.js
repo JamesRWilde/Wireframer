@@ -1,15 +1,15 @@
-import * as statefrom "@engine/state/render/background/worker.js";
+import { fillState } from "@engine/state/cpu/fillRenderBridge.js";
 
 export function fillWorker() {
-  if (state.worker) {
-    state.worker.terminate();
-    state.worker = null;
-    state.workerReady = false;
-    state.workerAvailable = false;
+  if (fillState.worker) {
+    fillState.worker.terminate();
+    fillState.worker = null;
+    fillState.workerReady = false;
+    fillState.workerAvailable = false;
   }
-  if (state.cachedImageBitmap) {
-    state.cachedImageBitmap.close();
-    state.cachedImageBitmap = null;
+  if (fillState.cachedImageBitmap) {
+    fillState.cachedImageBitmap.close();
+    fillState.cachedImageBitmap = null;
   }
-  state.offscreenCanvas = null;
+  fillState.offscreenCanvas = null;
 }

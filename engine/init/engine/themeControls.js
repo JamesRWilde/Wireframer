@@ -24,7 +24,8 @@ import {presetSwatches}from '@ui/init/presetSwatches.js';
 
 // Import the function to read saved custom RGB values from localStorage
 // Returns null if no saved colors exist (first visit or cleared storage)
-import { customRgb }from '@ui/get/read/customRgb.js';
+import { customRgb as readCustomRgb }from '@ui/get/read/customRgb.js';
+import { customRgb as writeCustomRgb }from '@ui/set/customRgb.js';
 
 // Import the function to apply custom RGB values to the theme
 // Updates CSS variables, particle colors, wire colors, etc.
@@ -58,12 +59,12 @@ export function themeControls() {
     
     // Step 2: Restore saved custom color from localStorage (if any)
     // readCustomRgb returns { r, g, b } or null if nothing saved
-    const saved = customRgb();
+    const saved = readCustomRgb();
     if (saved) {
       // Apply the saved color without persisting (already saved) but with visual update
       // persist: false avoids redundant localStorage write
       // apply: true updates CSS variables and canvas colors immediately
-      customRgb(saved, { persist: false, apply: true });
+      writeCustomRgb(saved, { persist: false, apply: true });
     }
 
     // Step 3: Set up theme mode selector (dark/light)
