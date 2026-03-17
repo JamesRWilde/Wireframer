@@ -53,7 +53,7 @@ export function canvas() {
   // Create a dedicated fill layer canvas for triangle fill rendering
   // Uses alpha channel and desynchronized hint for performance
   globalThis.fillLayerCanvas = document.createElement('canvas');
-  globalThis.fillLayerCtx = globalThis.fillLayerCanvas.getContext('2d', { alpha: true, desynchronized: true });
+  globalThis.fillLayerCtx = globalThis.fillLayerCanvas.getContext('2d', { alpha: true, desynchronized: false });
 
   // Disable image smoothing for pixel-accurate triangle rendering
   if (globalThis.fillLayerCtx) globalThis.fillLayerCtx.imageSmoothingEnabled = false;

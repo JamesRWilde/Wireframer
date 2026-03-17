@@ -50,8 +50,8 @@ export function sceneRenderer(canvas) {
     depth: true,                // Enable depth buffer for z-sorting
     stencil: false,             // No stencil buffer needed
     premultipliedAlpha: true,   // Better compositing with page
-    preserveDrawingBuffer: false, // Don't retain buffer (perf optimization)
-    desynchronized: true,       // Hint to skip compositor sync
+    preserveDrawingBuffer: true, // Retain buffer to prevent flashing
+    desynchronized: false,       // Sync with compositor for stable frames
     powerPreference: 'high-performance', // Request discrete GPU if available
   };
 
