@@ -23,7 +23,7 @@
 "use strict";
 
 // Import loop state for frame tracking and timing
-import { state }from '@ui/get/read/state.js';
+import { state }from '@engine/state/engine/loop.js';
 
 // Import physics update function - handles rotation and input
 import { physics }from '@engine/set/engine/physics.js';
