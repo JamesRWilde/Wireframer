@@ -15,7 +15,7 @@
  */
 
 import { bgState } from './backgroundState.js';
-import { createGpuBackgroundRenderer } from '../gpu/background-gpu/createGpuBackgroundRenderer.js';
+import { createGpuBackgroundRenderer } from '../gpu/createGpuBackgroundRenderer.js';
 
 /**
  * getBackgroundRenderer - Gets or creates the GPU background renderer

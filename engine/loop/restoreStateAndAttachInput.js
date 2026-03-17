@@ -22,11 +22,11 @@
 
 // Import the input listener attachment function
 // Sets up mouse/touch handlers for model rotation and zoom
-import { attachInputListeners } from '../physics/input/attachInputListeners.js';
+import { attachInputListeners } from '../physics/attachInputListeners.js';
 
 // Import the UI state restoration function
 // Reads saved shape, sliders, and theme from localStorage
-import { restoreUiState } from '../../ui/controls/restoreUiState.js';
+import { restoreUiState } from '../ui/restoreUiState.js';
 
 /**
  * restoreStateAndAttachInput - Restores UI state and sets up input handling

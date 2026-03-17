@@ -20,13 +20,13 @@
 "use strict";
 
 // Import the DOM element reference for the renderer stat display
-import { statsState } from '../../ui/statsState.js';
+import { statsState } from '../ui/statsState.js';
 
 // Import the toggle function
 import { toggleRendererMode } from './toggleRendererMode.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { getSceneGpuRenderer } from '../render/gpu/runtime/getSceneGpuRenderer.js';
+import { getSceneGpuRenderer } from '../render/gpu/getSceneGpuRenderer.js';
 
 /**
  * initRendererToggle - Initializes the renderer stat as a toggle button

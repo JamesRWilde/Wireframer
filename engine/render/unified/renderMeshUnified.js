@@ -21,14 +21,14 @@
 
 "use strict";
 
-import { getModelFrameData } from '../camera/projection/getModelFrameData.js';
+import { getModelFrameData } from '../camera/getModelFrameData.js';
 import { getModelTriangles } from '../fill/getModelTriangles.js';
 import { getModelShadingMode } from '../fill/normals/getModelShadingMode.js';
 import { getModelTriCornerNormals } from '../fill/normals/getModelTriCornerNormals.js';
 import { resolveTriangleNormal } from '../fill/lighting/resolveTriangleNormal.js';
 import { computeTriangleShadeColor } from '../fill/lighting/computeTriangleShadeColor.js';
-import { relativeLuminance } from '../../../ui/color-utils/relativeLuminance.js';
-import { rgbA } from '../../../ui/color-utils/rgbA.js';
+import { relativeLuminance } from '../../ui/relativeLuminance.js';
+import { rgbA } from '../../ui/rgbA.js';
 
 /**
  * renderMeshUnified - Renders mesh with per-triangle fill and edges

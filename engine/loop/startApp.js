@@ -40,7 +40,7 @@ import '../physics/physicsState.js';
 // Bring in loader and mesh loader side-effects (globals) before any mesh operations
 // These set up globalThis.loadObjMesh and globalThis.loadMesh
 import '../../loader.js';
-import '../mesh/loader/loadMesh.js';
+import '../mesh/loadMesh.js';
 
 // Import model state to make setActiveModel available globally
 import '../core/modelState.js';
@@ -49,7 +49,7 @@ import '../core/modelState.js';
 import '../morph/initMorphApi.js';
 
 // Import UI initialization functions
-import { initObjectSelector } from '../../ui/controls/initObjectSelector.js';
+import { initObjectSelector } from '../ui/initObjectSelector.js';
 
 // Import the frame loop entry point
 import { frame } from './frame.js';
@@ -61,7 +61,7 @@ import { initializeRotation } from '../math/initializeRotation.js';
 import { R } from '../math/R.js';
 
 // Import render toggle synchronization
-import { syncRenderToggles } from '../../ui/controls/syncRenderToggles.js';
+import { syncRenderToggles } from '../ui/syncRenderToggles.js';
 
 // Import slider listener attachment
 import { attachSliderListeners } from './attachSliderListeners.js';
@@ -84,7 +84,7 @@ import {
   fillOpacity,
   wireOpacity,
   lodSlider,
-} from '../../ui/dom-state.js';
+} from '../ui/dom-state.js';
 
 /**
  * startApp - Initializes all subsystems and starts the animation loop

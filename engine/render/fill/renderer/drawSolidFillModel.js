@@ -14,7 +14,7 @@
  *   Falls back to main-thread rendering if worker is unavailable.
  */
 
-import { getModelFrameData } from '../../camera/projection/getModelFrameData.js';
+import { getModelFrameData } from '../../camera/getModelFrameData.js';
 import { getModelTriangles } from '../getModelTriangles.js';
 import { getModelShadingMode } from '../normals/getModelShadingMode.js';
 import { getModelTriCornerNormals } from '../normals/getModelTriCornerNormals.js';
