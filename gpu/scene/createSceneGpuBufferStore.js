@@ -15,7 +15,7 @@
  * @returns {{ getModelBuffers: function(Object): Object|null, updateDynamicBuffers: function(Object, Object): boolean }}
  */
 import { getModelBuffers } from '../getModelBuffers.js';
-import { updateDynamicBuffersStore } from '../updateDynamicBuffersStore.js';
+import { updateDynamicBuffersStore } from '../update/updateDynamicBuffersStore.js';
 
 export function createSceneGpuBufferStore(gl, supportsUint32) {
   // Cache for model-to-buffer mapping. Uses WeakMap so cache is cleaned up when models are GC'd.

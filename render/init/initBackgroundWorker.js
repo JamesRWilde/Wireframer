@@ -1,5 +1,5 @@
-import * as state from './backgroundWorkerState.js';
-import { getBackgroundCanvas } from './get/getBackgroundCanvas.js';
+import * as state from '../backgroundWorkerState.js';
+import { getBackgroundCanvas } from '../get/getBackgroundCanvas.js';
 
 export function initBackgroundWorker() {
   if (state.workerInitialized) return state.workerReady;

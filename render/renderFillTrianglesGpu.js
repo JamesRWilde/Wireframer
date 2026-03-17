@@ -30,7 +30,7 @@
  */
 
 "use strict";
-import { resolveTriangleNormal } from './resolveTriangleNormalGpu.js';
+import { resolveTriangleNormal } from './resolve/resolveTriangleNormalGpu.js';
 import { computeTriangleShadeColor } from './computeTriangleShadeColorGpu.js';
 import { expandTriangleForSeam } from './expandTriangleForSeamGpu.js';
 import { fillTriangle } from '../cpu/fill/fillTriangle.js';

@@ -31,7 +31,7 @@
 "use strict";
 
 // Import canvas initialization - sets up all canvas elements and resize handling
-import { initCanvas } from '../render/initCanvas.js';
+import { initCanvas } from '../render/init/initCanvas.js';
 
 // Import physics state early so its initialization code runs and sets up
 // wx/wy/wz/AUTO_* defaults before the main loop starts
@@ -67,14 +67,14 @@ import { syncRenderToggles } from '../ui/syncRenderToggles.js';
 import { attachSliderListeners } from './attachSliderListeners.js';
 
 // Import theme control initialization
-import { initThemeControls } from './initThemeControls.js';
+import { initThemeControls } from './init/initThemeControls.js';
 
 // Import UI state restoration and input listener attachment
 import { restoreStateAndAttachInput } from './restoreStateAndAttachInput.js';
 
 // Import renderer toggle initialization
 // Makes the renderer stat in the HUD a clickable toggle button
-import { initRendererToggle } from './initRendererToggle.js';
+import { initRendererToggle } from './init/initRendererToggle.js';
 
 // Import DOM element references for sliders
 import {

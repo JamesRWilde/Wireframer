@@ -1,5 +1,5 @@
 import { computeTriangleShadeColor } from './computeTriangleShadeColorCpu.js';
-import { resolveTriangleNormal } from './resolveTriangleNormalCpu.js';
+import { resolveTriangleNormal } from './resolve/resolveTriangleNormalCpu.js';
 import { expandTriangleForSeam } from './expandTriangleForSeamCpu.js';
 import { fillTriangleOnLayer } from '../cpu/fill/fillTriangleOnLayer.js';
 

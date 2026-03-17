@@ -29,7 +29,7 @@ import { state } from '../loopState.js';
 import { updatePhysics } from '../update/updatePhysics.js';
 
 // Import scene renderer - draws background and foreground
-import { renderScene } from '../renderScene.js';
+import { renderScene } from '../render/renderScene.js';
 
 // Import telemetry HUD updater - displays stats in the UI
 import { updateTelemetryHud } from '../update/updateTelemetryHud.js';
