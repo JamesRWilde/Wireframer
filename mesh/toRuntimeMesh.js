@@ -20,13 +20,13 @@
  */
 
 // Import OBJ line parser
-import { parseObjLines } from './parseObjLines.js';
+import { parseObjLines } from './parse/parseObjLines.js';
 
 // Import raw text validator
 import { validateRawObjText } from './validateRawObjText.js';
 
 // Import parse result checker
-import { checkParseResults } from './checkParseResults.js';
+import { checkParseResults } from './parse/checkParseResults.js';
 
 // Import mesh object builder
 import { buildMeshObject } from './buildMeshObject.js';

@@ -55,10 +55,10 @@ import { initObjectSelector } from '../ui/initObjectSelector.js';
 import { frame } from './frame.js';
 
 // Import rotation matrix initialization
-import { rotationInitialize } from '../render/rotationInitialize.js';
+import { rotationInitialize } from '../render/rotation/rotationInitialize.js';
 
 // Import the rotation matrix reference
-import { R } from '../render/rotationMatrixRef.js';
+import { R } from '../render/rotation/rotationMatrixRef.js';
 
 // Import render toggle synchronization
 import { syncRenderToggles } from '../ui/syncRenderToggles.js';

@@ -16,11 +16,11 @@
 
 "use strict";
 
-import { clampByte } from './clampByte.js';
-import { mixRgb } from './mixRgb.js';
-import { toRgbCss } from './toRgbCss.js';
-import { toRgbaCss } from './toRgbaCss.js';
-import { enforceContrast } from './enforceContrast.js';
+import { clampByte } from './color/clampByte.js';
+import { mixRgb } from './color/mixRgb.js';
+import { toRgbCss } from './color/toRgbCss.js';
+import { toRgbaCss } from './color/toRgbaCss.js';
+import { enforceContrast } from './color/enforceContrast.js';
 
 export function buildCustomTheme(rgbInput) {
   const base = [clampByte(rgbInput[0]), clampByte(rgbInput[1]), clampByte(rgbInput[2])];

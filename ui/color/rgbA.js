@@ -1,5 +1,5 @@
 /**
- * rgbA.js - RGBA CSS String Generation
+ * rgbaString.js - RGBA CSS String Generation
  * 
  * PURPOSE:
  *   Generates a CSS rgba() color string from RGB values and alpha.
@@ -13,7 +13,7 @@
 "use strict";
 
 /**
- * rgbA - Creates CSS rgba() string from RGB and alpha
+ * rgbaString - Creates CSS rgba() string from RGB and alpha
  * 
  * @param {Array<number>} rgb - RGB color [r, g, b] with values 0-255
  * @param {number} alpha - Alpha value (0-1)
@@ -25,6 +25,6 @@
  * 2. Formats alpha with 3 decimal places
  * 3. Returns CSS rgba() string
  */
-export function rgbA(rgb, alpha) {
+export function rgbaString(rgb, alpha) {
   return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha.toFixed(3)})`;
 }

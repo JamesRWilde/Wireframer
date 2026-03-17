@@ -13,9 +13,9 @@
 "use strict";
 
 import { customRed, customGreen, customBlue, customRedValue, customGreenValue, customBlueValue, customHex, customSwatch, PRESET_SWATCH_BUTTONS, CUSTOM_RGB } from './domState.js';
-import { toHex } from './toHex.js';
-import { toRgbCss } from './toRgbCss.js';
-import { rgbEquals } from './rgbEquals.js';
+import { toHex } from './color/toHex.js';
+import { toRgbCss } from './color/toRgbCss.js';
+import { rgbEquals } from './color/rgbEquals.js';
 
 export function updateCustomColorUi() {
   if (!customRed || !customGreen || !customBlue) return;

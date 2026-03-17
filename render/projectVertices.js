@@ -1,13 +1,13 @@
 /**
- * project.js - Single Point Projection
+ * projectVerticesVertices.js - Single Point Projection
  * 
  * PURPOSE:
  *   Projects a single 3D point to 2D screen coordinates.
- *   Uses perspective projection with configurable zoom and vertical offset.
+ *   Uses perspective projectVerticesVerticesion with configurable zoom and vertical offset.
  * 
  * ARCHITECTURE ROLE:
- *   Used for projecting individual points (e.g., debug markers, UI elements).
- *   For bulk vertex projection, use getModelFrameData instead.
+ *   Used for projectVerticesVerticesing individual points (e.g., debug markers, UI elements).
+ *   For bulk vertex projectVerticesVerticesion, use getModelFrameData instead.
  * 
  * PROJECTION FORMULA:
  *   screenX = centerX + (worldX * fov) / (worldZ + 3)
@@ -16,7 +16,7 @@
  */
 
 /**
- * project - Projects a 3D point to 2D screen coordinates
+ * projectVerticesVertices - Projects a 3D point to 2D screen coordinates
  * 
  * @param {Array<number>} p - 3D point [x, y, z] in world space
  * 
@@ -27,7 +27,7 @@
  * 2. Applies perspective division with depth offset
  * 3. Centers result in viewport with model vertical offset
  */
-export function project(p) {
+export function projectVerticesVertices(p) {
   // Calculate field of view: smaller viewport dimension * 0.9 * zoom
   const fov = Math.min(window.innerWidth, window.innerHeight) * 0.9 * globalThis.ZOOM;
   

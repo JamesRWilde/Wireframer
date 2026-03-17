@@ -21,13 +21,13 @@
 
 "use strict";
 
-import { getModelFrameData } from '../render/getModelFrameData.js';
-import { getModelTriangles } from '../render/getModelTriangles.js';
+import { getModelFrameData } from '../render/get/getModelFrameData.js';
+import { getModelTriangles } from '../render/get/getModelTriangles.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
-import { getModelTriCornerNormals } from '../render/getModelTriCornerNormals.js';
+import { getModelTriCornerNormals } from '../render/get/getModelTriCornerNormals.js';
 import { resolveTriangleNormal } from '../render/resolveTriangleNormalCpu.js';
 import { computeTriangleShadeColor } from '../render/computeTriangleShadeColorCpu.js';
-import { relativeLuminance } from '../ui/relativeLuminance.js';
+import { relativeLuminance } from '../ui/color/relativeLuminance.js';
 import { rgbaString } from '../render/rgbaString.js';
 
 /**

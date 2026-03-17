@@ -20,7 +20,7 @@
 
 "use strict";
 
-import { clampByte } from './clampByte.js';
+import { clampByte } from './color/clampByte.js';
 import { updateCustomColorUi } from './updateCustomColorUi.js';
 import { persistCustomRgb } from './persistCustomRgb.js';
 import { applyPalette } from './applyPalette.js';

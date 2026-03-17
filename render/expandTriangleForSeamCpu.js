@@ -15,7 +15,7 @@
  *   Expanding each triangle slightly ensures edges overlap, eliminating gaps.
  */
 
-import { geometryExpandPoint } from '../cpu/geometryExpandPoint.js';
+import { geometryExpandPoint } from '../cpu/geometry/geometryExpandPoint.js';
 
 /**
  * expandTriangleForSeam - Expands triangle vertices outward from centroid

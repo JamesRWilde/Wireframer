@@ -14,8 +14,8 @@
 
 "use strict";
 
-import { hsvToRgb } from './hsvToRgb.js';
-import { relativeLuminance } from './relativeLuminance.js';
+import { hsvToRgb } from './color/hsvToRgb.js';
+import { relativeLuminance } from './color/relativeLuminance.js';
 
 export function randomPresetRgb() {
   for (let i = 0; i < 18; i++) {

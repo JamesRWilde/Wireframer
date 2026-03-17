@@ -27,7 +27,7 @@ import { state } from './loopState.js';
 import { updateRendererHud } from './updateRendererHud.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { getSceneGpuRenderer } from '../gpu/getSceneGpuRenderer.js';
+import { getSceneGpuRenderer } from '../gpu/scene/getSceneGpuRenderer.js';
 
 /**
  * resolveForegroundRenderMode - Determines and caches the foreground render mode

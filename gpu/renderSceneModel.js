@@ -1,7 +1,7 @@
 import { normalizeVector3 } from "./normalizeVector3.js";
 import { convertRgbToNormalized } from "./convertRgbToNormalized.js";
 import { toRowMajorRotation } from "./toRowMajorRotation.js";
-import { setProjectionUniforms } from "./setProjectionUniforms.js";
+import { setProjectionUniforms } from "./scene/setProjectionUniforms.js";
 
 export function renderSceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays) {
   if (!params?.theme || !params?.width || !params?.height) return false;

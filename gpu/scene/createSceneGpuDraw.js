@@ -1,5 +1,5 @@
-import { renderModel } from "./renderModel.js";
-import { clearGpuDraw } from "./clearGpuDraw.js";
+import { renderModel } from "../renderModel.js";
+import { clearGpuDraw } from "../clearGpuDraw.js";
 
 export function createSceneGpuDraw(gl, canvas, shaderPack, bufferStore) {
   const tmpArrays = {

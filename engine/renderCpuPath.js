@@ -1,4 +1,4 @@
-import { clearGpuSceneCanvas } from '../gpu/clearGpuSceneCanvas.js';
+import { clearGpuSceneCanvas } from '../gpu/scene/clearGpuSceneCanvas.js';
 import { renderMeshUnified } from '../cpu/renderMeshUnified.js';
 import { setCpuCanvasHidden } from './setCpuCanvasHidden.js';
 import { setGpuCanvasHidden } from './setGpuCanvasHidden.js';
