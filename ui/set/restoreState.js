@@ -16,6 +16,7 @@
 "use strict";
 
 import { state }from '@ui/get/read/state.js';
+import { themeMode }from '@ui/set/apply/themeMode.js';
 import { clampedValue }from '@ui/set/apply/clampedValue.js';
 import { bldMigratedState }from '@ui/init/bldMigratedState.js';
 import {select,themeMode as themeModeEl,lodSlider,bgDensity,bgVelocity,bgOpacity,fillOpacity,wireOpacity} from '@ui/state/dom.js';
