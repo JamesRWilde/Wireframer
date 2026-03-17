@@ -1,16 +1,16 @@
 // Import shader program creation
 // Compiles vertex and fragment shaders for fill and wire rendering
-import { createSceneGpuPrograms } from './createSceneGpuPrograms.js';
+import { createSceneGpuPrograms } from './initCreateSceneGpuPrograms.js';
 
 // Import buffer store creation
 // Manages vertex buffers for fill positions, normals, and wire edges
-import { createSceneGpuBufferStore } from './createSceneGpuBufferStore.js';
+import { createSceneGpuBufferStore } from './initCreateSceneGpuBufferStore.js';
 
 // Import draw API creation
 // Provides renderModel and clear functions for WebGL rendering
-import { createSceneGpuDraw } from './createSceneGpuDraw.js';
+import { createSceneGpuDraw } from './initCreateSceneGpuDraw.js';
 
-export function createSceneGpuRenderer(canvas) {
+export function initCreateSceneGpuRenderer(canvas) {
   if (!canvas) return null;
 
   const glOpts = {
@@ -39,14 +39,14 @@ export function createSceneGpuRenderer(canvas) {
 
   let shaderPack;
   try {
-    shaderPack = createSceneGpuPrograms(gl);
+    shaderPack = initCreateSceneGpuPrograms(gl);
   } catch (err) {
     console.warn(err);
     return null;
   }
 
-  const bufferStore = createSceneGpuBufferStore(gl, supportsUint32);
-  const drawApi = createSceneGpuDraw(gl, canvas, shaderPack, bufferStore);
+  const bufferStore = initCreateSceneGpuBufferStore(gl, supportsUint32);
+  const drawApi = initCreateSceneGpuDraw(gl, canvas, shaderPack, bufferStore);
 
   // Engine-owned mesh only
   return {

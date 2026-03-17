@@ -1,7 +1,7 @@
 import { renderModel } from "../renderModel.js";
 import { clearGpuDraw } from "../clearGpuDraw.js";
 
-export function createSceneGpuDraw(gl, canvas, shaderPack, bufferStore) {
+export function initCreateSceneGpuDraw(gl, canvas, shaderPack, bufferStore) {
   const tmpArrays = {
     tmpLight: new Float32Array(3),
     tmpView: new Float32Array(3),

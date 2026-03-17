@@ -1,8 +1,8 @@
 // Import GPU renderer getter to access the singleton renderer instance
-import { getSceneGpuRenderer } from './get/getSceneGpuRenderer.js';
+import { getSceneGpuRenderer } from '../get/getSceneGpuRenderer.js';
 
 // Import GPU renderer disabler for fallback on errors
-import { disableSceneGpuRenderer } from './dispose/disableSceneGpuRenderer.js';
+import { disableSceneGpuRenderer } from '../dispose/disableSceneGpuRenderer.js';
 
 /**
  * drawGpuSceneModel - Renders the 3D model using the GPU (WebGL) renderer
@@ -14,7 +14,7 @@ import { disableSceneGpuRenderer } from './dispose/disableSceneGpuRenderer.js';
  *   true: GPU rendering completed successfully
  *   false: GPU rendering failed (renderer unavailable or error occurred)
  */
-export function drawGpuSceneModel(model, params) {
+export function setDrawGpuSceneModel(model, params) {
   const renderer = getSceneGpuRenderer();
   if (!renderer) return false;
 

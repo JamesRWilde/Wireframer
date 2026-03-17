@@ -1,6 +1,6 @@
-import { createGpuProgram } from './init/createGpuProgram.js';
+import { createGpuProgram } from './createGpuProgram.js';
 
-export function createSceneGpuPrograms(gl) {
+export function initCreateSceneGpuPrograms(gl) {
   const fillVertSrc = `
     attribute vec3 a_pos;
     attribute vec3 a_normal;
