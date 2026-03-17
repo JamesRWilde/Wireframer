@@ -1,4 +1,4 @@
-import * as state from './frameBudgetState.js';
+import * as state from '../frameBudgetState.js';
 
 export function updateFrameTime(frameMs) {
   state.frameTimes[state.frameTimeIndex] = frameMs;

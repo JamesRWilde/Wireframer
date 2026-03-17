@@ -1,4 +1,4 @@
-import * as state from './frameBudgetState.js';
+import * as state from '../frameBudgetState.js';
 
 export function getAverageFrameTime() {
   if (state.frameTimeCount === 0) return 0;
