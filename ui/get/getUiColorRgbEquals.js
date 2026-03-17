@@ -24,6 +24,6 @@
  * 1. Compares each RGB component
  * 2. Returns true only if all three match exactly
  */
-export function rgbEquals(a, b) {
+export function getUiColorRgbEquals(a, b) {
   return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 }

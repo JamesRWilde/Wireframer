@@ -26,7 +26,7 @@
  * 2. Formula: result = a + (b - a) * t
  * 3. Rounds to integers
  */
-export function lerpColor(a, b, t) {
+export function getUiColorLerpColor(a, b, t) {
   return [
     Math.round(a[0] + (b[0] - a[0]) * t),
     Math.round(a[1] + (b[1] - a[1]) * t),

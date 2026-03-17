@@ -27,7 +27,7 @@
  * 2. Returns fallback if conversion results in NaN or Infinity
  * 3. Clamps result to [min, max] range
  */
-export function clampNumber(value, min, max, fallback) {
+export function getUiColorClampNumber(value, min, max, fallback) {
   // Convert to number
   const n = Number(value);
   

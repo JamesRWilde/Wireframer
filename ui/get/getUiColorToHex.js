@@ -12,7 +12,7 @@
 
 "use strict";
 
-import { clampByte } from './clampByte.js';
+import { getUiColorClampByte } from './getUiColorClampByte.js';
 
 /**
  * toHex - Converts RGB to hex color string
@@ -27,9 +27,9 @@ import { clampByte } from './clampByte.js';
  * 3. Joins and prefixes with #
  * 4. Returns uppercase result
  */
-export function toHex(rgb) {
+export function getUiColorToHex(rgb) {
   // Convert each component to 2-digit hex
-  const hex = rgb.map((v) => clampByte(v).toString(16).padStart(2, '0')).join('');
+  const hex = rgb.map((v) => getUiColorClampByte(v).toString(16).padStart(2, '0')).join('');
   
   // Return uppercase hex string with # prefix
   return `#${hex.toUpperCase()}`;

@@ -17,7 +17,7 @@
 "use strict";
 
 import { themeMode } from '../domState.js';
-import { applyPalette } from '../applyPalette.js';
+import { setUiApplyPalette } from './setUiApplyPalette.js';
 
 /**
  * setThemeMode - Sets application theme mode
@@ -43,5 +43,5 @@ export function setThemeMode(mode, options = {}) {
   if (themeMode) themeMode.value = globalThis.THEME_MODE;
   
   // Apply palette to update UI colors
-  if (apply) applyPalette();
+  if (apply) setUiApplyPalette();
 }

@@ -19,6 +19,6 @@
  * 
  * @returns {string} CSS rgb() color string
  */
-export function toRgbCss(rgb) {
+export function getUiColorToRgbCss(rgb) {
   return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
 }

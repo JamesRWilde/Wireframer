@@ -17,7 +17,7 @@
 
 "use strict";
 
-import { relativeLuminance } from './relativeLuminance.js';
+import { getUiColorRelativeLuminance } from './getUiColorRelativeLuminance.js';
 
 /**
  * contrastRatio - Calculates WCAG contrast ratio between two colors
@@ -32,10 +32,10 @@ import { relativeLuminance } from './relativeLuminance.js';
  * 2. Identifies lighter and darker colors
  * 3. Applies WCAG contrast formula
  */
-export function contrastRatio(a, b) {
+export function getUiColorContrastRatio(a, b) {
   // Get relative luminance for both colors
-  const la = relativeLuminance(a);
-  const lb = relativeLuminance(b);
+  const la = getUiColorRelativeLuminance(a);
+  const lb = getUiColorRelativeLuminance(b);
   
   // Identify lighter and darker
   const light = Math.max(la, lb);

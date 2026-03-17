@@ -21,7 +21,7 @@
 
 "use strict";
 
-import { lerpColor } from './getRenderLerpColor.js';
+import { getRenderLerpColor } from './getRenderLerpColor.js';
 export function getRenderComputeTriangleGpu(normal, useSmoothShading, theme) {
   const LIGHT_DIR = [-0.532, 0.847, 0];
   const VIEW_DIR = [0, 0, -1];
@@ -46,5 +46,5 @@ export function getRenderComputeTriangleGpu(normal, useSmoothShading, theme) {
   const lit = Math.max(0, Math.min(1, ambient + diffuse + specular));
 
   // Interpolate between dark and bright theme colors based on computed lighting.
-  return lerpColor(theme.shadeDark || [0, 0, 0], theme.shadeBright || [255, 255, 255], lit);
+  return getRenderLerpColor(theme.shadeDark || [0, 0, 0], theme.shadeBright || [255, 255, 255], lit);
 }

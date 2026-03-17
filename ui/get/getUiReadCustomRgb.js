@@ -17,15 +17,15 @@
 "use strict";
 
 import { CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT } from '../domState.js';
-import { clampByte } from '../color/clampByte.js';
+import { getUiColorClampByte } from './getUiColorClampByte.js';
 
-export function readCustomRgb() {
+export function getUiReadCustomRgb() {
   try {
     const saved = localStorage.getItem(CUSTOM_RGB_KEY);
     if (!saved) return CUSTOM_RGB_DEFAULT.slice();
     const parsed = JSON.parse(saved);
     if (!Array.isArray(parsed) || parsed.length !== 3) return CUSTOM_RGB_DEFAULT.slice();
-    return [clampByte(parsed[0]), clampByte(parsed[1]), clampByte(parsed[2])];
+    return [getUiColorClampByte(parsed[0]), getUiColorClampByte(parsed[1]), getUiColorClampByte(parsed[2])];
   } catch {
     return CUSTOM_RGB_DEFAULT.slice();
   }

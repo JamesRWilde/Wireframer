@@ -20,11 +20,11 @@
 
 // Import the function to create clickable preset color swatches in the UI
 // These provide quick access to curated color combinations
-import { initPresetSwatches } from '../../ui/init/initPresetSwatches.js';
+import { initPresetSwatches } from '../../ui/init/initUiPresetSwatches.js';
 
 // Import the function to read saved custom RGB values from localStorage
 // Returns null if no saved colors exist (first visit or cleared storage)
-import { readCustomRgb } from '../../ui/read/readCustomRgb.js';
+import { getUiReadCustomRgb } from '../../ui/get/getUiReadCustomRgb.js';
 
 // Import the function to apply custom RGB values to the theme
 // Updates CSS variables, particle colors, wire colors, etc.
@@ -36,7 +36,7 @@ import { setThemeMode } from '../../ui/set/setThemeMode.js';
 
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences
-import { persistUiState } from '../../ui/persist/persistUiState.js';
+import { setUiPersistUiState } from '../../ui/set/setUiPersistUiState.js';
 
 /**
  * initThemeControls - Initializes the theme system and wires up event handlers
@@ -58,7 +58,7 @@ export function initThemeControls() {
     
     // Step 2: Restore saved custom color from localStorage (if any)
     // readCustomRgb returns { r, g, b } or null if nothing saved
-    const saved = readCustomRgb();
+    const saved = getUiReadCustomRgb();
     if (saved) {
       // Apply the saved color without persisting (already saved) but with visual update
       // persist: false avoids redundant localStorage write
@@ -84,7 +84,7 @@ export function initThemeControls() {
         // Persist the new theme mode to localStorage
         // Wrapped in try/catch because persistence is non-critical
         try {
-          persistUiState();
+          setUiPersistUiState();
         } catch {
           // Ignore persistence errors - theme still works for this session
         }

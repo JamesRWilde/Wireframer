@@ -19,7 +19,7 @@
 "use strict";
 
 import { getObjectList } from '../../engine/render/get/getRenderObjectList.js';
-import { persistUiState } from '../persist/persistUiState.js';
+import { setUiPersistUiState } from '../set/setUiPersistUiState.js';
 
 export async function initObjectSelector(restoredShapeName = null) {
   // Fetch the dynamic list of available meshes from the server
@@ -63,7 +63,7 @@ export async function initObjectSelector(restoredShapeName = null) {
     console.debug('[initObjectSelector] selection changed', idx);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       await globalThis.loadObjMesh(OBJECTS[idx].obj, OBJECTS[idx].name);
-      persistUiState(OBJECTS);
+      setUiPersistUiState(OBJECTS);
     }
   });
 }

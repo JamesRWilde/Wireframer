@@ -16,7 +16,7 @@
  *   - Final color: Interpolation between theme shadeDark and shadeBright
  */
 
-import { lerpColor } from './getRenderLerpColor.js';
+import { getRenderLerpColor } from './getRenderLerpColor.js';
 
 /**
  * View-space light direction: top-left ceiling light
@@ -81,5 +81,5 @@ export function getRenderComputeTriangleCpu(normal, useSmoothShading) {
   const lit = Math.max(0, Math.min(1, ambient + diffuse + specular));
   
   // Interpolate between dark and bright theme colors
-  return lerpColor(THEME.shadeDark, THEME.shadeBright, lit);
+  return getRenderLerpColor(THEME.shadeDark, THEME.shadeBright, lit);
 }

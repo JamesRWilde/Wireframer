@@ -20,8 +20,8 @@
 
 "use strict";
 
-import { buildCustomTheme } from './buildCustomTheme.js';
-import { CUSTOM_RGB } from './domState.js';
+import { setUiBuildCustomTheme } from './setUiBuildCustomTheme.js';
+import { CUSTOM_RGB } from '../domState.js';
 
 /**
  * applyPalette - Applies current color theme to application
@@ -33,9 +33,9 @@ import { CUSTOM_RGB } from './domState.js';
  * 2. Sets global THEME object for runtime color access
  * 3. Updates CSS custom properties for UI styling
  */
-export function applyPalette() {
+export function setUiApplyPalette() {
   // Build complete theme palette from base color
-  const palette = buildCustomTheme(CUSTOM_RGB);
+  const palette = setUiBuildCustomTheme(CUSTOM_RGB);
   
   // Set global THEME for runtime access by renderers
   globalThis.THEME = palette;

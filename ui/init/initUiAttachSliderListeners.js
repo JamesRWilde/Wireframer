@@ -34,7 +34,7 @@ import { syncRenderToggles } from '../set/syncRenderToggles.js';
  * The function wraps all event handlers in try/catch to prevent a single slider
  * error from breaking the entire UI. Errors are logged but don't crash the app.
  */
-export function attachSliderListeners(sliders, lodSlider, setDetailLevel) {
+export function initUiAttachSliderListeners(sliders, lodSlider, setDetailLevel) {
   try {
     // Iterate over all standard sliders (fill opacity, wire opacity, bg density, etc.)
     // Each slider gets an 'input' event listener that fires on every value change

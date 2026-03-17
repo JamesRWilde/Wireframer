@@ -10,7 +10,7 @@
 
 import { attachInputListeners } from '../../engine/render/init/initRenderAttachInputListeners.js';
 
-export function attachInputListenersInit() {
+export function initUiAttachInputListeners() {
   try {
     const cpuCanvas = document.getElementById('c');
     attachInputListeners(cpuCanvas);

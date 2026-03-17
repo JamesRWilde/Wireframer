@@ -27,7 +27,7 @@ import { getModelShadingMode } from '../get/getCpuModelShadingMode.js';
 import { getModelTriCornerNormals } from '../../render/get/getRenderModelTriCornerNormals.js';
 import { resolveTriangleNormal } from '../../render/get/getRenderResolveTriangleNormalCpu.js';
 import { computeTriangleShadeColor } from '../../render/get/getRenderComputeTriangleCpu.js';
-import { relativeLuminance } from '../../../ui/color/relativeLuminance.js';
+import { getUiColorRelativeLuminance } from '../../../ui/get/getUiColorRelativeLuminance.js';
 import { getRenderRgbaString } from '../../render/get/getRenderRgbaString.js';
 
 /**
@@ -61,7 +61,7 @@ export function renderCpuMeshUnified(model, ctx) {
 
   // Get wire color (contrast with fill)
   let fillRgb = globalThis.THEME?.fill ?? [0, 200, 120];
-  const fillLum = relativeLuminance(fillRgb);
+  const fillLum = getUiColorRelativeLuminance(fillRgb);
   const contrastWire = fillLum > 0.5 ? [0, 0, 0] : [255, 255, 255];
   const edgeColor = getRenderRgbaString(contrastWire, 1);
 

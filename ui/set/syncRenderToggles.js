@@ -23,22 +23,22 @@ import {
   fillOpacity, fillOpacityValue,
   wireOpacity, wireOpacityValue,
 } from '../domState.js';
-import { sliderDisplayPercent } from '../sliderDisplayPercent.js';
-import { persistUiState } from '../persist/persistUiState.js';
+import { getUiSliderDisplayPercent } from '../sliderDisplayPercent.js';
+import { setUiPersistUiState } from './setUiPersistUiState.js';
 
 export function syncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;
-  lodValue.textContent = `${sliderDisplayPercent(lodSlider)}%`;
+  lodValue.textContent = `${getUiSliderDisplayPercent(lodSlider)}%`;
 
   const rawDensity = Number(bgDensity.value);
   const densityPct = rawDensity / 100;
   globalThis.BG_PARTICLE_DENSITY_PCT = densityPct;
-  bgDensityValue.textContent = `${sliderDisplayPercent(bgDensity)}%`;
+  bgDensityValue.textContent = `${getUiSliderDisplayPercent(bgDensity)}%`;
 
   const rawVelocity = Number(bgVelocity.value);
   const velocityPct = rawVelocity / 100;
   globalThis.BG_PARTICLE_VELOCITY_PCT = velocityPct;
-  bgVelocityValue.textContent = `${sliderDisplayPercent(bgVelocity)}%`;
+  bgVelocityValue.textContent = `${getUiSliderDisplayPercent(bgVelocity)}%`;
 
   const rawOpacity = Number(bgOpacity.value);
   const opacityPct = rawOpacity / 100;
@@ -54,5 +54,5 @@ export function syncRenderToggles() {
                   'WIRE_OPACITY', globalThis.WIRE_OPACITY);
   }
 
-  persistUiState();
+  setUiPersistUiState();
 }

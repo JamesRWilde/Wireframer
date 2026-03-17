@@ -20,15 +20,15 @@
 
 "use strict";
 
-import { clampByte } from '../color/clampByte.js';
+import { getUiColorClampByte } from '../get/getUiColorClampByte.js';
 import { updateCustomColorUi } from './updateCustomColorUi.js';
-import { persistCustomRgb } from '../persist/persistCustomRgb.js';
-import { applyPalette } from '../applyPalette.js';
+import { setUiPersistCustomRgb } from './setUiPersistCustomRgb.js';
+import { setUiApplyPalette } from './setUiApplyPalette.js';
 import { CUSTOM_RGB } from '../domState.js';
 
 export function setCustomRgb(rgb, options = {}) {
   const { persist = true, apply = true } = options;
-  const newRgb = [clampByte(rgb[0]), clampByte(rgb[1]), clampByte(rgb[2])];
+  const newRgb = [getUiColorClampByte(rgb[0]), getUiColorClampByte(rgb[1]), getUiColorClampByte(rgb[2])];
 
   // Update module-exported binding (used by other modules) and global fallback.
   try {
@@ -40,6 +40,6 @@ export function setCustomRgb(rgb, options = {}) {
   globalThis.CUSTOM_RGB = newRgb;
 
   updateCustomColorUi();
-  if (persist) persistCustomRgb();
-  if (apply) applyPalette();
+  if (persist) setUiPersistCustomRgb();
+  if (apply) setUiApplyPalette();
 }

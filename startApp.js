@@ -49,7 +49,7 @@ import './engine/render/modelState.js';
 import './engine/mesh/initMorphApi.js';
 
 // Import UI initialization functions
-import { initObjectSelector } from './ui/init/initObjectSelector.js';
+import { initObjectSelector } from './ui/init/initUiObjectSelector.js';
 
 // Import the frame loop entry point
 import { frame } from './engine/set/setFrame.js';
@@ -65,8 +65,8 @@ import { syncRenderToggles } from './ui/set/syncRenderToggles.js';
 
 // Import slider listener attachment
 import { setRestoredState } from './engine/set/setRestoredState.js';
-import { attachInputListenersInit } from './ui/init/attachInputListenersInit.js';
-import { attachSliderListeners } from './ui/init/attachSliderListeners.js';
+import { attachInputListenersInit } from './ui/init/initUiAttachInputListeners.js';
+import { attachSliderListeners } from './ui/init/initUiAttachSliderListeners.js';
 
 // Import theme control initialization
 import { initThemeControls } from './engine/init/initThemeControls.js';

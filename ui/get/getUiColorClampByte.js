@@ -24,7 +24,7 @@
  * 2. Rounds to nearest integer
  * 3. Clamps to [0, 255] range
  */
-export function clampByte(value) {
+export function getUiColorClampByte(value) {
   // Convert to number, round, and clamp to byte range
   return Math.max(0, Math.min(255, Math.round(Number(value) || 0)));
 }

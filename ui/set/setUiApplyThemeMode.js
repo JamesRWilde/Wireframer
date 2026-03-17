@@ -10,9 +10,9 @@
  *
  * @param {Object} state - Deserialized UI state object from localStorage
  */
-import { themeMode } from './domState.js';
+import { themeMode } from '../domState.js';
 
-export function applyThemeMode(state) {
+export function setUiApplyThemeMode(state) {
   if (!themeMode || !('themeMode' in state)) return;
   themeMode.value = state.themeMode === 'light' ? 'light' : 'dark';
 }

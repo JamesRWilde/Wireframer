@@ -13,9 +13,9 @@
 "use strict";
 
 import { customRed, customGreen, customBlue, customRedValue, customGreenValue, customBlueValue, customHex, customSwatch, PRESET_SWATCH_BUTTONS, CUSTOM_RGB } from '../domState.js';
-import { toHex } from '../color/toHex.js';
-import { toRgbCss } from '../color/toRgbCss.js';
-import { rgbEquals } from '../color/rgbEquals.js';
+import { getUiColorToHex } from '../get/getUiColorToHex.js';
+import { getUiColorToRgbCss } from '../get/getUiColorToRgbCss.js';
+import { getUiColorRgbEquals } from '../get/getUiColorRgbEquals.js';
 
 export function updateCustomColorUi() {
   if (!customRed || !customGreen || !customBlue) return;
@@ -28,10 +28,10 @@ export function updateCustomColorUi() {
   if (customRedValue) customRedValue.textContent = String(r);
   if (customGreenValue) customGreenValue.textContent = String(g);
   if (customBlueValue) customBlueValue.textContent = String(b);
-  if (customHex) customHex.textContent = toHex(CUSTOM_RGB);
-  if (customSwatch) customSwatch.style.background = toRgbCss(CUSTOM_RGB);
+  if (customHex) customHex.textContent = getUiColorToHex(CUSTOM_RGB);
+  if (customSwatch) customSwatch.style.background = getUiColorToRgbCss(CUSTOM_RGB);
 
   for (const entry of PRESET_SWATCH_BUTTONS) {
-    entry.button.classList.toggle('is-active', rgbEquals(entry.rgb, CUSTOM_RGB));
+    entry.button.classList.toggle('is-active', getUiColorRgbEquals(entry.rgb, CUSTOM_RGB));
   }
 }

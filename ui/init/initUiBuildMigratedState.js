@@ -18,9 +18,9 @@ import {
   bgDensity,
   bgVelocity,
   bgOpacity,
-} from './domState.js';
+} from '../domState.js';
 
-export function buildMigratedState(state) {
+export function initUiBuildMigratedState(state) {
   return {
     selectedShapeName: state.selectedShapeName || null,
     themeMode: state.themeMode || 'dark',

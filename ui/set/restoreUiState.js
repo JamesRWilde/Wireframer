@@ -15,10 +15,10 @@
 
 "use strict";
 
-import { readUiState } from '../read/readUiState.js';
-import { applyClampedValue } from '../applyClampedValue.js';
-import { applyThemeMode } from '../applyThemeMode.js';
-import { buildMigratedState } from '../buildMigratedState.js';
+import { getUiReadUiState } from '../get/getUiReadUiState.js';
+import { setUiApplyClampedValue } from './setUiApplyClampedValue.js';
+import { setUiApplyThemeMode } from './setUiApplyThemeMode.js';
+import { initUiBuildMigratedState } from '../init/initUiBuildMigratedState.js';
 import {
   lodSlider,
   fillOpacity,
@@ -31,19 +31,19 @@ import {
 const UI_STATE_KEY = 'wireframer.uiState';
 
 export function restoreUiState() {
-  const state = readUiState();
+  const state = getUiReadUiState();
   if (!state) return null;
 
-  applyClampedValue({ state, key: 'lod', element: lodSlider, min: 50, max: 140, defaultValue: 100 });
-  applyClampedValue({ state, key: 'fillOpacity', element: fillOpacity, min: 0, max: 100, defaultValue: 0 });
-  applyClampedValue({ state, key: 'wireOpacity', element: wireOpacity, min: 0, max: 100, defaultValue: 100 });
-  applyClampedValue({ state, key: 'bgDensity', element: bgDensity, min: 0, max: 220, defaultValue: 100 });
-  applyClampedValue({ state, key: 'bgVelocity', element: bgVelocity, min: 0, max: 220, defaultValue: 100 });
-  applyClampedValue({ state, key: 'bgOpacity', element: bgOpacity, min: 0, max: 100, defaultValue: 100 });
-  applyThemeMode(state);
+  setUiApplyClampedValue({ state, key: 'lod', element: lodSlider, min: 50, max: 140, defaultValue: 100 });
+  setUiApplyClampedValue({ state, key: 'fillOpacity', element: fillOpacity, min: 0, max: 100, defaultValue: 0 });
+  setUiApplyClampedValue({ state, key: 'wireOpacity', element: wireOpacity, min: 0, max: 100, defaultValue: 100 });
+  setUiApplyClampedValue({ state, key: 'bgDensity', element: bgDensity, min: 0, max: 220, defaultValue: 100 });
+  setUiApplyClampedValue({ state, key: 'bgVelocity', element: bgVelocity, min: 0, max: 220, defaultValue: 100 });
+  setUiApplyClampedValue({ state, key: 'bgOpacity', element: bgOpacity, min: 0, max: 100, defaultValue: 100 });
+  setUiApplyThemeMode(state);
 
   try {
-    localStorage.setItem(UI_STATE_KEY, JSON.stringify(buildMigratedState(state)));
+    localStorage.setItem(UI_STATE_KEY, JSON.stringify(initUiBuildMigratedState(state)));
     try { localStorage.removeItem('undefined'); } catch {}
   } catch {}
 
