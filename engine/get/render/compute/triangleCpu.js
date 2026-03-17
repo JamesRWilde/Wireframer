@@ -35,14 +35,15 @@ function syncThemeColors() {
   if (v === themeVersion) return;
   themeVersion = v;
 
-  const dark = globalThis.THEME?.shadeDark ?? '#000000';
-  const bright = globalThis.THEME?.shadeBright ?? '#ffffff';
-  themeDarkR = parseInt(dark.slice(1, 3), 16);
-  themeDarkG = parseInt(dark.slice(3, 5), 16);
-  themeDarkB = parseInt(dark.slice(5, 7), 16);
-  themeBrightR = parseInt(bright.slice(1, 3), 16);
-  themeBrightG = parseInt(bright.slice(3, 5), 16);
-  themeBrightB = parseInt(bright.slice(5, 7), 16);
+  const dark = globalThis.THEME?.shadeDark;
+  const bright = globalThis.THEME?.shadeBright;
+  // shadeDark/shadeBright are RGB arrays [r, g, b]
+  if (Array.isArray(dark)) {
+    themeDarkR = dark[0]; themeDarkG = dark[1]; themeDarkB = dark[2];
+  }
+  if (Array.isArray(bright)) {
+    themeBrightR = bright[0]; themeBrightG = bright[1]; themeBrightB = bright[2];
+  }
 }
 
 /**
