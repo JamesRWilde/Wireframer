@@ -80,7 +80,27 @@ export function load(mesh, name = 'Shape', options = {}) {
   // Step 3: Build edges from faces (if edge builder is available)
   const E = globalThis.edgesFromFacesRuntime ? globalThis.edgesFromFacesRuntime(F) : [];
 
-  // Step 4: Create the model object with filtered edges
+  // Step 4b: Center vertices so rotation pivots around bounding box center
+  // Without this, asymmetric meshes appear to orbit rather than spin
+  const vLen = V.length;
+  let minx = Infinity, miny = Infinity, minz = Infinity;
+  let maxx = -Infinity, maxy = -Infinity, maxz = -Infinity;
+  for (let i = 0; i < vLen; i++) {
+    const v = V[i];
+    if (v[0] < minx) minx = v[0]; if (v[0] > maxx) maxx = v[0];
+    if (v[1] < miny) miny = v[1]; if (v[1] > maxy) maxy = v[1];
+    if (v[2] < minz) minz = v[2]; if (v[2] > maxz) maxz = v[2];
+  }
+  const cx = (minx + maxx) * 0.5;
+  const cy = (miny + maxy) * 0.5;
+  const cz = (minz + maxz) * 0.5;
+  for (let i = 0; i < vLen; i++) {
+    V[i][0] -= cx;
+    V[i][1] -= cy;
+    V[i][2] -= cz;
+  }
+
+  // Step 4c: Create the model object with filtered edges
   const newModel = {
     V,
     F,

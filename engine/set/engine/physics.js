@@ -89,6 +89,28 @@ export function physics() {
       globalThis.PHYSICS_STATE.wy += (globalThis.PHYSICS_STATE.AUTO_WY - globalThis.PHYSICS_STATE.wy) * 0.04;
       globalThis.PHYSICS_STATE.wz += (globalThis.PHYSICS_STATE.AUTO_WZ - globalThis.PHYSICS_STATE.wz) * 0.04;
 
+      // Slowly orbit the spin axis through 3D space at fixed speed
+      // The axis direction wanders smoothly, eventually visiting every orientation
+      // Two slow oscillators at different rates ensure the axis traces a complex path
+      if (!globalThis.PHYSICS_STATE._axisAngleX) {
+        globalThis.PHYSICS_STATE._axisAngleX = Math.random() * Math.PI * 2;
+        globalThis.PHYSICS_STATE._axisAngleY = Math.random() * Math.PI * 2;
+      }
+      // Slow oscillation rates (radians per frame at 60fps)
+      // Full cycle: ~140s for X, ~200s for Y - different enough to avoid repetition
+      globalThis.PHYSICS_STATE._axisAngleX += 0.00075;
+      globalThis.PHYSICS_STATE._axisAngleY += 0.00052;
+      
+      const speed = 0.010;
+      const ax = Math.sin(globalThis.PHYSICS_STATE._axisAngleX);
+      const ay = Math.sin(globalThis.PHYSICS_STATE._axisAngleY);
+      const az = Math.cos(globalThis.PHYSICS_STATE._axisAngleX) * Math.cos(globalThis.PHYSICS_STATE._axisAngleY);
+      // Normalize axis
+      const len = Math.sqrt(ax*ax + ay*ay + az*az);
+      globalThis.PHYSICS_STATE.AUTO_WX = (ax / len) * speed;
+      globalThis.PHYSICS_STATE.AUTO_WY = (ay / len) * speed;
+      globalThis.PHYSICS_STATE.AUTO_WZ = (az / len) * speed;
+
       // Debug logging for physics state (only when DEBUG_LOG_PHYSICS is set)
       if (globalThis.DEBUG_LOG_PHYSICS) {
         console.log('[physics] wx,wy,wz',
