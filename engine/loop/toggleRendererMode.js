@@ -27,10 +27,10 @@ import { state } from './loopState.js';
 import { updateRendererHud } from './updateRendererHud.js';
 
 // Import GPU canvas clearing for when switching from GPU to CPU
-import { clearGpuSceneCanvas } from '../../render/gpu/runtime/clearGpuSceneCanvas.js';
+import { clearGpuSceneCanvas } from '../render/gpu/runtime/clearGpuSceneCanvas.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { getSceneGpuRenderer } from '../../render/gpu/runtime/getSceneGpuRenderer.js';
+import { getSceneGpuRenderer } from '../render/gpu/runtime/getSceneGpuRenderer.js';
 
 /**
  * toggleRendererMode - Toggles between GPU and CPU rendering modes

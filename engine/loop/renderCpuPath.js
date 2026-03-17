@@ -18,17 +18,17 @@
 "use strict";
 
 // Import GPU canvas clearing for when switching from GPU to CPU mode
-import { clearGpuSceneCanvas } from '../../render/gpu/runtime/clearGpuSceneCanvas.js';
+import { clearGpuSceneCanvas } from '../render/gpu/runtime/clearGpuSceneCanvas.js';
 
 // Import the unified mesh renderer - draws triangles with fill and edges in one pass
-import { renderMeshUnified } from '../../render/unified/renderMeshUnified.js';
+import { renderMeshUnified } from '../render/unified/renderMeshUnified.js';
 
 // Import canvas visibility toggles
 import { setCpuCanvasHidden } from './setCpuCanvasHidden.js';
 import { setGpuCanvasHidden } from './setGpuCanvasHidden.js';
 
 // Import projection function for debug axes
-import { project } from '../../render/camera/projection/project.js';
+import { project } from '../render/camera/projection/project.js';
 
 /**
  * drawAxes - Draws RGB orientation axes for debugging rotation

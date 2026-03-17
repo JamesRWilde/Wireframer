@@ -22,7 +22,7 @@
 
 // Import the background particle renderer
 // Draws animated ambient particles on the background canvas
-import { drawBackground } from '../../render/background/background/drawBackground.js';
+import { drawBackground } from '../render/background/drawBackground.js';
 
 // Import the CPU foreground renderer
 // Draws solid fill and wireframe using Canvas 2D

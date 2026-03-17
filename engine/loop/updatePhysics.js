@@ -22,11 +22,11 @@
 
 // Import the function that applies Euler angle increments to the rotation matrix
 // This updates the rotation matrix in-place based on angular velocities
-import { applyEulerIncrementInPlace } from '../../math/math3d/applyEulerIncrementInPlace.js';
+import { applyEulerIncrementInPlace } from '../math/applyEulerIncrementInPlace.js';
 
 // Import the re-orthogonalization function
 // This corrects numerical drift in the rotation matrix (prevents skewing)
-import { reorthogonalize } from '../../math/math3d/reorthogonalize.js';
+import { reorthogonalize } from '../math/reorthogonalize.js';
 
 // Import loop state for frame counting
 import { state } from './loopState.js';

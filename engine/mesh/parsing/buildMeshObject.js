@@ -20,7 +20,7 @@
  */
 
 // Import edge building utility
-import { buildEdgesFromFacesRuntime } from '../utils/mesh-utilities/buildEdgesFromFacesRuntime.js';
+import { buildEdgesFromFacesRuntime } from '../utils/buildEdgesFromFacesRuntime.js';
 
 // Register helper globally so callers don't have to import it repeatedly
 if (!globalThis.buildEdgesFromFacesRuntime) {
@@ -50,7 +50,7 @@ export function buildMeshObject(uniqueVerts, faces) {
   // Ensure edge builder is available (parsing may run before loader.js)
   if (!globalThis.buildEdgesFromFacesRuntime) {
     // eslint-disable-next-line import/no-cycle
-    const { buildEdgesFromFacesRuntime } = require('../utils/mesh-utilities/buildEdgesFromFacesRuntime.js');
+    const { buildEdgesFromFacesRuntime } = require('../utils/buildEdgesFromFacesRuntime.js');
     globalThis.buildEdgesFromFacesRuntime = buildEdgesFromFacesRuntime;
   }
   

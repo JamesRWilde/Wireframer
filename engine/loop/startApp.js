@@ -31,37 +31,37 @@
 "use strict";
 
 // Import canvas initialization - sets up all canvas elements and resize handling
-import { initCanvas } from '../initCanvas.js';
+import { initCanvas } from '../core/initCanvas.js';
 
 // Import physics state early so its initialization code runs and sets up
 // wx/wy/wz/AUTO_* defaults before the main loop starts
-import '../../physics/physicsState.js';
+import '../physics/physicsState.js';
 
 // Bring in loader and mesh loader side-effects (globals) before any mesh operations
 // These set up globalThis.loadObjMesh and globalThis.loadMesh
-import '../../../loader.js';
-import '../../mesh/loader/loadMesh.js';
+import '../../loader.js';
+import '../mesh/loader/loadMesh.js';
 
 // Import model state to make setActiveModel available globally
-import '../modelState.js';
+import '../core/modelState.js';
 
 // Expose morph API globally for finalizeModel and renderScene
-import '../../morph/initMorphApi.js';
+import '../morph/initMorphApi.js';
 
 // Import UI initialization functions
-import { initObjectSelector } from '../../../ui/controls/initObjectSelector.js';
+import { initObjectSelector } from '../../ui/controls/initObjectSelector.js';
 
 // Import the frame loop entry point
 import { frame } from './frame.js';
 
 // Import rotation matrix initialization
-import { initializeRotation } from '../../math/math3d/initializeRotation.js';
+import { initializeRotation } from '../math/initializeRotation.js';
 
 // Import the rotation matrix reference
-import { R } from '../../math/math3d/R.js';
+import { R } from '../math/R.js';
 
 // Import render toggle synchronization
-import { syncRenderToggles } from '../../../ui/controls/syncRenderToggles.js';
+import { syncRenderToggles } from '../../ui/controls/syncRenderToggles.js';
 
 // Import slider listener attachment
 import { attachSliderListeners } from './attachSliderListeners.js';
@@ -84,7 +84,7 @@ import {
   fillOpacity,
   wireOpacity,
   lodSlider,
-} from '../../../ui/dom-state.js';
+} from '../../ui/dom-state.js';
 
 /**
  * startApp - Initializes all subsystems and starts the animation loop

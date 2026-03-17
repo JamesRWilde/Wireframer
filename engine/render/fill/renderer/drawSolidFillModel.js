@@ -20,7 +20,7 @@ import { getModelShadingMode } from '../normals/getModelShadingMode.js';
 import { getModelTriCornerNormals } from '../normals/getModelTriCornerNormals.js';
 import { renderFillTriangles } from './renderFillTriangles.js';
 import { initFillWorker, sendRenderCommand, getCachedFrame, isFillWorkerAvailable } from './fillRenderBridge.js';
-import { state } from '../../../core/loop/loopState.js';
+import { state } from '../../../loop/loopState.js';
 
 // Track if worker has been initialized
 let workerInitialized = false;

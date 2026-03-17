@@ -23,7 +23,7 @@
 import { state, TELEMETRY_UI_INTERVAL_MS } from './loopState.js';
 
 // Import DOM element references for stat displays
-import { statsState } from '../../../ui/statsState.js';
+import { statsState } from '../../ui/statsState.js';
 
 /**
  * writeStat - Helper to safely update a DOM element's text content

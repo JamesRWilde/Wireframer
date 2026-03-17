@@ -41,7 +41,7 @@ import { finalizeModel } from './finalizeModel.js';
 
 // Import edge building utility
 // Register globally so any consumer can invoke it without circular imports
-import { buildEdgesFromFacesRuntime } from '../utils/mesh-utilities/buildEdgesFromFacesRuntime.js';
+import { buildEdgesFromFacesRuntime } from '../utils/buildEdgesFromFacesRuntime.js';
 if (!globalThis.buildEdgesFromFacesRuntime) {
   globalThis.buildEdgesFromFacesRuntime = buildEdgesFromFacesRuntime;
 }

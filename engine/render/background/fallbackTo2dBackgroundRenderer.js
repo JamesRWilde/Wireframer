@@ -14,7 +14,7 @@
  *   This module ensures the particle background still works via CPU rendering.
  */
 
-import { bgState } from '../backgroundState.js';
+import { bgState } from './backgroundState.js';
 
 /**
  * fallbackTo2dBackgroundRenderer - Disables GPU renderer and falls back to 2D
