@@ -27,8 +27,7 @@ import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.
 import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
 import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/resolve/triangleNormalCpu.js';
 import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/compute/triangleCpu.js';
-import { relativeLuminance }from '@ui/get/color/relativeLuminance.js';
-import { rgbaString }from '@ui/get/color/rgbaString.js';
+import { syncFromGlobals, getFillRgb, getEdgeColor, getFillOpacity, getWireOpacity }from '@engine/state/renderState.js';
 
 // Pre-allocated sort scratch space (reused across frames to avoid per-frame allocation)
 let sortZ = null;    // Float32Array of z-depths per triangle
@@ -59,15 +58,14 @@ export function renderMeshUnified(model, ctx) {
     ? getTriCornerNormals(model, triFaces)
     : null;
 
-  // Cache globals once (avoids repeated globalThis lookups in hot loop)
-  const fillAlpha = globalThis.FILL_OPACITY ?? 1;
-  const wireAlpha = globalThis.WIRE_OPACITY ?? 1;
-  const fillRgb = globalThis.THEME?.fill ?? [0, 200, 120];
+  // Sync from central state (cheap version-check if already current)
+  syncFromGlobals();
 
-  // Pre-compute edge color (contrast with fill)
-  const fillLum = relativeLuminance(fillRgb);
-  const contrastWire = fillLum > 0.5 ? [0, 0, 0] : [255, 255, 255];
-  const edgeColor = rgbaString(contrastWire, 1);
+  // Read cached derived values from renderState
+  const fillAlpha = getFillOpacity();
+  const wireAlpha = getWireOpacity();
+  const edgeColor = getEdgeColor(); // precomputed, cached
+  const fillRgb = getFillRgb();
 
   const triCount = triFaces.length;
 

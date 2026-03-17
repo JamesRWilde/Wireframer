@@ -39,7 +39,6 @@ export function palette() {
   
   // Set global THEME for runtime access by renderers
   globalThis.THEME = palette;
-  globalThis._themeVersion = (globalThis._themeVersion | 0) + 1;
   
   // Update CSS custom properties for UI styling
   for (const [k, v] of Object.entries(palette.uiVars)) {
