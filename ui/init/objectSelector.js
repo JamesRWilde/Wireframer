@@ -42,7 +42,7 @@ export async function initObjectSelector(restoredShapeName = null) {
   });
 
   // Load the restored shape if provided, otherwise load the first object
-  if (OBJECTS.length > 0 && typeof globalThis.load === 'function') {
+  if (OBJECTS.length > 0 && typeof globalThis.loadObjMesh === 'function') {
     let loadIndex = 0;
     if (restoredShapeName) {
       const foundIndex = OBJECTS.findIndex(obj => obj.name === restoredShapeName);
@@ -56,14 +56,14 @@ export async function initObjectSelector(restoredShapeName = null) {
       console.debug('[initObjectSelector] auto-loading first object', OBJECTS[0].name);
     }
     select.selectedIndex = loadIndex;
-    globalThis.load(OBJECTS[loadIndex].obj, OBJECTS[loadIndex].name);
+    globalThis.loadObjMesh(OBJECTS[loadIndex].obj, OBJECTS[loadIndex].name);
   }
 
   select.addEventListener('change', async () => {
     const idx = Number(select.value);
     console.debug('[initObjectSelector] selection changed', idx);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
-      await globalThis.load(OBJECTS[idx].obj, OBJECTS[idx].name);
+      await globalThis.loadObjMesh(OBJECTS[idx].obj, OBJECTS[idx].name);
       persistState(OBJECTS);
     }
   });

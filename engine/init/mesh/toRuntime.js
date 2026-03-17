@@ -42,21 +42,21 @@ import { object }from '@engine/init/mesh/build/object.js';
  * @returns {Object} Mesh object with V, F, E arrays and metadata
  * @throws {Error} If input is invalid or parsing fails critically
  */
-export function toRuntime(rawObjText, overrides = {}) {
+export function toRuntime(text, overrides = {}) {
   // Validate input is not null/undefined
-  if (rawObjText === undefined || rawObjText === null) {
+  if (text === undefined || text === null) {
     console.error('[toRuntime] Input mesh is undefined/null.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ' });
     throw new Error('[toRuntime] Input mesh is undefined/null');
   }
   
   // Validate input is a string
-  if (typeof rawObjText !== 'string') {
-    console.error('[toRuntime] Input mesh is not a string.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ', inputType: typeof rawObjText });
+  if (typeof text !== 'string') {
+    console.error('[toRuntime] Input mesh is not a string.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ', inputType: typeof text });
     throw new Error('Mesh definition must be an OBJ string.');
   }
   
   // Step 1: Split text into lines and validate format
-  const lines = rawObjText(rawObjText, overrides);
+  const lines = rawObjText(text, overrides);
 
   // Step 2: Parse lines into raw mesh data
   const {uniqueVerts, faces, failingLines} = objLines(lines, overrides);

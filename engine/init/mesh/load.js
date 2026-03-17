@@ -118,5 +118,24 @@ export function load(mesh, name = 'Shape', options = {}) {
   return newModelCopy;
 }
 
+// Import toRuntime for OBJ text parsing (used by loadObjMesh)
+import { toRuntime } from '@engine/init/mesh/toRuntime.js';
+
+/**
+ * loadObjMesh - Fetches an OBJ file and loads it through the pipeline
+ *
+ * @param {string} objPath - Path to the OBJ file
+ * @param {string} [name='Shape'] - Display name for the mesh
+ * @returns {Promise<Object>} The processed model ready for rendering
+ */
+export async function loadObjMesh(objPath, name = 'Shape') {
+  const resp = await fetch(objPath);
+  if (!resp.ok) throw new Error('Failed to fetch OBJ: ' + objPath);
+  const objText = await resp.text();
+  const mesh = toRuntime(objText, { meshFileName: objPath, meshType: 'OBJ' });
+  return load(mesh, name);
+}
+
 // Expose for engine modules
 globalThis.load = load;
+globalThis.loadObjMesh = loadObjMesh;
