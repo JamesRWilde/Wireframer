@@ -15,11 +15,14 @@
  */
 
 import { getModelFrameData } from '../render/getModelFrameData.js';
-import { getModelTriangles } from '../render/getModelTrianglesCpu.js';
+import { getModelTriangles } from '../render/getModelTriangles.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
-import { getModelTriCornerNormals } from '../render/getModelTriCornerNormalsCpu.js';
+import { getModelTriCornerNormals } from '../render/getModelTriCornerNormals.js';
 import { renderFillTriangles } from '../render/renderFillTrianglesCpu.js';
-import { initFillWorker, sendRenderCommand, getCachedFrame, isFillWorkerAvailable } from './fillRenderBridge.js';
+import { sendRenderCommand } from './sendRenderCommand.js';
+import { initFillWorker } from "./initFillWorker.js";
+import { getCachedFrame } from './getCachedFrame.js';
+import { isFillWorkerAvailable } from './isFillWorkerAvailable.js';
 import { state } from '../engine/loopState.js';
 
 // Track if worker has been initialized

@@ -41,7 +41,8 @@ import { shouldRunFrame } from './shouldRunFrame.js';
 import { updateTelemetry } from './updateTelemetry.js';
 
 // Import frame budget manager for adaptive quality
-import { updateFrameTime, checkBudget } from './frameBudget.js';
+import { updateFrameTime } from './updateFrameTime.js';
+import { checkBudget } from './checkBudget.js';
 
 /**
  * runFrame - Executes all operations for a single animation frame

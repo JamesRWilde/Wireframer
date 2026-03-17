@@ -22,9 +22,9 @@
 "use strict";
 
 import { getModelFrameData } from '../render/getModelFrameData.js';
-import { getModelTriangles } from '../render/getModelTrianglesCpu.js';
+import { getModelTriangles } from '../render/getModelTriangles.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
-import { getModelTriCornerNormals } from '../render/getModelTriCornerNormalsCpu.js';
+import { getModelTriCornerNormals } from '../render/getModelTriCornerNormals.js';
 import { resolveTriangleNormal } from '../render/resolveTriangleNormalCpu.js';
 import { computeTriangleShadeColor } from '../render/computeTriangleShadeColorCpu.js';
 import { relativeLuminance } from '../ui/relativeLuminance.js';

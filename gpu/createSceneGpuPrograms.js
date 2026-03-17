@@ -1,3 +1,5 @@
+import { createGpuProgram } from './createGpuProgram.js';
+
 export function createSceneGpuPrograms(gl) {
   const fillVertSrc = `
     attribute vec3 a_pos;
@@ -81,37 +83,8 @@ export function createSceneGpuPrograms(gl) {
     }
   `;
 
-  function compileShader(type, source) {
-    const shader = gl.createShader(type);
-    gl.shaderSource(shader, source);
-    gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      const info = gl.getShaderInfoLog(shader);
-      gl.deleteShader(shader);
-      throw new Error(`Scene GPU shader compile failed: ${info}`);
-    }
-    return shader;
-  }
-
-  function createProgram(vs, fs) {
-    const v = compileShader(gl.VERTEX_SHADER, vs);
-    const f = compileShader(gl.FRAGMENT_SHADER, fs);
-    const program = gl.createProgram();
-    gl.attachShader(program, v);
-    gl.attachShader(program, f);
-    gl.linkProgram(program);
-    gl.deleteShader(v);
-    gl.deleteShader(f);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      const info = gl.getProgramInfoLog(program);
-      gl.deleteProgram(program);
-      throw new Error(`Scene GPU program link failed: ${info}`);
-    }
-    return program;
-  }
-
-  const fillProgram = createProgram(fillVertSrc, fillFragSrc);
-  const wireProgram = createProgram(wireVertSrc, wireFragSrc);
+  const fillProgram = createGpuProgram(gl, fillVertSrc, fillFragSrc);
+  const wireProgram = createGpuProgram(gl, wireVertSrc, wireFragSrc);
 
   const fillLoc = {
     aPos: gl.getAttribLocation(fillProgram, 'a_pos'),
