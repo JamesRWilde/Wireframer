@@ -17,7 +17,7 @@
 
 "use strict";
 
-import { getUiColorRelativeLuminance } from ''./getUiColorRelativeLuminance.js'';
+import { getUiColorRelativeLuminance } from './getUiColorRelativeLuminance.js';
 
 /**
  * contrastRatio - Calculates WCAG contrast ratio between two colors

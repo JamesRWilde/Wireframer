@@ -20,11 +20,11 @@
 
 "use strict";
 
-import { getUiColorClampByte } from ''../get/getUiColorClampByte.js'';
-import { setUiUpdateCustomColor } from ''./setUiUpdateCustomColor.js'';
-import { setUiPersistCustomRgb } from ''./setUiPersistCustomRgb.js'';
-import { setUiApplyPalette } from ''./setUiApplyPalette.js'';
-import { CUSTOM_RGB } from ''../state/stateUiDom.js'';
+import { getUiColorClampByte } from '../get/getUiColorClampByte.js';
+import { setUiUpdateCustomColor } from './setUiUpdateCustomColor.js';
+import { setUiPersistCustomRgb } from './setUiPersistCustomRgb.js';
+import { setUiApplyPalette } from './setUiApplyPalette.js';
+import { CUSTOM_RGB } from '../state/stateUiDom.js';
 
 export function setUiCustomRgb(rgb, options = {}) {
   const { persist = true, apply = true } = options;

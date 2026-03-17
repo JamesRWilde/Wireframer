@@ -24,7 +24,7 @@ import {
   bgDensity,
   bgVelocity,
   bgOpacity,
-} from ''../state/stateUiDom.js'';
+} from '../state/stateUiDom.js';
 
 /**
  * persistUiState - Saves current UI state to localStorage

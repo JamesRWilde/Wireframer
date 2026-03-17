@@ -23,26 +23,26 @@
 "use strict";
 
 // Import loop state for frame tracking and timing
-import { state } from ''../state/stateEngineLoop.js'';
+import { state } from '../state/stateEngineLoop.js';
 
 // Import physics update function - handles rotation and input
-import { setEnginePhysics } from ''./setEnginePhysics.js'';
+import { setEnginePhysics } from './setEnginePhysics.js';
 
 // Import scene renderer - draws background and foreground
-import { renderScene } from ''../render/set/setRenderEngineScene.js'';
+import { renderScene } from './setRenderEngineScene.js';
 
 // Import telemetry HUD updater - displays stats in the UI
-import { setEngineTelemetryHud } from ''./setEngineTelemetryHud.js'';
+import { setEngineTelemetryHud } from './setEngineTelemetryHud.js';
 
 // Import frame throttling check - skips frames if running too fast
-import { shouldRunFrame } from ''../get/getEngineShouldRunFrame.js'';
+import { shouldRunFrame } from '../get/getEngineShouldRunFrame.js';
 
 // Import telemetry collector - smooths and stores timing metrics
-import { setEngineTelemetry } from ''./setEngineTelemetry.js'';
+import { setEngineTelemetry } from './setEngineTelemetry.js';
 
 // Import frame budget manager for adaptive quality
-import { setEngineFrameTime } from ''./setEngineFrameTime.js'';
-import { getEngineFrameBudget } from ''../get/getEngineFrameBudget.js'';
+import { setEngineFrameTime } from './setEngineFrameTime.js';
+import { getEngineFrameBudget } from '../get/getEngineFrameBudget.js';
 
 /**
  * runFrame - Executes all operations for a single animation frame

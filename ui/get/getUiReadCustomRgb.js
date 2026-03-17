@@ -16,8 +16,8 @@
 
 "use strict";
 
-import { CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT } from ''../state/stateUiDom.js'';
-import { getUiColorClampByte } from ''./getUiColorClampByte.js'';
+import { CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT } from '../state/stateUiDom.js';
+import { getUiColorClampByte } from './getUiColorClampByte.js';
 
 export function getUiReadCustomRgb() {
   try {

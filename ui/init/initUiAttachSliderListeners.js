@@ -20,7 +20,7 @@
 
 // Import the function that reads slider values and updates global render parameters
 // This syncs FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM to globals
-import { setUiSyncRenderToggles } from ''../set/setUiSyncRenderToggles.js'';
+import { setUiSyncRenderToggles } from '../set/setUiSyncRenderToggles.js';
 
 /**
  * attachSliderListeners - Binds input event handlers to all UI sliders

@@ -20,8 +20,8 @@
 
 "use strict";
 
-import { setUiBuildCustomTheme } from ''./setUiBuildCustomTheme.js'';
-import { CUSTOM_RGB } from ''../state/stateUiDom.js'';
+import { setUiBuildCustomTheme } from './setUiBuildCustomTheme.js';
+import { CUSTOM_RGB } from '../state/stateUiDom.js';
 
 /**
  * applyPalette - Applies current color theme to application

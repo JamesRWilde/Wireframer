@@ -1,4 +1,4 @@
-import * as state from ''../set/setEngineFrameBudgetState.js'';
+import * as state from '../set/setEngineFrameBudgetState.js';
 
 export function getEngineFrameAverageTime() {
   if (state.frameTimeCount === 0) return 0;

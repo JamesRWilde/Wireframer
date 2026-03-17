@@ -12,7 +12,7 @@
 
 "use strict";
 
-import { getUiColorClampByte } from ''./getUiColorClampByte.js'';
+import { getUiColorClampByte } from './getUiColorClampByte.js';
 
 /**
  * toHex - Converts RGB to hex color string

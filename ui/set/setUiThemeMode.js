@@ -16,8 +16,8 @@
 
 "use strict";
 
-import { themeMode } from ''../state/stateUiDom.js'';
-import { setUiApplyPalette } from ''./setUiApplyPalette.js'';
+import { themeMode } from '../state/stateUiDom.js';
+import { setUiApplyPalette } from './setUiApplyPalette.js';
 
 /**
  * SetUiThemeMode - Sets application theme mode

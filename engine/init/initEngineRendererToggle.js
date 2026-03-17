@@ -20,13 +20,13 @@
 "use strict";
 
 // Import the DOM element reference for the renderer stat display
-import { statsState } from ''../../ui/state/stateUiStats.js'';
+import { statsState } from '../../ui/state/stateUiStats.js';
 
 // Import the toggle function
-import { setEngineRendererMode } from ''../set/setEngineRendererMode.js'';
+import { setEngineRendererMode } from '../set/setEngineRendererMode.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { getGpuEngineSceneRenderer } from ''../gpu/get/getGpuEngineSceneRenderer.js'';
+import { getGpuEngineSceneRenderer } from '../get/getGpuEngineSceneRenderer.js';
 
 /**
  * InitEngineRendererToggle - Initializes the renderer stat as a toggle button

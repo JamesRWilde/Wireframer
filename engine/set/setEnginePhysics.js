@@ -22,14 +22,14 @@
 
 // Import the function that applies Euler angle increments to the rotation matrix
 // This updates the rotation matrix in-place based on angular velocities
-import { applyEulerIncrementInPlace } from ''../render/get/getRenderEngineApplyEulerIncrement.js'';
+import { applyEulerIncrementInPlace } from '../get/getRenderEngineApplyEulerIncrement.js';
 
 // Import the re-orthogonalization function
 // This corrects numerical drift in the rotation matrix (prevents skewing)
-import { reorthogonalize } from ''../render/get/getRenderEngineReorthogonalize.js'';
+import { reorthogonalize } from '../get/getRenderEngineReorthogonalize.js';
 
 // Import loop state for frame counting
-import { state } from ''../state/stateEngineLoop.js'';
+import { state } from '../state/stateEngineLoop.js';
 
 /**
  * SetEnginePhysics - Updates rotation physics for the current frame

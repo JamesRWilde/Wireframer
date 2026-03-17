@@ -19,7 +19,7 @@
 "use strict";
 
 // Import loop state and frame interval constant
-import { state, MIN_FRAME_INTERVAL_MS } from ''../state/stateEngineLoop.js'';
+import { state, MIN_FRAME_INTERVAL_MS } from '../state/stateEngineLoop.js';
 
 /**
  * shouldRunFrame - Checks if the current frame should run or be skipped

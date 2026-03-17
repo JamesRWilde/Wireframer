@@ -1,4 +1,4 @@
-import * as state from ''./setEngineFrameBudgetState.js'';
+import * as state from './setEngineFrameBudgetState.js';
 
 export function setEngineFrameTime(frameMs) {
   state.frameTimes[state.frameTimeIndex] = frameMs;

@@ -20,23 +20,23 @@
 
 // Import the function to create clickable preset color swatches in the UI
 // These provide quick access to curated color combinations
-import { initPresetSwatches } from ''../../ui/init/initUiPresetSwatches.js'';
+import { initPresetSwatches } from '../../ui/init/initUiPresetSwatches.js';
 
 // Import the function to read saved custom RGB values from localStorage
 // Returns null if no saved colors exist (first visit or cleared storage)
-import { getUiReadCustomRgb } from ''../../ui/get/getUiReadCustomRgb.js'';
+import { getUiReadCustomRgb } from '../../ui/get/getUiReadCustomRgb.js';
 
 // Import the function to apply custom RGB values to the theme
 // Updates CSS variables, particle colors, wire colors, etc.
-import { setUiCustomRgb } from ''../../ui/set/setUiCustomRgb.js'';
+import { setUiCustomRgb } from '../../ui/set/setUiCustomRgb.js';
 
 // Import the function to set dark/light theme mode
 // Adjusts background brightness, contrast enforcement, etc.
-import { setUiThemeMode } from ''../../ui/set/setUiThemeMode.js'';
+import { setUiThemeMode } from '../../ui/set/setUiThemeMode.js';
 
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences
-import { setUiPersistState } from ''../../ui/set/setUiPersistState.js'';
+import { setUiPersistState } from '../../ui/set/setUiPersistState.js';
 
 /**
  * InitEngineThemeControls - Initializes the theme system and wires up event handlers

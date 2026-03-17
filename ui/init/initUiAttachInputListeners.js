@@ -8,7 +8,7 @@
 
 "use strict";
 
-import { attachInputListeners } from ''../../engine/render/init/initRenderEngineAttachInputListeners.js'';
+import { attachInputListeners } from '../../engine/init/initRenderEngineAttachInputListeners.js';
 
 export function initUiAttachInputListeners() {
   try {

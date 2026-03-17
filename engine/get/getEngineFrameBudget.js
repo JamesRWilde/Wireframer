@@ -1,7 +1,7 @@
-import * as state from ''../set/setEngineFrameBudgetState.js'';
-import { getEngineFrameAverageTime } from ''./getEngineFrameAverageTime.js'';
-import { getEngineQualityDetermineTarget } from ''../get/getEngineQualityDetermineTarget.js'';
-import { setEngineQualityApplyChange } from ''../set/setEngineQualityApplyChange.js'';
+import * as state from '../set/setEngineFrameBudgetState.js';
+import { getEngineFrameAverageTime } from './getEngineFrameAverageTime.js';
+import { getEngineQualityDetermineTarget } from '../get/getEngineQualityDetermineTarget.js';
+import { setEngineQualityApplyChange } from '../set/setEngineQualityApplyChange.js';
 
 export function getEngineFrameBudget() {
   const avgFrameTime = GetEngineFrameAverageTime();

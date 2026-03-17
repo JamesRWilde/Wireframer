@@ -22,9 +22,9 @@ import {
   bgOpacity, bgOpacityValue,
   fillOpacity, fillOpacityValue,
   wireOpacity, wireOpacityValue,
-} from ''../state/stateUiDom.js'';
-import { getUiSliderDisplayPercent } from ''../get/getUiSliderDisplayPercent.js'';
-import { setUiPersistState } from ''./setUiPersistState.js'';
+} from '../state/stateUiDom.js';
+import { getUiSliderDisplayPercent } from '../get/getUiSliderDisplayPercent.js';
+import { setUiPersistState } from './setUiPersistState.js';
 
 export function setUiSyncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;

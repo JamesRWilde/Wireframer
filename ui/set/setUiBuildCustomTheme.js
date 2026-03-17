@@ -16,11 +16,11 @@
 
 "use strict";
 
-import { getUiColorClampByte } from ''../get/getUiColorClampByte.js'';
-import { getUiColorMixRgb } from ''../get/getUiColorMixRgb.js'';
-import { getUiColorToRgbCss } from ''../get/getUiColorToRgbCss.js'';
-import { getUiColorToRgbaCss } from ''../get/getUiColorToRgbaCss.js'';
-import { getUiColorEnforceContrast } from ''../get/getUiColorEnforceContrast.js'';
+import { getUiColorClampByte } from '../get/getUiColorClampByte.js';
+import { getUiColorMixRgb } from '../get/getUiColorMixRgb.js';
+import { getUiColorToRgbCss } from '../get/getUiColorToRgbCss.js';
+import { getUiColorToRgbaCss } from '../get/getUiColorToRgbaCss.js';
+import { getUiColorEnforceContrast } from '../get/getUiColorEnforceContrast.js';
 
 export function setUiBuildCustomTheme(rgbInput) {
   const base = [GetUiColorClampByte(rgbInput[0]), GetUiColorClampByte(rgbInput[1]), GetUiColorClampByte(rgbInput[2])];

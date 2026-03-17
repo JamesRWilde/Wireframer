@@ -21,8 +21,8 @@
 
 "use strict";
 
-import { getUiColorContrastRatio } from ''./getUiColorContrastRatio.js'';
-import { getUiColorMixRgb } from ''./getUiColorMixRgb.js'';
+import { getUiColorContrastRatio } from './getUiColorContrastRatio.js';
+import { getUiColorMixRgb } from './getUiColorMixRgb.js';
 
 /**
  * enforceContrast - Adjusts foreground color to meet contrast requirements

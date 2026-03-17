@@ -16,7 +16,7 @@
 
 "use strict";
 
-import { getUiColorLinearChannel } from ''./getUiColorLinearChannel.js'';
+import { getUiColorLinearChannel } from './getUiColorLinearChannel.js';
 
 /**
  * relativeLuminance - Calculates WCAG relative luminance
