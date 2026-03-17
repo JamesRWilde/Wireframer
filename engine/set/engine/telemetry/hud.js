@@ -47,15 +47,18 @@ export function hud(nowMs) {
     { el: statsState.statFgMs, val: state.emaFgMs > 0 ? state.emaFgMs.toFixed(2) : '--' },
   ];
 
-  // Append fill/wire breakdown if performance data is available
+  // Append detailed FG breakdown: CPU mode shows sort+draw, GPU mode shows fill+wire
   if (globalThis._perf && globalThis._perf.frameCount > 0) {
     const avgFill = (globalThis._perf.fillMs / globalThis._perf.frameCount).toFixed(2);
     const avgWire = (globalThis._perf.wireMs / globalThis._perf.frameCount).toFixed(2);
     stats.push({ el: statsState.statFgMs, val: `fill:${avgFill} wire:${avgWire}` });
-    // Reset the per-frame performance accumulator after reporting
     globalThis._perf.fillMs = 0;
     globalThis._perf.wireMs = 0;
     globalThis._perf.frameCount = 0;
+  } else if (globalThis._CPU_DRAW_MS > 0) {
+    const sortMs = (globalThis._CPU_SORT_MS || 0).toFixed(2);
+    const drawMs = (globalThis._CPU_DRAW_MS || 0).toFixed(2);
+    stats.push({ el: statsState.statFgMs, val: `sort:${sortMs} draw:${drawMs}` });
   }
 
   // Write all stats to their DOM elements

@@ -77,6 +77,9 @@ export function renderMeshUnified(model, ctx) {
     sortIdx = new Uint32Array(triCount);
   }
 
+  // ── Telemetry: sort ──
+  performance.mark('cpu-sort-start');
+
   // Compute z-depths and fill index array
   for (let i = 0; i < triCount; i++) {
     const tri = triFaces[i];
@@ -86,6 +89,12 @@ export function renderMeshUnified(model, ctx) {
 
   // Sort indices by z-depth (back-to-front) without allocating objects
   sortIdx.subarray(0, triCount).sort((a, b) => sortZ[b] - sortZ[a]);
+
+  performance.mark('cpu-sort-end');
+  performance.measure('cpu-sort', 'cpu-sort-start', 'cpu-sort-end');
+
+  // ── Telemetry: lighting + draw ──
+  performance.mark('cpu-draw-start');
 
   // Render each triangle in sorted order
   ctx.save();
@@ -134,4 +143,23 @@ export function renderMeshUnified(model, ctx) {
 
   ctx.globalAlpha = 1;
   ctx.restore();
+
+  performance.mark('cpu-draw-end');
+  performance.measure('cpu-draw', 'cpu-draw-start', 'cpu-draw-end');
+
+  // Store last frame's measurements as globals for HUD consumption
+  const sortEntry = performance.getEntriesByName('cpu-sort').at(-1);
+  const drawEntry = performance.getEntriesByName('cpu-draw').at(-1);
+  globalThis._CPU_SORT_MS = sortEntry?.duration ?? 0;
+  globalThis._CPU_DRAW_MS = drawEntry?.duration ?? 0;
+
+  // Keep only last 30 entries to avoid memory growth
+  if (performance.getEntriesByName('cpu-sort').length > 30) {
+    performance.clearMarks('cpu-sort-start');
+    performance.clearMarks('cpu-sort-end');
+    performance.clearMeasures('cpu-sort');
+    performance.clearMarks('cpu-draw-start');
+    performance.clearMarks('cpu-draw-end');
+    performance.clearMeasures('cpu-draw');
+  }
 }
