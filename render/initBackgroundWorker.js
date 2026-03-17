@@ -9,7 +9,7 @@ export function initBackgroundWorker() {
   
   try {
     state.worker = new Worker(
-      new URL('../../../../workers/background-worker.js', import.meta.url).href,
+      new URL('../workers/background-worker.js', import.meta.url).href,
       { type: 'module' }
     );
     
