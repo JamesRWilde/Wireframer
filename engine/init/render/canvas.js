@@ -1,27 +1,68 @@
+/**
+ * canvas.js - Canvas and Rendering Context Initialization
+ *
+ * PURPOSE:
+ *   Initializes all canvas elements (CPU foreground, GPU, background, fill layer)
+ *   and their 2D/WebGL rendering contexts. Sets up window resize handling
+ *   to keep all canvases synchronized with the viewport.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called early in the engine initialization sequence. Establishes the
+ *   rendering surface for both CPU and GPU render paths. Stores references
+ *   on globalThis for cross-module access.
+ *
+ * SIDE EFFECTS:
+ *   - Creates a new fillLayerCanvas element
+ *   - Stores canvas/context references on globalThis
+ *   - Adds window resize event listeners
+ */
+
+"use strict";
+
+// Import background render state to locate the background canvas
 import {bgState} from '@engine/state/render/background/backgroundState.js';
+
+// Import canvas size synchronization to keep all canvases in sync
 import { syncCanvasSize }from '@engine/set/render/syncCanvasSize.js';
 
+/**
+ * canvas - Initializes all canvas elements and rendering contexts
+ *
+ * @returns {void}
+ */
 export function canvas() {
+  // Guard against non-browser environments (SSR, Node)
   if (typeof document === 'undefined') return;
 
+  // Get the CPU canvas (primary fallback rendering surface)
   const cpuCanvas = document.getElementById('c');
+
+  // Store canvas element references globally for cross-module access
   globalThis.fgCanvas = document.getElementById('fg');
   globalThis.gpuCanvas = document.getElementById('gpu');
-  
+
+  // Get the 2D context from the foreground canvas
   globalThis.ctx = globalThis.fgCanvas ? globalThis.fgCanvas.getContext('2d') : null;
-  
+
+  // Fallback: use CPU canvas if foreground context is unavailable
   if (!globalThis.ctx) {
     console.warn('[initCanvas] fg context not available, falling back to cpu');
     globalThis.ctx = cpuCanvas ? cpuCanvas.getContext('2d') : null;
   }
-  
+
+  // Create a dedicated fill layer canvas for triangle fill rendering
+  // Uses alpha channel and desynchronized hint for performance
   globalThis.fillLayerCanvas = document.createElement('canvas');
   globalThis.fillLayerCtx = globalThis.fillLayerCanvas.getContext('2d', { alpha: true, desynchronized: true });
-  
+
+  // Disable image smoothing for pixel-accurate triangle rendering
   if (globalThis.fillLayerCtx) globalThis.fillLayerCtx.imageSmoothingEnabled = false;
 
+  // Sync canvas sizes and set up resize listeners
   if (typeof globalThis !== 'undefined' && typeof globalThis.addEventListener === 'function') {
     syncCanvasSize(cpuCanvas);
+
+    // On resize, synchronize all canvas dimensions to viewport size
     globalThis.addEventListener('resize', () => syncCanvasSize(cpuCanvas));
     globalThis.addEventListener('resize', () => {
       globalThis.W = globalThis.innerWidth;
@@ -29,6 +70,7 @@ export function canvas() {
     });
   }
 
+  // Locate and store the background canvas for particle rendering
   try {
     const bgCanvas = document.getElementById('bg');
     if (bgCanvas) {
@@ -39,4 +81,5 @@ export function canvas() {
   }
 }
 
+// Export as default for flexible import styles
 export default canvas;

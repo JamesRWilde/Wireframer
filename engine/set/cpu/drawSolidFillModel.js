@@ -1,39 +1,60 @@
-import { fillWorker } from '@engine/init/cpu/fillWorker.js';
 /**
  * drawSolidFillModel.js - Solid Fill Model Renderer
- * 
+ *
  * PURPOSE:
  *   Draws shaded triangles for the 3D model to an offscreen fill layer canvas.
  *   Uses back-to-front sorting (painter's algorithm) and Blinn-Phong lighting.
- * 
+ *
  * ARCHITECTURE ROLE:
  *   Called by renderCpuPath to render the solid fill portion of the model.
  *   Results are composited onto the main canvas with opacity blending.
- * 
+ *
  * OPTIMIZATION:
  *   Uses Web Worker with OffscreenCanvas when available for parallel rendering.
  *   Falls back to main-thread rendering if worker is unavailable.
  */
 
+"use strict";
+
+// Import fill worker initialization for lazy worker creation
+import { fillWorker } from '@engine/init/cpu/fillWorker.js';
+
+// Import frame data getter for vertex transforms
 import { frameData }from '@engine/get/render/model/frameData.js';
+
+// Import triangle face getter for mesh geometry
 import { triangles as modelTriangles }from '@engine/get/render/model/triangles.js';
+
+// Import shading mode detection for flat vs smooth shading
 import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.js';
+
+// Import per-corner normal computation for smooth shading
 import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
+
+// Import CPU triangle rasterizer for main-thread fallback
 import { trianglesCpu }from '@engine/set/render/fill/trianglesCpu.js';
+
+// Import worker command sender for async fill rendering
 import { sendRenderCommand }from '@engine/set/cpu/fill/sendRenderCommand.js';
 
+// Import cached frame getter for worker-rendered results
 import { fillCachedFrame }from '@engine/get/cpu/fillCachedFrame.js';
+
+// Import worker availability check for render path selection
 import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
+
+// Import render loop state for frame ID tracking
 import { state }from '@engine/state/engine/loop.js';
 
-// Track if worker has been initialized
+// Track if worker has been initialized to avoid redundant setup
 let workerInitialized = false;
 
 /**
  * drawSolidFillModel - Draws solid shaded triangles for the model
- * 
+ *
  * @param {Object} model - Model with V, F, E data
- * @param {number} [alphaScale=1] - Opacity multiplier
+ * @param {number} [alphaScale=1] - Opacity multiplier for fill rendering
+ * @returns {void}
  */
 export function drawSolidFillModel(model, alphaScale = 1) {
   const fillLayerCtx = globalThis.fillLayerCtx;
@@ -41,20 +62,28 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   const W = globalThis.W;
   const H = globalThis.H;
 
+  // Compute effective opacity from global slider and alpha scale
   const opacity = globalThis.FILL_OPACITY * alphaScale;
+
+  // Guard: skip if model has no vertices or opacity is negligible
   if (!model?.V?.length || opacity <= 0.001) return;
+
+  // Guard: ensure fill layer canvas and context are available
   if (!fillLayerCtx || !fillLayerCanvas) {
     console.warn('[drawSolidFillModel] missing fillLayerCtx/canvas');
     return;
   }
 
+  // Get transformed vertex data (2D projections + 3D positions)
   const fd = frameData(model);
   if (!fd) return;
   const { T, P2 } = fd;
 
+  // Get triangle faces for the model
   const triFaces = modelTriangles(model);
   if (!triFaces?.length) return;
 
+  // Determine shading mode and compute corner normals if needed
   const shadingMode = getShadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
   const seamExpandPx = useSmoothShading ? (globalThis.DENSE_SEAM_EXPAND_PX ?? 0) : 0;
@@ -63,16 +92,18 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     ? getTriCornerNormals(model, triFaces)
     : null;
 
+  // Compute fill alpha (1.0 for opaque, <1 for transparent fills)
   const fillSlider = globalThis.FILL_OPACITY * alphaScale;
   const fillAlpha = fillSlider >= 0.999 ? 1 : fillSlider;
 
-  // Try to use worker for parallel rendering
+  // Lazy-initialize the fill render worker
   if (!workerInitialized) {
     workerInitialized = fillWorker(W, H);
   }
 
+  // Try to use worker for parallel rendering
   if (isFillWorkerAvailable()) {
-    // Send current frame data to worker
+    // Send current frame data to worker for async rendering
     const R = globalThis.PHYSICS_STATE?.R;
     const theme = globalThis.THEME ?? { shadeDark: '#000000', shadeBright: '#ffffff' };
 
@@ -88,7 +119,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
       R
     }, state.RENDER_FRAME_ID);
 
-    // Draw cached frame from previous render
+    // Draw cached frame from previous render (pipeline latency hiding)
     const cached = fillCachedFrame();
     if (cached?.imageBitmap) {
       fillLayerCtx.setTransform(1, 0, 0, 1, 0, 0);
@@ -104,6 +135,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   fillLayerCtx.setTransform(1, 0, 0, 1, 0, 0);
   fillLayerCtx.clearRect(0, 0, W, H);
 
+  // Sort triangles back-to-front (painter's algorithm) by average Z depth
   const triOrder = new Array(triFaces.length);
   for (let i = 0; i < triFaces.length; i++) {
     const tri = triFaces[i];
@@ -116,6 +148,8 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   triOrder.sort((a, b) => b.z - a.z);
 
   fillLayerCtx.globalCompositeOperation = 'source-over';
+
+  // Debug logging for fill opacity values
   if (globalThis.DEBUG_LOG_FILL) {
     console.debug(
       '[drawSolidFillModel] FILL_OPACITY slider:',
@@ -129,6 +163,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     );
   }
 
+  // Rasterize triangles on the CPU
   trianglesCpu({
     triOrder,
     P2,

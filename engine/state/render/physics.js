@@ -60,16 +60,3 @@ if (!globalThis.PHYSICS_STATE) {
 // This follows the project's convention of accessing state directly rather than
 // through accessor functions, reducing boilerplate and improving performance.
 
-/**
- * decrementHoldRotationFrames - Decrements the rotation hold counter
- * 
- * This helper function decrements the HOLD_ROTATION_FRAMES counter if it's
- * greater than zero. When the counter is positive, rotation is paused to
- * provide visual feedback during user interaction.
- */
-export function physics() {
-  if (globalThis.PHYSICS_STATE.HOLD_ROTATION_FRAMES > 0) globalThis.PHYSICS_STATE.HOLD_ROTATION_FRAMES--;
-}
-
-// Do not expose trivial getters — consumers should read `globalThis.PHYSICS_STATE` directly.
-

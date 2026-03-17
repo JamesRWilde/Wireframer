@@ -16,7 +16,7 @@
  *   - advanceMorphFrame: Updates morph state each frame
  *   - currentMorph: Gets the current interpolated mesh
  *   - isMorphing: Checks if a morph is in progress
- *   - stopMorph: Stops the current morph animation
+
  */
 
 "use strict";
@@ -26,7 +26,6 @@ import { startMorph }from '@engine/init/mesh/startMorph.js';
 import { advanceMorphFrame }from '@engine/init/mesh/advanceMorphFrame.js';
 import { currentMorph }from '@engine/get/mesh/currentMorph.js';
 import { isMorphing }from '@engine/get/mesh/isMorphing.js';
-import { stopMorph }from '@engine/dispose/mesh/stopMorph.js';
 
 // Set default morph duration (1.6 seconds)
 // This provides a smooth transition that's not too fast or too slow
@@ -39,5 +38,4 @@ globalThis.morph = {
   advanceMorphFrame,
   currentMorph,
   isMorphing,
-  stopMorph,
 };

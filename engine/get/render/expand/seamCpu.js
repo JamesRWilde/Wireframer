@@ -1,6 +1,5 @@
-
 /**
- * expandTriangleForSeam.js - Triangle Seam Expansion
+ * seamCpu.js - Triangle Seam Expansion
  *
  * PURPOSE:
  *   Expands triangle vertices outward from centroid to prevent visible seams
@@ -15,16 +14,19 @@
  *   Expanding each triangle slightly ensures edges overlap, eliminating gaps.
  */
 
+"use strict";
+
+// Import point expansion helper to move vertices away from centroid
 import { geometryExpandPoint }from '@engine/set/cpu/geometryExpandPoint.js';
 
 /**
  * expandTriangleForSeam - Expands triangle vertices outward from centroid
- * 
+ *
  * @param {Array<Array<number>>} tri2d - Triangle vertices [[x1,y1], [x2,y2], [x3,y3]]
  * @param {number} seamExpandPx - Expansion distance in pixels (0 = no expansion)
- * 
+ *
  * @returns {Array<Array<number>>} Expanded triangle vertices
- * 
+ *
  * The function:
  * 1. Returns original vertices if expansion is disabled
  * 2. Computes triangle centroid
@@ -44,11 +46,11 @@ export function seamCpu(tri2d, seamExpandPx) {
     return [[ax, ay], [bx, by], [cx, cy]];
   }
 
-  // Compute triangle centroid
+  // Compute triangle centroid (average of all three vertices)
   const mx = (ax + bx + cx) / 3;
   const my = (ay + by + cy) / 3;
 
-  // Expand all three vertices using helper
+  // Expand all three vertices outward from centroid
   return [
     geometryExpandPoint(ax, ay, mx, my, seamExpandPx),
     geometryExpandPoint(bx, by, mx, my, seamExpandPx),

@@ -103,7 +103,6 @@ export function startApp() {
   globalThis.DEBUG_FORCE_WIRE = false;
   globalThis.DEBUG_P2_POINTS = false;
   globalThis.DEBUG_SHOW_FILL_LAYER = false;
-  globalThis.DEBUG_SHOW_AXES = false;
   globalThis.DEBUG_LOG_PHYSICS = false;
   globalThis.DEBUG_CLEAR = false;
 

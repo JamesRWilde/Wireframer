@@ -1,3 +1,25 @@
+/**
+ * sceneRenderer.js - GPU Scene Renderer Factory
+ *
+ * PURPOSE:
+ *   Creates a complete GPU scene renderer by initializing the WebGL context,
+ *   compiling shader programs, setting up GPU buffers, and assembling the
+ *   draw API. This is the primary entry point for GPU-based rendering.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called by the sceneRenderer getter (engine/get/gpu/sceneRenderer.js) to
+ *   lazily create the singleton GPU renderer. Returns an object with model()
+ *   and clear() methods for the render loop.
+ *
+ * DETAILS:
+ *   - Tries WebGL2 first, falls back to WebGL1 and experimental-webgl
+ *   - Stores the GL context globally as globalThis.gpuGl
+ *   - Checks for 32-bit index support for large models
+ *   - Creates shader programs, buffer store, and draw API
+ */
+
+"use strict";
+
 // Import shader program creation
 // Compiles vertex and fragment shaders for fill and wire rendering
 import { scenePrograms }from '@engine/init/gpu/create/scenePrograms.js';
@@ -10,33 +32,46 @@ import { sceneBufferStore }from '@engine/init/gpu/create/sceneBufferStore.js';
 // Provides model and clear functions for WebGL rendering
 import { sceneDraw }from '@engine/init/gpu/create/sceneDraw.js';
 
+/**
+ * sceneRenderer - Creates a GPU scene renderer for a canvas element
+ *
+ * @param {HTMLCanvasElement} canvas - The canvas element to render into
+ * @returns {Object|null} Renderer object with { mode, model, clear, dispose }
+ *   or null if WebGL initialization fails
+ */
 export function sceneRenderer(canvas) {
+  // Guard against missing canvas
   if (!canvas) { console.warn('[sceneRenderer] no canvas'); return null; }
 
+  // WebGL context options for optimal rendering performance
   const glOpts = {
-    alpha: true,
-    antialias: false,
-    depth: true,
-    stencil: false,
-    premultipliedAlpha: true,
-    preserveDrawingBuffer: false,
-    desynchronized: true,
-    powerPreference: 'high-performance',
+    alpha: true,                // Allow transparent backgrounds
+    antialias: false,           // Disable AA for performance (manual SSAA)
+    depth: true,                // Enable depth buffer for z-sorting
+    stencil: false,             // No stencil buffer needed
+    premultipliedAlpha: true,   // Better compositing with page
+    preserveDrawingBuffer: false, // Don't retain buffer (perf optimization)
+    desynchronized: true,       // Hint to skip compositor sync
+    powerPreference: 'high-performance', // Request discrete GPU if available
   };
 
+  // Try WebGL2 first, then WebGL1, then experimental fallback
   const gl =
     canvas.getContext('webgl2', glOpts) ||
     canvas.getContext('webgl', glOpts) ||
     canvas.getContext('experimental-webgl', glOpts);
 
+  // Bail out if no WebGL context available
   if (!gl) { console.warn('[sceneRenderer] no gl context'); return null; }
-  
-  // Store the WebGL context globally for easy access by sceneCanvas
+
+  // Store the GL context globally for access by other GPU modules
   globalThis.gpuGl = gl;
 
+  // Check for 32-bit index support (needed for models with >65535 vertices)
   const supportsUint32 = !!gl.getExtension('OES_element_index_uint') ||
     (typeof WebGL2RenderingContext !== 'undefined' && gl instanceof WebGL2RenderingContext);
 
+  // Compile fill and wire shader programs
   let shaderPack;
   try {
     shaderPack = scenePrograms(gl);
@@ -46,17 +81,21 @@ export function sceneRenderer(canvas) {
     return null;
   }
 
+  // Create GPU buffer store for vertex/index data
   const bufferStore = sceneBufferStore(gl, supportsUint32);
   if (!bufferStore) console.warn('[sceneRenderer] bufferStore failed');
+
+  // Create the draw API that wraps all GPU rendering operations
   const drawApi = sceneDraw(gl, canvas, shaderPack, bufferStore);
   if (!drawApi) console.warn('[sceneRenderer] drawApi failed');
 
-  // Engine-owned mesh only
+  // Return the engine-owned renderer interface
   return {
     mode: 'gpu-scene',
     model: drawApi.model,
     clear: drawApi.clear,
     dispose() {
+      // Clean up shader programs on disposal
       if (shaderPack && typeof shaderPack.dispose === 'function') shaderPack.dispose();
     },
   };
