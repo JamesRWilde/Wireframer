@@ -1,3 +1,4 @@
+import * as statefrom "@engine/state/render/background/worker.js";
 
 export function fillWorker() {
   if (state.worker) {

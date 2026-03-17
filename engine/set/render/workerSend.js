@@ -1,3 +1,4 @@
+import * as statefrom "@engine/state/render/background/worker.js";
 import { workerTransform }from '@engine/init/render/workerTransform.js';
 
 export function workerSend(vertices, rotation, fov, halfW, halfH, modelCy, frameId) {

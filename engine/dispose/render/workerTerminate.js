@@ -1,3 +1,4 @@
+import * as statefrom "@engine/state/render/background/worker.js";
 
 export function workerTerminate() {
   if (state.worker) {

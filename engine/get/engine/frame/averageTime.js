@@ -1,3 +1,4 @@
+import { state }from "@engine/state/engine/loop.js";
 
 export function averageTime() {
   if (state.frameTimeCount === 0) return 0;

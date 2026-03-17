@@ -1,3 +1,4 @@
+import { state }from "@engine/state/engine/loop.js";
 import { averageTime }from '@engine/get/engine/frame/averageTime.js';
 import { determineTarget }from '@engine/get/engine/quality/determineTarget.js';
 import { qualityApplyChange }from '@engine/set/engine/qualityApplyChange.js';

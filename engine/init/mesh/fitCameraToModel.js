@@ -57,7 +57,7 @@ export function fitCameraToModel(model) {
 
   // Update frame parameters for projection
   // These control the vertical center and depth range
-  const params = computeFrameParams(model.V);
+  const params = frameParams(model.V);
   if (typeof params.cy === 'number') globalThis.MODEL_CY = params.cy;
   if (typeof params.zHalf === 'number') globalThis.Z_HALF = params.zHalf;
 

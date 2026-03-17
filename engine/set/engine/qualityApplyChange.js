@@ -1,3 +1,4 @@
+import { state }from "@engine/state/engine/loop.js";
 import { priority }from '@engine/get/engine/quality/priority.js';
 
 export function qualityApplyChange(targetQuality, avgFrameTime) {

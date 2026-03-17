@@ -1,3 +1,4 @@
+import { state }from "@engine/state/engine/loop.js";
 
 export function determineTarget(avgFrameTime) {
   if (avgFrameTime > state.BUDGET_LOW) return 'low';

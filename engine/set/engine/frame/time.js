@@ -1,3 +1,4 @@
+import { state }from "@engine/state/engine/loop.js";
 
 export function time(frameMs) {
   state.frameTimes[state.frameTimeIndex] = frameMs;
