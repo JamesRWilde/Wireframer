@@ -1,5 +1,5 @@
 /**
- * initializeRotation.js - Initial Rotation Matrix Setup
+ * rotationInitialize.js - Initial Rotation Matrix Setup
  * 
  * PURPOSE:
  *   Sets up the initial rotation matrix for the 3D model. This provides a
@@ -31,7 +31,7 @@ import { rotationMatrixX } from './rotationMatrixX.js';
 import { R } from './rotationMatrixRef.js';
 
 /**
- * initializeRotation - Sets up the initial rotation matrix
+ * rotationInitialize - Sets up the initial rotation matrix
  * 
  * Creates a rotation matrix that combines:
  * - 0.4 radians rotation around Y axis (horizontal turn)
@@ -40,7 +40,7 @@ import { R } from './rotationMatrixRef.js';
  * This gives a pleasing three-quarter view of the model.
  * Falls back to identity matrix if rotation functions aren't available.
  */
-export function initializeRotation() {
+export function rotationInitialize() {
   // Check if rotation functions are available
   if (typeof mry === 'function' && typeof mrx === 'function' && typeof mmul === 'function') {
     // Create initial rotation: Ry(0.4) * Rx(0.18)

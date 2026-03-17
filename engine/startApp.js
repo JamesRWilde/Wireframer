@@ -55,7 +55,7 @@ import { initObjectSelector } from '../ui/initObjectSelector.js';
 import { frame } from './frame.js';
 
 // Import rotation matrix initialization
-import { initializeRotation } from '../render/rotationInitialize.js';
+import { rotationInitialize } from '../render/rotationInitialize.js';
 
 // Import the rotation matrix reference
 import { R } from '../render/rotationMatrixRef.js';

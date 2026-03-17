@@ -1,5 +1,5 @@
 /**
- * getTriangleNormalsOrNull.js - Helper to return triangleNormals if present
+ * geometryGetTriNormals.js - Helper to return triangleNormals if present
  *
  * PURPOSE:
  *   Returns a copy of model.triangleNormals if present, or null otherwise.
@@ -19,7 +19,7 @@
  *   if (triNormals) return triNormals;
  *   // ...fallback to other normal computation...
  */
-export function getTriangleNormalsOrNull(model, triCount) {
+export function geometryGetTriNormals(model, triCount) {
   // Check if precomputed triangleNormals are present
   if (model.triangleNormals) {
     // Create a shallow copy to avoid mutating the original array

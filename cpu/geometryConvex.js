@@ -1,5 +1,5 @@
 /**
- * isConvex.js - Convexity Check for Polygon Vertices
+ * geometryConvex.js - Convexity Check for Polygon Vertices
  * 
  * PURPOSE:
  *   Determines whether a vertex in a polygon forms a convex angle. This is used
@@ -19,7 +19,7 @@
 "use strict";
 
 /**
- * isConvex - Checks if a vertex forms a convex angle in a polygon
+ * geometryConvex - Checks if a vertex forms a convex angle in a polygon
  * 
  * @param {Array<Array<number>>} proj - Projected 2D vertex coordinates
  *   Each element is [x, y] representing a vertex position
@@ -36,7 +36,7 @@
  * 2. Multiplying by the polygon's signed area to account for winding order
  * 3. If the result is positive, the angle is convex
  */
-export function isConvex(proj, i0, i1, i2, area2) {
+export function geometryConvex(proj, i0, i1, i2, area2) {
   // Get the three vertices
   const a = proj[i0], b = proj[i1], c = proj[i2];
   

@@ -1,5 +1,5 @@
 /**
- * sumSimilarNormals.js - Helper to sum normals within crease threshold
+ * geometrySumNormals.js - Helper to sum normals within crease threshold
  *
  * PURPOSE:
  *   Sums the normals of adjacent faces for a vertex, including only those
@@ -22,7 +22,7 @@
  *   const [nx, ny, nz] = sumSimilarNormals(nRef, faceNormals, adjacent, cosThreshold);
  *   // Normalize if needed: const len = Math.hypot(nx, ny, nz);
  */
-export function sumSimilarNormals(nRef, faceNormals, adjacent, cosThreshold) {
+export function geometrySumNormals(nRef, faceNormals, adjacent, cosThreshold) {
   // Initialize sum vector
   let nx = 0, ny = 0, nz = 0;
   // For each adjacent face, check if its normal is within the crease threshold

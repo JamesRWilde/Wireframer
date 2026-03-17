@@ -19,9 +19,9 @@ import { getModelTriangles } from '../render/getModelTriangles.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
 import { getModelTriCornerNormals } from '../render/getModelTriCornerNormals.js';
 import { renderFillTriangles } from '../render/renderFillTrianglesCpu.js';
-import { sendRenderCommand } from './fillSendRenderCommand.js';
+import { fillSendRenderCommand } from './fillSendRenderCommand.js';
 import { initFillWorker } from "./initFillWorker.js";
-import { getCachedFrame } from './fillGetCachedFrame.js';
+import { fillGetCachedFrame } from './fillGetCachedFrame.js';
 import { isFillWorkerAvailable } from './isFillWorkerAvailable.js';
 import { state } from '../engine/loopState.js';
 
@@ -75,7 +75,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     const R = globalThis.PHYSICS_STATE?.R;
     const theme = globalThis.THEME ?? { shadeDark: '#000000', shadeBright: '#ffffff' };
 
-    sendRenderCommand({
+    fillSendRenderCommand({
       T,
       P2,
       triFaces,
@@ -88,7 +88,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     }, state.RENDER_FRAME_ID);
 
     // Draw cached frame from previous render
-    const cached = getCachedFrame();
+    const cached = fillGetCachedFrame();
     if (cached?.imageBitmap) {
       fillLayerCtx.setTransform(1, 0, 0, 1, 0, 0);
       fillLayerCtx.clearRect(0, 0, W, H);

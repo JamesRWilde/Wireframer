@@ -1,5 +1,5 @@
 /**
- * pointInTriangle.js - Point-in-Triangle Test
+ * geometryPointInTriangle.js - Point-in-Triangle Test
  * 
  * PURPOSE:
  *   Determines whether a 2D point lies inside a triangle. This is used by the
@@ -19,7 +19,7 @@
 "use strict";
 
 /**
- * pointInTriangle - Tests if a point lies inside a triangle
+ * geometryPointInTriangle - Tests if a point lies inside a triangle
  * 
  * @param {Array<number>} p - The point to test [x, y]
  * @param {Array<number>} a - First triangle vertex [x, y]
@@ -31,7 +31,7 @@
  * Uses barycentric coordinates with a small epsilon (1e-8) for floating-point
  * tolerance. This prevents false negatives due to numerical precision issues.
  */
-export function pointInTriangle(p, a, b, c) {
+export function geometryPointInTriangle(p, a, b, c) {
   // Compute edge vectors from vertex a
   const v0 = [c[0] - a[0], c[1] - a[1]];  // Vector a->c
   const v1 = [b[0] - a[0], b[1] - a[1]];  // Vector a->b

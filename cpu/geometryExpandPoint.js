@@ -1,5 +1,5 @@
 /**
- * expandPointFromCentroid.js - Expand a point outward from centroid
+ * geometryExpandPoint.js - Expand a point outward from centroid
  *
  * PURPOSE:
  *   Moves a 2D point outward from a given centroid by a specified distance.
@@ -17,7 +17,7 @@
  *   - If the point is at the centroid, returns the original point.
  *   - Otherwise, normalizes the direction and moves the point outward by expandPx.
  */
-export function expandPointFromCentroid(px, py, mx, my, expandPx) {
+export function geometryExpandPoint(px, py, mx, my, expandPx) {
   // Vector from centroid to point
   let dx = px - mx;
   let dy = py - my;

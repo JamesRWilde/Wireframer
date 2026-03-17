@@ -7,7 +7,7 @@
  *   construct arbitrary 3D rotations via Euler angles.
  * 
  * ARCHITECTURE ROLE:
- *   Used by initializeRotation() to set up the initial model orientation.
+ *   Used by rotationInitialize() to set up the initial model orientation.
  *   Available for any code that needs Y-axis rotation.
  * 
  * MATHEMATICAL BASIS:

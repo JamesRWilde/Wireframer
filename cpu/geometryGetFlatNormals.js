@@ -1,5 +1,5 @@
 /**
- * getFlatCornerNormals.js - Helper for flat shading corner normals
+ * geometryGetFlatNormals.js - Helper for flat shading corner normals
  *
  * PURPOSE:
  *   Returns an array of per-corner normals for each triangle, where all corners use the face normal.
@@ -16,7 +16,7 @@
  *   const flatNormals = getFlatCornerNormals(faceNormals);
  *   // flatNormals[i][c] gives the normal for corner c of triangle i
  */
-export function getFlatCornerNormals(faceNormals) {
+export function geometryGetFlatNormals(faceNormals) {
   // Allocate output array for per-triangle, per-corner normals
   const cornerNormals = new Array(faceNormals.length);
   let i = 0;

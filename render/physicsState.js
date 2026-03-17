@@ -14,7 +14,7 @@
  * STATE PROPERTIES:
  *   - wx, wy, wz: Current angular velocities (radians per frame)
  *   - AUTO_WX, AUTO_WY, AUTO_WZ: Target velocities for auto-rotation
- *   - R: Rotation matrix (initialized by initializeRotation)
+ *   - R: Rotation matrix (initialized by rotationInitialize)
  *   - dragging: Whether user is currently dragging
  *   - HOLD_ROTATION_FRAMES: Frames to pause rotation (for interaction)
  * 
@@ -42,7 +42,7 @@ if (!globalThis.PHYSICS_STATE) {
 		AUTO_WY: 0.015,  // Slower auto-yaw (gentle turn)
 		AUTO_WZ: 0.0025, // Slight roll (subtle tilt)
 		
-		// Rotation matrix - initialized by initializeRotation()
+		// Rotation matrix - initialized by rotationInitialize()
 		// This is the 3x3 matrix that transforms vertices
 		R: null,
 		

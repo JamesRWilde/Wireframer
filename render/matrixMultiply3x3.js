@@ -6,7 +6,7 @@
  *   This is the fundamental operation for combining rotations in 3D space.
  * 
  * ARCHITECTURE ROLE:
- *   Used by initializeRotation() to combine rotation matrices, and available
+ *   Used by rotationInitialize() to combine rotation matrices, and available
  *   for any other matrix composition needs.
  * 
  * MATRIX LAYOUT:
