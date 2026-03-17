@@ -21,7 +21,7 @@
 import { clearGpuSceneCanvas } from '../gpu/clearGpuSceneCanvas.js';
 
 // Import the unified mesh renderer - draws triangles with fill and edges in one pass
-import { renderMeshUnified } from '../render/renderMeshUnified.js';
+import { renderMeshUnified } from '../cpu/renderMeshUnified.js';
 
 // Import canvas visibility toggles
 import { setCpuCanvasHidden } from './setCpuCanvasHidden.js';

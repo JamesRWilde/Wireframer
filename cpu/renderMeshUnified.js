@@ -21,7 +21,7 @@
 
 "use strict";
 
-import { getModelFrameData } from './getModelFrameData.js';
+import { getModelFrameData } from '../render/getModelFrameData.js';
 import { getModelTriangles } from './getModelTriangles.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
 import { getModelTriCornerNormals } from './getModelTriCornerNormals.js';
