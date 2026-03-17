@@ -12,7 +12,7 @@
  * 
  * USAGE:
  *   import {objectList}from '@engine/get/render/objectList.js';
- *   const objects = await getObjectList();
+ *   const objects = await objectList();
  */
 
 "use strict";
@@ -20,38 +20,22 @@
 /** @type {Array<{key: string, name: string, obj: string}>|null} */
 let _cache = null;
 
-/** @type {Promise|null} */
-let _pending = null;
-
 /**
- * getObjectList - Returns the list of available mesh objects
+ * objectList - Returns the list of available mesh objects
  * 
+ * Fetches from /api/meshes endpoint and caches the result.
  * Returns a cached result on subsequent calls.
  * 
  * @returns {Promise<Array<{key: string, name: string, obj: string}>>}
  *   Array of mesh objects sorted alphabetically by key
  */
-export function objectList() {
-  if (_cache !== null) return Promise.resolve(_cache);
+export async function objectList() {
+  if (_cache !== null) return _cache;
   
-  // Static mesh list (no server API needed for static hosting)
-  const meshes = [
-    "airplane.obj", "capsule.obj", "cinquefoil-knot.obj", "cone.obj",
-    "cube.obj", "cylinder.obj", "diamond.obj", "drone.obj",
-    "icosahedron.obj", "jerusalem-cube.obj", "menger-sponge.obj",
-    "mobius-strip.obj", "octahedron.obj", "prism.obj", "pyramid.obj",
-    "sierpinski-pyramid.obj", "sphere.obj", "spring.obj", "star-prism.obj",
-    "torus-knot.obj", "torus.obj", "tree.obj", "wine-glass.obj"
-  ];
-  
-  const list = meshes
-    .map(f => ({
-      key: f.replace(/\.obj$/, ''),
-      name: f.replace(/\.obj$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-      obj: `/meshes/${f}`
-    }))
-    .sort((a, b) => a.key.localeCompare(b.key));
+  const res = await fetch('/api/meshes');
+  const list = await res.json();
+  list.sort((a, b) => a.key.localeCompare(b.key));
   
   _cache = list;
-  return Promise.resolve(list);
+  return list;
 }
