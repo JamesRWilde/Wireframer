@@ -28,9 +28,9 @@
  *   - This file must only contain this function and its export.
  *   - Update comments if the particle data structure or buffer layout changes.
  */
-import { createParticleBuffer } from '../init/createParticleBuffer.js';
+import { createParticleBuffer } from '../init/createBackgroundParticleBuffer.js';
 
-export function rebuildBuffer(gl, buffer, particles) {
+export function rebuildBackgroundBuffer(gl, buffer, particles) {
   if (!particles?.length) return 0;
   createParticleBuffer(gl, buffer, particles);
   return particles.length;

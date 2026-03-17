@@ -16,7 +16,7 @@
  *   - This file must only contain this helper function and its export.
  *   - Update comments if the particle data structure changes.
  */
-export function createParticleBuffer(gl, buffer, particles) {
+export function createBackgroundParticleBuffer(gl, buffer, particles) {
   const stride = 8;
   const data = new Float32Array(particles.length * stride);
   for (let i = 0; i < particles.length; i++) {
