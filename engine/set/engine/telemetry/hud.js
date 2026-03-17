@@ -47,18 +47,21 @@ export function hud(nowMs) {
     { el: statsState.statFgMs, val: state.emaFgMs > 0 ? state.emaFgMs.toFixed(2) : '--' },
   ];
 
-  // Append detailed FG breakdown: CPU mode shows sort+draw, GPU mode shows fill+wire
+  // Append detailed FG breakdown
   if (globalThis._perf && globalThis._perf.frameCount > 0) {
+    // GPU mode: fill vs wire
     const avgFill = (globalThis._perf.fillMs / globalThis._perf.frameCount).toFixed(2);
     const avgWire = (globalThis._perf.wireMs / globalThis._perf.frameCount).toFixed(2);
     stats.push({ el: statsState.statFgMs, val: `fill:${avgFill} wire:${avgWire}` });
     globalThis._perf.fillMs = 0;
     globalThis._perf.wireMs = 0;
     globalThis._perf.frameCount = 0;
-  } else if (globalThis._CPU_DRAW_MS > 0) {
-    const sortMs = (globalThis._CPU_SORT_MS || 0).toFixed(2);
-    const drawMs = (globalThis._CPU_DRAW_MS || 0).toFixed(2);
-    stats.push({ el: statsState.statFgMs, val: `sort:${sortMs} draw:${drawMs}` });
+  } else if (globalThis._CPU_LIGHT_MS > 0) {
+    // CPU mode: lighting vs fill vs stroke
+    const light = (globalThis._CPU_LIGHT_MS || 0).toFixed(2);
+    const fill = (globalThis._CPU_FILL_MS || 0).toFixed(2);
+    const stroke = (globalThis._CPU_STROKE_MS || 0).toFixed(2);
+    stats.push({ el: statsState.statFgMs, val: `L:${light} F:${fill} S:${stroke}` });
   }
 
   // Write all stats to their DOM elements

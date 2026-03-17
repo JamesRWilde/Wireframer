@@ -93,8 +93,8 @@ export function renderMeshUnified(model, ctx) {
   performance.mark('cpu-sort-end');
   performance.measure('cpu-sort', 'cpu-sort-start', 'cpu-sort-end');
 
-  // ── Telemetry: lighting + draw ──
-  performance.mark('cpu-draw-start');
+  // ── Telemetry: per-phase timing ──
+  let tLight = 0, tFill = 0, tStroke = 0;
 
   // Render each triangle in sorted order
   ctx.save();
@@ -112,6 +112,9 @@ export function renderMeshUnified(model, ctx) {
     const area2 = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
     if (Math.abs(area2) < 0.2) continue;
 
+    // ── Lighting phase ──
+    let t0 = performance.now();
+
     // Compute normal for lighting
     const normal = resolveTriangleNormal(tri, triIdx, T, triCornerNormals, useSmoothShading);
     if (!normal) continue;
@@ -119,47 +122,51 @@ export function renderMeshUnified(model, ctx) {
     // Compute shade color
     const shadeColor = computeTriangleShadeColor(normal, useSmoothShading);
 
-    // Draw triangle path
+    tLight += performance.now() - t0;
+
+    // ── Canvas fill phase ──
+    t0 = performance.now();
+
     ctx.beginPath();
     ctx.moveTo(ax, ay);
     ctx.lineTo(bx, by);
     ctx.lineTo(cx, cy);
     ctx.closePath();
 
-    // Fill triangle with fill opacity
     if (fillAlpha > 0.001) {
       ctx.globalAlpha = fillAlpha;
       ctx.fillStyle = `rgb(${shadeColor[0]}, ${shadeColor[1]}, ${shadeColor[2]})`;
       ctx.fill();
     }
 
-    // Draw edges with wire opacity
+    tFill += performance.now() - t0;
+
+    // ── Canvas stroke phase ──
+    t0 = performance.now();
+
     if (wireAlpha > 0.001) {
       ctx.globalAlpha = wireAlpha;
       ctx.strokeStyle = edgeColor;
       ctx.stroke();
     }
+
+    tStroke += performance.now() - t0;
   }
 
   ctx.globalAlpha = 1;
   ctx.restore();
 
-  performance.mark('cpu-draw-end');
-  performance.measure('cpu-draw', 'cpu-draw-start', 'cpu-draw-end');
-
-  // Store last frame's measurements as globals for HUD consumption
+  // Store telemetry for HUD
   const sortEntry = performance.getEntriesByName('cpu-sort').at(-1);
-  const drawEntry = performance.getEntriesByName('cpu-draw').at(-1);
   globalThis._CPU_SORT_MS = sortEntry?.duration ?? 0;
-  globalThis._CPU_DRAW_MS = drawEntry?.duration ?? 0;
+  globalThis._CPU_LIGHT_MS = tLight;
+  globalThis._CPU_FILL_MS = tFill;
+  globalThis._CPU_STROKE_MS = tStroke;
 
-  // Keep only last 30 entries to avoid memory growth
+  // Keep perf entries tidy
   if (performance.getEntriesByName('cpu-sort').length > 30) {
     performance.clearMarks('cpu-sort-start');
     performance.clearMarks('cpu-sort-end');
     performance.clearMeasures('cpu-sort');
-    performance.clearMarks('cpu-draw-start');
-    performance.clearMarks('cpu-draw-end');
-    performance.clearMeasures('cpu-draw');
   }
 }
