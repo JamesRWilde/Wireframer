@@ -10,11 +10,11 @@
  * - Derived cache: recomputed only when source version changes
  * - Consumers call getter functions; cache is transparent
  *
- * REPLACES:
+ * REPLACES scattered globalThis reads:
  * - globalThis.THEME / THEME_MODE
  * - globalThis.FILL_OPACITY / WIRE_OPACITY
  * - Per-frame relativeLuminance + rgbaString for edge color
- * - Per-frame theme RGB hex parsing (shadeDark, shadeBright)
+ * - Per-frame theme RGB parsing (shadeDark, shadeBright, bg, particle)
  */
 
 "use strict";
@@ -33,16 +33,18 @@ export let wireOpacity = 1;
 // ══════════════════════════════════════════════
 
 let _themeVer = 0;
-let _opacityVer = 0;
 
 // ══════════════════════════════════════════════
-// Derived caches
+// Derived caches (rebuilt only on theme change)
 // ══════════════════════════════════════════════
 
-let _shadeDarkRgb = null;
-let _shadeBrightRgb = null;
-let _fillRgb = null;
-let _edgeColor = null;
+let _shadeDarkRgb = [0, 0, 0];
+let _shadeBrightRgb = [255, 255, 255];
+let _fillRgb = [0, 200, 120];
+let _edgeColor = '#ffffff';
+let _bgRgb = [0, 0, 0];
+let _bgColor = 'rgba(0,0,0,1)';
+let _particleColor = 'rgba(200,220,255,1)';
 let _cacheVer = -1;
 
 // ══════════════════════════════════════════════
@@ -64,17 +66,15 @@ export function setThemeMode(mode) {
 /** Set fill opacity (0-1) */
 export function setFillOpacity(v) {
   fillOpacity = v;
-  _opacityVer++;
 }
 
 /** Set wire opacity (0-1) */
 export function setWireOpacity(v) {
   wireOpacity = v;
-  _opacityVer++;
 }
 
 // ══════════════════════════════════════════════
-// Derived value getters (cached)
+// Derived value cache rebuild
 // ══════════════════════════════════════════════
 
 function rebuildDerivedCache() {
@@ -83,7 +83,7 @@ function rebuildDerivedCache() {
 
   const t = theme;
 
-  // shadeDark / shadeBright are RGB arrays from bldCustomTheme
+  // Shade colors (RGB arrays from bldCustomTheme)
   const dark = t?.shadeDark;
   _shadeDarkRgb = Array.isArray(dark) ? dark : [0, 0, 0];
 
@@ -97,11 +97,24 @@ function rebuildDerivedCache() {
   // Edge color: contrast with fill luminance
   const lum = relativeLuminanceRaw(_fillRgb);
   _edgeColor = lum > 0.5 ? '#000000' : '#ffffff';
+
+  // Background color
+  const bg = t?.bg;
+  _bgRgb = Array.isArray(bg) ? bg : [0, 0, 0];
+  _bgColor = `rgba(${_bgRgb[0]},${_bgRgb[1]},${_bgRgb[2]},1)`;
+
+  // Particle color (theme particle, fallback to default)
+  const particle = t?.particle;
+  if (Array.isArray(particle)) {
+    _particleColor = `rgba(${particle[0]},${particle[1]},${particle[2]},1)`;
+  } else {
+    _particleColor = 'rgba(200,220,255,1)';
+  }
 }
 
 /**
  * relativeLuminanceRaw - WCAG luminance from RGB array
- * Inlined here to avoid importing from ui/get/color/ for hot path.
+ * Inlined to avoid cross-module import for hot path.
  */
 function relativeLuminanceRaw(rgb) {
   const r = linear(rgb[0]);
@@ -118,6 +131,12 @@ function linear(v) {
 // ══════════════════════════════════════════════
 // Public getters
 // ══════════════════════════════════════════════
+
+/** @returns {number} fill opacity (0-1) */
+export function getFillOpacity() { return fillOpacity; }
+
+/** @returns {number} wire opacity (0-1) */
+export function getWireOpacity() { return wireOpacity; }
 
 /** @returns {[number,number,number]} shadeDark as [r,g,b] */
 export function getShadeDarkRgb() {
@@ -143,11 +162,23 @@ export function getEdgeColor() {
   return _edgeColor;
 }
 
-/** @returns {number} fill opacity (0-1) */
-export function getFillOpacity() { return fillOpacity; }
+/** @returns {[number,number,number]} background color as [r,g,b] */
+export function getBgRgb() {
+  rebuildDerivedCache();
+  return _bgRgb;
+}
 
-/** @returns {number} wire opacity (0-1) */
-export function getWireOpacity() { return wireOpacity; }
+/** @returns {string} background color as 'rgba(r,g,b,1)' */
+export function getBgColor() {
+  rebuildDerivedCache();
+  return _bgColor;
+}
+
+/** @returns {string} particle color as 'rgba(r,g,b,1)' */
+export function getParticleColor() {
+  rebuildDerivedCache();
+  return _particleColor;
+}
 
 // ══════════════════════════════════════════════
 // Bridge: migrate existing globalThis reads
@@ -155,8 +186,8 @@ export function getWireOpacity() { return wireOpacity; }
 
 /**
  * Sync renderState from current globalThis values.
- * Call once per frame (cheap if nothing changed — version checks are fast).
- * This is a migration bridge: once all writers call the setters above
+ * Call once per frame (cheap — version checks are fast).
+ * This is a migration bridge: once all writers call the setters
  * directly, this function becomes unnecessary.
  */
 export function syncFromGlobals() {

@@ -46,6 +46,9 @@ import { pendingWorkerParticles }from '@engine/get/render/pendingWorkerParticles
 // Import message sender for background worker
 import { postToBackgroundWorker }from '@engine/set/render/postToBackgroundWorker.js';
 
+// Import centralized render state
+import { themeMode as getThemeMode } from '@engine/state/renderState.js';
+
 // Main-thread particle array (used as fallback when worker is unavailable)
 let particles = [];
 
@@ -84,7 +87,7 @@ export function background(nowMs) {
       type: 'update',
       timestamp: nowMs ?? performance.now(),
       density, speed, opacity,
-      themeMode: globalThis.THEME_MODE ?? 'dark'
+      themeMode: getThemeMode()
     });
 
     // Draw solid background color
@@ -97,7 +100,7 @@ export function background(nowMs) {
       const { data, count } = pending;
       ctx.save();
       // Use multiply blend for light theme, screen for dark
-      ctx.globalCompositeOperation = globalThis.THEME_MODE === 'light' ? 'multiply' : 'screen';
+      ctx.globalCompositeOperation = getThemeMode() === 'light' ? 'multiply' : 'screen';
       for (let i = 0; i < count; i++) {
         const idx = i * 4; // 4 floats per particle: x, y, size, alpha
         ctx.globalAlpha = data[idx + 3] * opacity;
@@ -125,7 +128,7 @@ export function background(nowMs) {
 
   // Draw particles with appropriate blend mode
   ctx.save();
-  ctx.globalCompositeOperation = globalThis.THEME_MODE === 'light' ? 'multiply' : 'screen';
+  ctx.globalCompositeOperation = getThemeMode() === 'light' ? 'multiply' : 'screen';
   drawParticlesFn(ctx, particles, particleColor, opacityScale, themeAlphaBoost);
   ctx.restore();
 

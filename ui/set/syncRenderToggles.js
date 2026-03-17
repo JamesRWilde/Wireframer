@@ -19,6 +19,7 @@ import {lodSlider, lodValue, bgDensity, bgDensityValue, bgVelocity, bgVelocityVa
 import { sliderDisplayPercent }from '@ui/get/sliderDisplayPercent.js';
 import { state }from '@ui/get/read/state.js';
 import { state as persistState }from '@ui/set/persist/state.js';
+import { setFillOpacity, setWireOpacity }from '@engine/state/renderState.js';
 
 export function syncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;
@@ -39,13 +40,19 @@ export function syncRenderToggles() {
   globalThis.BG_PARTICLE_OPACITY_PCT = opacityPct;
   bgOpacityValue.textContent = `${Math.round(opacityPct * 100)}%`;
 
-  globalThis.FILL_OPACITY = Number(fillOpacity.value) / 100;
-  fillOpacityValue.textContent = `${Math.round(globalThis.FILL_OPACITY * 100)}%`;
-  globalThis.WIRE_OPACITY = Number(wireOpacity.value) / 100;
-  wireOpacityValue.textContent = `${Math.round(globalThis.WIRE_OPACITY * 100)}%`;
+  const fillOp = Number(fillOpacity.value) / 100;
+  globalThis.FILL_OPACITY = fillOp; // keep globalThis for legacy consumers
+  setFillOpacity(fillOp);
+  fillOpacityValue.textContent = `${Math.round(fillOp * 100)}%`;
+
+  const wireOp = Number(wireOpacity.value) / 100;
+  globalThis.WIRE_OPACITY = wireOp; // keep globalThis for legacy consumers
+  setWireOpacity(wireOp);
+  wireOpacityValue.textContent = `${Math.round(wireOp * 100)}%`;
+
   if (globalThis.DEBUG_LOG_TOGGLES) {
-    console.debug('[syncRenderToggles] FILL_OPACITY', globalThis.FILL_OPACITY,
-                  'WIRE_OPACITY', globalThis.WIRE_OPACITY);
+    console.debug('[syncRenderToggles] FILL_OPACITY', fillOp,
+                  'WIRE_OPACITY', wireOp);
   }
 
   persistState();

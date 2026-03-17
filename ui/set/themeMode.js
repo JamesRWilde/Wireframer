@@ -17,6 +17,7 @@
 "use strict";
 
 import { palette }from '@ui/set/apply/palette.js';
+import { setThemeMode }from '@engine/state/renderState.js';
 
 /**
  * themeMode - Sets application theme mode
@@ -37,6 +38,7 @@ export function themeMode(mode, options = {}) {
 
   // Set global theme mode (normalize to 'light' or 'dark')
   globalThis.THEME_MODE = mode === 'light' ? 'light' : 'dark';
+  setThemeMode(globalThis.THEME_MODE);
 
   // Update theme mode select element if available
   const el = document.getElementById('theme-mode');

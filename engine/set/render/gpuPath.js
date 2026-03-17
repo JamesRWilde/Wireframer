@@ -48,13 +48,16 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
  * 2. Updates canvas visibility based on success/failure
  * 3. Falls back to CPU mode if GPU rendering fails
  */
+import { syncFromGlobals, getFillOpacity, getWireOpacity, theme as getTheme }from '@engine/state/renderState.js';
+
 export function gpuPath(meshToRender, morphing) {
+  syncFromGlobals();
   // Call the GPU renderer with all necessary parameters
   // These are gathered from globals and passed as a config object
   let gpuDrawn = drawGpuSceneModel(meshToRender, {
     // Opacity controls - modulate fill and wire visibility
-    fillAlpha: globalThis.FILL_OPACITY,
-    wireAlpha: globalThis.WIRE_OPACITY,
+    fillAlpha: getFillOpacity(),
+    wireAlpha: getWireOpacity(),
     
     // Camera parameters - control view and projection
     zoom: globalThis.ZOOM,
@@ -69,7 +72,7 @@ export function gpuPath(meshToRender, morphing) {
     height: globalThis.H,
     
     // Visual parameters
-    theme: globalThis.THEME,       // Color theme for fill/wire
+    theme: getTheme(),       // Color theme for fill/wire
     lightDir: globalThis.LIGHT_DIR, // Light direction for shading
     viewDir: globalThis.VIEW_DIR,  // View direction for specular
     

@@ -45,6 +45,7 @@ import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
 
 // Import render loop state for frame ID tracking
 import { state }from '@engine/state/engine/loop.js';
+import { syncFromGlobals, getFillOpacity, theme }from '@engine/state/renderState.js';
 
 // Track if worker has been initialized to avoid redundant setup
 let workerInitialized = false;
@@ -62,8 +63,11 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   const W = globalThis.W;
   const H = globalThis.H;
 
-  // Compute effective opacity from global slider and alpha scale
-  const opacity = globalThis.FILL_OPACITY * alphaScale;
+  // Sync render state and read cached values
+  syncFromGlobals();
+
+  // Compute effective opacity from slider and alpha scale
+  const opacity = getFillOpacity() * alphaScale;
 
   // Guard: skip if model has no vertices or opacity is negligible
   if (!model?.V?.length || opacity <= 0.001) return;
@@ -93,7 +97,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     : null;
 
   // Compute fill alpha (1.0 for opaque, <1 for transparent fills)
-  const fillSlider = globalThis.FILL_OPACITY * alphaScale;
+  const fillSlider = getFillOpacity() * alphaScale;
   const fillAlpha = fillSlider >= 0.999 ? 1 : fillSlider;
 
   // Lazy-initialize the fill render worker
@@ -105,7 +109,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   if (isFillWorkerAvailable()) {
     // Send current frame data to worker for async rendering
     const R = globalThis.PHYSICS_STATE?.R;
-    const theme = globalThis.THEME ?? { shadeDark: '#000000', shadeBright: '#ffffff' };
+    const workerTheme = theme ?? { shadeDark: [0,0,0], shadeBright: [255,255,255] };
 
     sendRenderCommand({
       T,
@@ -113,7 +117,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
       triFaces,
       triCornerNormalsResult,
       useSmoothShading,
-      theme,
+      theme: workerTheme,
       fillAlpha,
       seamExpandPx,
       R
@@ -153,7 +157,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   if (globalThis.DEBUG_LOG_FILL) {
     console.debug(
       '[drawSolidFillModel] FILL_OPACITY slider:',
-      globalThis.FILL_OPACITY,
+      getFillOpacity(),
       'alphaScale:',
       alphaScale,
       'fillSlider:',

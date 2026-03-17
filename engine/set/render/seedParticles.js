@@ -21,6 +21,9 @@
 // Import particle factory for creating individual particles
 import { createParticle }from '@engine/init/render/createParticle.js';
 
+// Import centralized render state
+import { themeMode as getThemeMode } from '@engine/state/renderState.js';
+
 /** Maximum density multiplier to cap particle count */
 const MAX_DENSITY_MULT = 1.6;
 
@@ -68,7 +71,7 @@ export function seedParticles(particles, w, h) {
   const velScale = velocityPct * MAX_VELOCITY_MULT;
   const opacityScale = (globalThis.BG_PARTICLE_OPACITY_PCT ?? 1) * 1;
   // Light theme needs higher alpha to be visible against light backgrounds
-  const themeAlphaBoost = globalThis.THEME_MODE === 'light' ? 1.75 : 1;
+  const themeAlphaBoost = getThemeMode() === 'light' ? 1.75 : 1;
 
   return { velScale, opacityScale, themeAlphaBoost };
 }

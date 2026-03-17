@@ -22,6 +22,7 @@
 
 import { bldCustomTheme }from '@ui/set/bldCustomTheme.js';
 import {CUSTOM_RGB,customBlue,customGreen,customRed,themeMode} from '@ui/state/dom.js';
+import { setTheme }from '@engine/state/renderState.js';
 
 /**
  * applyPalette - Applies current color theme to application
@@ -39,6 +40,7 @@ export function palette() {
   
   // Set global THEME for runtime access by renderers
   globalThis.THEME = palette;
+  setTheme(palette);
   
   // Update CSS custom properties for UI styling
   for (const [k, v] of Object.entries(palette.uiVars)) {

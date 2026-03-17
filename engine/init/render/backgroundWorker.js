@@ -20,6 +20,7 @@
 
 // Import background worker state to track worker lifecycle
 import { workerState as state } from '@engine/state/render/background/worker.js';
+import { themeMode as getThemeMode } from '@engine/state/renderState.js';
 
 // Import background canvas getter to read current dimensions
 import {canvas}from '@engine/get/render/background/canvas.js';
@@ -74,7 +75,7 @@ export function backgroundWorker() {
         height: canvasState.h,
         density: globalThis.BG_PARTICLE_DENSITY_PCT ?? 1,
         speed: globalThis.BG_PARTICLE_VELOCITY_PCT ?? 1,
-        themeMode: globalThis.THEME_MODE ?? 'dark'
+        themeMode: getThemeMode()
       });
     }
 
