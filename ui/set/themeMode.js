@@ -16,18 +16,17 @@
 
 "use strict";
 
-import { themeMode }from '@ui/set/apply/themeMode.js';
 import { palette }from '@ui/set/apply/palette.js';
 
 /**
  * themeMode - Sets application theme mode
- * 
+ *
  * @param {string} mode - Theme mode ('light' or 'dark')
  * @param {Object} [options={}] - Options
  * @param {boolean} [options.apply=true] - Whether to apply palette immediately
- * 
+ *
  * @returns {void}
- * 
+ *
  * The function:
  * 1. Sets global THEME_MODE
  * 2. Updates theme mode select element
@@ -35,13 +34,14 @@ import { palette }from '@ui/set/apply/palette.js';
  */
 export function themeMode(mode, options = {}) {
   const { apply = true } = options;
-  
+
   // Set global theme mode (normalize to 'light' or 'dark')
   globalThis.THEME_MODE = mode === 'light' ? 'light' : 'dark';
-  
+
   // Update theme mode select element if available
-  if (themeMode) themeMode.value = globalThis.THEME_MODE;
-  
+  const el = document.getElementById('theme-mode');
+  if (el) el.value = globalThis.THEME_MODE;
+
   // Apply palette to update UI colors
   if (apply) palette();
 }

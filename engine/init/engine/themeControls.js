@@ -32,7 +32,7 @@ import { customRgb as writeCustomRgb }from '@ui/set/customRgb.js';
 
 // Import the function to set dark/light theme mode
 // Adjusts background brightness, contrast enforcement, etc.
-import { themeMode }from '@ui/set/apply/themeMode.js';
+import { themeMode }from '@ui/set/themeMode.js';
 
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences
