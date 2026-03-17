@@ -24,7 +24,7 @@
 
 // Import the runFrame function that performs the actual per-frame work
 // This includes physics updates, rendering, and telemetry updates
-import { runFrame } from './frame/runFrame.js';
+import { runFrame } from './runFrame.js';
 
 // Initialize shared frame state flags on first load
 // These track whether GPU or CPU rendering was used last frame, which affects
