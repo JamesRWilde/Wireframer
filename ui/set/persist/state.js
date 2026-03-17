@@ -31,7 +31,7 @@ export function state(objects = []) {
 
   const payload = {
     selectedShapeName: selectedObject ? selectedObject.name : null,
-    themeMode: themeMode ? themeMode.value : 'dark',
+    themeMode: themeModeEl ? themeModeEl.value : 'dark',
     lod: Number(lodSlider.value),
     fillOpacity: Number(fillOpacity.value),
     wireOpacity: Number(wireOpacity.value),

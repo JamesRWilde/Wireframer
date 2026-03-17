@@ -1,18 +1,6 @@
-/**
- * applyThemeMode.js - Apply Saved Theme Mode
- *
- * PURPOSE:
- *   Applies the saved theme mode from stored state to the theme mode selector.
- *   Ensures the UI control reflects the restored mode value.
- *
- * ARCHITECTURE ROLE:
- *   Used by restoreState to apply the saved theme mode when the app initializes.
- *
- * @param {Object} state - Deserialized UI state object from localStorage
- */
-
-
-export function themeMode(state) {
-  if (!themeMode || !('themeMode' in state)) return;
-  themeMode.value = state.themeMode === 'light' ? 'light' : 'dark';
+export function themeMode(modeOrState, options = {}) {
+  const el = document.getElementById('theme-mode');
+  const mode = typeof modeOrState === 'string' ? modeOrState : modeOrState?.themeMode;
+  if (!el || !mode) return;
+  el.value = mode === 'light' ? 'light' : 'dark';
 }
