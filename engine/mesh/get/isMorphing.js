@@ -19,7 +19,7 @@
 "use strict";
 
 // Import morph state to check active flag
-import { morphState } from '../morphState.js';
+import { morphState } from '../state/meshMorphState.js';
 
 /**
  * isMorphing - Checks if a morph animation is in progress

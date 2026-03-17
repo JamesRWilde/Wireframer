@@ -21,7 +21,7 @@
 "use strict";
 
 import { setUiBuildCustomTheme } from './setUiBuildCustomTheme.js';
-import { CUSTOM_RGB } from '../domState.js';
+import { CUSTOM_RGB } from '../state/uiDomState.js';
 
 /**
  * applyPalette - Applies current color theme to application

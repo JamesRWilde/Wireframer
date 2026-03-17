@@ -1,4 +1,4 @@
-import * as state from '../renderVertexTransformBridgeState.js';
+import * as state from '../state/renderVertexTransformBridgeState.js';
 import { initRenderWorkerInitTransform } from '../init/initRenderWorkerInitTransform.js';
 
 export function setRenderWorkerSend(vertices, rotation, fov, halfW, halfH, modelCy, frameId) {

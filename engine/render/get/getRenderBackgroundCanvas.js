@@ -17,7 +17,7 @@
  */
 
 // Import background state for canvas reference
-import { bgState } from '../renderBackgroundState.js';
+import { bgState } from '../state/renderBackgroundState.js';
 
 /**
  * getBackgroundCanvas - Gets background canvas with context and dimensions

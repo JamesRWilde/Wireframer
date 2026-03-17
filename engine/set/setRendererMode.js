@@ -21,7 +21,7 @@
 "use strict";
 
 // Import loop state to read/write the cached render mode
-import { state } from '../loopState.js';
+import { state } from '../state/loopState.js';
 
 // Import HUD updater to display the current render mode
 import { setRendererHud } from './setRendererHud.js';

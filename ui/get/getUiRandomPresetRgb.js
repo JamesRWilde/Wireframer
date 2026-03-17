@@ -14,8 +14,8 @@
 
 "use strict";
 
-import { getUiColorHsvToRgb } from './get/getUiColorHsvToRgb.js';
-import { getUiColorRelativeLuminance } from './get/getUiColorRelativeLuminance.js';
+import { getUiColorHsvToRgb } from './getUiColorHsvToRgb.js';
+import { getUiColorRelativeLuminance } from './getUiColorRelativeLuminance.js';
 
 export function getUiRandomPresetRgb() {
   for (let i = 0; i < 18; i++) {

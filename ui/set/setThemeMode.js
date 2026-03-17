@@ -16,7 +16,7 @@
 
 "use strict";
 
-import { themeMode } from '../domState.js';
+import { themeMode } from '../state/uiDomState.js';
 import { setUiApplyPalette } from './setUiApplyPalette.js';
 
 /**

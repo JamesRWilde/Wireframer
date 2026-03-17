@@ -3,7 +3,7 @@
 import { initCreateSceneGpuRenderer } from '../init/initCreateSceneGpuRenderer.js';
 
 // Import shared GPU renderer state
-import { gpuState } from '../sceneGpuState.js';
+import { gpuState } from '../state/gpuSceneState.js';
 
 export function getSceneGpuRenderer() {
   if (gpuState.renderer || gpuState.failed) return gpuState.renderer;

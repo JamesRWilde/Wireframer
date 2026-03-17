@@ -1,4 +1,4 @@
-import * as state from '../renderBackgroundWorkerState.js';
+import * as state from '../state/renderBackgroundWorkerState.js';
 import { getBackgroundCanvas } from '../get/getRenderBackgroundCanvas.js';
 
 export function initRenderBackgroundWorker() {

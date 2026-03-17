@@ -1,4 +1,4 @@
-import { state } from '../../loopState.js';
+import { state } from '../../state/loopState.js';
 import { setRenderWorkerSend } from '../set/setRenderWorkerSend.js';
 import { getRenderCachedTransformResult } from './getRenderCachedTransformResult.js';
 import { getRenderConvertFlatToNested } from './getRenderConvertFlatToNested.js';

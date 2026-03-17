@@ -18,7 +18,7 @@
 
 "use strict";
 
-import { statsState } from './statsState.js';
+import { statsState } from './uiStatsState.js';
 
 const THEME = null;
 export const select = document.getElementById('obj-select');

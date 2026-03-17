@@ -22,8 +22,8 @@ import {
   bgOpacity, bgOpacityValue,
   fillOpacity, fillOpacityValue,
   wireOpacity, wireOpacityValue,
-} from '../domState.js';
-import { getUiSliderDisplayPercent } from '../sliderDisplayPercent.js';
+} from '../state/uiDomState.js';
+import { getUiSliderDisplayPercent } from '../get/getUiSliderDisplayPercent.js';
 import { setUiPersistUiState } from './setUiPersistUiState.js';
 
 export function syncRenderToggles() {

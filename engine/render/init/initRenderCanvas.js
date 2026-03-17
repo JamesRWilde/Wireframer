@@ -1,4 +1,4 @@
-import { bgState } from '../renderBackgroundState.js';
+import { bgState } from '../state/renderBackgroundState.js';
 import { setRenderSyncCanvasSize } from '../set/setRenderSyncCanvasSize.js';
 
 export function initRenderCanvas() {

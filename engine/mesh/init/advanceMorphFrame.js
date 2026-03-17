@@ -20,7 +20,7 @@
 "use strict";
 
 // Import morph state for reading/updating animation state
-import { morphState } from '../morphState.js';
+import { morphState } from '../state/meshMorphState.js';
 
 // Import easing function for smooth animation
 import { easeInOut } from '../get/getMeshEaseInOut.js';

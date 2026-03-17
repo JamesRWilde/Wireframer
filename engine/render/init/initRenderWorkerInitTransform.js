@@ -1,4 +1,4 @@
-import * as state from '../renderVertexTransformBridgeState.js';
+import * as state from '../state/renderVertexTransformBridgeState.js';
 
 export function initRenderWorkerInitTransform() {
   if (state.worker) return true;

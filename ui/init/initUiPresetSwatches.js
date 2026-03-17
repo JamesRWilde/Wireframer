@@ -12,11 +12,11 @@
 
 "use strict";
 
-import { presetSwatches, PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, SHUFFLE_SWATCH_NAME } from '../domState.js';
+import { presetSwatches, PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, SHUFFLE_SWATCH_NAME } from '../state/uiDomState.js';
 import { getUiColorToHex } from '../get/getUiColorToHex.js';
 import { getUiColorToRgbCss } from '../get/getUiColorToRgbCss.js';
 import { setCustomRgb } from '../set/setCustomRgb.js';
-import { getUiRandomPresetRgb } from '../randomPresetRgb.js';
+import { getUiRandomPresetRgb } from '../get/getUiRandomPresetRgb.js';
 
 export function initUiPresetSwatches() {
   if (!presetSwatches) return;

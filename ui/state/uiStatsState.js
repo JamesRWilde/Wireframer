@@ -10,7 +10,7 @@
  *   via a single shared object. Used by setTelemetryHud and stat-setter modules.
  *
  * USAGE:
- *   import { statsState } from './statsState.js';
+ *   import { statsState } from './uiStatsState.js';
  *   statsState.statRenderer = document.getElementById('stat-renderer');
  *   statsState.statFps.textContent = '60';
  *

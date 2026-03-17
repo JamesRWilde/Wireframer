@@ -20,7 +20,7 @@
 "use strict";
 
 // Import the DOM element reference for the renderer stat display
-import { statsState } from '../../ui/statsState.js';
+import { statsState } from '../../ui/state/uiStatsState.js';
 
 // Import the toggle function
 import { setRendererMode } from '../set/setRendererMode.js';

@@ -1,2 +1,2 @@
-import * as state from '../renderBackgroundWorkerState.js';
+import * as state from '../state/renderBackgroundWorkerState.js';
 export function getRenderPendingWorkerParticles() { return state.pendingWorkerParticles; }

@@ -16,7 +16,7 @@
 
 "use strict";
 
-import { CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT } from '../domState.js';
+import { CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT } from '../state/uiDomState.js';
 import { getUiColorClampByte } from './getUiColorClampByte.js';
 
 export function getUiReadCustomRgb() {

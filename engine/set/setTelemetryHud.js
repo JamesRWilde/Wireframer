@@ -1,5 +1,5 @@
-import { state, TELEMETRY_UI_INTERVAL_MS } from '../loopState.js';
-import { statsState } from '../../ui/statsState.js';
+import { state, TELEMETRY_UI_INTERVAL_MS } from '../state/loopState.js';
+import { statsState } from '../../ui/state/uiStatsState.js';
 import { writeStat } from '../../ui/set/writeStat.js';
 
 export function setTelemetryHud(nowMs) {

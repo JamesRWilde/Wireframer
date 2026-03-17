@@ -23,7 +23,7 @@ import { setCpuFillSendRenderCommand } from './setCpuFillSendRenderCommand.js';
 import { initFillWorker } from "../init/initCpuFillWorker.js";
 import { getCpuFillCachedFrame } from '../get/getCpuFillCachedFrame.js';
 import { isCpuFillWorkerAvailable } from '../get/isCpuFillWorkerAvailable.js';
-import { state } from '../../loopState.js';
+import { state } from '../../state/loopState.js';
 
 // Track if worker has been initialized
 let workerInitialized = false;

@@ -24,7 +24,7 @@ import { getUiColorClampByte } from '../get/getUiColorClampByte.js';
 import { updateCustomColorUi } from './updateCustomColorUi.js';
 import { setUiPersistCustomRgb } from './setUiPersistCustomRgb.js';
 import { setUiApplyPalette } from './setUiApplyPalette.js';
-import { CUSTOM_RGB } from '../domState.js';
+import { CUSTOM_RGB } from '../state/uiDomState.js';
 
 export function setCustomRgb(rgb, options = {}) {
   const { persist = true, apply = true } = options;

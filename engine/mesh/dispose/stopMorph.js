@@ -18,7 +18,7 @@
 "use strict";
 
 // Import morph state to update active flag
-import { morphState } from '../morphState.js';
+import { morphState } from '../state/meshMorphState.js';
 
 /**
  * stopMorph - Stops the current morph animation

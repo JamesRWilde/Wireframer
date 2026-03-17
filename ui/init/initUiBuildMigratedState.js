@@ -18,7 +18,7 @@ import {
   bgDensity,
   bgVelocity,
   bgOpacity,
-} from '../domState.js';
+} from '../state/uiDomState.js';
 
 export function initUiBuildMigratedState(state) {
   return {
