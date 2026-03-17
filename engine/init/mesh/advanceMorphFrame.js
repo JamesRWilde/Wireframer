@@ -58,6 +58,8 @@ export function advanceMorphFrame() {
   // Interpolate between source and target meshes at current progress
   morphState.currentMesh = interpolateMeshes(morphState.fromMesh, morphState.toMesh, t);
   
+  // Zoom stays constant during morph (already set to match visual size)
+  
   // Check if animation is complete
   if (tRaw >= 1) {
     // Mark morph as inactive
@@ -65,6 +67,8 @@ export function advanceMorphFrame() {
     
     // Set current mesh to exact target (avoid floating-point drift)
     morphState.currentMesh = clone(morphState.toMesh);
+    
+    // Zoom stays at user's current level (don't jump to optimal zoom)
     
     // Invoke completion callback if provided
     if (morphState.onComplete) morphState.onComplete();

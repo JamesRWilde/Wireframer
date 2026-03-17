@@ -120,11 +120,24 @@ export function load(mesh, name = 'Shape', options = {}) {
   // Step 7: Clone the mesh for caching (if cloner is available)
   const newModelCopy = globalThis.clone ? globalThis.clone(newModel) : newModel;
 
+  // Step 7b: Capture current zoom and old model's extent before fitting
+  const startZoom = globalThis.ZOOM;
+  const oldExtent = globalThis.Z_HALF * 2 || 1;
+
   // Step 8: Fit camera to model bounds
   fitCameraToModel(newModel);
+  const targetZoom = globalThis.ZOOM;
+  const newExtent = globalThis.Z_HALF * 2 || 1;
 
   // Step 9: Finalize model (activate, optionally morph)
-  finalizeModel(newModelCopy, animateMorph, name, clampedDetail);
+  // If morphing, calculate the zoom that makes the new shape appear the same
+  // visual size as the current shape, then use it for the morph duration
+  if (animateMorph) {
+    // Visual size ∝ extent * zoom, so to match: newZoom = startZoom * oldExtent / newExtent
+    globalThis.ZOOM = startZoom * (oldExtent / newExtent);
+    globalThis.ZOOM = Math.max(globalThis.ZOOM_MIN || 0.1, Math.min(globalThis.ZOOM_MAX || 10, globalThis.ZOOM));
+  }
+  finalizeModel(newModelCopy, animateMorph, name, clampedDetail, targetZoom);
 
   // Step 10: Set as active model for rendering
   if (typeof globalThis.setActiveModel === 'function') {

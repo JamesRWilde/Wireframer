@@ -36,7 +36,7 @@ import { clone }from '@engine/init/mesh/clone.js';
  * Both meshes are cloned to prevent mutation during interpolation.
  * The current mesh is initialized to the source mesh.
  */
-export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
+export function startMorph(fromMesh, toMesh, durationMs, onComplete, targetZoom) {
   // Mark morph as active
   morphState.active = true;
   
@@ -59,4 +59,7 @@ export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
   
   // Store completion callback (if provided)
   morphState.onComplete = typeof onComplete === 'function' ? onComplete : null;
+  
+  // Capture zoom at morph start
+  morphState.startZoom = globalThis.ZOOM;
 }

@@ -53,4 +53,8 @@ export const morphState = {
   
   // Callback to invoke when morph completes
   onComplete: null,
+  
+  // Zoom interpolation: starting and target zoom levels
+  startZoom: 1,
+  targetZoom: 1,
 };

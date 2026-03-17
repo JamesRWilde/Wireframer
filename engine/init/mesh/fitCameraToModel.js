@@ -53,13 +53,16 @@ export function fitCameraToModel(model) {
   // Calculate model dimensions
   const sizeX = maxX - minX;
   const sizeY = maxY - minY;
-  const maxExtent = Math.max(sizeX, sizeY);
-
-  // Update frame parameters for projection
-  // These control the vertical center and depth range
+  
+  // Update frame parameters for projection (also computes bounding sphere radius)
   const params = frameParams(model.V);
   if (typeof params.cy === 'number') globalThis.MODEL_CY = params.cy;
   if (typeof params.zHalf === 'number') globalThis.Z_HALF = params.zHalf;
+  
+  // Use bounding sphere radius as the extent to ensure fitting works
+  // regardless of rotation - a pyramid tip at z=-radius will project larger
+  // than its 2D bounding box suggests
+  const maxExtent = Math.max(sizeX, sizeY, params.zHalf * 2);
 
   // Set expanded zoom bounds to allow wide range of zoom levels
   globalThis.ZOOM_MIN = 0.1;

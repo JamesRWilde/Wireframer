@@ -32,7 +32,7 @@ import { detailLevel }from '@engine/set/mesh/detailLevel.js';
  * 2. If animateMorph is true and there's an old model, starts a morph animation
  * 3. Otherwise, directly sets the detail level (instant transition)
  */
-export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct) {
+export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct, targetZoom) {
   // Get the current model (if any) for morph source
   const oldModel = globalThis.MODEL;
   
@@ -43,10 +43,10 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct) 
   // Decide between morph animation and instant transition
   if (animateMorph && oldModel?.V?.length && globalThis.morph?.startMorph) {
     // Morph animation: smooth transition from old to new model
-    // The callback sets the detail level after morph completes
+    // Pass targetZoom so the morph interpolates zoom as well as vertices
     globalThis.morph.startMorph(oldModel, newModelCopy, globalThis.MORPH_DURATION_MS, () => {
       detailLevel(detailLevelPct, name);
-    });
+    }, targetZoom);
   } else {
     // Instant transition: directly set the detail level
     // This immediately activates the new model at the specified LOD
