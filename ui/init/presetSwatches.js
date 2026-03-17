@@ -17,11 +17,11 @@ import { toHex }from '@ui/get/color/toHex.js';
 import { toRgbCss }from '@ui/get/color/toRgbCss.js';
 import { customRgb }from '@ui/get/read/customRgb.js';
 import { randomPresetRgb }from '@ui/get/randomPresetRgb.js';
-import { PRESET_SWATCHES, PRESET_SWATCH_BUTTONS }from '@ui/state/dom.js';
+import { PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, presetSwatches as presetSwatchesEl, SHUFFLE_SWATCH_NAME }from '@ui/state/dom.js';
 
 export function presetSwatches() {
   if (!presetSwatches) return;
-  presetSwatches.innerHTML = '';
+  presetSwatchesEl.innerHTML = '';
   PRESET_SWATCH_BUTTONS.length = 0;
 
   for (const preset of PRESET_SWATCHES) {
@@ -35,7 +35,7 @@ export function presetSwatches() {
       customRgb(preset.rgb, { persist: true, apply: true });
     });
 
-    presetSwatches.appendChild(button);
+    presetSwatchesEl.appendChild(button);
     PRESET_SWATCH_BUTTONS.push({ button, rgb: preset.rgb });
   }
 
@@ -47,5 +47,5 @@ export function presetSwatches() {
   shuffleButton.addEventListener('click', () => {
     customRgb(randomPresetRgb(), { persist: true, apply: true });
   });
-  presetSwatches.appendChild(shuffleButton);
+  presetSwatchesEl.appendChild(shuffleButton);
 }
