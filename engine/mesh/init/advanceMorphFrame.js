@@ -23,7 +23,7 @@
 import { morphState } from '../morphState.js';
 
 // Import easing function for smooth animation
-import { easeInOut } from '../easeInOut.js';
+import { easeInOut } from '../get/getMeshEaseInOut.js';
 
 // Import mesh interpolation for computing intermediate meshes
 import { interpolateMeshes } from './interpolateMeshes.js';
@@ -53,7 +53,7 @@ export function advanceMorphFrame() {
   
   // Apply easing function for smooth animation
   // EaseInOut provides smooth acceleration and deceleration
-  const t = easeInOut(tRaw);
+  const t = getMeshEaseInOut(tRaw);
   
   // Interpolate between source and target meshes at current progress
   morphState.currentMesh = interpolateMeshes(morphState.fromMesh, morphState.toMesh, t);

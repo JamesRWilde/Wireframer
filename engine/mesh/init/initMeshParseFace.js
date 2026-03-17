@@ -21,7 +21,7 @@
  */
 
 // Import token parser for extracting vertex/uv/normal indices
-import { idxFromToken } from './idxFromToken.js';
+import { idxFromToken } from './initMeshParseIdxFromToken.js';
 
 // Import vertex deduplication helper
 import { getOrCreateVertIdx } from '../get/getOrCreateVertIdx.js';
@@ -33,7 +33,7 @@ import { getOrCreateVertIdx } from '../get/getOrCreateVertIdx.js';
  * @param {string} originalLine - Original line text for error messages
  * @param {Object} state - Parse state with vertices, faces, etc.
  */
-export function parseFace(parts, originalLine, state) {
+export function initMeshParseFace(parts, originalLine, state) {
   // Extract face vertex tokens (everything after "f")
   const rawTokens = parts.slice(1);
   
@@ -44,7 +44,7 @@ export function parseFace(parts, originalLine, state) {
   }
   
   // Parse each token into vertex/uv/normal indices
-  const faceVerts = rawTokens.map(tok => idxFromToken(tok, state));
+  const faceVerts = rawTokens.map(tok => initMeshParseIdxFromToken(tok, state));
   
   // Check for out-of-bounds vertex indices
   const outOfBounds = faceVerts.filter(i => i.v < 0 || i.v >= state.vertices.length);

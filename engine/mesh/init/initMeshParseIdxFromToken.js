@@ -18,7 +18,7 @@
  */
 
 // Import index parser for handling OBJ's 1-based indexing
-import { parseIndex } from './parseIndex.js';
+import { parseIndex } from './initMeshParseIndex.js';
 
 /**
  * idxFromToken - Parses an OBJ face token into indices
@@ -31,19 +31,19 @@ import { parseIndex } from './parseIndex.js';
  *   vt: Texture coordinate index (0-based, or null if not specified)
  *   vn: Normal index (0-based, or null if not specified)
  */
-export function idxFromToken(token, state) {
+export function initMeshParseIdxFromToken(token, state) {
   // Split token by '/' to get individual indices
   const fields = token.split('/');
   
   // Parse vertex position index (required)
-  const vIdx = parseIndex(fields[0], state.vertices.length);
+  const vIdx = initMeshParseIndex(fields[0], state.vertices.length);
   if (vIdx === null) return {v:-1, vt:null, vn:null};
   
   // Parse texture coordinate index (optional)
-  const vtIdx = parseIndex(fields[1], state.uvs.length);
+  const vtIdx = initMeshParseIndex(fields[1], state.uvs.length);
   
   // Parse normal index (optional)
-  const vnIdx = parseIndex(fields[2], state.normals.length);
+  const vnIdx = initMeshParseIndex(fields[2], state.normals.length);
   
   return {v:vIdx, vt:vtIdx, vn:vnIdx};
 }

@@ -37,7 +37,7 @@
  *   easeInOut(0.75) => 0.875 (slowing down)
  *   easeInOut(1) => 1 (end)
  */
-export function easeInOut(t) {
+export function getMeshEaseInOut(t) {
   // Quadratic ease-in-out
   // First half: ease in (accelerate)
   // Second half: ease out (decelerate)

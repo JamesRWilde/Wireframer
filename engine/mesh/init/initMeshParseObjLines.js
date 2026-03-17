@@ -22,10 +22,10 @@
  */
 
 // Import individual line parsers
-import { parseVertex } from './parseVertex.js';
-import { parseNormal } from './parseNormal.js';
-import { parseUv } from './parseUv.js';
-import { parseFace } from './parseFace.js';
+import { parseVertex } from './initMeshParseVertex.js';
+import { parseNormal } from './initMeshParseNormal.js';
+import { parseUv } from './initMeshParseUv.js';
+import { parseFace } from './initMeshParseFace.js';
 
 /**
  * parseObjLines - Parses OBJ text lines into mesh data
@@ -39,7 +39,7 @@ import { parseFace } from './parseFace.js';
  *   - failingLines: Array of error messages
  *   - vertices, normals, uvs: Raw parsed data
  */
-export function parseObjLines(lines, overrides) {
+export function initMeshParseObjLines(lines, overrides) {
   // Initialize parse state
   const state = {
     lineNumber: 0,
@@ -57,10 +57,10 @@ export function parseObjLines(lines, overrides) {
 
   // Map OBJ line prefixes to handler functions
   const handlers = {
-    v: parts => parseVertex(parts, state),
-    vn: parts => parseNormal(parts, state),
-    vt: parts => parseUv(parts, state),
-    f: (parts, line) => parseFace(parts, line, state),
+    v: parts => initMeshParseVertex(parts, state),
+    vn: parts => initMeshParseNormal(parts, state),
+    vt: parts => initMeshParseUv(parts, state),
+    f: (parts, line) => initMeshParseFace(parts, line, state),
     g: parts => { state.currentGroup = parts.length > 1 ? parts.slice(1).join(' ') : null; },
     o: parts => { state.currentObject = parts.length > 1 ? parts.slice(1).join(' ') : null; },
     s: parts => { state.currentSmoothing = parts.length > 1 ? parts[1] : null; },

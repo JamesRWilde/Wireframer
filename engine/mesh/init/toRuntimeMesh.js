@@ -20,13 +20,13 @@
  */
 
 // Import OBJ line parser
-import { parseObjLines } from '../parse/parseObjLines.js';
+import { initMeshParseObjLines } from './initMeshParseObjLines.js';
 
 // Import raw text validator
 import { validateRawObjText } from '../get/validateRawObjText.js';
 
 // Import parse result checker
-import { checkParseResults } from '../parse/checkParseResults.js';
+import { getMeshParseCheckResults } from '../get/getMeshParseCheckResults.js';
 
 // Import mesh object builder
 import { buildMeshObject } from './buildMeshObject.js';
@@ -59,13 +59,13 @@ export function toRuntimeMesh(rawObjText, overrides = {}) {
   const lines = validateRawObjText(rawObjText, overrides);
 
   // Step 2: Parse lines into raw mesh data
-  const {uniqueVerts, faces, failingLines} = parseObjLines(lines, overrides);
+  const {uniqueVerts, faces, failingLines} = initMeshParseObjLines(lines, overrides);
   
   // Store parse errors globally for debugging
   globalThis.lastMeshParseErrors = failingLines;
 
   // Step 3: Check for parse errors
-  checkParseResults(uniqueVerts, faces, failingLines, overrides);
+  getMeshParseCheckResults(uniqueVerts, faces, failingLines, overrides);
 
   // Step 4: Build final mesh object with all properties
   const meshObj = buildMeshObject(uniqueVerts, faces);
