@@ -26,16 +26,16 @@
  *   // cornerNormals[i][c] gives the normal for corner c of triangle i
  */
 
-import { getModelShadingMode } from '../../cpu/getModelShadingMode.js';
-import { getModelFaceNormals } from '../../cpu/getModelFaceNormals.js';
+import { getCpuModelShadingMode } from '../../cpu/get/getCpuModelShadingMode.js';
+import { getCpuModelFaceNormals } from '../../cpu/get/getCpuModelFaceNormals.js';
 import { geometrySumNormals } from '../../cpu/geometry/geometrySumNormals.js';
-import { buildVertexToFaces } from '../../cpu/buildVertexToFaces.js';
+import { buildCpuVertexToFaces } from '../../cpu/init/buildCpuVertexToFaces.js';
 import { geometryGetFlatNormals } from '../../cpu/geometry/geometryGetFlatNormals.js';
 import { geometryGetTriNormals } from '../../cpu/geometry/geometryGetTriNormals.js';
 
 export function getModelTriCornerNormals(model, triFaces) {
   // Determine shading mode ('flat', 'smooth', or 'auto')
-  const shadingMode = getModelShadingMode(model, triFaces);
+  const shadingMode = getCpuModelShadingMode(model, triFaces);
   // Use crease angle if present, otherwise default to 62 degrees
   const crease = Number.isFinite(model._creaseAngleDeg) ? model._creaseAngleDeg : 62;
   // Build a cache key for the current normal computation
@@ -47,7 +47,7 @@ export function getModelTriCornerNormals(model, triFaces) {
   }
 
   // 2. Compute face normals for all triangles
-  const faceNormals = getModelFaceNormals(model, triFaces);
+  const faceNormals = getCpuModelFaceNormals(model, triFaces);
 
   // 3. Use precomputed triangleNormals if available
   const triNormals = geometryGetTriNormals(model, triFaces.length);
@@ -59,7 +59,7 @@ export function getModelTriCornerNormals(model, triFaces) {
   }
 
   // 5. Build vertex-to-face adjacency list for smoothing
-  const vertexToFaces = buildVertexToFaces(triFaces, model.V.length);
+  const vertexToFaces = buildCpuVertexToFaces(triFaces, model.V.length);
 
   // 6. Set crease threshold for normal blending
   const cosThreshold = shadingMode === 'smooth' ? -1 : Math.cos((crease * Math.PI) / 180);

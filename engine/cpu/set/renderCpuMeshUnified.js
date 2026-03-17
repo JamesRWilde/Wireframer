@@ -21,14 +21,14 @@
 
 "use strict";
 
-import { getModelFrameData } from '../render/get/getModelFrameData.js';
-import { getModelTriangles } from '../render/get/getModelTriangles.js';
-import { getModelShadingMode } from './getModelShadingMode.js';
-import { getModelTriCornerNormals } from '../render/get/getModelTriCornerNormals.js';
-import { resolveTriangleNormal } from '../render/resolve/resolveTriangleNormalCpu.js';
-import { computeTriangleShadeColor } from '../render/get/computeTriangleShadeColorCpu.js';
-import { relativeLuminance } from '../../ui/color/relativeLuminance.js';
-import { rgbaString } from '../render/get/rgbaString.js';
+import { getModelFrameData } from '../../render/get/getModelFrameData.js';
+import { getModelTriangles } from '../../render/get/getModelTriangles.js';
+import { getModelShadingMode } from '../get/getCpuModelShadingMode.js';
+import { getModelTriCornerNormals } from '../../render/get/getModelTriCornerNormals.js';
+import { resolveTriangleNormal } from '../../render/resolve/resolveTriangleNormalCpu.js';
+import { computeTriangleShadeColor } from '../../render/get/computeTriangleShadeColorCpu.js';
+import { relativeLuminance } from '../../../ui/color/relativeLuminance.js';
+import { rgbaString } from '../../render/get/rgbaString.js';
 
 /**
  * renderMeshUnified - Renders mesh with per-triangle fill and edges
@@ -36,7 +36,7 @@ import { rgbaString } from '../render/get/rgbaString.js';
  * @param {Object} model - Model with V, F, E data
  * @param {CanvasRenderingContext2D} ctx - Canvas context to draw to
  */
-export function renderMeshUnified(model, ctx) {
+export function renderCpuMeshUnified(model, ctx) {
   if (!model?.V?.length || !model?.F?.length || !ctx) return;
 
   // Get transformed vertices
@@ -49,7 +49,7 @@ export function renderMeshUnified(model, ctx) {
   if (!triFaces?.length) return;
 
   // Get shading mode and normals
-  const shadingMode = getModelShadingMode(model, triFaces);
+  const shadingMode = getCpuModelShadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
   const triCornerNormals = useSmoothShading
     ? getModelTriCornerNormals(model, triFaces)

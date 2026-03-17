@@ -18,7 +18,7 @@
  *   const vertexToFaces = buildVertexToFaces(triFaces, model.V.length);
  *   // vertexToFaces[vertexIndex] -> array of triangle indices
  */
-export function buildVertexToFaces(triFaces, vertexCount) {
+export function buildCpuVertexToFaces(triFaces, vertexCount) {
   // Allocate output array: one entry per vertex
   const vertexToFaces = Array.from({ length: vertexCount }, () => []);
   // For each triangle, add its index to each of its three vertices' lists

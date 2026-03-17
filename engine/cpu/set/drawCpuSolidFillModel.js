@@ -14,16 +14,16 @@
  *   Falls back to main-thread rendering if worker is unavailable.
  */
 
-import { getModelFrameData } from '../render/get/getModelFrameData.js';
-import { getModelTriangles } from '../render/get/getModelTriangles.js';
-import { getModelShadingMode } from './getModelShadingMode.js';
-import { getModelTriCornerNormals } from '../render/get/getModelTriCornerNormals.js';
-import { renderFillTriangles } from '../render/set/renderFillTrianglesCpu.js';
-import { fillSendRenderCommand } from './fill/fillSendRenderCommand.js';
-import { initFillWorker } from "./fill/initFillWorker.js";
-import { fillGetCachedFrame } from './fill/fillGetCachedFrame.js';
-import { isFillWorkerAvailable } from './fill/isFillWorkerAvailable.js';
-import { state } from '../loopState.js';
+import { getModelFrameData } from '../../render/get/getModelFrameData.js';
+import { getModelTriangles } from '../../render/get/getModelTriangles.js';
+import { getModelShadingMode } from '../get/getCpuModelShadingMode.js';
+import { getModelTriCornerNormals } from '../../render/get/getModelTriCornerNormals.js';
+import { renderFillTriangles } from '../../render/set/renderFillTrianglesCpu.js';
+import { fillSendRenderCommand } from '../fill/fillSendRenderCommand.js';
+import { initFillWorker } from "../fill/initFillWorker.js";
+import { fillGetCachedFrame } from '../fill/fillGetCachedFrame.js';
+import { isFillWorkerAvailable } from '../fill/isFillWorkerAvailable.js';
+import { state } from '../../loopState.js';
 
 // Track if worker has been initialized
 let workerInitialized = false;
@@ -34,7 +34,7 @@ let workerInitialized = false;
  * @param {Object} model - Model with V, F, E data
  * @param {number} [alphaScale=1] - Opacity multiplier
  */
-export function drawSolidFillModel(model, alphaScale = 1) {
+export function drawCpuSolidFillModel(model, alphaScale = 1) {
   const fillLayerCtx = globalThis.fillLayerCtx;
   const fillLayerCanvas = globalThis.fillLayerCanvas;
   const W = globalThis.W;
@@ -54,7 +54,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   const triFaces = getModelTriangles(model);
   if (!triFaces?.length) return;
 
-  const shadingMode = getModelShadingMode(model, triFaces);
+  const shadingMode = getCpuModelShadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
   const seamExpandPx = useSmoothShading ? (globalThis.DENSE_SEAM_EXPAND_PX ?? 0) : 0;
 

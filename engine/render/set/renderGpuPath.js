@@ -30,7 +30,7 @@ import { fallbackToCpuForegroundMode } from '../../set/setCpuForegroundMode.js';
 // Import canvas visibility toggles
 // GPU path shows the GPU canvas and hides the CPU canvas
 import { setGpuCanvasHidden } from '../../gpu/set/setGpuCanvasHidden.js';
-import { setCpuCanvasHidden } from '../../cpu/setCpuCanvasHidden.js';
+import { setCpuCanvasHidden } from '../../cpu/set/setCpuCanvasHidden.js';
 
 /**
  * renderGpuPath - Renders the 3D model using the GPU (WebGL) rendering path

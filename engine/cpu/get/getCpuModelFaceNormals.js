@@ -29,7 +29,7 @@
  * 4. Orients normal outward using dot product with center-to-face vector
  * 5. Caches result on model for future use
  */
-export function getModelFaceNormals(model, triFaces) {
+export function getCpuModelFaceNormals(model, triFaces) {
   // Return cached normals if available and valid
   if (model._faceNormals?.length === triFaces.length) return model._faceNormals;
 
