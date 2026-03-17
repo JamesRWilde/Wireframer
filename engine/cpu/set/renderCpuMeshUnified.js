@@ -21,14 +21,14 @@
 
 "use strict";
 
-import { getModelFrameData } from '../../render/get/getModelFrameData.js';
-import { getModelTriangles } from '../../render/get/getModelTriangles.js';
+import { getRenderModelFrameData } from '../../render/get/getRenderModelFrameData.js';
+import { getModelTriangles } from '../../render/get/getRenderModelTriangles.js';
 import { getModelShadingMode } from '../get/getCpuModelShadingMode.js';
-import { getModelTriCornerNormals } from '../../render/get/getModelTriCornerNormals.js';
-import { resolveTriangleNormal } from '../../render/resolve/resolveTriangleNormalCpu.js';
-import { computeTriangleShadeColor } from '../../render/get/computeTriangleShadeColorCpu.js';
+import { getModelTriCornerNormals } from '../../render/get/getRenderModelTriCornerNormals.js';
+import { resolveTriangleNormal } from '../../render/get/getRenderResolveTriangleNormalCpu.js';
+import { computeTriangleShadeColor } from '../../render/get/getRenderComputeTriangleCpu.js';
 import { relativeLuminance } from '../../../ui/color/relativeLuminance.js';
-import { rgbaString } from '../../render/get/rgbaString.js';
+import { getRenderRgbaString } from '../../render/get/getRenderRgbaString.js';
 
 /**
  * renderMeshUnified - Renders mesh with per-triangle fill and edges
@@ -40,7 +40,7 @@ export function renderCpuMeshUnified(model, ctx) {
   if (!model?.V?.length || !model?.F?.length || !ctx) return;
 
   // Get transformed vertices
-  const frameData = getModelFrameData(model);
+  const frameData = getRenderModelFrameData(model);
   if (!frameData) return;
   const { T, P2 } = frameData;
 
@@ -63,7 +63,7 @@ export function renderCpuMeshUnified(model, ctx) {
   let fillRgb = globalThis.THEME?.fill ?? [0, 200, 120];
   const fillLum = relativeLuminance(fillRgb);
   const contrastWire = fillLum > 0.5 ? [0, 0, 0] : [255, 255, 255];
-  const edgeColor = rgbaString(contrastWire, 1);
+  const edgeColor = getRenderRgbaString(contrastWire, 1);
 
   // Sort triangles back-to-front (painter's algorithm)
   const triOrder = new Array(triFaces.length);

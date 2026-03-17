@@ -18,7 +18,7 @@
  */
 
 // Import frame parameter computation for projection setup
-import { computeFrameParams } from '../../render/get/computeFrameParams.js';
+import { computeFrameParams } from '../../render/get/getRenderComputeFrameParams.js';
 
 /**
  * fitCameraToModel - Adjusts camera to frame the model

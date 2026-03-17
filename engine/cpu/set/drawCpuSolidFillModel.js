@@ -14,15 +14,15 @@
  *   Falls back to main-thread rendering if worker is unavailable.
  */
 
-import { getModelFrameData } from '../../render/get/getModelFrameData.js';
-import { getModelTriangles } from '../../render/get/getModelTriangles.js';
+import { getRenderModelFrameData } from '../../render/get/getRenderModelFrameData.js';
+import { getModelTriangles } from '../../render/get/getRenderModelTriangles.js';
 import { getModelShadingMode } from '../get/getCpuModelShadingMode.js';
-import { getModelTriCornerNormals } from '../../render/get/getModelTriCornerNormals.js';
-import { renderFillTriangles } from '../../render/set/renderFillTrianglesCpu.js';
-import { fillSendRenderCommand } from './setCpuFillSendRenderCommand.js';
+import { getModelTriCornerNormals } from '../../render/get/getRenderModelTriCornerNormals.js';
+import { setRenderFillTrianglesCpu } from '../../render/set/setRenderFillTrianglesCpu.js';
+import { setCpuFillSendRenderCommand } from './setCpuFillSendRenderCommand.js';
 import { initFillWorker } from "../init/initCpuFillWorker.js";
-import { fillGetCachedFrame } from '../get/getCpuFillCachedFrame.js';
-import { isFillWorkerAvailable } from '../get/isCpuFillWorkerAvailable.js';
+import { getCpuFillCachedFrame } from '../get/getCpuFillCachedFrame.js';
+import { isCpuFillWorkerAvailable } from '../get/isCpuFillWorkerAvailable.js';
 import { state } from '../../loopState.js';
 
 // Track if worker has been initialized
@@ -47,7 +47,7 @@ export function drawCpuSolidFillModel(model, alphaScale = 1) {
     return;
   }
 
-  const frameData = getModelFrameData(model);
+  const frameData = getRenderModelFrameData(model);
   if (!frameData) return;
   const { T, P2 } = frameData;
 
@@ -128,7 +128,7 @@ export function drawCpuSolidFillModel(model, alphaScale = 1) {
     );
   }
 
-  renderFillTriangles({
+  setRenderFillTrianglesCpu({
     triOrder,
     P2,
     T,

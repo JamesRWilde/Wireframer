@@ -29,7 +29,7 @@ import { state } from '../loopState.js';
 import { setPhysics } from './setPhysics.js';
 
 // Import scene renderer - draws background and foreground
-import { renderScene } from '../render/set/renderScene.js';
+import { renderScene } from '../render/set/setRenderScene.js';
 
 // Import telemetry HUD updater - displays stats in the UI
 import { setTelemetryHud } from './setTelemetryHud.js';
@@ -41,8 +41,8 @@ import { shouldRunFrame } from '../get/getShouldRunFrame.js';
 import { setTelemetry } from './setTelemetry.js';
 
 // Import frame budget manager for adaptive quality
-import { updateFrameTime } from './setFrameTime.js';
-import { checkBudget } from '../get/getFrameBudget.js';
+import { setFrameTime } from './setFrameTime.js';
+import { getFrameBudget } from '../get/getFrameBudget.js';
 
 /**
  * runFrame - Executes all operations for a single animation frame
@@ -85,7 +85,7 @@ export function setFrameRun(nowMs = 0) {
   // Step 2: Check frame budget and adjust quality level
   // This tracks rolling average frame time and adjusts rendering quality
   // to maintain target FPS when the system is under load
-  checkBudget();
+  getFrameBudget();
   
   // Step 3: Render the scene (background + foreground)
   // Returns timing metrics and rendering state
@@ -98,7 +98,7 @@ export function setFrameRun(nowMs = 0) {
   const frameMs = performance.now() - frameStartMs;
 
   // Step 4: Update frame budget tracking with this frame's time
-  updateFrameTime(frameMs);
+  setFrameTime(frameMs);
 
   // Step 5: Update telemetry with timing metrics
   // This smooths values using EMA and stores them for HUD display
