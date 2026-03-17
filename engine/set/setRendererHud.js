@@ -1,5 +1,5 @@
 /**
- * updateRendererHud.js - Renderer Mode HUD Display
+ * setRendererHud.js - Renderer Mode HUD Display
  * 
  * PURPOSE:
  *   Updates the HUD display to show the current foreground rendering mode
@@ -25,7 +25,7 @@
 import { statsState } from '../../ui/statsState.js';
 
 /**
- * updateRendererHud - Updates the renderer mode display in the HUD
+ * setRendererHud - Updates the renderer mode display in the HUD
  * 
  * @param {string} mode - The current render mode: 'gpu', 'cpu', or 'unknown'
  * 
@@ -34,7 +34,7 @@ import { statsState } from '../../ui/statsState.js';
  * - "CPU" when Canvas 2D fallback is active
  * - "--" when the mode is unknown (during initialization)
  */
-export function updateRendererHud(mode) {
+export function setRendererHud(mode) {
   // Get the DOM element for the renderer stat display
   const statRenderer = statsState.statRenderer;
   

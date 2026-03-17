@@ -23,7 +23,7 @@ import { state } from '../loopState.js';
 
 // Import the HUD update function to display the current render mode
 // This shows "GPU" or "CPU" in the stats display so users know which path is active
-import { updateRendererHud } from '../update/updateRendererHud.js';
+import { setRendererHud } from './setRendererHud.js';
 
 /**
  * setCpuForegroundMode - Switches foreground rendering to CPU path
@@ -42,5 +42,5 @@ export function setCpuForegroundMode() {
   
   // Update the HUD display to show "CPU" instead of "GPU"
   // This helps users understand why performance might be different
-  updateRendererHud(state.foregroundRenderMode);
+  setRendererHud(state.foregroundRenderMode);
 }

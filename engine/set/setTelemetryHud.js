@@ -2,7 +2,7 @@ import { state, TELEMETRY_UI_INTERVAL_MS } from '../loopState.js';
 import { statsState } from '../../ui/statsState.js';
 import { writeStat } from '../../ui/writeStat.js';
 
-export function updateTelemetryHud(nowMs) {
+export function setTelemetryHud(nowMs) {
   if (nowMs - state.telemetryLastUiMs < TELEMETRY_UI_INTERVAL_MS) return;
   state.telemetryLastUiMs = nowMs;
 

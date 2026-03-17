@@ -55,7 +55,7 @@ import { handleOtherCases } from '../set/setMixedRenderFlags.js';
  *   @returns {boolean} drewCpuForeground - Whether CPU foreground was rendered
  *   @returns {boolean} backgroundOnSeparateCanvas - Whether background is on its own canvas
  * 
- * These metrics are used by updateTelemetry to display performance stats.
+ * These metrics are used by setTelemetry to display performance stats.
  */
 export function renderScene(nowMs) {
   // Get the current active model

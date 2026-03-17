@@ -8,7 +8,7 @@
  * 
  * ARCHITECTURE ROLE:
  *   Imported early during engine bootstrap (before the frame loop starts) to
- *   ensure PHYSICS_STATE is available when updatePhysics and input handlers
+ *   ensure PHYSICS_STATE is available when setPhysics and input handlers
  *   need it. The state is exposed globally for simple access throughout the app.
  * 
  * STATE PROPERTIES:

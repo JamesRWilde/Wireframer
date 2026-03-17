@@ -24,7 +24,7 @@
 import { state } from '../loopState.js';
 
 // Import HUD updater to display the current render mode
-import { updateRendererHud } from '../update/updateRendererHud.js';
+import { setRendererHud } from './setRendererHud.js';
 
 // Import GPU canvas clearing for when switching from GPU to CPU
 import { clearGpuSceneCanvas } from '../gpu/scene/clearGpuSceneCanvas.js';
@@ -67,7 +67,7 @@ export function setRendererMode() {
   state.foregroundRenderMode = newMode;
   
   // Update the HUD display
-  updateRendererHud(newMode);
+  setRendererHud(newMode);
   
   // Clear canvases based on the new mode
   if (newMode === 'cpu') {

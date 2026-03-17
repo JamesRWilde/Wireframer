@@ -1,5 +1,5 @@
 /**
- * updateTelemetry.js - Performance Telemetry Smoothing
+ * setTelemetry.js - Performance Telemetry Smoothing
  * 
  * PURPOSE:
  *   Smooths performance timing metrics using Exponential Moving Average (EMA).
@@ -8,7 +8,7 @@
  * 
  * ARCHITECTURE ROLE:
  *   Called by runFrame() each frame with timing measurements. Updates the
- *   smoothed EMA values in loopState that are read by updateTelemetryHud().
+ *   smoothed EMA values in loopState that are read by setTelemetryHud().
  * 
  * EMA FORMULA:
  *   newValue = alpha * currentSample + (1 - alpha) * previousEMA
@@ -31,7 +31,7 @@
 import { state, TELEMETRY_ALPHA } from '../loopState.js';
 
 /**
- * updateTelemetry - Updates smoothed performance metrics
+ * setTelemetry - Updates smoothed performance metrics
  * 
  * @param {number} nowMs - Current timestamp (unused but kept for API consistency)
  * @param {number} frameMs - Total frame time in milliseconds
@@ -43,7 +43,7 @@ import { state, TELEMETRY_ALPHA } from '../loopState.js';
  * On the first call (emaFrameMs === 0), values are initialized directly.
  * On subsequent calls, EMA smoothing is applied.
  */
-export function updateTelemetry(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs) {
+export function setTelemetry(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs) {
   // Check if this is the first telemetry update (EMA values are zero)
   if (state.emaFrameMs === 0) {
     // First frame: initialize EMA values directly (no smoothing)

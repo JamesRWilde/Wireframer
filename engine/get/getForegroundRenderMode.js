@@ -24,7 +24,7 @@
 import { state } from '../loopState.js';
 
 // Import HUD updater to display the current render mode (GPU/CPU)
-import { updateRendererHud } from '../update/updateRendererHud.js';
+import { setRendererHud } from '../set/setRendererHud.js';
 
 // Import GPU renderer getter to check if GPU is available
 import { getSceneGpuRenderer } from '../gpu/scene/getSceneGpuRenderer.js';
@@ -61,7 +61,7 @@ export function getForegroundRenderMode() {
   
   // Update the HUD to show the current render mode
   // This displays "GPU" or "CPU" in the stats panel
-  updateRendererHud(mode);
+  setRendererHud(mode);
   
   // Return the resolved mode
   return mode;

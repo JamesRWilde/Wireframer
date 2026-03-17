@@ -26,19 +26,19 @@
 import { state } from '../loopState.js';
 
 // Import physics update function - handles rotation and input
-import { updatePhysics } from '../update/updatePhysics.js';
+import { setPhysics } from '../set/setPhysics.js';
 
 // Import scene renderer - draws background and foreground
 import { renderScene } from '../render/renderScene.js';
 
 // Import telemetry HUD updater - displays stats in the UI
-import { updateTelemetryHud } from '../update/updateTelemetryHud.js';
+import { setTelemetryHud } from '../set/setTelemetryHud.js';
 
 // Import frame throttling check - skips frames if running too fast
 import { shouldRunFrame } from './shouldRunFrame.js';
 
 // Import telemetry collector - smooths and stores timing metrics
-import { updateTelemetry } from '../update/updateTelemetry.js';
+import { setTelemetry } from '../set/setTelemetry.js';
 
 // Import frame budget manager for adaptive quality
 import { updateFrameTime } from './updateFrameTime.js';
@@ -80,7 +80,7 @@ export function runFrame(nowMs = 0) {
   // Step 1: Update rotation physics
   // This handles auto-rotation, angular velocity decay, and input integration
   // Returns the time spent on physics for telemetry
-  const physMs = updatePhysics();
+  const physMs = setPhysics();
 
   // Step 2: Check frame budget and adjust quality level
   // This tracks rolling average frame time and adjusts rendering quality
@@ -102,11 +102,11 @@ export function runFrame(nowMs = 0) {
 
   // Step 5: Update telemetry with timing metrics
   // This smooths values using EMA and stores them for HUD display
-  updateTelemetry(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs);
+  setTelemetry(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs);
   
   // Step 6: Update the telemetry HUD display
   // This is throttled to avoid expensive DOM updates every frame
-  updateTelemetryHud(nowMs);
+  setTelemetryHud(nowMs);
   
   // Update frame loop state for next frame's canvas management
   // This tracks whether CPU foreground is on the main canvas, which affects

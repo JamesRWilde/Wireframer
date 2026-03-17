@@ -1,5 +1,5 @@
 /**
- * updatePhysics.js - Rotation Physics Update
+ * setPhysics.js - Rotation Physics Update
  * 
  * PURPOSE:
  *   Updates the model's rotation each frame based on angular velocities and
@@ -32,7 +32,7 @@ import { reorthogonalize } from '../render/reorthogonalize.js';
 import { state } from '../loopState.js';
 
 /**
- * updatePhysics - Updates rotation physics for the current frame
+ * setPhysics - Updates rotation physics for the current frame
  * 
  * @returns {number} Time spent on physics update (milliseconds)
  *   Used by telemetry to display physics performance
@@ -43,7 +43,7 @@ import { state } from '../loopState.js';
  * 3. Periodically re-orthogonalizes the rotation matrix
  * 4. Updates angular velocities based on drag state
  */
-export function updatePhysics() {
+export function setPhysics() {
   // Record start time for performance measurement
   const physStartMs = performance.now();
   
@@ -91,11 +91,11 @@ export function updatePhysics() {
 
       // Debug logging for physics state (only when DEBUG_LOG_PHYSICS is set)
       if (globalThis.DEBUG_LOG_PHYSICS) {
-        console.log('[updatePhysics] wx,wy,wz',
+        console.log('[setPhysics] wx,wy,wz',
                     globalThis.PHYSICS_STATE.wx.toFixed(3),
                     globalThis.PHYSICS_STATE.wy.toFixed(3),
                     globalThis.PHYSICS_STATE.wz.toFixed(3));
-        console.log('[updatePhysics] R row0',
+        console.log('[setPhysics] R row0',
                     globalThis.PHYSICS_STATE.R[0].toFixed(3),
                     globalThis.PHYSICS_STATE.R[1].toFixed(3),
                     globalThis.PHYSICS_STATE.R[2].toFixed(3));
