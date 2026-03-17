@@ -39,4 +39,4 @@ export function canvas() {
   }
 }
 
-export default initCanvas;
+export default canvas;
