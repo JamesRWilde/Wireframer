@@ -17,7 +17,7 @@
 
 from '@ui/state/dom.js';
 import { sliderDisplayPercent }from '@ui/get/sliderDisplayPercent.js';
-import { state }from '@ui/get/Read/state.js';
+import { state }from '@ui/get/read/state.js';
 
 export function syncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;

@@ -22,7 +22,7 @@
 
 // Import the background particle renderer
 // Draws animated ambient particles on the background canvas
-import {background}from '@engine/set/gpu/Render/background.js';
+import {background}from '@engine/set/gpu/render/background.js';
 
 // Import the CPU foreground renderer
 // Draws solid fill and wireframe using Canvas 2D
@@ -37,7 +37,7 @@ import {gpuPath}from '@engine/set/render/gpuPath.js';
 import { foregroundRenderMode }from '@engine/get/engine/foregroundRenderMode.js';
 
 // Import loop state to read the current render mode
-import { state }from '@ui/get/Read/state.js';
+import { state }from '@ui/get/read/state.js';
 
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU

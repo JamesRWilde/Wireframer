@@ -1,8 +1,8 @@
-import { sceneCanvas }from '@engine/set/gpu/Clear/sceneCanvas.js';
+import { sceneCanvas }from '@engine/set/gpu/clear/sceneCanvas.js';
 import { renderMeshUnified }from '@engine/set/cpu/renderMeshUnified.js';
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
-import { axes }from '@engine/set/render/Draw/axes.js';
+import { axes }from '@engine/set/render/draw/axes.js';
 
 export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
   const ctx = globalThis.ctx;

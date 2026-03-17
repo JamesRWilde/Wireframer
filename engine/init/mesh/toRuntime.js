@@ -20,16 +20,16 @@
  */
 
 // Import OBJ line parser
-import { objLines }from '@engine/init/mesh/Parse/objLines.js';
+import { objLines }from '@engine/init/mesh/parse/objLines.js';
 
 // Import raw text validator
-import { rawObjText }from '@engine/get/mesh/Validate/rawObjText.js';
+import { rawObjText }from '@engine/get/mesh/validate/rawObjText.js';
 
 // Import parse result checker
 import { parseCheckResults }from '@engine/get/mesh/parseCheckResults.js';
 
 // Import mesh object builder
-import { object }from '@engine/init/mesh/Build/object.js';
+import { object }from '@engine/init/mesh/build/object.js';
 
 /**
  * InitMeshEngineToRuntime - Converts OBJ text to engine mesh format

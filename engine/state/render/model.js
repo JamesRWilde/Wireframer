@@ -30,7 +30,7 @@ import { foregroundRenderMode }from '@engine/get/engine/foregroundRenderMode.js'
 
 // Import loop state to access telemetry EMA (Exponential Moving Average) values
 // These need to be reset when switching models to avoid stale timing data
-import { state }from '@ui/get/Read/state.js';
+import { state }from '@ui/get/read/state.js';
 
 /**
  * setActiveModel - Updates the active mesh model and synchronizes all dependent state

@@ -16,8 +16,8 @@
 
 "use strict";
 
-import { themeMode }from '@ui/set/Apply/themeMode.js';
-import { palette }from '@ui/set/Apply/palette.js';
+import { themeMode }from '@ui/set/apply/themeMode.js';
+import { palette }from '@ui/set/apply/palette.js';
 
 /**
  * SetUiThemeMode - Sets application theme mode

@@ -24,19 +24,19 @@ import {presetSwatches}from '@ui/init/presetSwatches.js';
 
 // Import the function to read saved custom RGB values from localStorage
 // Returns null if no saved colors exist (first visit or cleared storage)
-import { customRgb }from '@ui/get/Read/customRgb.js';
+import { customRgb }from '@ui/get/read/customRgb.js';
 
 // Import the function to apply custom RGB values to the theme
 // Updates CSS variables, particle colors, wire colors, etc.
-import { customRgb }from '@ui/get/Read/customRgb.js';
+import { customRgb }from '@ui/get/read/customRgb.js';
 
 // Import the function to set dark/light theme mode
 // Adjusts background brightness, contrast enforcement, etc.
-import { themeMode }from '@ui/set/Apply/themeMode.js';
+import { themeMode }from '@ui/set/apply/themeMode.js';
 
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences
-import { state }from '@ui/get/Read/state.js';
+import { state }from '@ui/get/read/state.js';
 
 /**
  * InitEngineThemeControls - Initializes the theme system and wires up event handlers

@@ -13,9 +13,9 @@
 "use strict";
 
 from '@ui/state/dom.js';
-import { toHex }from '@ui/get/Color/toHex.js';
-import { toRgbCss }from '@ui/get/Color/toRgbCss.js';
-import { rgbEquals }from '@ui/get/Color/rgbEquals.js';
+import { toHex }from '@ui/get/color/toHex.js';
+import { toRgbCss }from '@ui/get/color/toRgbCss.js';
+import { rgbEquals }from '@ui/get/color/rgbEquals.js';
 
 export function updateCustomColor() {
   if (!customRed || !customGreen || !customBlue) return;

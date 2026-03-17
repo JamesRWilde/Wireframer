@@ -23,7 +23,7 @@
 from '@ui/state/stats.js';
 
 // Import the toggle function
-import { mode }from '@engine/set/engine/Renderer/mode.js';
+import { mode }from '@engine/set/engine/renderer/mode.js';
 
 // Import GPU renderer getter to check if GPU is available
 import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';

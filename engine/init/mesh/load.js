@@ -28,7 +28,7 @@
 import { filterValidEdges }from '@engine/get/mesh/filterValidEdges.js';
 
 // Import mesh validation to ensure data integrity
-import { validationResult }from '@engine/get/mesh/Validate/validationResult.js';
+import { validationResult }from '@engine/get/mesh/validate/validationResult.js';
 
 // Import LOD range setup for detail level control
 import { lodRangeForModel }from '@engine/set/mesh/lodRangeForModel.js';
@@ -41,7 +41,7 @@ import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
 
 // Import edge building utility
 // Register globally so any consumer can invoke it without circular imports
-import { edgesFromFacesRuntime }from '@engine/init/mesh/Build/edgesFromFacesRuntime.js';
+import { edgesFromFacesRuntime }from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
   globalThis.InitMeshEngineBuildEdgesFromFacesRuntime = InitMeshEngineBuildEdgesFromFacesRuntime;
 }

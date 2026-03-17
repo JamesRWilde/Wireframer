@@ -16,11 +16,11 @@
 
 "use strict";
 
-import { clampByte }from '@ui/get/Color/clampByte.js';
-import { mixRgb }from '@ui/get/Color/mixRgb.js';
-import { toRgbCss }from '@ui/get/Color/toRgbCss.js';
-import { toRgbaCss }from '@ui/get/Color/toRgbaCss.js';
-import { enforceContrast }from '@ui/get/Color/enforceContrast.js';
+import { clampByte }from '@ui/get/color/clampByte.js';
+import { mixRgb }from '@ui/get/color/mixRgb.js';
+import { toRgbCss }from '@ui/get/color/toRgbCss.js';
+import { toRgbaCss }from '@ui/get/color/toRgbaCss.js';
+import { enforceContrast }from '@ui/get/color/enforceContrast.js';
 
 export function bldCustomTheme(rgbInput) {
   const base = [GetUiColorClampByte(rgbInput[0]), GetUiColorClampByte(rgbInput[1]), GetUiColorClampByte(rgbInput[2])];

@@ -13,9 +13,9 @@
 "use strict";
 
 import { presetSwatches, PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, SHUFFLE_SWATCH_NAME }from '@ui/init/presetSwatches.js';
-import { toHex }from '@ui/get/Color/toHex.js';
-import { toRgbCss }from '@ui/get/Color/toRgbCss.js';
-import { customRgb }from '@ui/get/Read/customRgb.js';
+import { toHex }from '@ui/get/color/toHex.js';
+import { toRgbCss }from '@ui/get/color/toRgbCss.js';
+import { customRgb }from '@ui/get/read/customRgb.js';
 import { randomPresetRgb }from '@ui/get/randomPresetRgb.js';
 
 export function presetSwatches() {

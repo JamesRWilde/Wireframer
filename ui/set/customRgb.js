@@ -20,10 +20,10 @@
 
 "use strict";
 
-import { clampByte }from '@ui/get/Color/clampByte.js';
+import { clampByte }from '@ui/get/color/clampByte.js';
 import { updateCustomColor }from '@ui/set/updateCustomColor.js';
-import { customRgb }from '@ui/get/Read/customRgb.js';
-import { palette }from '@ui/set/Apply/palette.js';
+import { customRgb }from '@ui/get/read/customRgb.js';
+import { palette }from '@ui/set/apply/palette.js';
 from '@ui/state/dom.js';
 
 export function customRgb(rgb, options = {}) {

@@ -1,5 +1,5 @@
 ;
-import { priority }from '@engine/get/engine/Quality/priority.js';
+import { priority }from '@engine/get/engine/quality/priority.js';
 
 export function qualityApplyChange(targetQuality, avgFrameTime) {
   const isDowngrade = GetEngineQualityPriority(targetQuality) < GetEngineQualityPriority(state.currentQuality);

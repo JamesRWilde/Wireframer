@@ -19,7 +19,7 @@
 "use strict";
 
 import {objectList}from '@engine/get/render/objectList.js';
-import { state }from '@ui/get/Read/state.js';
+import { state }from '@ui/get/read/state.js';
 
 export async function initObjectSelector(restoredShapeName = null) {
   // Fetch the dynamic list of available meshes from the server
