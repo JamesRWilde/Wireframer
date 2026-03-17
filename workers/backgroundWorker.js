@@ -10,9 +10,9 @@ let state = {
   themeMode: 'dark'
 };
 
-import { initParticles } from './initParticles.js';
-import { updateParticles } from './updateParticles.js';
-import { packParticles } from './packParticles.js';
+import { initParticles } from './init/initParticles.js';
+import { updateParticles } from './set/updateParticles.js';
+import { packParticles } from './get/packParticles.js';
 
 onmessage = (event) => {
   const { type, width, height, density, speed, timestamp, themeMode } = event.data;

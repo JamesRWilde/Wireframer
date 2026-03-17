@@ -1,12 +1,12 @@
 import { getBackgroundCanvas } from '../get/getBackgroundCanvas.js';
 import { getBackgroundColors } from '../get/getBackgroundColors.js';
-import { seedParticlesIfNeeded } from '../seedParticles.js';
-import { updateParticles } from '../updateParticles.js';
+import { seedParticlesIfNeeded } from '../set/seedParticles.js';
+import { updateParticles } from '../../../workers/set/updateParticles.js';
 import { drawParticles } from './drawParticles.js';
 import { initBackgroundWorker } from '../init/initBackgroundWorker.js';
 import { isBackgroundWorkerReady } from '../isBackgroundWorkerReady.js';
 import { getPendingWorkerParticles } from '../get/getPendingWorkerParticles.js';
-import { postToBackgroundWorker } from '../postToBackgroundWorker.js';
+import { postToBackgroundWorker } from '../set/postToBackgroundWorker.js';
 
 let particles = [];
 let workerInitialized = false;

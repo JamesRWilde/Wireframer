@@ -1,6 +1,6 @@
 import { state, TELEMETRY_UI_INTERVAL_MS } from '../loopState.js';
 import { statsState } from '../../ui/statsState.js';
-import { writeStat } from '../../ui/writeStat.js';
+import { writeStat } from '../../ui/set/writeStat.js';
 
 export function setTelemetryHud(nowMs) {
   if (nowMs - state.telemetryLastUiMs < TELEMETRY_UI_INTERVAL_MS) return;

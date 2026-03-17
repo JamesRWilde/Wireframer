@@ -19,7 +19,7 @@
 "use strict";
 
 // Import matrix multiplication for combining rotations
-import { matrixMultiply3x3 } from '../matrixMultiply3x3.js';
+import { matrixMultiply3x3 } from '../get/matrixMultiply3x3.js';
 
 // Import Y-axis rotation matrix constructor
 import { rotationMatrixY } from './rotationMatrixY.js';

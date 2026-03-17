@@ -61,7 +61,7 @@ import { rotationInitialize } from './engine/render/rotation/rotationInitialize.
 import { R } from './engine/render/rotation/rotationMatrixRef.js';
 
 // Import render toggle synchronization
-import { syncRenderToggles } from './ui/syncRenderToggles.js';
+import { syncRenderToggles } from './ui/set/syncRenderToggles.js';
 
 // Import slider listener attachment
 import { setRestoredState } from './engine/set/setRestoredState.js';

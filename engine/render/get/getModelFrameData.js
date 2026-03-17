@@ -1,7 +1,7 @@
-import { state } from '../../../engine/loopState.js';
+import { state } from '../../loopState.js';
 import { sendToWorker } from '../worker/sendToWorker.js';
 import { getCachedTransformResult } from './getCachedTransformResult.js';
-import { convertFlatToNested } from '../convertFlatToNested.js';
+import { convertFlatToNested } from './convertFlatToNested.js';
 import { transformSync } from '../worker/transformSync.js';
 
 export function getModelFrameData(model) {

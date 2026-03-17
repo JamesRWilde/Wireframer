@@ -1,4 +1,4 @@
-import { createGpuProgram } from '../createGpuProgram.js';
+import { createGpuProgram } from '../init/createGpuProgram.js';
 
 export function createSceneGpuPrograms(gl) {
   const fillVertSrc = `

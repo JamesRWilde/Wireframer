@@ -18,7 +18,7 @@ import { getModelFrameData } from '../render/get/getModelFrameData.js';
 import { getModelTriangles } from '../render/get/getModelTriangles.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
 import { getModelTriCornerNormals } from '../render/get/getModelTriCornerNormals.js';
-import { renderFillTriangles } from '../render/renderFillTrianglesCpu.js';
+import { renderFillTriangles } from '../render/set/renderFillTrianglesCpu.js';
 import { fillSendRenderCommand } from './fill/fillSendRenderCommand.js';
 import { initFillWorker } from "./fill/initFillWorker.js";
 import { fillGetCachedFrame } from './fill/fillGetCachedFrame.js';

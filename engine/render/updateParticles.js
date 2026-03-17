@@ -1,1 +1,1 @@
-export { updateParticles } from '../../workers/updateParticles.js';
+export { updateParticles } from '../../workers/set/updateParticles.js';

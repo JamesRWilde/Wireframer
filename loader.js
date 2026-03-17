@@ -28,7 +28,7 @@ import { getObjectList } from './engine/render/meshObjectList.js';
 
 // Import the OBJ parser that converts raw OBJ text to engine mesh format
 // This is imported explicitly (not dynamically) so it's bundled in the output
-import { toRuntimeMesh } from './engine/mesh/toRuntimeMesh.js';
+import { toRuntimeMesh } from './engine/mesh/init/toRuntimeMesh.js';
 
 /**
  * loadObjMesh - Asynchronously loads and parses an OBJ file

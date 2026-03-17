@@ -24,7 +24,7 @@
 import { idxFromToken } from './idxFromToken.js';
 
 // Import vertex deduplication helper
-import { getOrCreateVertIdx } from '../getOrCreateVertIdx.js';
+import { getOrCreateVertIdx } from '../get/getOrCreateVertIdx.js';
 
 /**
  * parseFace - Parses an OBJ face line into triangles

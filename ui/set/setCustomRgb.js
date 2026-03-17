@@ -21,7 +21,7 @@
 "use strict";
 
 import { clampByte } from '../color/clampByte.js';
-import { updateCustomColorUi } from '../updateCustomColorUi.js';
+import { updateCustomColorUi } from './updateCustomColorUi.js';
 import { persistCustomRgb } from '../persist/persistCustomRgb.js';
 import { applyPalette } from '../applyPalette.js';
 import { CUSTOM_RGB } from '../domState.js';

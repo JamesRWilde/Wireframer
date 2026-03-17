@@ -26,9 +26,9 @@ import { getModelTriangles } from '../render/get/getModelTriangles.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
 import { getModelTriCornerNormals } from '../render/get/getModelTriCornerNormals.js';
 import { resolveTriangleNormal } from '../render/resolve/resolveTriangleNormalCpu.js';
-import { computeTriangleShadeColor } from '../render/computeTriangleShadeColorCpu.js';
+import { computeTriangleShadeColor } from '../render/get/computeTriangleShadeColorCpu.js';
 import { relativeLuminance } from '../../ui/color/relativeLuminance.js';
-import { rgbaString } from '../render/rgbaString.js';
+import { rgbaString } from '../render/get/rgbaString.js';
 
 /**
  * renderMeshUnified - Renders mesh with per-triangle fill and edges

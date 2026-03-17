@@ -1,5 +1,5 @@
 import { bgState } from '../backgroundState.js';
-import { syncCanvasSize } from '../syncCanvasSize.js';
+import { syncCanvasSize } from '../set/syncCanvasSize.js';
 
 export function initCanvas() {
   if (typeof document === 'undefined') return;
