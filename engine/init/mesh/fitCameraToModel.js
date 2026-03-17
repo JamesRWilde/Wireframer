@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineFitCameraToModel.js - Camera Fitting to Model Bounds
+ * fitCameraToModel.js - Camera Fitting to Model Bounds
  * 
  * PURPOSE:
  *   Automatically adjusts the camera zoom and projection parameters to frame
@@ -7,7 +7,7 @@
  *   different sizes are displayed at a consistent, visible scale.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineLoad after a new model is loaded. Computes the model's
+ *   Called by load after a new model is loaded. Computes the model's
  *   bounding box and adjusts zoom, center, and depth parameters to fit
  *   the model in the viewport.
  * 
@@ -21,7 +21,7 @@
 import {frameParams}from '@engine/get/render/compute/frameParams.js';
 
 /**
- * InitMeshEngineFitCameraToModel - Adjusts camera to frame the model
+ * fitCameraToModel - Adjusts camera to frame the model
  * 
  * @param {Object} model - The mesh model with V (vertices) array
  * 

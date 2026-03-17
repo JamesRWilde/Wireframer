@@ -1,5 +1,5 @@
 /**
- * SetCpuEngineCanvasHidden.js - CPU Canvas Visibility Control
+ * canvasHidden.js - CPU Canvas Visibility Control
  * 
  * PURPOSE:
  *   Controls the visibility of the CPU canvas element by toggling its CSS display
@@ -21,7 +21,7 @@
 "use strict";
 
 /**
- * SetCpuEngineCanvasHidden - Shows or hides the CPU canvas
+ * canvasHidden - Shows or hides the CPU canvas
  * 
  * @param {boolean} hidden - Whether to hide the canvas (true) or show it (false)
  * 

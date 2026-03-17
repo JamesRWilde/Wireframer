@@ -1,5 +1,5 @@
 /**
- * SetEngineMixedRenderFlags.js - Mixed Rendering State Handler
+ * mixedRenderFlags.js - Mixed Rendering State Handler
  * 
  * PURPOSE:
  *   Handles edge cases in the rendering pipeline where the background and foreground
@@ -22,7 +22,7 @@
 "use strict";
 
 /**
- * SetEngineMixedRenderFlags - Manages rendering state for mixed canvas configurations
+ * mixedRenderFlags - Manages rendering state for mixed canvas configurations
  * 
  * @param {boolean} backgroundOnSeparateCanvas - Whether background particles are rendered
  *   on a separate canvas (bg) rather than the main canvas

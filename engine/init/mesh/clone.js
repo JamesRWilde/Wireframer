@@ -1,15 +1,15 @@
 /**
- * InitMeshEngineClone.js - Deep Mesh Clone for Morphing
+ * clone.js - Deep Mesh Clone for Morphing
  * 
  * PURPOSE:
  *   Creates a deep copy of a mesh object for use in morphing operations.
- *   This is similar to the LOD InitMeshEngineDeepCopy but optimized for morphing
+ *   This is similar to the LOD deepCopy but optimized for morphing
  *   needs, ensuring all arrays are properly cloned to prevent mutation
  *   of the original meshes during interpolation.
  * 
  * ARCHITECTURE ROLE:
- *   Used by InitMeshEngineStartMorph to clone source and target meshes, and by
- *   InitMeshEngineAdvanceMorphFrame to create the final mesh when morph completes.
+ *   Used by startMorph to clone source and target meshes, and by
+ *   advanceMorphFrame to create the final mesh when morph completes.
  * 
  * WHY DEEP CLONE:
  *   During morphing, vertex positions are interpolated in-place. Without
@@ -20,7 +20,7 @@
 "use strict";
 
 /**
- * InitMeshEngineClone - Creates a deep copy of a mesh object
+ * clone - Creates a deep copy of a mesh object
  * 
  * @param {Object} mesh - The mesh to clone
  * 

@@ -46,5 +46,5 @@ export function triangleGpu(normal, useSmoothShading, theme) {
   const lit = Math.max(0, Math.min(1, ambient + diffuse + specular));
 
   // Interpolate between dark and bright theme colors based on computed lighting.
-  return GetRenderEngineLerpColor(theme.shadeDark || [0, 0, 0], theme.shadeBright || [255, 255, 255], lit);
+  return lerpColor(theme.shadeDark || [0, 0, 0], theme.shadeBright || [255, 255, 255], lit);
 }

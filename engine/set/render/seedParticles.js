@@ -20,7 +20,7 @@ export function seedParticles(particles, w, h) {
     particles.length = 0;
     const count = Math.max(0, Math.round(baseCount * density));
     for (let i = 0; i < count; i++) {
-      particles.push(InitRenderEngineCreateParticle(w, h, velocityScale));
+      particles.push(createParticle(w, h, velocityScale));
     }
     lastSize = { w, h };
     lastDensity = density;

@@ -1,5 +1,5 @@
 /**
- * SetGpuEngineCanvasHidden.js - GPU Canvas Visibility Control
+ * canvasHidden.js - GPU Canvas Visibility Control
  * 
  * PURPOSE:
  *   Controls the visibility of the GPU canvas element by toggling its CSS display
@@ -21,7 +21,7 @@
 "use strict";
 
 /**
- * SetGpuEngineCanvasHidden - Shows or hides the GPU canvas
+ * canvasHidden - Shows or hides the GPU canvas
  * 
  * @param {boolean} hidden - Whether to hide the canvas (true) or show it (false)
  * 

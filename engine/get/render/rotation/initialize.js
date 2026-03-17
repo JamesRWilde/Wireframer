@@ -45,7 +45,7 @@ export function initialize() {
   if (typeof mry === 'function' && typeof mrx === 'function' && typeof mmul === 'function') {
     // Create initial rotation: Ry(0.4) * Rx(0.18)
     // This combines a horizontal turn with a slight tilt
-    R.value = GetRenderEngineMatrixMultiply3x3(GetRenderEngineRotationMatrixY(0.4), GetRenderEngineRotationMatrixX(0.18));
+    R.value = GetRenderEngineMatrixMultiply3x3(matrixY(0.4), matrixX(0.18));
   } else {
     // Fallback: identity matrix (no rotation)
     // This is a 4x4 matrix but only the 3x3 rotation part is used

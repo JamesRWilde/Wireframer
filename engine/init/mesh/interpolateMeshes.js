@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineInterpolateMeshes.js - Mesh Vertex Interpolation
+ * interpolateMeshes.js - Mesh Vertex Interpolation
  * 
  * PURPOSE:
  *   Interpolates vertex positions between two meshes to create a smooth
@@ -7,7 +7,7 @@
  *   vertex positions at a given progress point.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineAdvanceMorphFrame each frame to compute the current interpolated
+ *   Called by advanceMorphFrame each frame to compute the current interpolated
  *   mesh. Uses linear interpolation (lerp) for each vertex coordinate.
  * 
  * HOW IT WORKS:
@@ -20,7 +20,7 @@
 "use strict";
 
 /**
- * InitMeshEngineInterpolateMeshes - Interpolates between two meshes
+ * interpolateMeshes - Interpolates between two meshes
  * 
  * @param {Object} fromMesh - Source mesh
  * @param {Object} toMesh - Target mesh

@@ -1,5 +1,5 @@
 /**
- * DisposeMeshEngineStopMorph.js - Morph Animation Cancellation
+ * stopMorph.js - Morph Animation Cancellation
  * 
  * PURPOSE:
  *   Stops the current morph animation immediately. This is used when a new
@@ -21,7 +21,7 @@
 import {morphState} from '@engine/state/mesh/morph.js';
 
 /**
- * DisposeMeshEngineStopMorph - Stops the current morph animation
+ * stopMorph - Stops the current morph animation
  * 
  * This function:
  * 1. Marks the morph as inactive

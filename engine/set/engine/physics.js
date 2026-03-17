@@ -1,5 +1,5 @@
 /**
- * SetEnginePhysics.js - Rotation Physics Update
+ * physics.js - Rotation Physics Update
  * 
  * PURPOSE:
  *   Updates the model's rotation each frame based on angular velocities and
@@ -32,7 +32,7 @@ import { reorthogonalize }from '@engine/get/render/reorthogonalize.js';
 import { state }from '@ui/get/read/state.js';
 
 /**
- * SetEnginePhysics - Updates rotation physics for the current frame
+ * physics - Updates rotation physics for the current frame
  * 
  * @returns {number} Time spent on physics update (milliseconds)
  *   Used by telemetry to display physics performance
@@ -91,11 +91,11 @@ export function physics() {
 
       // Debug logging for physics state (only when DEBUG_LOG_PHYSICS is set)
       if (globalThis.DEBUG_LOG_PHYSICS) {
-        console.log('[SetEnginePhysics] wx,wy,wz',
+        console.log('[physics] wx,wy,wz',
                     globalThis.PHYSICS_STATE.wx.toFixed(3),
                     globalThis.PHYSICS_STATE.wy.toFixed(3),
                     globalThis.PHYSICS_STATE.wz.toFixed(3));
-        console.log('[SetEnginePhysics] R row0',
+        console.log('[physics] R row0',
                     globalThis.PHYSICS_STATE.R[0].toFixed(3),
                     globalThis.PHYSICS_STATE.R[1].toFixed(3),
                     globalThis.PHYSICS_STATE.R[2].toFixed(3));

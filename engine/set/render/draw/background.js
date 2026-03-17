@@ -19,16 +19,16 @@ export function background(nowMs) {
   const { bgColor, particleColor } = getBackgroundColors();
 
   if (!workerInitialized) {
-    InitRenderEngineBackgroundWorker();
+    backgroundWorker();
     workerInitialized = true;
   }
 
-  if (GetRenderEngineIsBackgroundWorkerReady()) {
+  if (isBackgroundWorkerReady()) {
     const density = globalThis.BG_PARTICLE_DENSITY_PCT ?? 1;
     const speed = globalThis.BG_PARTICLE_VELOCITY_PCT ?? 1;
     const opacity = globalThis.BG_PARTICLE_OPACITY_PCT ?? 1;
     
-    SetRenderEnginePostToBackgroundWorker({ 
+    postToBackgroundWorker({ 
       type: 'update', 
       timestamp: nowMs ?? performance.now(),
       density, speed, opacity,
@@ -38,7 +38,7 @@ export function background(nowMs) {
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, w, h);
     
-    const pending = GetRenderEnginePendingWorkerParticles();
+    const pending = pendingWorkerParticles();
     if (pending) {
       const { data, count } = pending;
       ctx.save();
@@ -57,7 +57,7 @@ export function background(nowMs) {
     return true;
   }
 
-  const { velScale, opacityScale, themeAlphaBoost } = SetRenderEngineSeedParticles(particles, w, h);
+  const { velScale, opacityScale, themeAlphaBoost } = seedParticles(particles, w, h);
   const now = nowMs ?? performance.now();
 
   SetWorkersUpdateParticles(particles, w, h, now, velScale, opacityScale, themeAlphaBoost);

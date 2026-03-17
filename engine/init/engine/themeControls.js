@@ -1,5 +1,5 @@
 /**
- * InitEngineThemeControls.js - Theme System Initialization
+ * themeControls.js - Theme System Initialization
  * 
  * PURPOSE:
  *   Initializes the color theming system during app startup. This includes creating
@@ -28,7 +28,6 @@ import { customRgb }from '@ui/get/read/customRgb.js';
 
 // Import the function to apply custom RGB values to the theme
 // Updates CSS variables, particle colors, wire colors, etc.
-import { customRgb }from '@ui/get/read/customRgb.js';
 
 // Import the function to set dark/light theme mode
 // Adjusts background brightness, contrast enforcement, etc.
@@ -40,7 +39,7 @@ import { state }from '@ui/get/read/state.js';
 import { state as persistState }from '@ui/set/persist/state.js';
 
 /**
- * InitEngineThemeControls - Initializes the theme system and wires up event handlers
+ * themeControls - Initializes the theme system and wires up event handlers
  * 
  * This function:
  * 1. Creates preset color swatches in the UI
@@ -59,12 +58,12 @@ export function themeControls() {
     
     // Step 2: Restore saved custom color from localStorage (if any)
     // readCustomRgb returns { r, g, b } or null if nothing saved
-    const saved = GetUiReadCustomRgb();
+    const saved = customRgb();
     if (saved) {
       // Apply the saved color without persisting (already saved) but with visual update
       // persist: false avoids redundant localStorage write
       // apply: true updates CSS variables and canvas colors immediately
-      SetUiCustomRgb(saved, { persist: false, apply: true });
+      customRgb(saved, { persist: false, apply: true });
     }
 
     // Step 3: Set up theme mode selector (dark/light)
@@ -74,13 +73,13 @@ export function themeControls() {
       
       // Apply the initial theme mode from the select's current value
       // apply: true updates CSS variables and background immediately
-      SetUiThemeMode(tm.value, { apply: true });
+      themeMode(tm.value, { apply: true });
 
       // Attach input event handler for live theme mode changes
       // 'input' fires continuously while the user interacts with the select
       tm.addEventListener('input', () => {
         // Apply the new theme mode
-        SetUiThemeMode(tm.value, { apply: true });
+        themeMode(tm.value, { apply: true });
         
         // Persist the new theme mode to localStorage
         // Wrapped in try/catch because persistence is non-critical

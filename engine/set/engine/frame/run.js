@@ -8,7 +8,7 @@
  * 
  * ARCHITECTURE ROLE:
  *   Called by frame() which handles requestAnimationFrame scheduling.
- *   SetEngineFrameRun() focuses purely on the work to be done each frame, making
+ *   run() focuses purely on the work to be done each frame, making
  *   it testable independently of the animation loop.
  * 
  * FRAME PIPELINE:
@@ -80,12 +80,12 @@ export function run(nowMs = 0) {
   // Step 1: Update rotation physics
   // This handles auto-rotation, angular velocity decay, and input integration
   // Returns the time spent on physics for telemetry
-  const physMs = SetEnginePhysics();
+  const physMs = physics();
 
   // Step 2: Check frame budget and adjust quality level
   // This tracks rolling average frame time and adjusts rendering quality
   // to maintain target FPS when the system is under load
-  GetEngineFrameBudget();
+  budget();
   
   // Step 3: Render the scene (background + foreground)
   // Returns timing metrics and rendering state
@@ -98,15 +98,15 @@ export function run(nowMs = 0) {
   const frameMs = performance.now() - frameStartMs;
 
   // Step 4: Update frame budget tracking with this frame's time
-  SetEngineFrameTime(frameMs);
+  time(frameMs);
 
   // Step 5: Update telemetry with timing metrics
   // This smooths values using EMA and stores them for HUD display
-  SetEngineTelemetry(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs);
+  telemetryState(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs);
   
   // Step 6: Update the telemetry HUD display
   // This is throttled to avoid expensive DOM updates every frame
-  SetEngineTelemetryHud(nowMs);
+  hud(nowMs);
   
   // Update frame loop state for next frame's canvas management
   // This tracks whether CPU foreground is on the main canvas, which affects

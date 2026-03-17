@@ -1,5 +1,5 @@
 /**
- * GetMeshEngineFilterValidEdges.js - Edge Validation and Filtering
+ * filterValidEdges.js - Edge Validation and Filtering
  * 
  * PURPOSE:
  *   Filters out invalid edges from an edge list. Invalid edges include:
@@ -9,7 +9,7 @@
  *   - Edges referencing non-existent vertices
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineLoad to clean up edge data before creating the model object.
+ *   Called by load to clean up edge data before creating the model object.
  *   Ensures the edge list only contains valid, renderable edges.
  * 
  * WHY FILTER:
@@ -21,19 +21,19 @@
  */
 
 /**
- * GetMeshEngineFilterValidEdges - Removes invalid edges from an edge list
+ * filterValidEdges - Removes invalid edges from an edge list
  * 
  * @param {Array<Array<number>>} E - Array of edge pairs [[i,j], ...]
  * @param {Array<Array<number>>} V - Vertex positions array (for bounds checking)
  * 
  * @returns {Array<Array<number>>} Filtered array containing only valid edges
  * 
- * The function uses the global InitMeshEngineBuildEdgesFromFacesRuntime if available,
+ * The function uses the global edgesFromFacesRuntime if available,
  * otherwise falls back to a simple filter that checks array structure.
  */
 export function filterValidEdges(E, V) {
   // Check if the global edge builder is available
-  if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
+  if (!globalThis.edgesFromFacesRuntime) {
     // Fallback: simple filter for basic validity
     // - Must be an array
     // - Must have exactly 2 elements
@@ -43,5 +43,5 @@ export function filterValidEdges(E, V) {
   
   // Use the global edge builder for comprehensive validation
   // This includes bounds checking against vertex count
-  return globalThis.InitMeshEngineBuildEdgesFromFacesRuntime(E) || [];
+  return globalThis.edgesFromFacesRuntime(E) || [];
 }

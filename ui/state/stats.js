@@ -7,7 +7,7 @@
  *
  * ARCHITECTURE ROLE:
  *   Allows direct assignment and access to stat display elements from any module
- *   via a single shared object. Used by SetEngineTelemetryHud and stat-setter modules.
+ *   via a single shared object. Used by hud and stat-setter modules.
  *
  * USAGE:
  *   from '@ui/state/stats.js';

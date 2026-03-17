@@ -1,5 +1,5 @@
 /**
- * SetEngineRendererMode.js - Toggle Between GPU and CPU Rendering Modes
+ * mode.js - Toggle Between GPU and CPU Rendering Modes
  * 
  * PURPOSE:
  *   Provides a function to toggle between GPU (WebGL) and CPU (Canvas 2D) rendering
@@ -7,7 +7,7 @@
  *   preference purposes.
  * 
  * ARCHITECTURE ROLE:
- *   Called by the renderer stat click handler in InitEngineRendererToggle.js. Updates
+ *   Called by the renderer stat click handler in rendererToggle.js. Updates
  *   the loop state and HUD to reflect the new mode. Clears canvases as needed
  *   to prevent visual artifacts when switching.
  * 
@@ -33,7 +33,7 @@ import { sceneCanvas }from '@engine/set/gpu/clear/sceneCanvas.js';
 import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 /**
- * SetEngineRendererMode - Toggles between GPU and CPU rendering modes
+ * mode - Toggles between GPU and CPU rendering modes
  * 
  * This function is called when the user clicks the renderer stat in the HUD.
  * It checks if GPU is supported before allowing the toggle, and updates the
@@ -46,7 +46,7 @@ import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 export function mode() {
   // Check if GPU renderer is available
   // If not, we can't toggle - CPU is the only option
-  const renderer = GetGpuEngineSceneRenderer();
+  const renderer = sceneRenderer();
   if (!renderer) {
     // GPU not supported, cannot toggle
     return false;
@@ -67,12 +67,12 @@ export function mode() {
   state.foregroundRenderMode = newMode;
   
   // Update the HUD display
-  SetEngineRendererHud(newMode);
+  hud(newMode);
   
   // Clear canvases based on the new mode
   if (newMode === 'cpu') {
     // Switching to CPU: clear GPU canvas to prevent stale content
-    SetGpuEngineClearSceneCanvas();
+    sceneCanvas();
   } else {
     // Switching to GPU: clear CPU canvas to prevent stale content
     // The GPU canvas will be cleared by the GPU renderer on next frame

@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineFinalizeModel.js - Model Finalization and Activation
+ * finalizeModel.js - Model Finalization and Activation
  * 
  * PURPOSE:
  *   Finalizes a loaded mesh model by setting it as the base model for LOD
@@ -7,7 +7,7 @@
  *   model. This is the last step in the mesh loading pipeline.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineLoad after the model has been validated, processed, and
+ *   Called by load after the model has been validated, processed, and
  *   the camera has been fitted. Handles the transition from the old model
  *   to the new one, either instantly or via morph animation.
  * 
@@ -20,7 +20,7 @@
 import { detailLevel }from '@engine/set/mesh/detailLevel.js';
 
 /**
- * InitMeshEngineFinalizeModel - Finalizes and activates a mesh model
+ * finalizeModel - Finalizes and activates a mesh model
  * 
  * @param {Object} newModelCopy - The processed mesh model to activate
  * @param {boolean} animateMorph - Whether to animate the transition
@@ -41,15 +41,15 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevel) {
   globalThis.BASE_MODEL = newModelCopy;
   
   // Decide between morph animation and instant transition
-  if (animateMorph && oldModel?.V?.length && globalThis.morph?.InitMeshEngineStartMorph) {
+  if (animateMorph && oldModel?.V?.length && globalThis.morph?.startMorph) {
     // Morph animation: smooth transition from old to new model
     // The callback sets the detail level after morph completes
-    globalThis.morph.InitMeshEngineStartMorph(oldModel, newModelCopy, globalThis.MORPH_DURATION_MS, () => {
-      SetMeshEngineDetailLevel(detailLevel, name);
+    globalThis.morph.startMorph(oldModel, newModelCopy, globalThis.MORPH_DURATION_MS, () => {
+      detailLevel(detailLevel, name);
     });
   } else {
     // Instant transition: directly set the detail level
     // This immediately activates the new model at the specified LOD
-    SetMeshEngineDetailLevel(detailLevel, name);
+    detailLevel(detailLevel, name);
   }
 }

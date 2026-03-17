@@ -3,12 +3,12 @@
  * 
  * PURPOSE:
  *   Shared state for the GPU scene renderer. This file holds the singleton
- *   renderer instance and failure flag that are shared between GetGpuEngineSceneRenderer,
- *   DisposeGpuEngineDisableSceneRenderer, and drawGpuSceneModel.
+ *   renderer instance and failure flag that are shared between sceneRenderer,
+ *   disableSceneRenderer, and drawGpuSceneModel.
  * 
  * ARCHITECTURE ROLE:
  *   Extracted to a separate file to avoid circular dependencies between
- *   GetGpuEngineSceneRenderer.js and DisposeGpuEngineDisableSceneRenderer.js.
+ *   sceneRenderer.js and disableSceneRenderer.js.
  * 
  * Uses a mutable object so all modules share the same reference.
  */

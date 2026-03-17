@@ -45,7 +45,7 @@ export const morphState = {
   // Target mesh (where we're morphing to)
   toMesh: null,
   
-  // Current interpolated mesh (updated each frame by InitMeshEngineAdvanceMorphFrame)
+  // Current interpolated mesh (updated each frame by advanceMorphFrame)
   currentMesh: null,
   
   // Current progress through the morph (0 = start, 1 = complete)

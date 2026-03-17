@@ -30,7 +30,6 @@ import {cpuForegroundMode}from '@engine/set/engine/cpuForegroundMode.js';
 // Import canvas visibility toggles
 // GPU path shows the GPU canvas and hides the CPU canvas
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
-import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 
 /**
  * renderGpuPath - Renders the 3D model using the GPU (WebGL) rendering path
@@ -80,8 +79,8 @@ export function gpuPath(meshToRender, morphing) {
   // Update canvas visibility based on GPU rendering success
   // If GPU succeeded: show GPU canvas, hide CPU canvas
   // If GPU failed: hide GPU canvas, show CPU canvas (for fallback)
-  SetGpuEngineCanvasHidden(!gpuDrawn);
-  SetCpuEngineCanvasHidden(gpuDrawn);
+  canvasHidden(!gpuDrawn);
+  canvasHidden(gpuDrawn);
   
   // If GPU rendering failed, trigger fallback to CPU mode
   // This updates foregroundRenderMode so subsequent frames use CPU path

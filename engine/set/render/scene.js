@@ -55,7 +55,7 @@ import { mixedRenderFlags }from '@engine/set/engine/mixedRenderFlags.js';
  *   @returns {boolean} drewCpuForeground - Whether CPU foreground was rendered
  *   @returns {boolean} backgroundOnSeparateCanvas - Whether background is on its own canvas
  * 
- * These metrics are used by SetEngineTelemetry to display performance stats.
+ * These metrics are used by telemetryState to display performance stats.
  */
 export function scene(nowMs) {
   // Get the current active model
@@ -83,16 +83,16 @@ export function scene(nowMs) {
   // Step 3: Advance morph animation if one is in progress
   // This updates the morph state and prepares interpolated vertices
   // The morph system is accessed via globalThis.morph for flexibility
-  if (globalThis.morph?.InitMeshEngineAdvanceMorphFrame) globalThis.morph.InitMeshEngineAdvanceMorphFrame();
+  if (globalThis.morph?.advanceMorphFrame) globalThis.morph.advanceMorphFrame();
 
   // Step 4: Determine which mesh to render
   // If morphing, use the interpolated morph mesh; otherwise use the current model
-  const morphing = globalThis.morph?.GetMeshEngineIsMorphing?.() ?? false;
-  const meshToRender = morphing ? globalThis.morph?.GetMeshEngineCurrentMorph?.() ?? currentModel : currentModel;
+  const morphing = globalThis.morph?.isMorphing?.() ?? false;
+  const meshToRender = morphing ? globalThis.morph?.currentMorph?.() ?? currentModel : currentModel;
 
   // Step 5: Resolve render mode if not yet determined
   // This checks WebGL availability and caches the result in state.foregroundRenderMode
-  GetEngineForegroundRenderMode();
+  foregroundRenderMode();
 
   // Step 6: Render foreground using GPU or CPU path based on resolved mode
   // GPU path is preferred when available for better performance
@@ -104,16 +104,16 @@ export function scene(nowMs) {
     // If GPU failed, renderGpuPath already called fallbackToCpuForegroundMode
     // which updated state.foregroundRenderMode to 'cpu'
     if (!gpuDrawn) {
-      drewCpuForeground = SetRenderEngineCpuPath(meshToRender, backgroundOnSeparateCanvas);
+      drewCpuForeground = cpuPath(meshToRender, backgroundOnSeparateCanvas);
     }
   } else {
     // Use CPU rendering path
-    drewCpuForeground = SetRenderEngineCpuPath(meshToRender, backgroundOnSeparateCanvas);
+    drewCpuForeground = cpuPath(meshToRender, backgroundOnSeparateCanvas);
   }
   
   // Step 7: Manage canvas visibility based on rendering mode
   // This handles edge cases where canvases might be visible from a previous frame
-  SetEngineMixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn);
+  mixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn);
 
   // Calculate foreground rendering time
   const fgMs = performance.now() - fgStartMs;

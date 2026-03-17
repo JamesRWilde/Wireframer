@@ -1,5 +1,5 @@
 /**
- * DisposeGpuEngineBackgroundRenderer.js - Main dispose function for GPU background renderer
+ * renderer.js - Main dispose function for GPU background renderer
  *
  * PURPOSE:
  *   Handles cleanup of all GPU resources allocated by the background renderer, including buffer and program.
@@ -8,15 +8,15 @@
  *   @param {WebGLRenderingContext} gl - The WebGL context used for rendering.
  *   @param {WebGLBuffer} buffer - The buffer to delete.
  *   @param {WebGLProgram} program - The program to delete.
- *   @param {function} DisposeGpuEngineBackground - Helper to delete resources.
+ *   @param {function} backgroundDispose - Helper to delete resources.
  *
  * USAGE:
- *   DisposeGpuEngineBackgroundRenderer(gl, buffer, program, DisposeGpuEngineBackground);
+ *   renderer(gl, buffer, program, backgroundDispose);
  *
  * MAINTAINER GUIDELINES:
  *   - This file must only contain this function and its export.
  *   - Update comments if resource management changes.
  */
-export function renderer(gl, buffer, program, DisposeGpuEngineBackground) {
-  DisposeGpuEngineBackground(gl, buffer, program);
+export function renderer(gl, buffer, program, backgroundDispose) {
+  backgroundDispose(gl, buffer, program);
 }

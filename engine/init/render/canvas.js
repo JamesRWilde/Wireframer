@@ -21,8 +21,8 @@ export function canvas() {
   if (globalThis.fillLayerCtx) globalThis.fillLayerCtx.imageSmoothingEnabled = false;
 
   if (typeof globalThis !== 'undefined' && typeof globalThis.addEventListener === 'function') {
-    SetRenderEngineSyncCanvasSize(cpuCanvas);
-    globalThis.addEventListener('resize', () => SetRenderEngineSyncCanvasSize(cpuCanvas));
+    syncCanvasSize(cpuCanvas);
+    globalThis.addEventListener('resize', () => syncCanvasSize(cpuCanvas));
     globalThis.addEventListener('resize', () => {
       globalThis.W = globalThis.innerWidth;
       globalThis.H = globalThis.innerHeight;

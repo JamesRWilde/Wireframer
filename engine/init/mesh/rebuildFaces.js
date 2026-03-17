@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineRebuildFaces.js - Face Reconstruction After Vertex Clustering
+ * rebuildFaces.js - Face Reconstruction After Vertex Clustering
  * 
  * PURPOSE:
  *   Rebuilds mesh faces after vertex clustering has merged vertices. This
@@ -7,7 +7,7 @@
  *   removes degenerate faces (faces with duplicate vertices).
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineGreedyClusterDecimator after vertices have been clustered.
+ *   Called by greedyClusterDecimator after vertices have been clustered.
  *   This is the final step that produces the simplified mesh's face list.
  * 
  * HOW IT WORKS:
@@ -25,7 +25,7 @@
 "use strict";
 
 /**
- * InitMeshEngineRebuildFaces - Rebuilds faces after vertex clustering
+ * rebuildFaces - Rebuilds faces after vertex clustering
  * 
  * @param {Array<Array<number>>} F - Original face array (triangles)
  * @param {Map<number, number>} oldToNew - Map from old to new vertex indices

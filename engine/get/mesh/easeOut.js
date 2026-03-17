@@ -7,7 +7,7 @@
  *   creating a natural-looking motion.
  * 
  * ARCHITECTURE ROLE:
- *   Used by InitMeshEngineAdvanceMorphFrame to smooth the morph animation progress. Without
+ *   Used by advanceMorphFrame to smooth the morph animation progress. Without
  *   easing, morphs would have linear interpolation which looks mechanical.
  * 
  * MATHEMATICAL BASIS:

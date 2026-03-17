@@ -7,7 +7,7 @@
  *   mode, and telemetry smoothing values.
  * 
  * ARCHITECTURE ROLE:
- *   Imported by multiple loop modules (frame.js, runFrame.js, SetEngineTelemetry.js, etc.)
+ *   Imported by multiple loop modules (frame.js, runFrame.js, telemetryState.js, etc.)
  *   that need to read or update loop state. The state object is mutable while the
  *   export binding is const, following the project's pattern for shared mutable state.
  * 

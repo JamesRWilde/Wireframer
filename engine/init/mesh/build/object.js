@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineBuildObject.js - Mesh Object Construction
+ * object.js - Mesh Object Construction
  * 
  * PURPOSE:
  *   Constructs the final mesh object from parsed vertex and face data.
@@ -7,7 +7,7 @@
  *   per-corner normals and UVs for rendering.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineToRuntime after parsing is complete. Produces the mesh
+ *   Called by toRuntime after parsing is complete. Produces the mesh
  *   object format expected by the engine's rendering pipeline.
  * 
  * MESH OBJECT STRUCTURE:
@@ -28,7 +28,7 @@ if (!globalThis.edgesFromFacesRuntime) {
 }
 
 /**
- * InitMeshEngineBuildObject - Constructs final mesh object from parsed data
+ * object - Constructs final mesh object from parsed data
  * 
  * @param {Array<Array<number>>} uniqueVerts - Unique vertex positions
  *   Each vertex is [x, y, z, u, v, nx, ny, nz] (position, UV, normal)

@@ -2,7 +2,7 @@
 import {gpuState} from '@engine/state/gpu/scene.js';
 
 /**
- * DisposeGpuEngineDisableSceneRenderer - Disables the GPU renderer and cleans up resources
+ * disableSceneRenderer - Disables the GPU renderer and cleans up resources
  * 
  * Called when GPU rendering fails (shader compile error, context lost, etc.).
  * Disposes of the renderer resources and marks the GPU as failed so the app

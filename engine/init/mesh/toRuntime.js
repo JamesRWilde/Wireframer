@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineToRuntime.js - OBJ Text to Runtime Mesh Conversion
+ * toRuntime.js - OBJ Text to Runtime Mesh Conversion
  * 
  * PURPOSE:
  *   Converts raw OBJ file text into the engine's internal mesh format.
@@ -8,7 +8,7 @@
  * 
  * ARCHITECTURE ROLE:
  *   Called by loader.js when loading OBJ files. Exposed globally as
- *   globalThis.InitMeshEngineToRuntime for flexible access.
+ *   globalThis.toRuntime for flexible access.
  * 
  * PIPELINE:
  *   1. Validate input (must be non-null string)
@@ -32,7 +32,7 @@ import { parseCheckResults }from '@engine/get/mesh/parseCheckResults.js';
 import { object }from '@engine/init/mesh/build/object.js';
 
 /**
- * InitMeshEngineToRuntime - Converts OBJ text to engine mesh format
+ * toRuntime - Converts OBJ text to engine mesh format
  * 
  * @param {string} rawObjText - Raw OBJ file content as string
  * @param {Object} [overrides={}] - Optional overrides for error messages
@@ -45,39 +45,39 @@ import { object }from '@engine/init/mesh/build/object.js';
 export function toRuntime(rawObjText, overrides = {}) {
   // Validate input is not null/undefined
   if (rawObjText === undefined || rawObjText === null) {
-    console.error('[InitMeshEngineToRuntime] Input mesh is undefined/null.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ' });
-    throw new Error('[InitMeshEngineToRuntime] Input mesh is undefined/null');
+    console.error('[toRuntime] Input mesh is undefined/null.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ' });
+    throw new Error('[toRuntime] Input mesh is undefined/null');
   }
   
   // Validate input is a string
   if (typeof rawObjText !== 'string') {
-    console.error('[InitMeshEngineToRuntime] Input mesh is not a string.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ', inputType: typeof rawObjText });
+    console.error('[toRuntime] Input mesh is not a string.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ', inputType: typeof rawObjText });
     throw new Error('Mesh definition must be an OBJ string.');
   }
   
   // Step 1: Split text into lines and validate format
-  const lines = GetMeshEngineValidateRawObjText(rawObjText, overrides);
+  const lines = rawObjText(rawObjText, overrides);
 
   // Step 2: Parse lines into raw mesh data
-  const {uniqueVerts, faces, failingLines} = InitMeshEngineParseObjLines(lines, overrides);
+  const {uniqueVerts, faces, failingLines} = objLines(lines, overrides);
   
   // Store parse errors globally for debugging
   globalThis.lastMeshParseErrors = failingLines;
 
   // Step 3: Check for parse errors
-  GetMeshEngineParseCheckResults(uniqueVerts, faces, failingLines, overrides);
+  parseCheckResults(uniqueVerts, faces, failingLines, overrides);
 
   // Step 4: Build final mesh object with all properties
-  const meshObj = InitMeshEngineBuildObject(uniqueVerts, faces);
+  const meshObj = object(uniqueVerts, faces);
 
   // Step 5: Sanity validate the result
   if (!Array.isArray(meshObj.V) || !Array.isArray(meshObj.F)) {
-    console.error('[InitMeshEngineToRuntime] Returned mesh object V or F is not an array.', meshObj);
-    throw new Error('[InitMeshEngineToRuntime] Returned mesh object V or F is not an array');
+    console.error('[toRuntime] Returned mesh object V or F is not an array.', meshObj);
+    throw new Error('[toRuntime] Returned mesh object V or F is not an array');
   }
   
   return meshObj;
 }
 
 // Expose to global scope for loader.js (legacy global path)
-globalThis.InitMeshEngineToRuntime = InitMeshEngineToRuntime;
+globalThis.toRuntime = toRuntime;

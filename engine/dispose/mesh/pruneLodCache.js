@@ -1,5 +1,5 @@
 /**
- * DisposeMeshEnginePruneLodCache.js - LOD Cache Pruning
+ * pruneLodCache.js - LOD Cache Pruning
  * 
  * PURPOSE:
  *   Removes old entries from the LOD cache when it exceeds a maximum size.
@@ -7,7 +7,7 @@
  *   still providing fast access to recently used detail levels.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineGreedyClusterDecimator after adding a new cache entry.
+ *   Called by greedyClusterDecimator after adding a new cache entry.
  *   Implements a simple FIFO (First In, First Out) eviction policy.
  * 
  * WHY PRUNE:
@@ -24,7 +24,7 @@
 "use strict";
 
 /**
- * DisposeMeshEnginePruneLodCache - Removes oldest cache entry if cache exceeds max size
+ * pruneLodCache - Removes oldest cache entry if cache exceeds max size
  * 
  * @param {Map} cache - The LOD cache Map to prune
  * @param {number} [maxSize=12] - Maximum number of entries to keep

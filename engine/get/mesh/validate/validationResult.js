@@ -1,5 +1,5 @@
 /**
- * GetMeshEngineValidate.js - Mesh Data Validation
+ * validationResult.js - Mesh Data Validation
  * 
  * PURPOSE:
  *   Validates that a mesh object has the required structure and minimum
@@ -7,7 +7,7 @@
  *   pipeline with clear error messages.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineLoad before processing mesh data. Ensures the mesh
+ *   Called by load before processing mesh data. Ensures the mesh
  *   has valid V (vertices) and F (faces) arrays with minimum counts.
  * 
  * WHY VALIDATE:
@@ -20,7 +20,7 @@
  */
 
 /**
- * GetMeshEngineValidate - Validates mesh data structure and content
+ * validationResult - Validates mesh data structure and content
  * 
  * @param {Object} mesh - The mesh object to validate
  * @param {string} name - Display name for error messages
@@ -37,16 +37,16 @@
 export function validationResult(mesh, name, meshFileName, meshType) {
   // Check 1: Mesh must exist (not null or undefined)
   if (mesh === undefined || mesh === null) {
-    throw new Error(`[InitMeshEngineLoad] Mesh input is ${mesh === null ? 'null' : 'undefined'} for '${name}'.\n  - Source: mesh file did not return a valid OBJ string.`);
+    throw new Error(`[load] Mesh input is ${mesh === null ? 'null' : 'undefined'} for '${name}'.\n  - Source: mesh file did not return a valid OBJ string.`);
   }
   
   // Check 2: Must have at least 3 vertices (smallest valid mesh is a triangle)
   if (!Array.isArray(mesh.V) || mesh.V.length < 3) {
-    throw new Error(`[InitMeshEngineLoad] Mesh must have at least 3 vertices.\n  - mesh.V: ${mesh.V ? mesh.V.length : 'missing'}\n  - Mesh file: ${meshFileName || name}\n  - Mesh type: ${meshType}`);
+    throw new Error(`[load] Mesh must have at least 3 vertices.\n  - mesh.V: ${mesh.V ? mesh.V.length : 'missing'}\n  - Mesh file: ${meshFileName || name}\n  - Mesh type: ${meshType}`);
   }
   
   // Check 3: Must have at least 1 face
   if (!Array.isArray(mesh.F) || mesh.F.length < 1) {
-    throw new Error(`[InitMeshEngineLoad] Mesh must have at least 1 face.\n  - mesh.F: ${mesh.F ? mesh.F.length : 'missing'}\n  - Mesh file: ${meshFileName || name}\n  - Mesh type: ${meshType}`);
+    throw new Error(`[load] Mesh must have at least 1 face.\n  - mesh.F: ${mesh.F ? mesh.F.length : 'missing'}\n  - Mesh file: ${meshFileName || name}\n  - Mesh type: ${meshType}`);
   }
 }

@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineClusterVertices.js - Vertex Clustering and Merging
+ * clusterVertices.js - Vertex Clustering and Merging
  * 
  * PURPOSE:
  *   Merges vertices within each spatial grid cell by computing their average
@@ -7,7 +7,7 @@
  *   algorithm, reducing vertex count by combining nearby vertices.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineGreedyClusterDecimator after vertices have been assigned to
+ *   Called by greedyClusterDecimator after vertices have been assigned to
  *   spatial cells. Produces the new vertex array and a mapping from old
  *   to new vertex indices.
  * 
@@ -26,7 +26,7 @@
 "use strict";
 
 /**
- * InitMeshEngineClusterVertices - Merges vertices within spatial cells
+ * clusterVertices - Merges vertices within spatial cells
  * 
  * @param {Array<Array<number>>} V - Original vertex positions array
  * @param {Map<string, Array<number>>} cellMap - Map from cell keys to vertex indices

@@ -7,7 +7,7 @@
  *   and other OBJ format elements.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineToRuntime to perform the actual parsing. Returns a
+ *   Called by toRuntime to perform the actual parsing. Returns a
  *   state object containing all parsed data and any errors encountered.
  * 
  * OBJ FORMAT SUPPORTED:
@@ -57,10 +57,10 @@ export function objLines(lines, overrides) {
 
   // Map OBJ line prefixes to handler functions
   const handlers = {
-    v: parts => InitMeshEngineParseVertex(parts, state),
-    vn: parts => InitMeshEngineParseNormal(parts, state),
-    vt: parts => InitMeshEngineParseUv(parts, state),
-    f: (parts, line) => InitMeshEngineParseFace(parts, line, state),
+    v: parts => vertex(parts, state),
+    vn: parts => normal(parts, state),
+    vt: parts => uv(parts, state),
+    f: (parts, line) => face(parts, line, state),
     g: parts => { state.currentGroup = parts.length > 1 ? parts.slice(1).join(' ') : null; },
     o: parts => { state.currentObject = parts.length > 1 ? parts.slice(1).join(' ') : null; },
     s: parts => { state.currentSmoothing = parts.length > 1 ? parts[1] : null; },
@@ -87,7 +87,7 @@ export function objLines(lines, overrides) {
       // Log parse error but continue processing
       const fileName = overrides.meshFileName || 'unknown';
       state.failingLines.push(`[${state.lineNumber}] Exception parsing line in OBJ file '${fileName}': '${line}' | Error: ${err?.message ?? err}`);
-      console.error(`[InitMeshEngineToRuntime] Exception at line ${state.lineNumber} in OBJ file '${fileName}':`, line, err);
+      console.error(`[toRuntime] Exception at line ${state.lineNumber} in OBJ file '${fileName}':`, line, err);
       continue;
     }
   }

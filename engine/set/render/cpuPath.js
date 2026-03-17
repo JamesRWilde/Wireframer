@@ -1,17 +1,16 @@
 import { sceneCanvas }from '@engine/set/gpu/clear/sceneCanvas.js';
 import { renderMeshUnified }from '@engine/set/cpu/renderMeshUnified.js';
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
-import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { axes }from '@engine/set/render/draw/axes.js';
 
 export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
   const ctx = globalThis.ctx;
   
-  SetCpuEngineCanvasHidden(false);
-  SetGpuEngineCanvasHidden(true);
+  canvasHidden(false);
+  canvasHidden(true);
   
   if (globalThis.FRAME_LOOP_STATE.gpuSceneDrawnLastFrame) {
-    SetGpuEngineClearSceneCanvas();
+    sceneCanvas();
     globalThis.FRAME_LOOP_STATE.gpuSceneDrawnLastFrame = false;
   }
   
@@ -22,10 +21,10 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
     ctx.restore();
   }
   
-  SetCpuEngineRenderMeshUnified(meshToRender, ctx);
+  renderMeshUnified(meshToRender, ctx);
 
   if (globalThis.DEBUG_SHOW_AXES && ctx) {
-    SetRenderEngineDrawAxes(ctx);
+    axes(ctx);
   }
 
   return true;

@@ -1,5 +1,5 @@
 /**
- * GetMeshEngineOrCreateVertIdx.js - Unique Vertex Index Management
+ * orCreateVertIdx.js - Unique Vertex Index Management
  * 
  * PURPOSE:
  *   Manages unique vertex indices during OBJ parsing. OBJ format allows
@@ -18,7 +18,7 @@
  */
 
 /**
- * GetMeshEngineOrCreateVertIdx - Gets or creates a unique vertex index
+ * orCreateVertIdx - Gets or creates a unique vertex index
  * 
  * @param {number} v - Vertex position index (0-based)
  * @param {number|null} vt - Texture coordinate index (0-based, or null)

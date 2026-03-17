@@ -1,5 +1,5 @@
 /**
- * DisposeGpuEngineBackground.js - Helper to dispose GPU resources for the background renderer
+ * backgroundDispose.js - Helper to dispose GPU resources for the background renderer
  *
  * PURPOSE:
  *   Releases GPU resources allocated by the background renderer by deleting the WebGL buffer and program.
@@ -14,7 +14,7 @@
  *     - If null or already deleted, this is a no-op.
  *
  * USAGE:
- *   DisposeGpuEngineBackground(gl, buffer, program);
+ *   backgroundDispose(gl, buffer, program);
  *
  * BEST PRACTICES:
  *   - Always call this when the renderer is disposed or the canvas is removed from the DOM.

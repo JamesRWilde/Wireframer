@@ -1,5 +1,5 @@
 /**
- * SetMeshEngineDetailLevel.js - LOD Detail Level Control
+ * detailLevel.js - LOD Detail Level Control
  * 
  * PURPOSE:
  *   Sets the current Level of Detail (LOD) for the active model. This function
@@ -8,8 +8,8 @@
  *   with fewer vertices, improving performance at the cost of visual fidelity.
  * 
  * ARCHITECTURE ROLE:
- *   Called by the LOD slider handler and by InitMeshEngineFinalizeModel when loading a new
- *   mesh. Exposed globally as globalThis.SetMeshEngineDetailLevel for UI access.
+ *   Called by the LOD slider handler and by finalizeModel when loading a new
+ *   mesh. Exposed globally as globalThis.detailLevel for UI access.
  * 
  * HOW LOD WORKS:
  *   1. The base model (full detail) is stored in globalThis.BASE_MODEL
@@ -24,7 +24,7 @@
 import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
 
 /**
- * SetMeshEngineDetailLevel - Sets the LOD detail level for the active model
+ * detailLevel - Sets the LOD detail level for the active model
  * 
  * @param {number} percent - Detail level as a percentage (0-1)
  *   1 = full detail (all vertices)
@@ -51,7 +51,7 @@ export function detailLevel(percent, name = 'Shape') {
   
   // Decimate the base model to the target detail level
   // Always decimate from BASE_MODEL to avoid quality loss from repeated decimation
-  globalThis.CURRENT_LOD_MODEL = InitMeshEngineDecimateByPercent(globalThis.BASE_MODEL, clampedPercent);
+  globalThis.CURRENT_LOD_MODEL = decimateByPercent(globalThis.BASE_MODEL, clampedPercent);
 
   // Set the decimated model as active for rendering
   if (typeof globalThis.setActiveModel === 'function') {
@@ -61,4 +61,4 @@ export function detailLevel(percent, name = 'Shape') {
 
 // Expose globally for UI slider handler
 // The LOD slider calls this when the user adjusts the detail level
-globalThis.SetMeshEngineDetailLevel = SetMeshEngineDetailLevel;
+globalThis.detailLevel = detailLevel;

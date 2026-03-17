@@ -22,7 +22,7 @@
  * BEST PRACTICES:
  *   - Call this only when the particle array changes (add/remove).
  *   - Do not call if particles is empty or unchanged.
- *   - This function does not manage buffer or program lifetimes; see DisposeGpuEngineBackground for cleanup.
+ *   - This function does not manage buffer or program lifetimes; see backgroundDispose for cleanup.
  *
  * MAINTAINER GUIDELINES:
  *   - This file must only contain this function and its export.

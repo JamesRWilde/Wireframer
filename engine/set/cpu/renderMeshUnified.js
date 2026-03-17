@@ -40,7 +40,7 @@ export function renderMeshUnified(model, ctx) {
   if (!model?.V?.length || !model?.F?.length || !ctx) return;
 
   // Get transformed vertices
-  const frameData = GetRenderEngineModelFrameData(model);
+  const frameData = frameData(model);
   if (!frameData) return;
   const { T, P2 } = frameData;
 
@@ -49,7 +49,7 @@ export function renderMeshUnified(model, ctx) {
   if (!triFaces?.length) return;
 
   // Get shading mode and normals
-  const shadingMode = GetCpuEngineModelShadingMode(model, triFaces);
+  const shadingMode = shadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
   const triCornerNormals = useSmoothShading
     ? getModelTriCornerNormals(model, triFaces)
@@ -63,7 +63,7 @@ export function renderMeshUnified(model, ctx) {
   let fillRgb = globalThis.THEME?.fill ?? [0, 200, 120];
   const fillLum = GetUiColorRelativeLuminance(fillRgb);
   const contrastWire = fillLum > 0.5 ? [0, 0, 0] : [255, 255, 255];
-  const edgeColor = GetRenderEngineRgbaString(contrastWire, 1);
+  const edgeColor = rgbaString(contrastWire, 1);
 
   // Sort triangles back-to-front (painter's algorithm)
   const triOrder = new Array(triFaces.length);

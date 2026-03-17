@@ -1,5 +1,5 @@
 /**
- * SetEngineRendererHud.js - Renderer Mode HUD Display
+ * hud.js - Renderer Mode HUD Display
  * 
  * PURPOSE:
  *   Updates the HUD display to show the current foreground rendering mode
@@ -14,7 +14,7 @@
  * 
  * TOGGLE FUNCTIONALITY:
  *   When GPU is supported, the renderer stat becomes a clickable toggle button
- *   (initialized by InitEngineRendererToggle.js). Clicking it switches between GPU
+ *   (initialized by rendererToggle.js). Clicking it switches between GPU
  *   and CPU modes. The visual styling (cursor, underline) is applied during
  *   initialization, not by this function.
  */
@@ -25,7 +25,7 @@
 import {statsState} from '@ui/state/stats.js';
 
 /**
- * SetEngineRendererHud - Updates the renderer mode display in the HUD
+ * hud - Updates the renderer mode display in the HUD
  * 
  * @param {string} mode - The current render mode: 'gpu', 'cpu', or 'unknown'
  * 

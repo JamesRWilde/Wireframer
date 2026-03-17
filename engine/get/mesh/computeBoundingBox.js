@@ -1,5 +1,5 @@
 /**
- * GetMeshEngineComputeBoundingBox.js - 3D Bounding Box Computation
+ * computeBoundingBox.js - 3D Bounding Box Computation
  * 
  * PURPOSE:
  *   Computes the axis-aligned bounding box (AABB) of a set of 3D vertices.
@@ -21,7 +21,7 @@
 "use strict";
 
 /**
- * GetMeshEngineComputeBoundingBox - Computes axis-aligned bounding box of vertices
+ * computeBoundingBox - Computes axis-aligned bounding box of vertices
  * 
  * @param {Array<Array<number>>} V - Vertex positions array [[x,y,z], ...]
  * 

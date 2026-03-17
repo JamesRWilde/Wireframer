@@ -72,6 +72,6 @@ export function trianglesGpu({ T, P2, triFaces, triCornerNormals, useSmoothShadi
     const tri2d = expandTriangleForSeam([[ax, ay], [bx, by], [cx, cy]], seamExpandPx);
 
     // Rasterize the triangle into the 2D canvas context.
-    SetCpuEngineFillTriangle(ctx, tri2d, shadeColor, fillAlpha);
+    triangle(ctx, tri2d, shadeColor, fillAlpha);
   }
 }

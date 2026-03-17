@@ -7,7 +7,7 @@
  *   encountered during parsing.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineToRuntime after parsing completes. Acts as a gatekeeper
+ *   Called by toRuntime after parsing completes. Acts as a gatekeeper
  *   to ensure only valid meshes proceed to the rendering pipeline.
  * 
  * WHY VALIDATE:
@@ -29,7 +29,7 @@
 export function parseCheckResults(uniqueVerts, faces, failingLines, overrides = {}) {
   // Check for empty mesh or parse errors
   if (uniqueVerts.length === 0 || faces.length === 0 || failingLines.length > 0) {
-    console.error('[InitMeshEngineToRuntime] Mesh load failure:', {
+    console.error('[toRuntime] Mesh load failure:', {
       meshFile: overrides.meshFileName || 'unknown',
       meshType: overrides.meshType || 'OBJ',
       vertices: uniqueVerts.length,
@@ -37,6 +37,6 @@ export function parseCheckResults(uniqueVerts, faces, failingLines, overrides = 
       errors: failingLines.slice(0, 10),  // Show first 10 errors
       errorCount: failingLines.length
     });
-    throw new Error('[InitMeshEngineToRuntime] Mesh load failure');
+    throw new Error('[toRuntime] Mesh load failure');
   }
 }

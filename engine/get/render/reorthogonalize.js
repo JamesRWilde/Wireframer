@@ -9,7 +9,7 @@
  *   orthonormal rotation matrix.
  * 
  * ARCHITECTURE ROLE:
- *   Called periodically by SetEnginePhysics() (every 120 frames) to prevent
+ *   Called periodically by physics() (every 120 frames) to prevent
  *   visual artifacts from accumulated numerical errors.
  * 
  * MATHEMATICAL BASIS:

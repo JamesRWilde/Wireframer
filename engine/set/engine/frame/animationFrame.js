@@ -2,7 +2,7 @@
  * frame.js - Main Animation Frame Entry Point
  * 
  * PURPOSE:
- *   Provides the SetEngineFrame() function that serves as the callback for requestAnimationFrame.
+ *   Provides the animationFrame() function that serves as the callback for requestAnimationFrame.
  *   This is the heartbeat of the application - called by the browser ~60 times per second
  *   to drive the animation loop. It delegates actual work to runFrame() while handling
  *   frame timing and loop continuation.
@@ -13,11 +13,11 @@
  *   separation allows runFrame to be called independently (e.g., for single-step debugging).
  * 
  * FRAME LOOP FLOW:
- *   1. Browser calls SetEngineFrame(timestamp)
- *   2. SetEngineFrame() schedules next frame via requestAnimationFrame(frame)
- *   3. SetEngineFrame() calls runFrame(nowMs) to do actual work
+ *   1. Browser calls animationFrame(timestamp)
+ *   2. animationFrame() schedules next frame via requestAnimationFrame(frame)
+ *   3. animationFrame() calls runFrame(nowMs) to do actual work
  *   4. runFrame() updates physics, renders, updates telemetry
- *   5. Browser calls SetEngineFrame() again ~16ms later
+ *   5. Browser calls animationFrame() again ~16ms later
  */
 
 "use strict";

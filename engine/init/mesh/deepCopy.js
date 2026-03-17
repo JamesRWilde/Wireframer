@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineDeepCopy.js - Deep Mesh Copy Utility
+ * deepCopy.js - Deep Mesh Copy Utility
  * 
  * PURPOSE:
  *   Creates a deep copy of a mesh object, duplicating all arrays and nested
@@ -21,7 +21,7 @@
 "use strict";
 
 /**
- * InitMeshEngineDeepCopy - Creates a deep copy of a mesh object
+ * deepCopy - Creates a deep copy of a mesh object
  * 
  * @param {Object} model - The mesh model to copy
  * 

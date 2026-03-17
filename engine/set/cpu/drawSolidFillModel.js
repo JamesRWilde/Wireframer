@@ -48,14 +48,14 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     return;
   }
 
-  const frameData = GetRenderEngineModelFrameData(model);
+  const frameData = frameData(model);
   if (!frameData) return;
   const { T, P2 } = frameData;
 
   const triFaces = getModelTriangles(model);
   if (!triFaces?.length) return;
 
-  const shadingMode = GetCpuEngineModelShadingMode(model, triFaces);
+  const shadingMode = shadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
   const seamExpandPx = useSmoothShading ? (globalThis.DENSE_SEAM_EXPAND_PX ?? 0) : 0;
 
@@ -68,15 +68,15 @@ export function drawSolidFillModel(model, alphaScale = 1) {
 
   // Try to use worker for parallel rendering
   if (!workerInitialized) {
-    workerInitialized = InitCpuEngineFillWorker(W, H);
+    workerInitialized = fillWorker(W, H);
   }
 
-  if (GetCpuEngineIsFillWorkerAvailable()) {
+  if (isFillWorkerAvailable()) {
     // Send current frame data to worker
     const R = globalThis.PHYSICS_STATE?.R;
     const theme = globalThis.THEME ?? { shadeDark: '#000000', shadeBright: '#ffffff' };
 
-    SetCpuEngineFillSendRenderCommand({
+    sendRenderCommand({
       T,
       P2,
       triFaces,
@@ -89,7 +89,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     }, state.RENDER_FRAME_ID);
 
     // Draw cached frame from previous render
-    const cached = GetCpuEngineFillCachedFrame();
+    const cached = fillCachedFrame();
     if (cached?.imageBitmap) {
       fillLayerCtx.setTransform(1, 0, 0, 1, 0, 0);
       fillLayerCtx.clearRect(0, 0, W, H);
@@ -129,7 +129,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     );
   }
 
-  SetRenderEngineFillTrianglesCpu({
+  trianglesCpu({
     triOrder,
     P2,
     T,

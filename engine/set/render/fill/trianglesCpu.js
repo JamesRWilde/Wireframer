@@ -28,6 +28,6 @@ export function trianglesCpu({
     const shadeColor = computeTriangleShadeColor(normal, useSmoothShading);
 
     const tri2d = expandTriangleForSeam([[ax, ay], [bx, by], [cx, cy]], seamExpandPx);
-    SetCpuEngineFillTriangleOnLayer(fillLayerCtx, tri2d, shadeColor, fillAlpha);
+    triangleOnLayer(fillLayerCtx, tri2d, shadeColor, fillAlpha);
   }
 }

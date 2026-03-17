@@ -14,7 +14,7 @@ export function modelBuffers(gl, modelCache, supportsUint32, model) {
   if (!model) return null; // Defensive: must have a model
   let buffers = modelCache.get(model); // Check cache first
   if (!buffers) {
-    buffers = InitGpuEngineBuildModelBuffers(gl, model, supportsUint32); // Delegate to helper
+    buffers = buildModelBuffers(gl, model, supportsUint32); // Delegate to helper
     if (buffers) modelCache.set(model, buffers); // Cache for future calls
   }
   return buffers;

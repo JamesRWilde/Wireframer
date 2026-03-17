@@ -33,15 +33,15 @@ export function frameData(model) {
   }
 
   const flatR = new Float32Array(Rmat);
-  SetRenderEngineWorkerSend(flatV, flatR, fov, halfW, halfH, modelCy, state.RENDER_FRAME_ID);
+  workerSend(flatV, flatR, fov, halfW, halfH, modelCy, state.RENDER_FRAME_ID);
 
-  const cached = GetRenderEngineCachedTransformResult();
+  const cached = cachedTransformResult();
   if (cached?.T && cached?.P2) {
-    const converted = GetRenderEngineConvertFlatToNested(cached.T, cached.P2, vertexCount);
+    const converted = convertFlatToNested(cached.T, cached.P2, vertexCount);
     T = converted.T;
     P2 = converted.P2;
   } else {
-    const result = GetRenderEngineWorkerTransformSync(V, Rmat, fov, halfW, halfH, modelCy, vertexCount);
+    const result = transformSync(V, Rmat, fov, halfW, halfH, modelCy, vertexCount);
     T = result.T;
     P2 = result.P2;
   }

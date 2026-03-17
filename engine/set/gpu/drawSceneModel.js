@@ -15,14 +15,14 @@ import { disableSceneRenderer }from '@engine/dispose/gpu/disableSceneRenderer.js
  *   false: GPU rendering failed (renderer unavailable or error occurred)
  */
 export function drawSceneModel(model, params) {
-  const renderer = GetGpuEngineSceneRenderer();
+  const renderer = sceneRenderer();
   if (!renderer) return false;
 
   try {
     // Engine-owned mesh only
-    return renderer.SetGpuEngineRenderModel(model, params);
+    return renderer.model(model, params);
   } catch (err) {
-    DisposeGpuEngineDisableSceneRenderer(err);
+    disableSceneRenderer(err);
     return false;
   }
 }

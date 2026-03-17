@@ -1,5 +1,5 @@
 /**
- * GetEngineForegroundRenderMode.js - GPU/CPU Render Mode Detection
+ * foregroundRenderMode.js - GPU/CPU Render Mode Detection
  * 
  * PURPOSE:
  *   Determines whether to use GPU (WebGL) or CPU (Canvas 2D) rendering for the
@@ -13,7 +13,7 @@
  * 
  * DETECTION LOGIC:
  *   1. If mode is already resolved (not 'unknown'), return cached value
- *   2. Check if GPU renderer is available via GetGpuEngineSceneRenderer()
+ *   2. Check if GPU renderer is available via sceneRenderer()
  *   3. If GPU renderer exists, use 'gpu' mode; otherwise use 'cpu' mode
  *   4. Cache the result and update the HUD display
  */
@@ -30,7 +30,7 @@ import { hud }from '@engine/set/engine/renderer/hud.js';
 import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 /**
- * GetEngineForegroundRenderMode - Determines and caches the foreground render mode
+ * foregroundRenderMode - Determines and caches the foreground render mode
  * 
  * @returns {string} The resolved render mode: 'gpu' or 'cpu'
  * 
@@ -48,8 +48,8 @@ export function foregroundRenderMode() {
   if (state.foregroundRenderMode !== 'unknown') return state.foregroundRenderMode;
   
   // Check if GPU renderer is available
-  // GetGpuEngineSceneRenderer returns the GPU renderer if WebGL is available and initialized
-  const renderer = GetGpuEngineSceneRenderer();
+  // sceneRenderer returns the GPU renderer if WebGL is available and initialized
+  const renderer = sceneRenderer();
   
   // Determine mode based on GPU renderer availability
   // If renderer exists, use GPU; otherwise fall back to CPU
@@ -61,7 +61,7 @@ export function foregroundRenderMode() {
   
   // Update the HUD to show the current render mode
   // This displays "GPU" or "CPU" in the stats panel
-  SetEngineRendererHud(mode);
+  hud(mode);
   
   // Return the resolved mode
   return mode;

@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineNormalizeFaces.js - Face Format Normalization
+ * normalizeFaces.js - Face Format Normalization
  * 
  * PURPOSE:
  *   Normalizes face data to a consistent format for processing. Some mesh
@@ -20,7 +20,7 @@
 "use strict";
 
 /**
- * InitMeshEngineNormalizeFaces - Normalizes face data to consistent array format
+ * normalizeFaces - Normalizes face data to consistent array format
  * 
  * @param {Array} F - Face data (either arrays or objects with indices)
  * 

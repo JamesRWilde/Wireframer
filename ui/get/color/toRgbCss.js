@@ -6,7 +6,7 @@
  *   Used for creating CSS-compatible color strings without alpha.
  * 
  * ARCHITECTURE ROLE:
- *   Called by buildCustomTheme and SetUiUpdateCustomColor to create
+ *   Called by buildCustomTheme and updateCustomColor to create
  *   CSS color values for UI elements.
  */
 

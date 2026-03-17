@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineGreedyClusterDecimator.js - Greedy Cluster-Based Mesh Decimation
+ * greedyClusterDecimator.js - Greedy Cluster-Based Mesh Decimation
  * 
  * PURPOSE:
  *   Implements a greedy cluster-based mesh decimation algorithm for LOD
@@ -8,7 +8,7 @@
  *   while preserving its overall shape.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineDecimateByPercent to perform the actual mesh simplification.
+ *   Called by decimateByPercent to perform the actual mesh simplification.
  *   This is the core LOD algorithm that balances visual quality with
  *   performance.
  * 
@@ -51,7 +51,7 @@ import { rebuildFaces }from '@engine/init/mesh/rebuildFaces.js';
 import { pruneLodCache }from '@engine/dispose/mesh/pruneLodCache.js';
 
 /**
- * InitMeshEngineGreedyClusterDecimator - Decimates a mesh using greedy cluster merging
+ * greedyClusterDecimator - Decimates a mesh using greedy cluster merging
  * 
  * @param {Object} model - The mesh model to decimate
  * @param {number} targetFaces - Target number of faces after decimation
@@ -77,31 +77,31 @@ export function greedyClusterDecimator(model, targetFaces) {
   // Check cache for existing LOD at this detail level
   if (model._lodCache.has(cacheKey)) {
     // Return deep copy to prevent cache pollution
-    return InitMeshEngineDeepCopy(model._lodCache.get(cacheKey));
+    return deepCopy(model._lodCache.get(cacheKey));
   }
 
   // Extract vertices and normalize faces
   const V = model.V;
-  const F = InitMeshEngineNormalizeFaces(model.F);
+  const F = normalizeFaces(model.F);
 
   // Compute bounding box for spatial grid setup
-  const { minX, minY, minZ, extent } = GetMeshEngineComputeBoundingBox(V);
+  const { minX, minY, minZ, extent } = computeBoundingBox(V);
   
   // Compute cluster parameters (cell size) based on target face count
-  const { cellSize } = InitMeshEngineComputeClusterParams(targetFaces, extent);
+  const { cellSize } = computeClusterParams(targetFaces, extent);
 
   // Assign vertices to spatial grid cells
   // This groups nearby vertices for merging
-  const cellMap = InitMeshEngineAssignVerticesToCells(V, minX, minY, minZ, cellSize);
+  const cellMap = assignVerticesToCells(V, minX, minY, minZ, cellSize);
   
   // Cluster vertices within each cell (merge nearby vertices)
-  const { newVerts, oldToNew } = InitMeshEngineClusterVertices(V, cellMap);
+  const { newVerts, oldToNew } = clusterVertices(V, cellMap);
   
   // Rebuild faces using new vertex indices
-  const newFaces = InitMeshEngineRebuildFaces(F, oldToNew);
+  const newFaces = rebuildFaces(F, oldToNew);
 
   // Build edges for wireframe rendering
-  const newEdges = globalThis.InitMeshEngineBuildEdgesFromFacesRuntime?.(newFaces) ?? [];
+  const newEdges = globalThis.edgesFromFacesRuntime?.(newFaces) ?? [];
   
   // Create decimated mesh object
   const decimated = {
@@ -117,8 +117,8 @@ export function greedyClusterDecimator(model, targetFaces) {
   model._lodCache.set(cacheKey, decimated);
   
   // Prune cache to prevent memory bloat (keep max 12 entries)
-  DisposeMeshEnginePruneLodCache(model._lodCache, 12);
+  pruneLodCache(model._lodCache, 12);
 
   // Return deep copy to prevent cache pollution
-  return InitMeshEngineDeepCopy(decimated);
+  return deepCopy(decimated);
 }

@@ -6,7 +6,7 @@
  *   Used for displaying colors in hex format in the UI.
  * 
  * ARCHITECTURE ROLE:
- *   Called by SetUiUpdateCustomColor and initPresetSwatches to display
+ *   Called by updateCustomColor and initPresetSwatches to display
  *   color values in hex format.
  */
 

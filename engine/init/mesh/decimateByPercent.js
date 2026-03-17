@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineDecimateByPercent.js - LOD Decimation by Percentage
+ * decimateByPercent.js - LOD Decimation by Percentage
  * 
  * PURPOSE:
  *   Reduces a mesh's complexity to a target percentage of its original face count.
@@ -7,14 +7,14 @@
  *   when the user adjusts the detail slider.
  * 
  * ARCHITECTURE ROLE:
- *   Called by SetMeshEngineDetailLevel to generate LOD versions of the base model.
- *   Delegates to InitMeshEngineGreedyClusterDecimator for the actual decimation algorithm.
+ *   Called by detailLevel to generate LOD versions of the base model.
+ *   Delegates to greedyClusterDecimator for the actual decimation algorithm.
  * 
  * HOW IT WORKS:
  *   1. Validates input model
  *   2. Calculates target face count from percentage
  *   3. If at 100%, returns original model (no decimation needed)
- *   4. Otherwise, calls InitMeshEngineGreedyClusterDecimator to reduce faces
+ *   4. Otherwise, calls greedyClusterDecimator to reduce faces
  */
 
 "use strict";
@@ -24,7 +24,7 @@
 import { greedyClusterDecimator }from '@engine/init/mesh/greedyClusterDecimator.js';
 
 /**
- * InitMeshEngineDecimateByPercent - Decimates a mesh to a target percentage of faces
+ * decimateByPercent - Decimates a mesh to a target percentage of faces
  * 
  * @param {Object} model - The mesh model to decimate
  * @param {number} percent - Target percentage (0-1) of original face count
@@ -38,7 +38,7 @@ import { greedyClusterDecimator }from '@engine/init/mesh/greedyClusterDecimator.
  * 1. Guards against invalid input (null, too few vertices)
  * 2. Calculates target face count with minimum of 4 faces
  * 3. Returns original model if target >= current (no decimation needed)
- * 4. Otherwise delegates to InitMeshEngineGreedyClusterDecimator
+ * 4. Otherwise delegates to greedyClusterDecimator
  */
 export function decimateByPercent(model, percent) {
     // Guard: return original model if invalid or too few vertices
@@ -60,5 +60,5 @@ export function decimateByPercent(model, percent) {
     }
     
     // Delegate to greedy cluster decimator for actual decimation
-    return InitMeshEngineGreedyClusterDecimator(model, targetFaces);
+    return greedyClusterDecimator(model, targetFaces);
 }

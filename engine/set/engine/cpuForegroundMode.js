@@ -26,7 +26,7 @@ import { state }from '@ui/get/read/state.js';
 import { hud }from '@engine/set/engine/renderer/hud.js';
 
 /**
- * SetEngineCpuForegroundMode - Switches foreground rendering to CPU path
+ * cpuForegroundMode - Switches foreground rendering to CPU path
  * 
  * This function is called when GPU rendering fails (context lost, shader compile
  * error, unsupported features, etc.). It updates the global render mode state
@@ -42,5 +42,5 @@ export function cpuForegroundMode() {
   
   // Update the HUD display to show "CPU" instead of "GPU"
   // This helps users understand why performance might be different
-  SetEngineRendererHud(state.foregroundRenderMode);
+  hud(state.foregroundRenderMode);
 }

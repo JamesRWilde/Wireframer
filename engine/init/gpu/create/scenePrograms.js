@@ -83,8 +83,8 @@ export function scenePrograms(gl) {
     }
   `;
 
-  const fillProgram = InitGpuEngineCreateProgram(gl, fillVertSrc, fillFragSrc);
-  const wireProgram = InitGpuEngineCreateProgram(gl, wireVertSrc, wireFragSrc);
+  const fillProgram = program(gl, fillVertSrc, fillFragSrc);
+  const wireProgram = program(gl, wireVertSrc, wireFragSrc);
 
   const fillLoc = {
     aPos: gl.getAttribLocation(fillProgram, 'a_pos'),

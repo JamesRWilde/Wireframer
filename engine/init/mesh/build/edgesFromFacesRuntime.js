@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineBuildEdgesFromFacesRuntime.js - Edge Extraction from Face Data
+ * edgesFromFacesRuntime.js - Edge Extraction from Face Data
  * 
  * PURPOSE:
  *   Extracts unique edges from face index arrays at runtime. Each face is
@@ -18,7 +18,7 @@
 import { addEdge }from '@engine/init/mesh/addEdge.js';
 
 /**
- * InitMeshEngineBuildEdgesFromFacesRuntime - Extracts unique edges from face arrays
+ * edgesFromFacesRuntime - Extracts unique edges from face arrays
  * 
  * @param {Array} faces - Array of face objects or index arrays
  *   Each face can be:
@@ -47,7 +47,7 @@ export function edgesFromFacesRuntime(faces) {
     
     // Extract edges: (0,1), (1,2), ..., (n-1,0)
     for (let i = 0; i < indices.length; i++) {
-      InitMeshEngineAddEdge(indices[i], indices[(i + 1) % indices.length], E, edgeSet);
+      addEdge(indices[i], indices[(i + 1) % indices.length], E, edgeSet);
     }
   }
 

@@ -1,5 +1,5 @@
 /**
- * SetEngineRestoredState.js - UI State Restoration
+ * restoredState.js - UI State Restoration
  * 
  * PURPOSE:
  *   Restores saved UI state from localStorage (shape, sliders, theme).

@@ -44,7 +44,7 @@ export function face(parts, originalLine, state) {
   }
   
   // Parse each token into vertex/uv/normal indices
-  const faceVerts = rawTokens.map(tok => InitMeshEngineParseIdxFromToken(tok, state));
+  const faceVerts = rawTokens.map(tok => idxFromToken(tok, state));
   
   // Check for out-of-bounds vertex indices
   const outOfBounds = faceVerts.filter(i => i.v < 0 || i.v >= state.vertices.length);
@@ -59,9 +59,9 @@ export function face(parts, originalLine, state) {
   for (let i = 1; i < faceVerts.length - 1; i++) {
     // Get or create unique vertex indices for this triangle
     const tri = [
-      GetMeshEngineOrCreateVertIdx(faceVerts[0].v, faceVerts[0].vt, faceVerts[0].vn, state),
-      GetMeshEngineOrCreateVertIdx(faceVerts[i].v, faceVerts[i].vt, faceVerts[i].vn, state),
-      GetMeshEngineOrCreateVertIdx(faceVerts[i+1].v, faceVerts[i+1].vt, faceVerts[i+1].vn, state)
+      orCreateVertIdx(faceVerts[0].v, faceVerts[0].vt, faceVerts[0].vn, state),
+      orCreateVertIdx(faceVerts[i].v, faceVerts[i].vt, faceVerts[i].vn, state),
+      orCreateVertIdx(faceVerts[i+1].v, faceVerts[i+1].vt, faceVerts[i+1].vn, state)
     ];
     
     // Only add triangle if all 3 vertices are unique (skip degenerate triangles)

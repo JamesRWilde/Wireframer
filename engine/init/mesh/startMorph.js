@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineStartMorph.js - Morph Animation Initialization
+ * startMorph.js - Morph Animation Initialization
  * 
  * PURPOSE:
  *   Starts a morph animation between two mesh models. This function sets up
@@ -7,14 +7,14 @@
  *   callback, preparing the animation to be advanced each frame.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineFinalizeModel when loading a new mesh with animation enabled.
+ *   Called by finalizeModel when loading a new mesh with animation enabled.
  *   Part of the morph API exposed globally via InitMeshEngineMorphApi.js.
  * 
  * HOW IT WORKS:
  *   1. Clones both source and target meshes to prevent mutation
  *   2. Sets up morph state with timing and callback
  *   3. Initializes current mesh to source (starting point)
- *   4. Subsequent frames call InitMeshEngineAdvanceMorphFrame to interpolate
+ *   4. Subsequent frames call advanceMorphFrame to interpolate
  */
 
 "use strict";
@@ -26,7 +26,7 @@ import {morphState} from '@engine/state/mesh/morph.js';
 import { clone }from '@engine/init/mesh/clone.js';
 
 /**
- * InitMeshEngineStartMorph - Starts a morph animation between two meshes
+ * startMorph - Starts a morph animation between two meshes
  * 
  * @param {Object} fromMesh - Source mesh (starting point)
  * @param {Object} toMesh - Target mesh (ending point)
@@ -48,11 +48,11 @@ export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
   
   // Clone source and target meshes to prevent mutation
   // Interpolation will modify vertices in-place, so we need copies
-  morphState.fromMesh = InitMeshEngineClone(fromMesh);
-  morphState.toMesh = InitMeshEngineClone(toMesh);
+  morphState.fromMesh = clone(fromMesh);
+  morphState.toMesh = clone(toMesh);
   
   // Initialize current mesh to source (starting point)
-  morphState.currentMesh = InitMeshEngineClone(fromMesh);
+  morphState.currentMesh = clone(fromMesh);
   
   // Reset progress to start
   morphState.progress = 0;

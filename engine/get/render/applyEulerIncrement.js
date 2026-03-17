@@ -7,7 +7,7 @@
  *   system to rotate the model based on angular velocities.
  * 
  * ARCHITECTURE ROLE:
- *   Called by SetEnginePhysics() each frame to apply angular velocity increments
+ *   Called by physics() each frame to apply angular velocity increments
  *   to the rotation matrix. Modifies the matrix in-place for performance.
  * 
  * MATHEMATICAL BASIS:

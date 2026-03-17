@@ -31,7 +31,7 @@ export function presetSwatches() {
     button.setAttribute('aria-label', `${preset.name} preset ${GetUiColorToHex(preset.rgb)}`);
     button.style.setProperty('--swatch-color', GetUiColorToRgbCss(preset.rgb));
     button.addEventListener('click', () => {
-      SetUiCustomRgb(preset.rgb, { persist: true, apply: true });
+      customRgb(preset.rgb, { persist: true, apply: true });
     });
 
     presetSwatches.appendChild(button);
@@ -44,7 +44,7 @@ export function presetSwatches() {
   shuffleButton.title = `${SHUFFLE_SWATCH_NAME} random preset`;
   shuffleButton.setAttribute('aria-label', `${SHUFFLE_SWATCH_NAME} random preset`);
   shuffleButton.addEventListener('click', () => {
-    SetUiCustomRgb(GetUiRandomPresetRgb(), { persist: true, apply: true });
+    customRgb(randomPresetRgb(), { persist: true, apply: true });
   });
   presetSwatches.appendChild(shuffleButton);
 }

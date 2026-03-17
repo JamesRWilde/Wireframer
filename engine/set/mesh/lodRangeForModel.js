@@ -1,5 +1,5 @@
 /**
- * SetMeshEngineLodRangeForModel.js - LOD Range Configuration for Model
+ * lodRangeForModel.js - LOD Range Configuration for Model
  * 
  * PURPOSE:
  *   Sets the LOD (Level of Detail) range for a specific model. This defines
@@ -7,7 +7,7 @@
  *   when this model is active.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineLoad when a new model is loaded. Updates the global LOD
+ *   Called by load when a new model is loaded. Updates the global LOD
  *   range so the UI slider can be configured appropriately for the model.
  * 
  * WHY PER-MODEL RANGE:
@@ -17,7 +17,7 @@
  */
 
 /**
- * SetMeshEngineLodRangeForModel - Sets the LOD range for a model
+ * lodRangeForModel - Sets the LOD range for a model
  * 
  * @param {Object} model - The mesh model with V (vertices) array
  * 

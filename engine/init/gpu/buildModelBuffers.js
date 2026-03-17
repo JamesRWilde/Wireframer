@@ -9,9 +9,9 @@
  * - Converts n-gon faces to triangles (without mutating the model).
  * - Computes per-corner normals for smooth shading.
  * - Delegates:
- *   - Vertex position buffer creation to InitGpuEngineCreateWirePosData.
- *   - Fill position, normal, and UV buffer creation to InitGpuEngineCreateFillBuffers.
- *   - Edge index buffer creation to InitGpuEngineCreateEdgeIndexData.
+ *   - Vertex position buffer creation to wirePosData.
+ *   - Fill position, normal, and UV buffer creation to fillBuffers.
+ *   - Edge index buffer creation to edgeIndexData.
  * - Uploads all data to WebGL buffers and returns them for use by the renderer.
  *
  * Defensive design:
@@ -57,15 +57,15 @@ export function buildModelBuffers(gl, model, supportsUint32) {
 
   // Delegate wireframe vertex buffer creation
   // Packs all model vertex positions ([x, y, z]) into a contiguous Float32Array
-  const wirePosData = InitGpuEngineCreateWirePosData(model);
+  const wirePosData = wirePosData(model);
 
   // Delegate fill buffer creation (positions, normals, UVs, source indices)
   // Packs all triangle corner attributes into contiguous arrays for fill rendering
-  const { fillPosData, fillNormalData, fillUVData } = InitGpuEngineCreateFillBuffers(model, triFaces, triCornerNormals);
+  const { fillPosData, fillNormalData, fillUVData } = fillBuffers(model, triFaces, triCornerNormals);
 
   // Delegate edge index buffer creation
   // Packs all model edges into an index buffer, choosing 16/32 bit as needed
-  const { edgeData, indexType } = InitGpuEngineCreateEdgeIndexData(model, vertexCount, supportsUint32, gl);
+  const { edgeData, indexType } = edgeIndexData(model, vertexCount, supportsUint32, gl);
 
   // Create and upload all GPU buffers
   // Each buffer is created, bound, and populated with the corresponding data array

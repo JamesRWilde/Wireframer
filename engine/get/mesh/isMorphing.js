@@ -1,5 +1,5 @@
 /**
- * GetMeshEngineIsMorphing.js - Morph State Check
+ * isMorphing.js - Morph State Check
  * 
  * PURPOSE:
  *   Checks whether a morph animation is currently in progress. This is used
@@ -22,7 +22,7 @@
 import {morphState} from '@engine/state/mesh/morph.js';
 
 /**
- * GetMeshEngineIsMorphing - Checks if a morph animation is in progress
+ * isMorphing - Checks if a morph animation is in progress
  * 
  * @returns {boolean} True if a morph is currently active, false otherwise
  * 

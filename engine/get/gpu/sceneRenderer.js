@@ -12,7 +12,7 @@ export function sceneRenderer() {
     return null;
   }
 
-  gpuState.renderer = InitGpuEngineCreateSceneRenderer(gpuCanvas);
+  gpuState.renderer = sceneRenderer(gpuCanvas);
   if (!gpuState.renderer) gpuState.failed = true;
   return gpuState.renderer;
 }

@@ -67,7 +67,7 @@ export function model(model, name = '') {
   // or browser capabilities. We wrap in try/catch because this is non-critical -
   // if it fails, the existing render mode will continue to work
   try {
-    GetEngineForegroundRenderMode();
+    foregroundRenderMode();
   } catch {}
 
   // Step 3: Update vertex and edge count displays in the HUD

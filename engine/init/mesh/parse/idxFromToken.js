@@ -36,14 +36,14 @@ export function idxFromToken(token, state) {
   const fields = token.split('/');
   
   // Parse vertex position index (required)
-  const vIdx = InitMeshEngineParseIndex(fields[0], state.vertices.length);
+  const vIdx = index(fields[0], state.vertices.length);
   if (vIdx === null) return {v:-1, vt:null, vn:null};
   
   // Parse texture coordinate index (optional)
-  const vtIdx = InitMeshEngineParseIndex(fields[1], state.uvs.length);
+  const vtIdx = index(fields[1], state.uvs.length);
   
   // Parse normal index (optional)
-  const vnIdx = InitMeshEngineParseIndex(fields[2], state.normals.length);
+  const vnIdx = index(fields[2], state.normals.length);
   
   return {v:vIdx, vt:vtIdx, vn:vnIdx};
 }

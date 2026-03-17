@@ -28,13 +28,13 @@ import { syncRenderToggles }from '@ui/set/syncRenderToggles.js';
  * @param {Array<{name: string, el: HTMLInputElement}>} sliders - Array of slider descriptors
  *   Each entry has a name (for logging) and el (the DOM input element)
  * @param {HTMLInputElement} lodSlider - The LOD level slider element (may be null)
- * @param {Function} SetMeshEngineDetailLevel - Callback to trigger model decimation (0-1 range)
+ * @param {Function} detailLevel - Callback to trigger model decimation (0-1 range)
  *   Called with the normalized LOD value when the LOD slider changes
  * 
  * The function wraps all event handlers in try/catch to prevent a single slider
  * error from breaking the entire UI. Errors are logged but don't crash the app.
  */
-export function sliderListeners(sliders, lodSlider, SetMeshEngineDetailLevel) {
+export function sliderListeners(sliders, lodSlider, detailLevel) {
   try {
     // Iterate over all standard sliders (fill opacity, wire opacity, bg density, etc.)
     // Each slider gets an 'input' event listener that fires on every value change
@@ -46,10 +46,10 @@ export function sliderListeners(sliders, lodSlider, SetMeshEngineDetailLevel) {
           try {
             // Sync all slider values to global render parameters
             // This reads FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM
-            SetUiSyncRenderToggles();
+            syncRenderToggles();
           } catch (e) {
             // Log but don't throw - allows other sliders to continue working
-            console.warn('[startApp] slider SetUiSyncRenderToggles error', e);
+            console.warn('[startApp] slider syncRenderToggles error', e);
           }
         });
       } else {
@@ -64,16 +64,16 @@ export function sliderListeners(sliders, lodSlider, SetMeshEngineDetailLevel) {
       lodSlider.addEventListener('input', () => {
         try {
           // First, sync the LOD value to global state (like other sliders)
-          SetUiSyncRenderToggles();
+          syncRenderToggles();
           
           // Then trigger model decimation if the callback is available
           // We divide by 100 because the slider range is 0-100 but the engine expects 0-1
-          if (typeof SetMeshEngineDetailLevel === 'function') {
-            SetMeshEngineDetailLevel(Number(lodSlider.value) / 100);
+          if (typeof detailLevel === 'function') {
+            detailLevel(Number(lodSlider.value) / 100);
           }
         } catch (e) {
           // Log but don't throw - the app can continue at the current LOD
-          console.warn('[startApp] lodSlider SetUiSyncRenderToggles error', e);
+          console.warn('[startApp] lodSlider syncRenderToggles error', e);
         }
       });
     }

@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineAssignVerticesToCells.js - Spatial Grid Vertex Assignment
+ * assignVerticesToCells.js - Spatial Grid Vertex Assignment
  * 
  * PURPOSE:
  *   Assigns mesh vertices to a 3D spatial grid for clustering. This is the
@@ -7,7 +7,7 @@
  *   vertices together for potential merging.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineGreedyClusterDecimator to partition vertices into spatial cells.
+ *   Called by greedyClusterDecimator to partition vertices into spatial cells.
  *   The cell size is computed based on the target face count to achieve the
  *   desired level of decimation.
  * 
@@ -25,7 +25,7 @@
 "use strict";
 
 /**
- * InitMeshEngineAssignVerticesToCells - Assigns vertices to a 3D spatial grid
+ * assignVerticesToCells - Assigns vertices to a 3D spatial grid
  * 
  * @param {Array<Array<number>>} V - Vertex positions array [[x,y,z], ...]
  * @param {number} minX - Minimum X coordinate (bounding box)

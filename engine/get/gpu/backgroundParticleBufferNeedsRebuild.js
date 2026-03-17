@@ -20,7 +20,7 @@
  * BEST PRACTICES:
  *   - Only use this to check for count changes; for deep equality, use a more thorough comparison.
  *   - Always update lastCount after a successful buffer rebuild.
- *   - This function does not manage buffer or program lifetimes; see DisposeGpuEngineBackground for cleanup.
+ *   - This function does not manage buffer or program lifetimes; see backgroundDispose for cleanup.
  *
  * MAINTAINER GUIDELINES:
  *   - This file must only contain this function and its export.

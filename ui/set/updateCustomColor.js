@@ -1,5 +1,5 @@
 /**
- * SetUiUpdateCustomColor.js - Custom Color UI Updater
+ * updateCustomColor.js - Custom Color UI Updater
  *
  * PURPOSE:
  *   Synchronizes the UI inputs and display elements with the current custom color

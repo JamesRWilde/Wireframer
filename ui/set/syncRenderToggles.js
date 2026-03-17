@@ -1,5 +1,5 @@
 /**
- * SetUiSyncRenderToggles.js - Render Control Sync
+ * syncRenderToggles.js - Render Control Sync
  *
  * PURPOSE:
  *   Syncs UI slider values for rendering options (LOD, opacity, particle density, etc.)
@@ -44,7 +44,7 @@ export function syncRenderToggles() {
   globalThis.WIRE_OPACITY = Number(wireOpacity.value) / 100;
   wireOpacityValue.textContent = `${Math.round(globalThis.WIRE_OPACITY * 100)}%`;
   if (globalThis.DEBUG_LOG_TOGGLES) {
-    console.debug('[SetUiSyncRenderToggles] FILL_OPACITY', globalThis.FILL_OPACITY,
+    console.debug('[syncRenderToggles] FILL_OPACITY', globalThis.FILL_OPACITY,
                   'WIRE_OPACITY', globalThis.WIRE_OPACITY);
   }
 

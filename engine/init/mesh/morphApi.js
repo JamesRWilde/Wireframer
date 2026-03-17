@@ -12,11 +12,11 @@
  *   access without circular imports.
  * 
  * MORPH API FUNCTIONS:
- *   - InitMeshEngineStartMorph: Begins a morph animation between two models
- *   - InitMeshEngineAdvanceMorphFrame: Updates morph state each frame
- *   - GetMeshEngineCurrentMorph: Gets the current interpolated mesh
- *   - GetMeshEngineIsMorphing: Checks if a morph is in progress
- *   - DisposeMeshEngineStopMorph: Stops the current morph animation
+ *   - startMorph: Begins a morph animation between two models
+ *   - advanceMorphFrame: Updates morph state each frame
+ *   - currentMorph: Gets the current interpolated mesh
+ *   - isMorphing: Checks if a morph is in progress
+ *   - stopMorph: Stops the current morph animation
  */
 
 "use strict";
@@ -32,7 +32,7 @@ import { stopMorph }from '@engine/dispose/mesh/stopMorph.js';
 // This provides a smooth transition that's not too fast or too slow
 globalThis.MORPH_DURATION_MS = 1600;
 
-// Expose morph API globally so InitMeshEngineFinalizeModel and renderScene can use it
+// Expose morph API globally so finalizeModel and renderScene can use it
 // This avoids circular imports while providing a clean API
 globalThis.morph = {
   startMorph,

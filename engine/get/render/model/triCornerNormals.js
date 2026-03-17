@@ -35,7 +35,7 @@ import {triNormals}from '@engine/get/cpu/geometry/triNormals.js';
 
 export function triCornerNormals(model, triFaces) {
   // Determine shading mode ('flat', 'smooth', or 'auto')
-  const shadingMode = GetCpuEngineModelShadingMode(model, triFaces);
+  const shadingMode = shadingMode(model, triFaces);
   // Use crease angle if present, otherwise default to 62 degrees
   const crease = Number.isFinite(model._creaseAngleDeg) ? model._creaseAngleDeg : 62;
   // Build a cache key for the current normal computation
@@ -47,19 +47,19 @@ export function triCornerNormals(model, triFaces) {
   }
 
   // 2. Compute face normals for all triangles
-  const faceNormals = GetCpuEngineModelFaceNormals(model, triFaces);
+  const faceNormals = faceNormals(model, triFaces);
 
   // 3. Use precomputed triangleNormals if available
-  const triNormals = GetCpuEngineGeometryTriNormals(model, triFaces.length);
+  const triNormals = triNormals(model, triFaces.length);
   if (triNormals) return triNormals;
 
   // 4. Flat shading: assign face normal to all corners
   if (shadingMode === 'flat') {
-    return GetCpuEngineGeometryFlatNormals(faceNormals);
+    return flatNormals(faceNormals);
   }
 
   // 5. Build vertex-to-face adjacency list for smoothing
-  const vertexToFaces = InitCpuEngineBuildVertexToFaces(triFaces, model.V.length);
+  const vertexToFaces = buildVertexToFaces(triFaces, model.V.length);
 
   // 6. Set crease threshold for normal blending
   const cosThreshold = shadingMode === 'smooth' ? -1 : Math.cos((crease * Math.PI) / 180);
@@ -74,7 +74,7 @@ export function triCornerNormals(model, triFaces) {
       const vi = tri[c]; // Vertex index for this corner
       const adjacent = vertexToFaces[vi]; // All faces sharing this vertex
       // Sum normals of adjacent faces within crease threshold
-      const [nx, ny, nz] = GetCpuEngineGeometrySumNormals(nRef, faceNormals, adjacent, cosThreshold);
+      const [nx, ny, nz] = sumNormals(nRef, faceNormals, adjacent, cosThreshold);
       const nl = Math.hypot(nx, ny, nz);
       if (nl < 1e-9) {
         // Fallback: use face normal if sum is degenerate

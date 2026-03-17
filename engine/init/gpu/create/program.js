@@ -1,8 +1,8 @@
 import { compileShader }from '@engine/init/gpu/compileShader.js';
 
 export function program(gl, vs, fs) {
-  const v = InitGpuEngineCompileShader(gl, gl.VERTEX_SHADER, vs);
-  const f = InitGpuEngineCompileShader(gl, gl.FRAGMENT_SHADER, fs);
+  const v = compileShader(gl, gl.VERTEX_SHADER, vs);
+  const f = compileShader(gl, gl.FRAGMENT_SHADER, fs);
   const program = gl.createProgram();
   gl.attachShader(program, v);
   gl.attachShader(program, f);

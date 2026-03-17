@@ -50,8 +50,8 @@ export function seamCpu(tri2d, seamExpandPx) {
 
   // Expand all three vertices using helper
   return [
-    SetCpuEngineGeometryExpandPoint(ax, ay, mx, my, seamExpandPx),
-    SetCpuEngineGeometryExpandPoint(bx, by, mx, my, seamExpandPx),
-    SetCpuEngineGeometryExpandPoint(cx, cy, mx, my, seamExpandPx)
+    geometryExpandPoint(ax, ay, mx, my, seamExpandPx),
+    geometryExpandPoint(bx, by, mx, my, seamExpandPx),
+    geometryExpandPoint(cx, cy, mx, my, seamExpandPx)
   ];
 }

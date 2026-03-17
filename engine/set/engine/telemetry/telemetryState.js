@@ -1,5 +1,5 @@
 /**
- * SetEngineTelemetry.js - Performance Telemetry Smoothing
+ * telemetryState.js - Performance Telemetry Smoothing
  * 
  * PURPOSE:
  *   Smooths performance timing metrics using Exponential Moving Average (EMA).
@@ -8,7 +8,7 @@
  * 
  * ARCHITECTURE ROLE:
  *   Called by runFrame() each frame with timing measurements. Updates the
- *   smoothed EMA values in StateEngineLoop that are read by SetEngineTelemetryHud().
+ *   smoothed EMA values in StateEngineLoop that are read by hud().
  * 
  * EMA FORMULA:
  *   newValue = alpha * currentSample + (1 - alpha) * previousEMA
@@ -31,7 +31,7 @@
 import { state, TELEMETRY_ALPHA }from '@ui/get/read/state.js';
 
 /**
- * SetEngineTelemetry - Updates smoothed performance metrics
+ * telemetryState - Updates smoothed performance metrics
  * 
  * @param {number} nowMs - Current timestamp (unused but kept for API consistency)
  * @param {number} frameMs - Total frame time in milliseconds

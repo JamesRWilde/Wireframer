@@ -7,10 +7,10 @@ export function axes(ctx) {
     R[3]*v[0] + R[4]*v[1] + R[5]*v[2],
     R[6]*v[0] + R[7]*v[1] + R[8]*v[2],
   ];
-  const o  = GetRenderEngineProjectVertices(rotate([0,0,0]));
-  const px = GetRenderEngineProjectVertices(rotate([1,0,0]));
-  const py = GetRenderEngineProjectVertices(rotate([0,1,0]));
-  const pz = GetRenderEngineProjectVertices(rotate([0,0,1]));
+  const o  = projectVertices(rotate([0,0,0]));
+  const px = projectVertices(rotate([1,0,0]));
+  const py = projectVertices(rotate([0,1,0]));
+  const pz = projectVertices(rotate([0,0,1]));
   ctx.save();
   ctx.lineWidth = 2;
   ctx.strokeStyle = 'red';

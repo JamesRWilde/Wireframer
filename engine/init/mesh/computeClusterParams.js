@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineComputeClusterParams.js - Cluster Parameter Calculation
+ * computeClusterParams.js - Cluster Parameter Calculation
  * 
  * PURPOSE:
  *   Computes the spatial grid parameters for the cluster-based decimation
@@ -7,7 +7,7 @@
  *   size of each cell based on the target face count and mesh extent.
  * 
  * ARCHITECTURE ROLE:
- *   Called by InitMeshEngineGreedyClusterDecimator to set up the spatial grid for vertex
+ *   Called by greedyClusterDecimator to set up the spatial grid for vertex
  *   clustering. The cluster count directly affects the decimation ratio.
  * 
  * HOW IT WORKS:
@@ -24,7 +24,7 @@
 "use strict";
 
 /**
- * InitMeshEngineComputeClusterParams - Computes spatial grid parameters for clustering
+ * computeClusterParams - Computes spatial grid parameters for clustering
  * 
  * @param {number} targetFaces - Target number of faces after decimation
  * @param {number} extent - Mesh bounding box extent (largest dimension)

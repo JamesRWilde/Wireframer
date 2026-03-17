@@ -12,11 +12,11 @@ export function sceneDraw(gl, canvas, shaderPack, bufferStore) {
   };
 
   return {
-    SetGpuEngineRenderModel(model, params) {
-      return SetGpuEngineRenderModel(gl, model, params, shaderPack, bufferStore, tmpArrays);
+    model(model, params) {
+      return model(gl, model, params, shaderPack, bufferStore, tmpArrays);
     },
     clear() {
-      SetGpuEngineClearDraw(gl, canvas);
+      draw(gl, canvas);
     }
   };
 }

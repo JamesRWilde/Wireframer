@@ -1,5 +1,5 @@
 /**
- * InitMeshEngineAdvanceMorphFrame.js - Morph Frame Advancement
+ * advanceMorphFrame.js - Morph Frame Advancement
  * 
  * PURPOSE:
  *   Advances the morph animation by one frame. This function is called each
@@ -32,7 +32,7 @@ import { interpolateMeshes }from '@engine/init/mesh/interpolateMeshes.js';
 import { clone }from '@engine/init/mesh/clone.js';
 
 /**
- * InitMeshEngineAdvanceMorphFrame - Advances morph animation by one frame
+ * advanceMorphFrame - Advances morph animation by one frame
  * 
  * This function:
  * 1. Calculates progress from elapsed time
@@ -53,10 +53,10 @@ export function advanceMorphFrame() {
   
   // Apply easing function for smooth animation
   // EaseInOut provides smooth acceleration and deceleration
-  const t = GetMeshEngineEaseOut(tRaw);
+  const t = easeOut(tRaw);
   
   // Interpolate between source and target meshes at current progress
-  morphState.currentMesh = InitMeshEngineInterpolateMeshes(morphState.fromMesh, morphState.toMesh, t);
+  morphState.currentMesh = interpolateMeshes(morphState.fromMesh, morphState.toMesh, t);
   
   // Check if animation is complete
   if (tRaw >= 1) {
@@ -64,7 +64,7 @@ export function advanceMorphFrame() {
     morphState.active = false;
     
     // Set current mesh to exact target (avoid floating-point drift)
-    morphState.currentMesh = InitMeshEngineClone(morphState.toMesh);
+    morphState.currentMesh = clone(morphState.toMesh);
     
     // Invoke completion callback if provided
     if (morphState.onComplete) morphState.onComplete();

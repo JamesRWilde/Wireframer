@@ -6,7 +6,7 @@
  *   Used to highlight active preset swatches in the UI.
  * 
  * ARCHITECTURE ROLE:
- *   Called by SetUiUpdateCustomColor to mark the currently active preset.
+ *   Called by updateCustomColor to mark the currently active preset.
  *   Provides simple component-wise color comparison.
  */
 

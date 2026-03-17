@@ -6,7 +6,7 @@
  *   Used to show slider position as a percentage in the UI.
  * 
  * ARCHITECTURE ROLE:
- *   Called by SetUiSyncRenderToggles to update percentage displays next to sliders.
+ *   Called by syncRenderToggles to update percentage displays next to sliders.
  *   Provides consistent percentage calculation across all slider controls.
  */
 

@@ -7,7 +7,7 @@ import { scenePrograms }from '@engine/init/gpu/create/scenePrograms.js';
 import { sceneBufferStore }from '@engine/init/gpu/create/sceneBufferStore.js';
 
 // Import draw API creation
-// Provides SetGpuEngineRenderModel and clear functions for WebGL rendering
+// Provides model and clear functions for WebGL rendering
 import { sceneDraw }from '@engine/init/gpu/create/sceneDraw.js';
 
 export function sceneRenderer(canvas) {
@@ -31,7 +31,7 @@ export function sceneRenderer(canvas) {
 
   if (!gl) return null;
   
-  // Store the WebGL context globally for easy access by SetGpuEngineClearSceneCanvas
+  // Store the WebGL context globally for easy access by sceneCanvas
   globalThis.gpuGl = gl;
 
   const supportsUint32 = !!gl.getExtension('OES_element_index_uint') ||
@@ -39,19 +39,19 @@ export function sceneRenderer(canvas) {
 
   let shaderPack;
   try {
-    shaderPack = InitGpuEngineCreateScenePrograms(gl);
+    shaderPack = scenePrograms(gl);
   } catch (err) {
     console.warn(err);
     return null;
   }
 
-  const bufferStore = InitGpuEngineCreateSceneBufferStore(gl, supportsUint32);
-  const drawApi = InitGpuEngineCreateSceneDraw(gl, canvas, shaderPack, bufferStore);
+  const bufferStore = sceneBufferStore(gl, supportsUint32);
+  const drawApi = sceneDraw(gl, canvas, shaderPack, bufferStore);
 
   // Engine-owned mesh only
   return {
     mode: 'gpu-scene',
-    SetGpuEngineRenderModel: drawApi.SetGpuEngineRenderModel,
+    model: drawApi.model,
     clear: drawApi.clear,
     dispose() {
       if (shaderPack && typeof shaderPack.dispose === 'function') shaderPack.dispose();

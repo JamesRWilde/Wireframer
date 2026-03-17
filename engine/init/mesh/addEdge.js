@@ -1,12 +1,12 @@
 /**
- * InitMeshEngineAddEdge.js - Unique Edge Addition
+ * addEdge.js - Unique Edge Addition
  * 
  * PURPOSE:
  *   Adds an edge to an edge array if it doesn't already exist. Uses a Set
  *   to track unique edges by their canonical key (lower index first).
  * 
  * ARCHITECTURE ROLE:
- *   Helper for InitMeshEngineBuildEdgesFromFacesRuntime. Extracted to follow one-function-per-file
+ *   Helper for edgesFromFacesRuntime. Extracted to follow one-function-per-file
  *   architecture rule.
  * 
  * EDGE DEDUPLICATION:
@@ -16,7 +16,7 @@
  */
 
 /**
- * InitMeshEngineAddEdge - Adds a unique edge to the edge array
+ * addEdge - Adds a unique edge to the edge array
  * 
  * @param {number} a - First vertex index
  * @param {number} b - Second vertex index

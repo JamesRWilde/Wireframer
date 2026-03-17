@@ -1,5 +1,5 @@
 /**
- * InitEngineRendererToggle.js - Initialize Renderer Stat as Toggle Button
+ * rendererToggle.js - Initialize Renderer Stat as Toggle Button
  * 
  * PURPOSE:
  *   Initializes the renderer stat display element as a clickable toggle button.
@@ -29,7 +29,7 @@ import { mode }from '@engine/set/engine/renderer/mode.js';
 import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 /**
- * InitEngineRendererToggle - Initializes the renderer stat as a toggle button
+ * rendererToggle - Initializes the renderer stat as a toggle button
  * 
  * This function is called once during app initialization. It checks if GPU
  * rendering is supported and, if so, makes the renderer stat element clickable
@@ -49,7 +49,7 @@ export function rendererToggle() {
   
   // Check if GPU renderer is available
   // If not, we don't enable the toggle (CPU is the only option)
-  const renderer = GetGpuEngineSceneRenderer();
+  const renderer = sceneRenderer();
   if (!renderer) {
     // GPU not supported - leave as static display
     // Add a title to explain why it's not clickable

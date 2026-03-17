@@ -1,5 +1,5 @@
 /**
- * SetUiCustomRgb.js - Custom RGB Setter
+ * customRgb.js - Custom RGB Setter
  *
  * PURPOSE:
  *   Updates the application's custom RGB color state, updates the UI, optionally
@@ -35,11 +35,11 @@ export function customRgb(rgb, options = {}) {
     CUSTOM_RGB.length = 0;
     CUSTOM_RGB.push(...newRgb);
   } catch (e) {
-    console.warn('[SetUiCustomRgb] failed to update module-held CUSTOM_RGB', e);
+    console.warn('[customRgb] failed to update module-held CUSTOM_RGB', e);
   }
   globalThis.CUSTOM_RGB = newRgb;
 
-  SetUiUpdateCustomColor();
+  updateCustomColor();
   if (persist) SetUiPersistCustomRgb();
-  if (apply) SetUiApplyPalette();
+  if (apply) palette();
 }

@@ -1,5 +1,5 @@
 /**
- * SetUiThemeMode.js - Theme Mode Switching
+ * themeMode.js - Theme Mode Switching
  * 
  * PURPOSE:
  *   Sets the application theme mode (light or dark).
@@ -20,7 +20,7 @@ import { themeMode }from '@ui/set/apply/themeMode.js';
 import { palette }from '@ui/set/apply/palette.js';
 
 /**
- * SetUiThemeMode - Sets application theme mode
+ * themeMode - Sets application theme mode
  * 
  * @param {string} mode - Theme mode ('light' or 'dark')
  * @param {Object} [options={}] - Options
@@ -43,5 +43,5 @@ export function themeMode(mode, options = {}) {
   if (themeMode) themeMode.value = globalThis.THEME_MODE;
   
   // Apply palette to update UI colors
-  if (apply) SetUiApplyPalette();
+  if (apply) palette();
 }

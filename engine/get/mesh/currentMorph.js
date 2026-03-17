@@ -1,5 +1,5 @@
 /**
- * GetMeshEngineCurrentMorph.js - Current Morph Mesh Accessor
+ * currentMorph.js - Current Morph Mesh Accessor
  * 
  * PURPOSE:
  *   Returns the current interpolated mesh during a morph animation. This is
@@ -21,7 +21,7 @@
 import {morphState} from '@engine/state/mesh/morph.js';
 
 /**
- * GetMeshEngineCurrentMorph - Gets the current interpolated mesh
+ * currentMorph - Gets the current interpolated mesh
  * 
  * @returns {Object|null} The current interpolated mesh, or null if no morph is active
  * 
