@@ -21,7 +21,7 @@
 
 // Import the GPU scene renderer - handles all WebGL operations
 // This includes shader compilation, buffer setup, and draw calls
-import { drawGpuSceneModel } from '../../gpu/scene/drawGpuSceneModel.js';
+import { drawGpuSceneModel } from '../../gpu/drawGpuSceneModel.js';
 
 // Import the fallback function to switch to CPU mode when GPU fails
 // This updates the render mode and HUD display

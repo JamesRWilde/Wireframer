@@ -26,7 +26,7 @@ import { statsState } from '../../ui/statsState.js';
 import { toggleRendererMode } from '../set/setRendererMode.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { getSceneGpuRenderer } from '../gpu/scene/get/getSceneGpuRenderer.js';
+import { getSceneGpuRenderer } from '../gpu/get/getSceneGpuRenderer.js';
 
 /**
  * initRendererToggle - Initializes the renderer stat as a toggle button
