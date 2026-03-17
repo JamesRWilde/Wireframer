@@ -15,8 +15,8 @@
  * 
  * DATA FLOW:
  *   1. OBJ file fetched from meshes/ directory
- *   2. Raw text parsed by toRuntimeMesh() into engine format
- *   3. Parsed mesh handed to engine's loadMesh() for normalization
+ *   2. Raw text parsed by InitMeshEngineToRuntime() into engine format
+ *   3. Parsed mesh handed to engine's InitMeshEngineLoad() for normalization
  *   4. Engine updates MODEL and UI telemetry automatically
  */
 
@@ -24,11 +24,11 @@
 
 // Import the dynamic mesh list loader
 // Fetches available .obj files from the server's /api/meshes endpoint
-import { getObjectList } from './engine/render/get/getRenderObjectList.js';
+import { getObjectList } from './engine/render/get/GetRenderEngineObjectList.js';
 
 // Import the OBJ parser that converts raw OBJ text to engine mesh format
 // This is imported explicitly (not dynamically) so it's bundled in the output
-import { toRuntimeMesh } from './engine/mesh/init/toRuntimeMesh.js';
+import { InitMeshEngineToRuntime } from './engine/mesh/init/InitMeshEngineToRuntime.js';
 
 /**
  * loadObjMesh - Asynchronously loads and parses an OBJ file
@@ -37,7 +37,7 @@ import { toRuntimeMesh } from './engine/mesh/init/toRuntimeMesh.js';
  * @param {string} objPath - Path to the OBJ file (relative to server root, e.g., 'meshes/cube.obj')
  * @param {string} [name] - Optional display name for the mesh (defaults to objPath)
  * @returns {Promise<Object>} The parsed mesh in engine format { V, F, E }
- * @throws {Error} If the fetch fails or the engine's loadMesh encounters an error
+ * @throws {Error} If the fetch fails or the engine's InitMeshEngineLoad encounters an error
  * 
  * This function is exposed globally so it can be called from anywhere in the app,
  * including from UI event handlers or dynamic loading scenarios.
@@ -55,19 +55,19 @@ globalThis.loadObjMesh = async function(objPath, name) {
   const objText = await resp.text();
   
   // Step 3: Parse the OBJ text into the engine's internal mesh format
-  // toRuntimeMesh handles vertex/face extraction, normal computation, etc.
+  // InitMeshEngineToRuntime handles vertex/face extraction, normal computation, etc.
   // The options object provides context for error messages and format hints
-  const mesh = toRuntimeMesh(objText, { meshFileName: objPath, meshType: 'OBJ' });
+  const mesh = InitMeshEngineToRuntime(objText, { meshFileName: objPath, meshType: 'OBJ' });
 
   // Step 4: Hand the parsed mesh to the engine for normalization and activation
-  // The engine's loadMesh handles LOD setup, caching, and MODEL state updates
-  if (globalThis.loadMesh) {
+  // The engine's InitMeshEngineLoad handles LOD setup, caching, and MODEL state updates
+  if (globalThis.InitMeshEngineLoad) {
     try {
-      // engine.loadMesh returns the normalized model copy and handles BASE_MODEL/LOD
+      // engine.InitMeshEngineLoad returns the normalized model copy and handles BASE_MODEL/LOD
       // animateMorph: true triggers a smooth morph transition to the new shape
-      const result = globalThis.loadMesh(mesh, name || objPath, { animateMorph: true });
+      const result = globalThis.InitMeshEngineLoad(mesh, name || objPath, { animateMorph: true });
       
-      // Fallback: loadMesh should set the active model itself, but older versions may not
+      // Fallback: InitMeshEngineLoad should set the active model itself, but older versions may not
       // This ensures backward compatibility if the engine module hasn't been updated
       if (result && typeof globalThis.setActiveModel === 'function') {
         globalThis.setActiveModel(result, name || objPath);
@@ -75,7 +75,7 @@ globalThis.loadObjMesh = async function(objPath, name) {
     } catch (err) {
       // Log but don't throw - the mesh was parsed successfully even if activation failed
       // This allows the app to continue running and potentially recover
-      console.error('[loadObjMesh] engine.loadMesh failed', err);
+      console.error('[loadObjMesh] engine.InitMeshEngineLoad failed', err);
     }
   }
 

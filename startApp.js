@@ -13,9 +13,9 @@
  * INITIALIZATION ORDER:
  *   1. Canvas setup (initCanvas)
  *   2. Physics state (physicsState.js import)
- *   3. Mesh loader (loader.js, loadMesh.js imports)
+ *   3. Mesh loader (loader.js, InitMeshEngineLoad.js imports)
  *   4. Model state (modelState.js import)
- *   5. Morph API (initMorphApi.js import)
+ *   5. Morph API (InitMeshEngineMorphApi.js import)
  *   6. Rotation matrix initialization
  *   7. Zoom parameter defaults
  *   8. Physics state fallback
@@ -31,51 +31,51 @@
 "use strict";
 
 // Import canvas initialization - sets up all canvas elements and resize handling
-import { initCanvas } from './engine/render/init/initRenderCanvas.js';
+import { initCanvas } from './engine/render/init/InitRenderEngineCanvas.js';
 
 // Import physics state early so its initialization code runs and sets up
 // wx/wy/wz/AUTO_* defaults before the main loop starts
 import './engine/render/physicsState.js';
 
 // Bring in loader and mesh loader side-effects (globals) before any mesh operations
-// These set up globalThis.loadObjMesh and globalThis.loadMesh
+// These set up globalThis.loadObjMesh and globalThis.InitMeshEngineLoad
 import './loader.js';
-import './engine/mesh/loadMesh.js';
+import './engine/mesh/InitMeshEngineLoad.js';
 
 // Import model state to make setActiveModel available globally
 import './engine/render/modelState.js';
 
-// Expose morph API globally for finalizeModel and renderScene
-import './engine/mesh/initMorphApi.js';
+// Expose morph API globally for InitMeshEngineFinalizeModel and renderScene
+import './engine/mesh/InitMeshEngineMorphApi.js';
 
 // Import UI initialization functions
-import { initObjectSelector } from './ui/init/initUiObjectSelector.js';
+import { initObjectSelector } from './ui/init/InitUiObjectSelector.js';
 
 // Import the frame loop entry point
-import { frame } from './engine/set/setFrame.js';
+import { frame } from './engine/set/SetEngineFrame.js';
 
 // Import rotation matrix initialization
-import { rotationInitialize } from './engine/render/get/getRenderRotationInitialize.js';
+import { rotationInitialize } from './engine/render/get/GetRenderEngineRotationInitialize.js';
 
 // Import the rotation matrix reference
-import { R } from './engine/render/state/renderRotationMatrixRef.js';
+import { R } from './engine/render/state/StateRenderEngineRotationMatrixRef.js';
 
 // Import render toggle synchronization
-import { syncRenderToggles } from './ui/set/syncRenderToggles.js';
+import { SetUiSyncRenderToggles } from './ui/set/SetUiSyncRenderToggles.js';
 
 // Import slider listener attachment
-import { setRestoredState } from './engine/set/setRestoredState.js';
-import { attachInputListenersInit } from './ui/init/initUiAttachInputListeners.js';
-import { attachSliderListeners } from './ui/init/initUiAttachSliderListeners.js';
+import { SetEngineRestoredState } from './engine/set/SetEngineRestoredState.js';
+import { attachInputListenersInit } from './ui/init/InitUiAttachInputListeners.js';
+import { attachSliderListeners } from './ui/init/InitUiAttachSliderListeners.js';
 
 // Import theme control initialization
-import { initThemeControls } from './engine/init/initThemeControls.js';
+import { InitEngineThemeControls } from './engine/init/InitEngineThemeControls.js';
 
 // Import UI state restoration and input listener attachment
 
 // Import renderer toggle initialization
 // Makes the renderer stat in the HUD a clickable toggle button
-import { initRendererToggle } from './engine/init/initRendererToggle.js';
+import { InitEngineRendererToggle } from './engine/init/InitEngineRendererToggle.js';
 
 // Import DOM element references for sliders
 import {
@@ -85,7 +85,7 @@ import {
   fillOpacity,
   wireOpacity,
   lodSlider,
-} from './ui/state/uiDomState.js';
+} from './ui/state/StateUiDom.js';
 
 /**
  * startApp - Initializes all subsystems and starts the animation loop
@@ -146,7 +146,7 @@ export function startApp() {
   // Step 6: Restore UI state and attach input listeners
   // This reads saved shape, theme, and slider values from localStorage
   // and sets up mouse/touch handlers for rotation and zoom
-  const restoredShapeName = setRestoredState();
+  const restoredShapeName = SetEngineRestoredState();
   attachInputListenersInit();
   
   // Step 7: Initialize the object selector with the restored shape
@@ -161,26 +161,26 @@ export function startApp() {
     { name: 'bgOpacity', el: bgOpacity },
     { name: 'fillOpacity', el: fillOpacity },
     { name: 'wireOpacity', el: wireOpacity },
-  ], lodSlider, globalThis.setDetailLevel);
+  ], lodSlider, globalThis.SetMeshEngineDetailLevel);
   
   // Step 9: Initialize render toggles from UI state
   // This reads current slider values and updates global render parameters
   try {
-    console.debug('[startApp] calling syncRenderToggles');
-    syncRenderToggles();
-    console.debug('[startApp] syncRenderToggles done');
+    console.debug('[startApp] calling SetUiSyncRenderToggles');
+    SetUiSyncRenderToggles();
+    console.debug('[startApp] SetUiSyncRenderToggles done');
   } catch (e) {
-    console.warn('[startApp] syncRenderToggles failed', e);
+    console.warn('[startApp] SetUiSyncRenderToggles failed', e);
   }
   
   // Step 10: Initialize UI theme controls
   // This creates preset swatches and applies saved custom colors
-  initThemeControls();
+  InitEngineThemeControls();
 
   // Step 11: Initialize renderer toggle functionality
   // Makes the renderer stat in the HUD a clickable toggle button
   // Only enables if GPU rendering is supported
-  initRendererToggle();
+  InitEngineRendererToggle();
 
   // Step 12: Start the animation loop
   // This kicks off requestAnimationFrame which will call frame() repeatedly
