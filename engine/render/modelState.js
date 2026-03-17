@@ -26,7 +26,7 @@ import { statsState } from '../../ui/statsState.js';
 
 // Import render mode resolver to update GPU/CPU indicator when model changes
 // The render mode may need to be re-evaluated based on the new model's complexity
-import { resolveForegroundRenderMode } from '../resolveForegroundRenderMode.js';
+import { resolveForegroundRenderMode } from '../get/getForegroundRenderMode.js';
 
 // Import loop state to access telemetry EMA (Exponential Moving Average) values
 // These need to be reset when switching models to avoid stale timing data

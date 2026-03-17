@@ -64,13 +64,14 @@ import { R } from './engine/render/rotation/rotationMatrixRef.js';
 import { syncRenderToggles } from './ui/syncRenderToggles.js';
 
 // Import slider listener attachment
+import { setRestoredState } from './engine/set/setRestoredState.js';
+import { attachInputListenersInit } from './ui/init/attachInputListenersInit.js';
 import { attachSliderListeners } from './ui/init/attachSliderListeners.js';
 
 // Import theme control initialization
 import { initThemeControls } from './engine/init/initThemeControls.js';
 
 // Import UI state restoration and input listener attachment
-import { restoreStateAndAttachInput } from './engine/restoreStateAndAttachInput.js';
 
 // Import renderer toggle initialization
 // Makes the renderer stat in the HUD a clickable toggle button
@@ -145,7 +146,8 @@ export function startApp() {
   // Step 6: Restore UI state and attach input listeners
   // This reads saved shape, theme, and slider values from localStorage
   // and sets up mouse/touch handlers for rotation and zoom
-  const restoredShapeName = restoreStateAndAttachInput();
+  const restoredShapeName = setRestoredState();
+  attachInputListenersInit();
   
   // Step 7: Initialize the object selector with the restored shape
   // This populates the shape dropdown and selects the saved shape (if any)

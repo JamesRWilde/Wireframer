@@ -1,5 +1,5 @@
 /**
- * toggleRendererMode.js - Toggle Between GPU and CPU Rendering Modes
+ * setRendererMode.js - Toggle Between GPU and CPU Rendering Modes
  * 
  * PURPOSE:
  *   Provides a function to toggle between GPU (WebGL) and CPU (Canvas 2D) rendering
@@ -21,19 +21,19 @@
 "use strict";
 
 // Import loop state to read/write the cached render mode
-import { state } from './loopState.js';
+import { state } from '../loopState.js';
 
 // Import HUD updater to display the current render mode
-import { updateRendererHud } from './update/updateRendererHud.js';
+import { updateRendererHud } from '../update/updateRendererHud.js';
 
 // Import GPU canvas clearing for when switching from GPU to CPU
-import { clearGpuSceneCanvas } from './gpu/scene/clearGpuSceneCanvas.js';
+import { clearGpuSceneCanvas } from '../gpu/scene/clearGpuSceneCanvas.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { getSceneGpuRenderer } from './gpu/scene/getSceneGpuRenderer.js';
+import { getSceneGpuRenderer } from '../gpu/scene/getSceneGpuRenderer.js';
 
 /**
- * toggleRendererMode - Toggles between GPU and CPU rendering modes
+ * setRendererMode - Toggles between GPU and CPU rendering modes
  * 
  * This function is called when the user clicks the renderer stat in the HUD.
  * It checks if GPU is supported before allowing the toggle, and updates the
@@ -43,7 +43,7 @@ import { getSceneGpuRenderer } from './gpu/scene/getSceneGpuRenderer.js';
  *   true: mode was toggled successfully
  *   false: toggle was not performed (GPU not supported or mode unchanged)
  */
-export function toggleRendererMode() {
+export function setRendererMode() {
   // Check if GPU renderer is available
   // If not, we can't toggle - CPU is the only option
   const renderer = getSceneGpuRenderer();

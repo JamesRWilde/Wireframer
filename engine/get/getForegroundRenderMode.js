@@ -1,5 +1,5 @@
 /**
- * resolveForegroundRenderMode.js - GPU/CPU Render Mode Detection
+ * getForegroundRenderMode.js - GPU/CPU Render Mode Detection
  * 
  * PURPOSE:
  *   Determines whether to use GPU (WebGL) or CPU (Canvas 2D) rendering for the
@@ -21,16 +21,16 @@
 "use strict";
 
 // Import loop state to read/write the cached render mode
-import { state } from './loopState.js';
+import { state } from '../loopState.js';
 
 // Import HUD updater to display the current render mode (GPU/CPU)
-import { updateRendererHud } from './update/updateRendererHud.js';
+import { updateRendererHud } from '../update/updateRendererHud.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { getSceneGpuRenderer } from './gpu/scene/getSceneGpuRenderer.js';
+import { getSceneGpuRenderer } from '../gpu/scene/getSceneGpuRenderer.js';
 
 /**
- * resolveForegroundRenderMode - Determines and caches the foreground render mode
+ * getForegroundRenderMode - Determines and caches the foreground render mode
  * 
  * @returns {string} The resolved render mode: 'gpu' or 'cpu'
  * 
@@ -42,7 +42,7 @@ import { getSceneGpuRenderer } from './gpu/scene/getSceneGpuRenderer.js';
  * - startApp() during initialization
  * - Any code that needs to know the current render mode
  */
-export function resolveForegroundRenderMode() {
+export function getForegroundRenderMode() {
   // If mode is already resolved (not 'unknown'), return the cached value
   // This avoids repeated detection and ensures consistent behavior
   if (state.foregroundRenderMode !== 'unknown') return state.foregroundRenderMode;

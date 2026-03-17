@@ -1,5 +1,5 @@
 /**
- * handleOtherCases.js - Mixed Rendering State Handler
+ * setMixedRenderFlags.js - Mixed Rendering State Handler
  * 
  * PURPOSE:
  *   Handles edge cases in the rendering pipeline where the background and foreground
@@ -22,7 +22,7 @@
 "use strict";
 
 /**
- * handleOtherCases - Manages rendering state for mixed canvas configurations
+ * setMixedRenderFlags - Manages rendering state for mixed canvas configurations
  * 
  * @param {boolean} backgroundOnSeparateCanvas - Whether background particles are rendered
  *   on a separate canvas (bg) rather than the main canvas
@@ -32,7 +32,7 @@
  * - Whether to clear the GPU scene canvas next frame
  * - Whether CPU foreground is currently composited on the main canvas
  */
-export function handleOtherCases(backgroundOnSeparateCanvas, gpuDrawn) {
+export function setMixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn) {
   // Mark that GPU scene was drawn (for next frame's clearing logic)
   globalThis.FRAME_LOOP_STATE.gpuSceneDrawnLastFrame = true;
 }

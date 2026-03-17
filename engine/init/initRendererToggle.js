@@ -23,7 +23,7 @@
 import { statsState } from '../../ui/statsState.js';
 
 // Import the toggle function
-import { toggleRendererMode } from '../toggleRendererMode.js';
+import { toggleRendererMode } from '../set/setRendererMode.js';
 
 // Import GPU renderer getter to check if GPU is available
 import { getSceneGpuRenderer } from '../gpu/scene/getSceneGpuRenderer.js';

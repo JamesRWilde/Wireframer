@@ -34,14 +34,14 @@ import { renderGpuPath } from './renderGpuPath.js';
 
 // Import the render mode resolver
 // Determines whether to use GPU or CPU based on WebGL availability
-import { resolveForegroundRenderMode } from '../resolveForegroundRenderMode.js';
+import { resolveForegroundRenderMode } from '../get/getForegroundRenderMode.js';
 
 // Import loop state to read the current render mode
 import { state } from '../loopState.js';
 
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU
-import { handleOtherCases } from '../handleMixedRenderState.js';
+import { handleOtherCases } from '../set/setMixedRenderFlags.js';
 
 /**
  * renderScene - Renders the complete scene (background + foreground)

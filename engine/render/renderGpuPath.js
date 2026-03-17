@@ -25,7 +25,7 @@ import { drawGpuSceneModel } from '../gpu/scene/drawGpuSceneModel.js';
 
 // Import the fallback function to switch to CPU mode when GPU fails
 // This updates the render mode and HUD display
-import { fallbackToCpuForegroundMode } from '../fallbackToCpuForegroundMode.js';
+import { fallbackToCpuForegroundMode } from '../set/setCpuForegroundMode.js';
 
 // Import canvas visibility toggles
 // GPU path shows the GPU canvas and hides the CPU canvas

@@ -19,14 +19,14 @@
 "use strict";
 
 // Import loop state to update the cached render mode
-import { state } from './loopState.js';
+import { state } from '../loopState.js';
 
 // Import the HUD update function to display the current render mode
 // This shows "GPU" or "CPU" in the stats display so users know which path is active
-import { updateRendererHud } from './update/updateRendererHud.js';
+import { updateRendererHud } from '../update/updateRendererHud.js';
 
 /**
- * fallbackToCpuForegroundMode - Switches foreground rendering to CPU path
+ * setCpuForegroundMode - Switches foreground rendering to CPU path
  * 
  * This function is called when GPU rendering fails (context lost, shader compile
  * error, unsupported features, etc.). It updates the global render mode state
@@ -35,7 +35,7 @@ import { updateRendererHud } from './update/updateRendererHud.js';
  * The CPU path uses Canvas 2D for rendering, which is universally supported
  * but typically slower than WebGL for complex scenes.
  */
-export function fallbackToCpuForegroundMode() {
+export function setCpuForegroundMode() {
   // Update the render mode to CPU in loop state
   // This variable is read by the frame loop to determine which rendering path to use
   state.foregroundRenderMode = 'cpu';
