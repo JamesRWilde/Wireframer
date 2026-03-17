@@ -69,9 +69,9 @@ export function animationFrame(nowMs = 0) {
   // Schedule the NEXT frame immediately, before doing any work
   // This ensures the browser can optimize scheduling and we don't miss frames
   // if runFrame takes longer than expected
-  requestAnimationFrame(frame);
+  requestAnimationFrame(animationFrame);
   
-  // Delegate actual work to runFrame
-  // This separation allows runFrame to be called independently for debugging
-  return runFrame(nowMs);
+  // Delegate actual work to run
+  // This separation allows run to be called independently for debugging
+  return run(nowMs);
 }
