@@ -1,5 +1,5 @@
 /**
- * signedArea2.js - Signed Area Calculation for 2D Polygons
+ * signArea.js - Signed Area Calculation for 2D Polygons
  * 
  * PURPOSE:
  *   Computes twice the signed area of a 2D polygon using the shoelace formula.
@@ -21,7 +21,7 @@
 "use strict";
 
 /**
- * signedArea2 - Computes twice the signed area of a 2D polygon
+ * signArea - Computes twice the signed area of a 2D polygon
  * 
  * @param {Array<Array<number>>} poly - Array of 2D vertices [[x,y], ...]
  *   The polygon is assumed to be closed (last vertex connects to first)
@@ -33,7 +33,7 @@
  * The factor of 2 is intentional - it avoids division and keeps the result
  * compatible with cross product comparisons in the convexity test.
  */
-export function signedArea2(poly) {
+export function signedArea(poly) {
   let area2 = 0;
   
   // Iterate over all edges of the polygon
