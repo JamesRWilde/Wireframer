@@ -1,4 +1,4 @@
-import { createParticle } from '../init/createParticle.js';
+import { createParticle }from '@engine/init/render/createParticle.js';
 
 const MAX_DENSITY_MULT = 1.6;
 const MAX_VELOCITY_MULT = 1;

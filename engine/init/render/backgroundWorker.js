@@ -1,5 +1,5 @@
-import * as state from '../state/backgroundWorker.js';
-import { getBackgroundCanvas } from '../get/canvas.js';
+import * as statefrom '@ui/get/Read/state.js';
+import {canvas}from '@engine/get/render/Background/canvas.js';
 
 export function backgroundWorker() {
   if (state.workerInitialized) return state.workerReady;

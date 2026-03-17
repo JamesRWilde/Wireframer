@@ -19,11 +19,11 @@
 "use strict";
 
 // Import loop state to update the cached render mode
-import { state } from '../state/engineLoop.js';
+import { state }from '@ui/get/Read/state.js';
 
 // Import the HUD update function to display the current render mode
 // This shows "GPU" or "CPU" in the stats display so users know which path is active
-import { hud } from './hud.js';
+import { hud }from '@engine/set/engine/Renderer/hud.js';
 
 /**
  * SetEngineCpuForegroundMode - Switches foreground rendering to CPU path

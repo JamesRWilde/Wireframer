@@ -21,7 +21,7 @@
 
 "use strict";
 
-import { lerpColor } from './lerpColor.js';
+import { lerpColor }from '@engine/get/render/lerpColor.js';
 export function triangleGpu(normal, useSmoothShading, theme) {
   const LIGHT_DIR = [-0.532, 0.847, 0];
   const VIEW_DIR = [0, 0, -1];

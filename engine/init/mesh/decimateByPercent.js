@@ -21,7 +21,7 @@
 
 // Import the greedy cluster decimation algorithm
 // This groups nearby vertices and merges them to reduce face count
-import { greedyClusterDecimator } from './greedyClusterDecimator.js';
+import { greedyClusterDecimator }from '@engine/init/mesh/greedyClusterDecimator.js';
 
 /**
  * InitMeshEngineDecimateByPercent - Decimates a mesh to a target percentage of faces

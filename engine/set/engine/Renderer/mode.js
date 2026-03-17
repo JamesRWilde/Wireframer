@@ -21,16 +21,16 @@
 "use strict";
 
 // Import loop state to read/write the cached render mode
-import { state } from '../state/engineLoop.js';
+import { state }from '@ui/get/Read/state.js';
 
 // Import HUD updater to display the current render mode
-import { hud } from './hud.js';
+import { hud }from '@engine/set/engine/Renderer/hud.js';
 
 // Import GPU canvas clearing for when switching from GPU to CPU
-import { sceneCanvas } from '../set/sceneCanvas.js';
+import { sceneCanvas }from '@engine/set/gpu/Clear/sceneCanvas.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { sceneRenderer } from '../get/sceneRenderer.js';
+import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 /**
  * SetEngineRendererMode - Toggles between GPU and CPU rendering modes

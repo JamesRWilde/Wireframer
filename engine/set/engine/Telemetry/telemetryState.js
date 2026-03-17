@@ -28,7 +28,7 @@
 "use strict";
 
 // Import loop state and smoothing constant
-import { state, TELEMETRY_ALPHA } from '../state/engineLoop.js';
+import { state, TELEMETRY_ALPHA }from '@ui/get/Read/state.js';
 
 /**
  * SetEngineTelemetry - Updates smoothed performance metrics

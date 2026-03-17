@@ -17,7 +17,7 @@
  */
 
 // Import the detail level setter for LOD control
-import { detailLevel } from '../set/detailLevel.js';
+import { detailLevel }from '@engine/set/mesh/detailLevel.js';
 
 /**
  * InitMeshEngineFinalizeModel - Finalizes and activates a mesh model

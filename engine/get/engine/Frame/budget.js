@@ -1,7 +1,7 @@
-import * as state from '../set/engineFrameBudgetState.js';
-import { averageTime } from './averageTime.js';
-import { determineTarget } from '../get/determineTarget.js';
-import { qualityApplyChange } from '../set/qualityApplyChange.js';
+;
+import { averageTime }from '@engine/get/engine/Frame/averageTime.js';
+import { determineTarget }from '@engine/get/engine/Quality/determineTarget.js';
+import { qualityApplyChange }from '@engine/set/engine/qualityApplyChange.js';
 
 export function budget() {
   const avgFrameTime = GetEngineFrameAverageTime();

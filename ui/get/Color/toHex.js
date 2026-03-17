@@ -12,7 +12,7 @@
 
 "use strict";
 
-import { clampByte } from './clampByte.js';
+import { clampByte }from '@ui/get/Color/clampByte.js';
 
 /**
  * toHex - Converts RGB to hex color string

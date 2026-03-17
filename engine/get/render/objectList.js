@@ -11,7 +11,7 @@
  *   The server scans the meshes/ directory and returns all .obj files.
  * 
  * USAGE:
- *   import { getObjectList } from './objectList.js';
+ *   import {objectList}from '@engine/get/render/objectList.js';
  *   const objects = await getObjectList();
  */
 

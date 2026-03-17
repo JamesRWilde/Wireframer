@@ -21,16 +21,16 @@
 
 // Import the GPU scene renderer - handles all WebGL operations
 // This includes shader compilation, buffer setup, and draw calls
-import { drawGpuSceneModel } from '../set/drawSceneModel.js';
+import {drawSceneModel}from '@engine/set/gpu/drawSceneModel.js';
 
 // Import the fallback function to switch to CPU mode when GPU fails
 // This updates the render mode and HUD display
-import { fallbackToCpuForegroundMode } from '../set/cpuForegroundMode.js';
+import {cpuForegroundMode}from '@engine/set/engine/cpuForegroundMode.js';
 
 // Import canvas visibility toggles
 // GPU path shows the GPU canvas and hides the CPU canvas
-import { canvasHidden } from '../set/canvasHidden.js';
-import { canvasHidden } from '../set/canvasHidden.js';
+import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
+import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 
 /**
  * renderGpuPath - Renders the 3D model using the GPU (WebGL) rendering path

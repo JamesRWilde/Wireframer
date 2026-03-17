@@ -1,8 +1,8 @@
 // Import GPU renderer getter to access the singleton renderer instance
-import { sceneRenderer } from '../get/sceneRenderer.js';
+import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 // Import GPU renderer disabler for fallback on errors
-import { disableSceneRenderer } from '../dispose/disableSceneRenderer.js';
+import { disableSceneRenderer }from '@engine/dispose/gpu/disableSceneRenderer.js';
 
 /**
  * drawGpuSceneModel - Renders the 3D model using the GPU (WebGL) renderer

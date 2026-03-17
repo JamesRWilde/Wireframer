@@ -25,23 +25,23 @@
 "use strict";
 
 // Import edge filtering to remove degenerate edges
-import { filterValidEdges } from '../get/filterValidEdges.js';
+import { filterValidEdges }from '@engine/get/mesh/filterValidEdges.js';
 
 // Import mesh validation to ensure data integrity
-import { validationResult } from '../get/validationResult.js';
+import { validationResult }from '@engine/get/mesh/Validate/validationResult.js';
 
 // Import LOD range setup for detail level control
-import { lodRangeForModel } from '../set/lodRangeForModel.js';
+import { lodRangeForModel }from '@engine/set/mesh/lodRangeForModel.js';
 
 // Import camera fitting to frame the model properly
-import { fitCameraToModel } from './fitCameraToModel.js';
+import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
 
 // Import model finalization (activation, morph setup)
-import { finalizeModel } from './finalizeModel.js';
+import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
 
 // Import edge building utility
 // Register globally so any consumer can invoke it without circular imports
-import { edgesFromFacesRuntime } from './edgesFromFacesRuntime.js';
+import { edgesFromFacesRuntime }from '@engine/init/mesh/Build/edgesFromFacesRuntime.js';
 if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
   globalThis.InitMeshEngineBuildEdgesFromFacesRuntime = InitMeshEngineBuildEdgesFromFacesRuntime;
 }

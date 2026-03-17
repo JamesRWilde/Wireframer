@@ -24,7 +24,7 @@ import {
   bgDensity,
   bgVelocity,
   bgOpacity,
-} from '../state/uiDom.js';
+}from '@ui/set/Apply/themeMode.js';
 
 /**
  * persistUiState - Saves current UI state to localStorage

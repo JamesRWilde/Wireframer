@@ -14,7 +14,7 @@
  * @param {Object} buffers - The GPU buffer store to update.
  * @returns {boolean} True if update succeeded, false if model or buffers are invalid.
  */
-import { SetGpuEngineUpdateDynamicBuffers as updateDynamicBuffersHelper } from './dynamicBuffers.js';
+import {dynamicBuffers}from '@engine/set/gpu/Update/dynamicBuffers.js';
 
 /**
  * Updates the dynamic buffers for a model's GPU buffer store by delegating to the SetGpuEngineUpdateDynamicBuffers helper.

@@ -15,18 +15,11 @@
 
 "use strict";
 
-import { state } from '../get/state.js';
-import { clampedValue } from './clampedValue.js';
-import { themeMode } from './themeMode.js';
-import { bldMigratedState } from '../init/bldMigratedState.js';
-import {
-  lodSlider,
-  fillOpacity,
-  wireOpacity,
-  bgDensity,
-  bgVelocity,
-  bgOpacity,
-} from '../state/uiDom.js';
+import { state }from '@ui/get/Read/state.js';
+import { clampedValue }from '@ui/set/Apply/clampedValue.js';
+import { themeMode }from '@ui/set/Apply/themeMode.js';
+import { bldMigratedState }from '@ui/init/bldMigratedState.js';
+from '@ui/state/dom.js';
 
 const UI_STATE_KEY = 'wireframer.uiState';
 

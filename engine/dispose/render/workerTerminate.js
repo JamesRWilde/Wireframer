@@ -1,4 +1,4 @@
-import * as state from '../state/renderEngineVertexTransformBridge.js';
+;
 
 export function workerTerminate() {
   if (state.worker) {

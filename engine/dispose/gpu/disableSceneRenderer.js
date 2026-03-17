@@ -1,5 +1,5 @@
 // Import shared GPU renderer state
-import { gpuState } from '../state/gpuEngineScene.js';
+from '@engine/state/gpu/scene.js';
 
 /**
  * DisposeGpuEngineDisableSceneRenderer - Disables the GPU renderer and cleans up resources

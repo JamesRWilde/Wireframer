@@ -128,6 +128,17 @@
 </div>
 
 
+<!-- Import map: path aliases for clean imports -->
+<script type="importmap">
+{
+  "imports": {
+    "@engine/": "./engine/",
+    "@ui/": "./ui/",
+    "@workers/": "./workers/"
+  }
+}
+</script>
+
 <!-- App entry: import the startApp module which initializes and boots on load -->
 <script type="module" src="engine/startApp.js"></script>
 </body>

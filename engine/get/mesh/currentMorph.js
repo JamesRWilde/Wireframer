@@ -18,7 +18,7 @@
 "use strict";
 
 // Import morph state to check if morph is active
-import { morphState } from '../state/meshEngineMorph.js';
+from '@engine/state/mesh/morph.js';
 
 /**
  * GetMeshEngineCurrentMorph - Gets the current interpolated mesh

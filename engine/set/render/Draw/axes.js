@@ -1,4 +1,4 @@
-import { projectVertices } from '../get/projectVertices.js';
+import { projectVertices }from '@engine/get/render/projectVertices.js';
 
 export function axes(ctx) {
   const R = globalThis.PHYSICS_STATE.R;

@@ -23,26 +23,26 @@
 "use strict";
 
 // Import loop state for frame tracking and timing
-import { state } from '../state/engineLoop.js';
+import { state }from '@ui/get/Read/state.js';
 
 // Import physics update function - handles rotation and input
-import { physics } from './physics.js';
+import { physics }from '@engine/set/engine/physics.js';
 
 // Import scene renderer - draws background and foreground
-import { renderScene } from './scene.js';
+import {scene}from '@engine/set/render/scene.js';
 
 // Import telemetry HUD updater - displays stats in the UI
-import { hud } from './hud.js';
+import { hud }from '@engine/set/engine/Renderer/hud.js';
 
 // Import frame throttling check - skips frames if running too fast
-import { shouldRunFrame } from '../get/shouldRunFrame.js';
+import { shouldRunFrame }from '@engine/get/engine/shouldRunFrame.js';
 
 // Import telemetry collector - smooths and stores timing metrics
-import { telemetryState } from './telemetryState.js';
+import { telemetryState }from '@engine/set/engine/Telemetry/telemetryState.js';
 
 // Import frame budget manager for adaptive quality
-import { time } from './time.js';
-import { budget } from '../get/budget.js';
+import { time }from '@engine/set/engine/Frame/time.js';
+import { budget }from '@engine/get/engine/Frame/budget.js';
 
 /**
  * runFrame - Executes all operations for a single animation frame

@@ -21,7 +21,7 @@
 
 // Import the mesh decimation algorithm
 // This reduces vertex count while preserving the model's overall shape
-import { decimateByPercent } from '../init/decimateByPercent.js';
+import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
 
 /**
  * SetMeshEngineDetailLevel - Sets the LOD detail level for the active model

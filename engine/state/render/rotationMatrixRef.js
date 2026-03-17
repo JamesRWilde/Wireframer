@@ -27,7 +27,7 @@
  *   as a flat 9-element array, or null if not yet initialized
  * 
  * Usage:
- *   import { R } from './renderEngineRotationMatrixRef.js';
+ *   from '@engine/state/render/rotationMatrixRef.js';
  *   const matrix = R.value;  // Read the current matrix
  *   R.value = newMatrix;     // Replace the matrix
  */

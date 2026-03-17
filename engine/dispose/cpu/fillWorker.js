@@ -1,4 +1,4 @@
-import * as state from '../state/cpuEngineFillRenderBridge.js';
+;
 
 export function fillWorker() {
   if (state.worker) {

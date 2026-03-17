@@ -26,12 +26,12 @@
  *   // cornerNormals[i][c] gives the normal for corner c of triangle i
  */
 
-import { shadingMode } from '../get/shadingMode.js';
-import { faceNormals } from '../get/faceNormals.js';
-import { geometrySumNormals } from '../get/sumNormals.js';
-import { buildVertexToFaces } from '../init/buildVertexToFaces.js';
-import { geometryGetFlatNormals } from '../get/flatNormals.js';
-import { geometryGetTriNormals } from '../get/triNormals.js';
+import { shadingMode }from '@engine/get/cpu/Model/shadingMode.js';
+import { faceNormals }from '@engine/get/cpu/Model/faceNormals.js';
+import {sumNormals}from '@engine/get/cpu/Geometry/sumNormals.js';
+import { buildVertexToFaces }from '@engine/init/cpu/buildVertexToFaces.js';
+import {flatNormals}from '@engine/get/cpu/Geometry/flatNormals.js';
+import {triNormals}from '@engine/get/cpu/Geometry/triNormals.js';
 
 export function triCornerNormals(model, triFaces) {
   // Determine shading mode ('flat', 'smooth', or 'auto')

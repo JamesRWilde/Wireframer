@@ -21,13 +21,13 @@
 "use strict";
 
 // Import loop state to read/write the cached render mode
-import { state } from '../state/engineLoop.js';
+import { state }from '@ui/get/Read/state.js';
 
 // Import HUD updater to display the current render mode (GPU/CPU)
-import { hud } from '../set/hud.js';
+import { hud }from '@engine/set/engine/Renderer/hud.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { sceneRenderer } from '../get/sceneRenderer.js';
+import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 /**
  * GetEngineForegroundRenderMode - Determines and caches the foreground render mode

@@ -1,4 +1,4 @@
-import * as state from '../state/cpuEngineFillRenderBridge.js';
+;
 
 export function sendRenderCommand(renderData, frameId) {
   if (!state.worker || !state.workerReady) return;

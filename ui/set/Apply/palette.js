@@ -20,8 +20,8 @@
 
 "use strict";
 
-import { bldCustomTheme } from './bldCustomTheme.js';
-import { CUSTOM_RGB } from '../state/uiDom.js';
+import { bldCustomTheme }from '@ui/set/bldCustomTheme.js';
+from '@ui/state/dom.js';
 
 /**
  * applyPalette - Applies current color theme to application

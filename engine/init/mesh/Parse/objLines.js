@@ -22,10 +22,10 @@
  */
 
 // Import individual line parsers
-import { parseVertex } from './vertex.js';
-import { parseNormal } from './normal.js';
-import { parseUv } from './uv.js';
-import { parseFace } from './face.js';
+import {vertex}from '@engine/init/mesh/Parse/vertex.js';
+import {normal}from '@engine/init/mesh/Parse/normal.js';
+import {uv}from '@engine/init/mesh/Parse/uv.js';
+import {face}from '@engine/init/mesh/Parse/face.js';
 
 /**
  * parseObjLines - Parses OBJ text lines into mesh data

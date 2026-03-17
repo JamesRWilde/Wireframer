@@ -1,4 +1,4 @@
-import * as state from '../set/engineFrameBudgetState.js';
+;
 
 export function determineTarget(avgFrameTime) {
   if (avgFrameTime > state.BUDGET_LOW) return 'low';

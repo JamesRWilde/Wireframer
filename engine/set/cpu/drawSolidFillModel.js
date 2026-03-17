@@ -14,16 +14,16 @@
  *   Falls back to main-thread rendering if worker is unavailable.
  */
 
-import { frameData } from '../get/frameData.js';
-import { getModelTriangles } from '../get/triangles.js';
-import { getModelShadingMode } from '../get/shadingMode.js';
-import { getModelTriCornerNormals } from '../get/triCornerNormals.js';
-import { trianglesCpu } from '../set/trianglesCpu.js';
-import { sendRenderCommand } from './sendRenderCommand.js';
+import { frameData }from '@engine/get/render/Model/frameData.js';
+import {triangles}from '@engine/get/render/Model/triangles.js';
+import {shadingMode}from '@engine/get/cpu/Model/shadingMode.js';
+import {triCornerNormals}from '@engine/get/render/Model/triCornerNormals.js';
+import { trianglesCpu }from '@engine/set/render/Fill/trianglesCpu.js';
+import { sendRenderCommand }from '@engine/set/cpu/Fill/sendRenderCommand.js';
 import { initFillWorker } from "'../init/fillWorker.js'";
-import { fillCachedFrame } from '../get/fillCachedFrame.js';
-import { isFillWorkerAvailable } from '../get/isFillWorkerAvailable.js';
-import { state } from '../state/engineLoop.js';
+import { fillCachedFrame }from '@engine/get/cpu/fillCachedFrame.js';
+import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
+import { state }from '@ui/get/Read/state.js';
 
 // Track if worker has been initialized
 let workerInitialized = false;

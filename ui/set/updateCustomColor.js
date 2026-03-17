@@ -12,10 +12,10 @@
 
 "use strict";
 
-import { customRed, customGreen, customBlue, customRedValue, customGreenValue, customBlueValue, customHex, customSwatch, PRESET_SWATCH_BUTTONS, CUSTOM_RGB } from '../state/uiDom.js';
-import { toHex } from '../get/toHex.js';
-import { toRgbCss } from '../get/toRgbCss.js';
-import { rgbEquals } from '../get/rgbEquals.js';
+from '@ui/state/dom.js';
+import { toHex }from '@ui/get/Color/toHex.js';
+import { toRgbCss }from '@ui/get/Color/toRgbCss.js';
+import { rgbEquals }from '@ui/get/Color/rgbEquals.js';
 
 export function updateCustomColor() {
   if (!customRed || !customGreen || !customBlue) return;

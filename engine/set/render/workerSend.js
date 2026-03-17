@@ -1,5 +1,5 @@
-import * as state from '../state/renderEngineVertexTransformBridge.js';
-import { workerTransform } from '../init/workerTransform.js';
+;
+import { workerTransform }from '@engine/init/render/workerTransform.js';
 
 export function workerSend(vertices, rotation, fov, halfW, halfH, modelCy, frameId) {
   if (!state.workerAvailable && !InitRenderEngineWorkerTransform()) return;

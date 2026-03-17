@@ -18,7 +18,7 @@
  */
 
 // Import frame parameter computation for projection setup
-import { computeFrameParams } from '../get/frameParams.js';
+import {frameParams}from '@engine/get/render/Compute/frameParams.js';
 
 /**
  * InitMeshEngineFitCameraToModel - Adjusts camera to frame the model

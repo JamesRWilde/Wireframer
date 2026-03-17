@@ -19,16 +19,16 @@
 "use strict";
 
 // Import matrix multiplication for combining rotations
-import { matrixMultiply3x3 } from './matrixMultiply3x3.js';
+import { matrixMultiply3x3 }from '@engine/get/render/matrixMultiply3x3.js';
 
 // Import Y-axis rotation matrix constructor
-import { matrixY } from './matrixY.js';
+import { matrixY }from '@engine/get/render/Rotation/matrixY.js';
 
 // Import X-axis rotation matrix constructor
-import { matrixX } from './matrixX.js';
+import { matrixX }from '@engine/get/render/Rotation/matrixX.js';
 
 // Import the global rotation matrix reference
-import { R } from '../state/renderEngineRotationMatrixRef.js';
+from '@engine/state/render/rotationMatrixRef.js';
 
 /**
  * rotationInitialize - Sets up the initial rotation matrix

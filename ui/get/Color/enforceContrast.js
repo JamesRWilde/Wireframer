@@ -21,8 +21,8 @@
 
 "use strict";
 
-import { contrastRatio } from './contrastRatio.js';
-import { mixRgb } from './mixRgb.js';
+import { contrastRatio }from '@ui/get/Color/contrastRatio.js';
+import { mixRgb }from '@ui/get/Color/mixRgb.js';
 
 /**
  * enforceContrast - Adjusts foreground color to meet contrast requirements

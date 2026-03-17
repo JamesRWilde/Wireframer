@@ -1,4 +1,4 @@
-import * as state from '../set/engineFrameBudgetState.js';
+;
 
 export function averageTime() {
   if (state.frameTimeCount === 0) return 0;

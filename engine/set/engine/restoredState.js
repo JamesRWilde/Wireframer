@@ -8,7 +8,7 @@
 
 "use strict";
 
-import { restoreState } from '../../ui/set/restoreState.js';
+import { restoreState }from '@ui/set/restoreState.js';
 
 export function restoredState() {
   let restoredShapeName = null;

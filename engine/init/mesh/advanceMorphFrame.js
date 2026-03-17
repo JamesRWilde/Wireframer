@@ -20,16 +20,16 @@
 "use strict";
 
 // Import morph state for reading/updating animation state
-import { morphState } from '../state/meshEngineMorph.js';
+from '@engine/state/mesh/morph.js';
 
 // Import easing function for smooth animation
-import { easeInOut } from '../get/easeOut.js';
+import {easeOut}from '@engine/get/mesh/easeOut.js';
 
 // Import mesh interpolation for computing intermediate meshes
-import { interpolateMeshes } from './interpolateMeshes.js';
+import { interpolateMeshes }from '@engine/init/mesh/interpolateMeshes.js';
 
 // Import mesh cloning for final mesh copy
-import { clone } from './clone.js';
+import { clone }from '@engine/init/mesh/clone.js';
 
 /**
  * InitMeshEngineAdvanceMorphFrame - Advances morph animation by one frame

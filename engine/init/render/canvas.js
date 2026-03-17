@@ -1,5 +1,5 @@
-import { bgState } from '../state/renderEngineBackground.js';
-import { syncCanvasSize } from '../set/syncCanvasSize.js';
+from '@engine/state/render/Background/backgroundState.js';
+import { syncCanvasSize }from '@engine/set/render/syncCanvasSize.js';
 
 export function canvas() {
   if (typeof document === 'undefined') return;

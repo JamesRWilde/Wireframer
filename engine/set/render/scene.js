@@ -22,26 +22,26 @@
 
 // Import the background particle renderer
 // Draws animated ambient particles on the background canvas
-import { drawBackground } from './background.js';
+import {background}from '@engine/set/gpu/Render/background.js';
 
 // Import the CPU foreground renderer
 // Draws solid fill and wireframe using Canvas 2D
-import { cpuPath } from './cpuPath.js';
+import { cpuPath }from '@engine/set/render/cpuPath.js';
 
 // Import the GPU foreground renderer
 // Draws using WebGL for hardware-accelerated rendering
-import { renderGpuPath } from './gpuPath.js';
+import {gpuPath}from '@engine/set/render/gpuPath.js';
 
 // Import the render mode resolver
 // Determines whether to use GPU or CPU based on WebGL availability
-import { foregroundRenderMode } from '../get/foregroundRenderMode.js';
+import { foregroundRenderMode }from '@engine/get/engine/foregroundRenderMode.js';
 
 // Import loop state to read the current render mode
-import { state } from '../state/engineLoop.js';
+import { state }from '@ui/get/Read/state.js';
 
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU
-import { mixedRenderFlags } from '../set/mixedRenderFlags.js';
+import { mixedRenderFlags }from '@engine/set/engine/mixedRenderFlags.js';
 
 /**
  * renderScene - Renders the complete scene (background + foreground)

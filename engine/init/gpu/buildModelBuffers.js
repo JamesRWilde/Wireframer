@@ -30,11 +30,11 @@
  * @param {boolean} supportsUint32 - Whether the context supports 32-bit indices.
  * @returns {Object|null} The GPU buffer store for the model, or null if invalid.
  */
-import { getModelTriangles } from '../get/triangles.js';
-import { getModelTriCornerNormals } from '../get/triCornerNormals.js';
-import { wirePosData } from './wirePosData.js';
-import { fillBuffers } from './fillBuffers.js';
-import { edgeIndexData } from './edgeIndexData.js';
+import {triangles}from '@engine/get/render/Model/triangles.js';
+import {triCornerNormals}from '@engine/get/render/Model/triCornerNormals.js';
+import { wirePosData }from '@engine/init/gpu/Create/wirePosData.js';
+import { fillBuffers }from '@engine/init/gpu/Create/fillBuffers.js';
+import { edgeIndexData }from '@engine/init/gpu/Create/edgeIndexData.js';
 
 export function buildModelBuffers(gl, model, supportsUint32) {
   // Defensive: model must have vertices and edges

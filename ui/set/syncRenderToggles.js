@@ -15,16 +15,9 @@
 
 "use strict";
 
-import {
-  lodSlider, lodValue,
-  bgDensity, bgDensityValue,
-  bgVelocity, bgVelocityValue,
-  bgOpacity, bgOpacityValue,
-  fillOpacity, fillOpacityValue,
-  wireOpacity, wireOpacityValue,
-} from '../state/uiDom.js';
-import { sliderDisplayPercent } from '../get/sliderDisplayPercent.js';
-import { state } from './state.js';
+from '@ui/state/dom.js';
+import { sliderDisplayPercent }from '@ui/get/sliderDisplayPercent.js';
+import { state }from '@ui/get/Read/state.js';
 
 export function syncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;

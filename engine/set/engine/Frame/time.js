@@ -1,4 +1,4 @@
-import * as state from './engineFrameBudgetState.js';
+;
 
 export function time(frameMs) {
   state.frameTimes[state.frameTimeIndex] = frameMs;

@@ -22,15 +22,15 @@
 
 // Import stat display helpers to update vertex/edge counts in the HUD
 // These return DOM element references that are cached in statsState.js
-import { statsState } from '../../ui/state/uiStats.js';
+from '@ui/state/stats.js';
 
 // Import render mode resolver to update GPU/CPU indicator when model changes
 // The render mode may need to be re-evaluated based on the new model's complexity
-import { foregroundRenderMode } from '../get/foregroundRenderMode.js';
+import { foregroundRenderMode }from '@engine/get/engine/foregroundRenderMode.js';
 
 // Import loop state to access telemetry EMA (Exponential Moving Average) values
 // These need to be reset when switching models to avoid stale timing data
-import { state } from '../state/engineLoop.js';
+import { state }from '@ui/get/Read/state.js';
 
 /**
  * setActiveModel - Updates the active mesh model and synchronizes all dependent state

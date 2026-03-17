@@ -20,7 +20,7 @@
 "use strict";
 
 // Import the mouse/touch move handler
-import { onMove } from '../set/onMove.js';
+import { onMove }from '@engine/set/render/onMove.js';
 
 /**
  * attachInputListeners - Attaches input event listeners to canvas

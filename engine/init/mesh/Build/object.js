@@ -20,7 +20,7 @@
  */
 
 // Import edge building utility
-import { edgesFromFacesRuntime } from './edgesFromFacesRuntime.js';
+import { edgesFromFacesRuntime }from '@engine/init/mesh/Build/edgesFromFacesRuntime.js';
 
 // Register helper globally so callers don't have to import it repeatedly
 if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {

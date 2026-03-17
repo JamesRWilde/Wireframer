@@ -1,4 +1,4 @@
-import { program } from './program.js';
+import { program }from '@engine/init/gpu/Create/program.js';
 
 export function scenePrograms(gl) {
   const fillVertSrc = `

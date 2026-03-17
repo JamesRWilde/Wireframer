@@ -27,28 +27,28 @@
 "use strict";
 
 // Import mesh deep copy utility
-import { deepCopy } from './deepCopy.js';
+import { deepCopy }from '@engine/init/mesh/deepCopy.js';
 
 // Import face normalization (ensures consistent face format)
-import { normalizeFaces } from './normalizeFaces.js';
+import { normalizeFaces }from '@engine/init/mesh/normalizeFaces.js';
 
 // Import bounding box computation
-import { computeBoundingBox } from '../get/computeBoundingBox.js';
+import { computeBoundingBox }from '@engine/get/mesh/computeBoundingBox.js';
 
 // Import cluster parameter calculation
-import { computeClusterParams } from './computeClusterParams.js';
+import { computeClusterParams }from '@engine/init/mesh/computeClusterParams.js';
 
 // Import vertex-to-cell assignment
-import { assignVerticesToCells } from './assignVerticesToCells.js';
+import { assignVerticesToCells }from '@engine/init/mesh/assignVerticesToCells.js';
 
 // Import vertex clustering (merging nearby vertices)
-import { clusterVertices } from './clusterVertices.js';
+import { clusterVertices }from '@engine/init/mesh/clusterVertices.js';
 
 // Import face rebuilding (updating face indices after clustering)
-import { rebuildFaces } from './rebuildFaces.js';
+import { rebuildFaces }from '@engine/init/mesh/rebuildFaces.js';
 
 // Import LOD cache pruning (removes old cache entries)
-import { pruneLodCache } from '../dispose/pruneLodCache.js';
+import { pruneLodCache }from '@engine/dispose/mesh/pruneLodCache.js';
 
 /**
  * InitMeshEngineGreedyClusterDecimator - Decimates a mesh using greedy cluster merging

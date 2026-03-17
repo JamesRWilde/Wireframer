@@ -1,8 +1,8 @@
-import { state } from '../state/engineLoop.js';
-import { workerSend } from '../set/workerSend.js';
-import { cachedTransformResult } from './cachedTransformResult.js';
-import { convertFlatToNested } from './convertFlatToNested.js';
-import { transformSync } from '../get/transformSync.js';
+import { state }from '@ui/get/Read/state.js';
+import { workerSend }from '@engine/set/render/workerSend.js';
+import { cachedTransformResult }from '@engine/get/render/cachedTransformResult.js';
+import { convertFlatToNested }from '@engine/get/render/convertFlatToNested.js';
+import { transformSync }from '@engine/get/render/Worker/transformSync.js';
 
 export function frameData(model) {
   if (!model?.V?.length) return null;

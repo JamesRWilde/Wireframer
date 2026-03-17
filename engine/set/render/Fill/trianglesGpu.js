@@ -30,10 +30,10 @@
  */
 
 "use strict";
-import { resolveTriangleNormal } from '../get/renderEngineResolveTriangleNormalGpu.js';
-import { computeTriangleShadeColor } from '../get/triangleGpu.js';
-import { expandTriangleForSeam } from '../get/seamGpu.js';
-import { fillTriangle } from '../set/triangle.js';
+import {triangleNormalGpu}from '@engine/get/render/Resolve/triangleNormalGpu.js';
+import {triangleGpu}from '@engine/get/render/Compute/triangleGpu.js';
+import {seamGpu}from '@engine/get/render/Expand/seamGpu.js';
+import {triangle}from '@engine/set/cpu/Fill/triangle.js';
 
 export function trianglesGpu({ T, P2, triFaces, triCornerNormals, useSmoothShading, theme, fillAlpha, seamExpandPx, R, ctx }) {
   // Sort triangles back-to-front (painter's algorithm). Sorting by average depth helps

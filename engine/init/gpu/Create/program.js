@@ -1,4 +1,4 @@
-import { compileShader } from './compileShader.js';
+import { compileShader }from '@engine/init/gpu/compileShader.js';
 
 export function program(gl, vs, fs) {
   const v = InitGpuEngineCompileShader(gl, gl.VERTEX_SHADER, vs);
