@@ -1,4 +1,4 @@
-import * as state from '../frame/frameBudgetState.js';
+import * as state from '../set/frameBudgetState.js';
 import { getAverageFrameTime } from './getFrameAverageTime.js';
 import { determineTargetQuality } from '../quality/determineTargetQuality.js';
 import { applyQualityChange } from '../quality/applyQualityChange.js';

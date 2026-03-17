@@ -1,4 +1,4 @@
-import * as state from '../frame/frameBudgetState.js';
+import * as state from '../set/frameBudgetState.js';
 
 export function determineTargetQuality(avgFrameTime) {
   if (avgFrameTime > state.BUDGET_LOW) return 'low';

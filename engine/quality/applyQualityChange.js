@@ -1,4 +1,4 @@
-import * as state from '../frame/frameBudgetState.js';
+import * as state from '../set/frameBudgetState.js';
 import { getQualityPriority } from './getQualityPriority.js';
 
 export function applyQualityChange(targetQuality, avgFrameTime) {
