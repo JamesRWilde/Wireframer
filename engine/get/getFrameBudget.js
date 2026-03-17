@@ -1,9 +1,9 @@
-import * as state from '../frameBudgetState.js';
-import { getAverageFrameTime } from './getAverageFrameTime.js';
-import { determineTargetQuality } from '../../quality/determineTargetQuality.js';
-import { applyQualityChange } from '../../quality/applyQualityChange.js';
+import * as state from '../frame/frameBudgetState.js';
+import { getAverageFrameTime } from './getFrameAverageTime.js';
+import { determineTargetQuality } from '../quality/determineTargetQuality.js';
+import { applyQualityChange } from '../quality/applyQualityChange.js';
 
-export function checkBudget() {
+export function getFrameBudget() {
   const avgFrameTime = getAverageFrameTime();
   if (avgFrameTime === 0) return state.currentQuality;
 

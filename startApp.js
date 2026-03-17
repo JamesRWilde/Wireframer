@@ -52,7 +52,7 @@ import './engine/mesh/initMorphApi.js';
 import { initObjectSelector } from './ui/init/initObjectSelector.js';
 
 // Import the frame loop entry point
-import { frame } from './engine/frame/set/frame.js';
+import { frame } from './engine/set/setFrame.js';
 
 // Import rotation matrix initialization
 import { rotationInitialize } from './engine/render/rotation/rotationInitialize.js';

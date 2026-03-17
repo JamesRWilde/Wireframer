@@ -8,7 +8,7 @@
  * 
  * ARCHITECTURE ROLE:
  *   Called by frame() which handles requestAnimationFrame scheduling.
- *   runFrame() focuses purely on the work to be done each frame, making
+ *   setFrameRun() focuses purely on the work to be done each frame, making
  *   it testable independently of the animation loop.
  * 
  * FRAME PIPELINE:
@@ -23,26 +23,26 @@
 "use strict";
 
 // Import loop state for frame tracking and timing
-import { state } from '../../loopState.js';
+import { state } from '../loopState.js';
 
 // Import physics update function - handles rotation and input
-import { setPhysics } from '../../set/setPhysics.js';
+import { setPhysics } from './setPhysics.js';
 
 // Import scene renderer - draws background and foreground
-import { renderScene } from '../../render/set/renderScene.js';
+import { renderScene } from '../render/set/renderScene.js';
 
 // Import telemetry HUD updater - displays stats in the UI
-import { setTelemetryHud } from '../../set/setTelemetryHud.js';
+import { setTelemetryHud } from './setTelemetryHud.js';
 
 // Import frame throttling check - skips frames if running too fast
-import { shouldRunFrame } from '../get/shouldRunFrame.js';
+import { shouldRunFrame } from '../get/getShouldRunFrame.js';
 
 // Import telemetry collector - smooths and stores timing metrics
-import { setTelemetry } from '../../set/setTelemetry.js';
+import { setTelemetry } from './setTelemetry.js';
 
 // Import frame budget manager for adaptive quality
-import { updateFrameTime } from './updateFrameTime.js';
-import { checkBudget } from '../get/checkBudget.js';
+import { updateFrameTime } from './setFrameTime.js';
+import { checkBudget } from '../get/getFrameBudget.js';
 
 /**
  * runFrame - Executes all operations for a single animation frame
@@ -58,7 +58,7 @@ import { checkBudget } from '../get/checkBudget.js';
  * 5. Collects performance metrics
  * 6. Updates the telemetry HUD display
  */
-export function runFrame(nowMs = 0) {
+export function setFrameRun(nowMs = 0) {
   // Record frame start time for performance measurement
   const frameStartMs = performance.now();
 

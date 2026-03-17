@@ -2,7 +2,7 @@
  * frame.js - Main Animation Frame Entry Point
  * 
  * PURPOSE:
- *   Provides the frame() function that serves as the callback for requestAnimationFrame.
+ *   Provides the setFrame() function that serves as the callback for requestAnimationFrame.
  *   This is the heartbeat of the application - called by the browser ~60 times per second
  *   to drive the animation loop. It delegates actual work to runFrame() while handling
  *   frame timing and loop continuation.
@@ -13,18 +13,18 @@
  *   separation allows runFrame to be called independently (e.g., for single-step debugging).
  * 
  * FRAME LOOP FLOW:
- *   1. Browser calls frame(timestamp)
- *   2. frame() schedules next frame via requestAnimationFrame(frame)
- *   3. frame() calls runFrame(nowMs) to do actual work
+ *   1. Browser calls setFrame(timestamp)
+ *   2. setFrame() schedules next frame via requestAnimationFrame(frame)
+ *   3. setFrame() calls runFrame(nowMs) to do actual work
  *   4. runFrame() updates physics, renders, updates telemetry
- *   5. Browser calls frame() again ~16ms later
+ *   5. Browser calls setFrame() again ~16ms later
  */
 
 "use strict";
 
 // Import the runFrame function that performs the actual per-frame work
 // This includes physics updates, rendering, and telemetry updates
-import { runFrame } from './runFrame.js';
+import { runFrame } from './setFrameRun.js';
 
 // Initialize shared frame state flags on first load
 // These track whether GPU or CPU rendering was used last frame, which affects
@@ -54,7 +54,7 @@ let __lastRafMs = 0;
  * 
  * The browser will call this ~60 times per second (or matching display refresh rate).
  */
-export function frame(nowMs = 0) {
+export function setFrame(nowMs = 0) {
   // Debug logging: measure time between consecutive frames
   // This helps diagnose jank (dropped frames) during development
   // Only logs when DEBUG_RAF global is set to avoid performance overhead

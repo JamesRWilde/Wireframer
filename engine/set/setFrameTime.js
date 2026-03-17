@@ -1,6 +1,6 @@
-import * as state from '../frameBudgetState.js';
+import * as state from '../frame/frameBudgetState.js';
 
-export function updateFrameTime(frameMs) {
+export function setFrameTime(frameMs) {
   state.frameTimes[state.frameTimeIndex] = frameMs;
   state.frameTimeIndex = (state.frameTimeIndex + 1) % state.WINDOW_SIZE;
   if (state.frameTimeCount < state.WINDOW_SIZE) state.frameTimeCount++;
