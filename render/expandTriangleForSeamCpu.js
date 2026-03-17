@@ -15,7 +15,7 @@
  *   Expanding each triangle slightly ensures edges overlap, eliminating gaps.
  */
 
-import { expandPointFromCentroid } from './expandPointFromCentroid.js';
+import { expandPointFromCentroid } from '../cpu/expandPointFromCentroid.js';
 
 /**
  * expandTriangleForSeam - Expands triangle vertices outward from centroid

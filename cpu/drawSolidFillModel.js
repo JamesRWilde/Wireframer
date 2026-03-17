@@ -15,10 +15,10 @@
  */
 
 import { getModelFrameData } from '../render/getModelFrameData.js';
-import { getModelTriangles } from './getModelTriangles.js';
+import { getModelTriangles } from '../render/getModelTrianglesCpu.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
-import { getModelTriCornerNormals } from './getModelTriCornerNormals.js';
-import { renderFillTriangles } from './renderFillTriangles.js';
+import { getModelTriCornerNormals } from '../render/getModelTriCornerNormalsCpu.js';
+import { renderFillTriangles } from '../render/renderFillTrianglesCpu.js';
 import { initFillWorker, sendRenderCommand, getCachedFrame, isFillWorkerAvailable } from './fillRenderBridge.js';
 import { state } from '../engine/loopState.js';
 

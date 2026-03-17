@@ -1,7 +1,7 @@
-import { computeTriangleShadeColor } from './computeTriangleShadeColor.js';
-import { resolveTriangleNormal } from './resolveTriangleNormal.js';
-import { expandTriangleForSeam } from './expandTriangleForSeam.js';
-import { fillTriangleOnLayer } from './fillTriangleOnLayer.js';
+import { computeTriangleShadeColor } from './computeTriangleShadeColorCpu.js';
+import { resolveTriangleNormal } from './resolveTriangleNormalCpu.js';
+import { expandTriangleForSeam } from './expandTriangleForSeamCpu.js';
+import { fillTriangleOnLayer } from '../cpu/fillTriangleOnLayer.js';
 
 export function renderFillTriangles({
   triOrder,
