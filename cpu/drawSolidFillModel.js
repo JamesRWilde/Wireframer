@@ -19,9 +19,9 @@ import { getModelTriangles } from '../render/getModelTriangles.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
 import { getModelTriCornerNormals } from '../render/getModelTriCornerNormals.js';
 import { renderFillTriangles } from '../render/renderFillTrianglesCpu.js';
-import { sendRenderCommand } from './sendRenderCommand.js';
+import { sendRenderCommand } from './fillSendRenderCommand.js';
 import { initFillWorker } from "./initFillWorker.js";
-import { getCachedFrame } from './getCachedFrame.js';
+import { getCachedFrame } from './fillGetCachedFrame.js';
 import { isFillWorkerAvailable } from './isFillWorkerAvailable.js';
 import { state } from '../engine/loopState.js';
 

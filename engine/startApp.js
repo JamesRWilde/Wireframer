@@ -55,7 +55,7 @@ import { initObjectSelector } from '../ui/initObjectSelector.js';
 import { frame } from './frame.js';
 
 // Import rotation matrix initialization
-import { initializeRotation } from '../render/initializeRotation.js';
+import { initializeRotation } from '../render/rotationInitialize.js';
 
 // Import the rotation matrix reference
 import { R } from '../render/rotationMatrixRef.js';
@@ -96,7 +96,7 @@ import {
 export function startApp() {
   // Step 1: Initialize rotation matrix before starting the frame loop
   // This sets up the initial orientation (typically identity or slight tilt)
-  initializeRotation();
+  rotationInitialize();
   
   // Step 2: Ensure zoom parameters exist with sensible defaults
   // These guards prevent NaN errors if the user scrolls before values are set

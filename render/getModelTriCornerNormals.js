@@ -28,10 +28,10 @@
 
 import { getModelShadingMode } from '../cpu/getModelShadingMode.js';
 import { getModelFaceNormals } from '../cpu/getModelFaceNormals.js';
-import { sumSimilarNormals } from '../cpu/sumSimilarNormals.js';
+import { geometrySumNormals } from '../cpu/geometrySumNormals.js';
 import { buildVertexToFaces } from '../cpu/buildVertexToFaces.js';
-import { getFlatCornerNormals } from '../cpu/getFlatCornerNormals.js';
-import { getTriangleNormalsOrNull } from '../cpu/getTriangleNormalsOrNull.js';
+import { geometryGetFlatNormals } from '../cpu/geometryGetFlatNormals.js';
+import { geometryGetTriNormals } from '../cpu/geometryGetTriNormals.js';
 
 export function getModelTriCornerNormals(model, triFaces) {
   // Determine shading mode ('flat', 'smooth', or 'auto')
@@ -50,12 +50,12 @@ export function getModelTriCornerNormals(model, triFaces) {
   const faceNormals = getModelFaceNormals(model, triFaces);
 
   // 3. Use precomputed triangleNormals if available
-  const triNormals = getTriangleNormalsOrNull(model, triFaces.length);
+  const triNormals = geometryGetTriNormals(model, triFaces.length);
   if (triNormals) return triNormals;
 
   // 4. Flat shading: assign face normal to all corners
   if (shadingMode === 'flat') {
-    return getFlatCornerNormals(faceNormals);
+    return geometryGetFlatNormals(faceNormals);
   }
 
   // 5. Build vertex-to-face adjacency list for smoothing
@@ -74,7 +74,7 @@ export function getModelTriCornerNormals(model, triFaces) {
       const vi = tri[c]; // Vertex index for this corner
       const adjacent = vertexToFaces[vi]; // All faces sharing this vertex
       // Sum normals of adjacent faces within crease threshold
-      const [nx, ny, nz] = sumSimilarNormals(nRef, faceNormals, adjacent, cosThreshold);
+      const [nx, ny, nz] = geometrySumNormals(nRef, faceNormals, adjacent, cosThreshold);
       const nl = Math.hypot(nx, ny, nz);
       if (nl < 1e-9) {
         // Fallback: use face normal if sum is degenerate
