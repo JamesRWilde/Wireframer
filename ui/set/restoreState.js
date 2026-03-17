@@ -23,24 +23,24 @@ import {select,themeMode as themeModeEl,lodSlider,bgDensity,bgVelocity,bgOpacity
 const UI_STATE_KEY = 'wireframer.uiState';
 
 export function restoreState() {
-  const state = state();
-  if (!state) return null;
+  const savedState = state();
+  if (!savedState) return null;
 
-  clampedValue({ state, key: 'lod', element: lodSlider, min: 50, max: 140, defaultValue: 100 });
-  clampedValue({ state, key: 'fillOpacity', element: fillOpacity, min: 0, max: 100, defaultValue: 0 });
-  clampedValue({ state, key: 'wireOpacity', element: wireOpacity, min: 0, max: 100, defaultValue: 100 });
-  clampedValue({ state, key: 'bgDensity', element: bgDensity, min: 0, max: 220, defaultValue: 100 });
-  clampedValue({ state, key: 'bgVelocity', element: bgVelocity, min: 0, max: 220, defaultValue: 100 });
-  clampedValue({ state, key: 'bgOpacity', element: bgOpacity, min: 0, max: 100, defaultValue: 100 });
-  themeMode(state);
+  clampedValue({ state: savedState, key: 'lod', element: lodSlider, min: 50, max: 140, defaultValue: 100 });
+  clampedValue({ state: savedState, key: 'fillOpacity', element: fillOpacity, min: 0, max: 100, defaultValue: 0 });
+  clampedValue({ state: savedState, key: 'wireOpacity', element: wireOpacity, min: 0, max: 100, defaultValue: 100 });
+  clampedValue({ state: savedState, key: 'bgDensity', element: bgDensity, min: 0, max: 220, defaultValue: 100 });
+  clampedValue({ state: savedState, key: 'bgVelocity', element: bgVelocity, min: 0, max: 220, defaultValue: 100 });
+  clampedValue({ state: savedState, key: 'bgOpacity', element: bgOpacity, min: 0, max: 100, defaultValue: 100 });
+  themeMode(savedState);
 
   try {
-    localStorage.setItem(UI_STATE_KEY, JSON.stringify(bldMigratedState(state)));
+    localStorage.setItem(UI_STATE_KEY, JSON.stringify(bldMigratedState(savedState)));
     try { localStorage.removeItem('undefined'); } catch {}
   } catch {}
 
-  if (typeof state.selectedShapeName === 'string' && state.selectedShapeName) {
-    return state.selectedShapeName;
+  if (typeof savedState.selectedShapeName === 'string' && savedState.selectedShapeName) {
+    return savedState.selectedShapeName;
   }
   return null;
 }

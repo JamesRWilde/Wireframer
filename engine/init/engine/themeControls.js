@@ -54,7 +54,7 @@ export function themeControls() {
   try {
     // Step 1: Create preset color swatches in the UI
     // These are clickable buttons that apply predefined color schemes
-    initPresetSwatches();
+    presetSwatches();
     
     // Step 2: Restore saved custom color from localStorage (if any)
     // readCustomRgb returns { r, g, b } or null if nothing saved
