@@ -12,7 +12,7 @@
 
 "use strict";
 
-import { customRed, customGreen, customBlue, customRedValue, customGreenValue, customBlueValue, customHex, customSwatch, PRESET_SWATCH_BUTTONS, CUSTOM_RGB } from './dom-state.js';
+import { customRed, customGreen, customBlue, customRedValue, customGreenValue, customBlueValue, customHex, customSwatch, PRESET_SWATCH_BUTTONS, CUSTOM_RGB } from './domState.js';
 import { toHex } from './toHex.js';
 import { toRgbCss } from './toRgbCss.js';
 import { rgbEquals } from './rgbEquals.js';

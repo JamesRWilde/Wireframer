@@ -12,7 +12,7 @@
 
 "use strict";
 
-import { presetSwatches, PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, SHUFFLE_SWATCH_NAME } from './dom-state.js';
+import { presetSwatches, PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, SHUFFLE_SWATCH_NAME } from './domState.js';
 import { toHex } from './toHex.js';
 import { toRgbCss } from './toRgbCss.js';
 import { setCustomRgb } from './setCustomRgb.js';

@@ -30,7 +30,7 @@
  * @returns {Array<number>} 3x3 rotation matrix as flat 9-element array
  *   Layout: [m00, m01, m02, m10, m11, m12, m20, m21, m22]
  */
-export function mry(a) {
+export function rotationMatrixY(a) {
   // Precompute cosine and sine (used twice each)
   const c = Math.cos(a), s = Math.sin(a);
   

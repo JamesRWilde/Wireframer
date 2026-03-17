@@ -58,7 +58,7 @@ import { frame } from './frame.js';
 import { initializeRotation } from '../render/initializeRotation.js';
 
 // Import the rotation matrix reference
-import { R } from '../render/R.js';
+import { R } from '../render/rotationMatrixRef.js';
 
 // Import render toggle synchronization
 import { syncRenderToggles } from '../ui/syncRenderToggles.js';
@@ -84,7 +84,7 @@ import {
   fillOpacity,
   wireOpacity,
   lodSlider,
-} from '../ui/dom-state.js';
+} from '../ui/domState.js';
 
 /**
  * startApp - Initializes all subsystems and starts the animation loop

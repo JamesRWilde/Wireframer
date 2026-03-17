@@ -26,7 +26,7 @@ import {
   bgDensity,
   bgVelocity,
   bgOpacity,
-} from './dom-state.js';
+} from './domState.js';
 
 const UI_STATE_KEY = 'wireframer.uiState';
 

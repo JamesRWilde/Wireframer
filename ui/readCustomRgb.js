@@ -16,7 +16,7 @@
 
 "use strict";
 
-import { CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT } from './dom-state.js';
+import { CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT } from './domState.js';
 import { clampByte } from './clampByte.js';
 
 export function readCustomRgb() {

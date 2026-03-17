@@ -10,7 +10,7 @@
  *
  * @param {Object} state - Deserialized UI state object from localStorage
  */
-import { themeMode } from './dom-state.js';
+import { themeMode } from './domState.js';
 
 export function applyThemeMode(state) {
   if (!themeMode || !('themeMode' in state)) return;

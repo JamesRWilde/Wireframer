@@ -29,7 +29,7 @@
  * The multiplication follows standard matrix multiplication rules:
  * C[i][j] = Σ(A[i][k] * B[k][j]) for k = 0..2
  */
-export function mmul(A, B) {
+export function matrixMultiply3x3(A, B) {
   // Compute each element of the result matrix
   // Row 0: dot products of row 0 of A with columns of B
   return [

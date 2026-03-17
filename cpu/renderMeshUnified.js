@@ -28,7 +28,7 @@ import { getModelTriCornerNormals } from '../render/getModelTriCornerNormals.js'
 import { resolveTriangleNormal } from '../render/resolveTriangleNormalCpu.js';
 import { computeTriangleShadeColor } from '../render/computeTriangleShadeColorCpu.js';
 import { relativeLuminance } from '../ui/relativeLuminance.js';
-import { rgbA } from '../render/rgbA.js';
+import { rgbaString } from '../render/rgbaString.js';
 
 /**
  * renderMeshUnified - Renders mesh with per-triangle fill and edges
@@ -63,7 +63,7 @@ export function renderMeshUnified(model, ctx) {
   let fillRgb = globalThis.THEME?.fill ?? [0, 200, 120];
   const fillLum = relativeLuminance(fillRgb);
   const contrastWire = fillLum > 0.5 ? [0, 0, 0] : [255, 255, 255];
-  const edgeColor = rgbA(contrastWire, 1);
+  const edgeColor = rgbaString(contrastWire, 1);
 
   // Sort triangles back-to-front (painter's algorithm)
   const triOrder = new Array(triFaces.length);

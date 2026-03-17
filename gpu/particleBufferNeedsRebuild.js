@@ -1,5 +1,5 @@
 /**
- * needsRebuild.js - Helper to determine if the particle buffer needs to be rebuilt
+ * particleBufferNeedsRebuild.js - Helper to determine if the particle buffer needs to be rebuilt
  *
  * PURPOSE:
  *   Checks if the number of particles has changed since the last frame, indicating the buffer must be rebuilt.
@@ -26,6 +26,6 @@
  *   - This file must only contain this function and its export.
  *   - Update comments if buffer rebuild logic or particle structure changes.
  */
-export function needsRebuild(particles, lastCount) {
+export function particleBufferNeedsRebuild(particles, lastCount) {
   return particles?.length !== lastCount;
 }

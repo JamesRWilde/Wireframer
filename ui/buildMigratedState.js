@@ -18,7 +18,7 @@ import {
   bgDensity,
   bgVelocity,
   bgOpacity,
-} from './dom-state.js';
+} from './domState.js';
 
 export function buildMigratedState(state) {
   return {

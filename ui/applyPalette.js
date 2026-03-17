@@ -21,7 +21,7 @@
 "use strict";
 
 import { buildCustomTheme } from './buildCustomTheme.js';
-import { CUSTOM_RGB } from './dom-state.js';
+import { CUSTOM_RGB } from './domState.js';
 
 /**
  * applyPalette - Applies current color theme to application

@@ -13,7 +13,7 @@
 
 "use strict";
 
-import { CUSTOM_RGB_KEY, CUSTOM_RGB } from './dom-state.js';
+import { CUSTOM_RGB_KEY, CUSTOM_RGB } from './domState.js';
 
 export function persistCustomRgb() {
   try {

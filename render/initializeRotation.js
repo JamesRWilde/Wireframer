@@ -19,16 +19,16 @@
 "use strict";
 
 // Import matrix multiplication for combining rotations
-import { mmul } from './mmul.js';
+import { matrixMultiply3x3 } from './matrixMultiply3x3.js';
 
 // Import Y-axis rotation matrix constructor
-import { mry } from './mry.js';
+import { rotationMatrixY } from './rotationMatrixY.js';
 
 // Import X-axis rotation matrix constructor
-import { mrx } from './mrx.js';
+import { rotationMatrixX } from './rotationMatrixX.js';
 
 // Import the global rotation matrix reference
-import { R } from './R.js';
+import { R } from './rotationMatrixRef.js';
 
 /**
  * initializeRotation - Sets up the initial rotation matrix
@@ -45,7 +45,7 @@ export function initializeRotation() {
   if (typeof mry === 'function' && typeof mrx === 'function' && typeof mmul === 'function') {
     // Create initial rotation: Ry(0.4) * Rx(0.18)
     // This combines a horizontal turn with a slight tilt
-    R.value = mmul(mry(0.4), mrx(0.18));
+    R.value = matrixMultiply3x3(rotationMatrixY(0.4), rotationMatrixX(0.18));
   } else {
     // Fallback: identity matrix (no rotation)
     // This is a 4x4 matrix but only the 3x3 rotation part is used

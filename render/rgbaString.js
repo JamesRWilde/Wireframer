@@ -25,6 +25,6 @@
  * 2. Formats alpha with 3 decimal places
  * 3. Returns CSS rgba() string
  */
-export function rgbA(rgb, alpha) {
+export function rgbaString(rgb, alpha) {
   return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha.toFixed(3)})`;
 }

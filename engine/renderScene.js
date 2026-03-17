@@ -41,7 +41,7 @@ import { state } from './loopState.js';
 
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU
-import { handleOtherCases } from './handleOtherCases.js';
+import { handleOtherCases } from './handleMixedRenderState.js';
 
 /**
  * renderScene - Renders the complete scene (background + foreground)

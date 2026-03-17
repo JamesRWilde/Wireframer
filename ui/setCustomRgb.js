@@ -24,7 +24,7 @@ import { clampByte } from './clampByte.js';
 import { updateCustomColorUi } from './updateCustomColorUi.js';
 import { persistCustomRgb } from './persistCustomRgb.js';
 import { applyPalette } from './applyPalette.js';
-import { CUSTOM_RGB } from './dom-state.js';
+import { CUSTOM_RGB } from './domState.js';
 
 export function setCustomRgb(rgb, options = {}) {
   const { persist = true, apply = true } = options;

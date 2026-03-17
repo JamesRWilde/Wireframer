@@ -22,7 +22,7 @@ import {
   bgOpacity, bgOpacityValue,
   fillOpacity, fillOpacityValue,
   wireOpacity, wireOpacityValue,
-} from './dom-state.js';
+} from './domState.js';
 import { sliderDisplayPercent } from './sliderDisplayPercent.js';
 import { persistUiState } from './persistUiState.js';
 

@@ -31,7 +31,7 @@ export function renderGpuBackgroundRenderer(opts) {
   const { particles } = params;
   let particleCount = prevCount;
   if (!particles?.length) return particleCount;
-  if (needsRebuild(particles, particleCount)) {
+  if (particleBufferNeedsRebuild(particles, particleCount)) {
     particleCount = rebuildBuffer(gl, buffer, particles);
   }
   renderGpuBackground(gl, locations, buffer, particleCount, params);
