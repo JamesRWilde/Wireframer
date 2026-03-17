@@ -41,12 +41,10 @@ export function syncRenderToggles() {
   bgOpacityValue.textContent = `${Math.round(opacityPct * 100)}%`;
 
   const fillOp = Number(fillOpacity.value) / 100;
-  globalThis.FILL_OPACITY = fillOp; // keep globalThis for legacy consumers
   setFillOpacity(fillOp);
   fillOpacityValue.textContent = `${Math.round(fillOp * 100)}%`;
 
   const wireOp = Number(wireOpacity.value) / 100;
-  globalThis.WIRE_OPACITY = wireOp; // keep globalThis for legacy consumers
   setWireOpacity(wireOp);
   wireOpacityValue.textContent = `${Math.round(wireOp * 100)}%`;
 

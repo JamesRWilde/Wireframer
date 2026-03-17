@@ -22,9 +22,9 @@ import { toRgbCss }from '@ui/get/color/toRgbCss.js';
 import { toRgbaCss }from '@ui/get/color/toRgbaCss.js';
 import { enforceContrast }from '@ui/get/color/enforceContrast.js';
 
-export function bldCustomTheme(rgbInput) {
+export function bldCustomTheme(rgbInput, themeMode) {
   const base = [clampByte(rgbInput[0]), clampByte(rgbInput[1]), clampByte(rgbInput[2])];
-  const isLight = globalThis.THEME_MODE === 'light';
+  const isLight = themeMode === 'light';
   const choose = (lightVal, darkVal) => (isLight ? lightVal : darkVal);
 
   const bg = choose(

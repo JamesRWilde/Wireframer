@@ -2,34 +2,32 @@
  * renderState.js - Centralized Render State Store
  *
  * Single source of truth for all render-relevant state.
- * Writers set values here; readers consume them with
- * automatic caching of derived computations.
+ * Writers set values via setters; readers consume via getters
+ * with automatic caching of derived computations.
  *
- * DESIGN:
- * - Source values: set by UI controls (theme, opacity, mode)
- * - Derived cache: recomputed only when source version changes
- * - Consumers call getter functions; cache is transparent
+ * No globalThis. No backdoor reads. State or go home.
  *
- * REPLACES scattered globalThis reads:
- * - globalThis.THEME / THEME_MODE
- * - globalThis.FILL_OPACITY / WIRE_OPACITY
- * - Per-frame relativeLuminance + rgbaString for edge color
- * - Per-frame theme RGB parsing (shadeDark, shadeBright, bg, particle)
+ * SOURCE VALUES:
+ *   theme, themeMode, fillOpacity, wireOpacity
+ *
+ * DERIVED CACHES (rebuilt only on change):
+ *   shadeDark/shadeBright RGB, fill RGB, edge color,
+ *   bg color, particle color
  */
 
 "use strict";
 
 // ══════════════════════════════════════════════
-// Source values (set by UI, read by renderers)
+// Source values (private — setters/getters only)
 // ══════════════════════════════════════════════
 
-export let theme = null;
-export let themeMode = 'dark';
-export let fillOpacity = 1;
-export let wireOpacity = 1;
+let _theme = null;
+let _themeMode = 'dark';
+let _fillOpacity = 1;
+let _wireOpacity = 1;
 
 // ══════════════════════════════════════════════
-// Version counters (bump when source changes)
+// Version counter (bump when theme changes)
 // ══════════════════════════════════════════════
 
 let _themeVer = 0;
@@ -48,29 +46,29 @@ let _particleColor = 'rgba(200,220,255,1)';
 let _cacheVer = -1;
 
 // ══════════════════════════════════════════════
-// Setters (called by UI controls)
+// Setters (called by UI controls only)
 // ══════════════════════════════════════════════
 
 /** Set the active theme palette object */
 export function setTheme(t) {
-  theme = t;
+  _theme = t;
   _themeVer++;
   _cacheVer = -1; // force derived rebuild
 }
 
 /** Set theme mode ('dark' | 'light') */
 export function setThemeMode(mode) {
-  themeMode = mode === 'light' ? 'light' : 'dark';
+  _themeMode = mode === 'light' ? 'light' : 'dark';
 }
 
 /** Set fill opacity (0-1) */
 export function setFillOpacity(v) {
-  fillOpacity = v;
+  _fillOpacity = v;
 }
 
 /** Set wire opacity (0-1) */
 export function setWireOpacity(v) {
-  wireOpacity = v;
+  _wireOpacity = v;
 }
 
 // ══════════════════════════════════════════════
@@ -81,7 +79,7 @@ function rebuildDerivedCache() {
   if (_cacheVer === _themeVer) return;
   _cacheVer = _themeVer;
 
-  const t = theme;
+  const t = _theme;
 
   // Shade colors (RGB arrays from bldCustomTheme)
   const dark = t?.shadeDark;
@@ -112,10 +110,6 @@ function rebuildDerivedCache() {
   }
 }
 
-/**
- * relativeLuminanceRaw - WCAG luminance from RGB array
- * Inlined to avoid cross-module import for hot path.
- */
 function relativeLuminanceRaw(rgb) {
   const r = linear(rgb[0]);
   const g = linear(rgb[1]);
@@ -129,14 +123,20 @@ function linear(v) {
 }
 
 // ══════════════════════════════════════════════
-// Public getters
+// Public getters (read from state, not globalThis)
 // ══════════════════════════════════════════════
 
 /** @returns {number} fill opacity (0-1) */
-export function getFillOpacity() { return fillOpacity; }
+export function getFillOpacity() { return _fillOpacity; }
 
 /** @returns {number} wire opacity (0-1) */
-export function getWireOpacity() { return wireOpacity; }
+export function getWireOpacity() { return _wireOpacity; }
+
+/** @returns {string} theme mode ('dark' | 'light') */
+export function getThemeMode() { return _themeMode; }
+
+/** @returns {object|null} theme palette object */
+export function getTheme() { return _theme; }
 
 /** @returns {[number,number,number]} shadeDark as [r,g,b] */
 export function getShadeDarkRgb() {
@@ -178,21 +178,4 @@ export function getBgColor() {
 export function getParticleColor() {
   rebuildDerivedCache();
   return _particleColor;
-}
-
-// ══════════════════════════════════════════════
-// Bridge: migrate existing globalThis reads
-// ══════════════════════════════════════════════
-
-/**
- * Sync renderState from current globalThis values.
- * Call once per frame (cheap — version checks are fast).
- * This is a migration bridge: once all writers call the setters
- * directly, this function becomes unnecessary.
- */
-export function syncFromGlobals() {
-  if (globalThis.THEME !== theme) setTheme(globalThis.THEME);
-  if (globalThis.THEME_MODE !== themeMode) setThemeMode(globalThis.THEME_MODE);
-  if (globalThis.FILL_OPACITY !== fillOpacity) setFillOpacity(globalThis.FILL_OPACITY);
-  if (globalThis.WIRE_OPACITY !== wireOpacity) setWireOpacity(globalThis.WIRE_OPACITY);
 }
