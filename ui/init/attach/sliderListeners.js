@@ -80,7 +80,6 @@ export function sliderListeners(sliders, lodSlider, detailLevel) {
 
     // Debug log showing which sliders were successfully bound
     // Useful for diagnosing initialization order issues
-    console.debug('[startApp] attached slider listeners', sliders.map((s) => s.name));
   } catch (e) {
     // Catch-all: if the entire slider setup fails, log but keep the app running
     // Users can still interact via mouse/touch even without slider controls

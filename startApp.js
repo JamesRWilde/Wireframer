@@ -128,7 +128,6 @@ export function startApp() {
   
   // Step 9: Initialize render toggles from UI state
   try {
-    console.debug('[startApp] calling syncRenderToggles');
     syncRenderToggles();
   } catch (e) {
     console.warn('[startApp] syncRenderToggles failed', e);
@@ -143,7 +142,6 @@ export function startApp() {
   // Step 12: Start the animation loop
   requestAnimationFrame(animationFrame);
   
-  console.debug('[startApp] started');
 }
 
 // When loaded as the application entry point, initialize canvas and start.

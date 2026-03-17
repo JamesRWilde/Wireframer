@@ -26,10 +26,8 @@ export async function initObjectSelector(restoredShapeName = null) {
   // Fetch the dynamic list of available meshes from the server
   const OBJECTS = await objectList();
   
-  console.debug('[initObjectSelector] called, OBJECTS length', OBJECTS.length);
   const select = document.getElementById('obj-select');
   if (!select) {
-    console.debug('[initObjectSelector] select element not found');
     return;
   }
   select.innerHTML = '';
@@ -48,12 +46,9 @@ export async function initObjectSelector(restoredShapeName = null) {
       const foundIndex = OBJECTS.findIndex(obj => obj.name === restoredShapeName);
       if (foundIndex >= 0) {
         loadIndex = foundIndex;
-        console.debug('[initObjectSelector] restoring shape', restoredShapeName);
       } else {
-        console.debug('[initObjectSelector] restored shape not found, loading first object', OBJECTS[0].name);
       }
     } else {
-      console.debug('[initObjectSelector] auto-loading first object', OBJECTS[0].name);
     }
     select.selectedIndex = loadIndex;
     globalThis.loadObjMesh(OBJECTS[loadIndex].obj, OBJECTS[loadIndex].name);
@@ -61,7 +56,6 @@ export async function initObjectSelector(restoredShapeName = null) {
 
   select.addEventListener('change', async () => {
     const idx = Number(select.value);
-    console.debug('[initObjectSelector] selection changed', idx);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       await globalThis.loadObjMesh(OBJECTS[idx].obj, OBJECTS[idx].name);
       persistState(OBJECTS);

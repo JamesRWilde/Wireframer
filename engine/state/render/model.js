@@ -55,7 +55,6 @@ import { state }from '@engine/state/engine/loop.js';
 export function model(model, name = '') {
   // Debug logging to trace model changes during development
   // Shows whether a model is present or null, helpful for diagnosing loading issues
-  console.debug('[setActiveModel] name', name, 'model', model ? 'present' : 'null');
   
   // Step 1: Update the global MODEL reference
   // This is the primary state that the rendering pipeline reads each frame

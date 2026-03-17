@@ -63,5 +63,4 @@ export function syncCanvasSize(cpuCanvas) {
     globalThis.fillLayerCanvas.height = h;
   }
 
-  console.debug('[initCanvas] synced canvas sizes', w, h);
 }

@@ -60,7 +60,6 @@ if (!globalThis.edgesFromFacesRuntime) {
  * @returns {Object} The processed model ready for rendering
  */
 export function load(mesh, name = 'Shape', options = {}) {
-  console.debug('[load] called', name, 'mesh', mesh?.V?.length, 'vertices');
   
   // Extract options with defaults
   const {
@@ -109,7 +108,6 @@ export function load(mesh, name = 'Shape', options = {}) {
     _shadingMode: 'auto',
     _creaseAngleDeg: undefined,
   };
-  console.debug('[load] built model', name, 'V=', V.length, 'F=', F.length, 'E=', newModel.E.length);
 
   // Step 5: Set LOD range for detail level control
   lodRangeForModel(newModel);

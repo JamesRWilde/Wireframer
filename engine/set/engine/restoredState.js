@@ -15,7 +15,6 @@ export function restoredState() {
   try {
     restoredShapeName = restoreState();
     if (restoredShapeName) {
-      console.debug('[startApp] restored UI state, selected shape', restoredShapeName);
     }
   } catch (e) {
     console.warn('[startApp] restoreState failed', e);
