@@ -1,15 +1,15 @@
 /**
  * renderMeshUnified.js - Unified Triangle Renderer
- * 
+ *
  * PURPOSE:
  *   Renders a mesh by drawing each triangle with fill and edges in a single pass.
  *   No offscreen canvases, no compositing, no workers. Just triangles with edges.
- * 
+ *
  * ARCHITECTURE ROLE:
  *   Replaces the 3-layer compositing approach (fill layer + back wire + front wire)
  *   with a simple per-triangle rendering loop. Each triangle is drawn completely
  *   (fill then edges) before moving to the next.
- * 
+ *
  * RENDERING APPROACH:
  *   1. Sort triangles back-to-front (painter's algorithm)
  *   2. For each triangle:
@@ -30,9 +30,13 @@ import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/comp
 import { relativeLuminance }from '@ui/get/color/relativeLuminance.js';
 import { rgbaString }from '@ui/get/color/rgbaString.js';
 
+// Pre-allocated sort scratch space (reused across frames to avoid per-frame allocation)
+let sortZ = null;    // Float32Array of z-depths per triangle
+let sortIdx = null;  // Uint32Array of triangle indices
+
 /**
  * renderMeshUnified - Renders mesh with per-triangle fill and edges
- * 
+ *
  * @param {Object} model - Model with V, F, E data
  * @param {CanvasRenderingContext2D} ctx - Canvas context to draw to
  */
@@ -55,33 +59,42 @@ export function renderMeshUnified(model, ctx) {
     ? getTriCornerNormals(model, triFaces)
     : null;
 
-  // Get opacities
+  // Cache globals once (avoids repeated globalThis lookups in hot loop)
   const fillAlpha = globalThis.FILL_OPACITY ?? 1;
   const wireAlpha = globalThis.WIRE_OPACITY ?? 1;
+  const fillRgb = globalThis.THEME?.fill ?? [0, 200, 120];
 
-  // Get wire color (contrast with fill)
-  let fillRgb = globalThis.THEME?.fill ?? [0, 200, 120];
+  // Pre-compute edge color (contrast with fill)
   const fillLum = relativeLuminance(fillRgb);
   const contrastWire = fillLum > 0.5 ? [0, 0, 0] : [255, 255, 255];
   const edgeColor = rgbaString(contrastWire, 1);
 
-  // Sort triangles back-to-front (painter's algorithm)
-  const triOrder = new Array(triFaces.length);
-  for (let i = 0; i < triFaces.length; i++) {
-    const tri = triFaces[i];
-    triOrder[i] = {
-      tri,
-      triIndex: i,
-      z: (T[tri[0]][2] + T[tri[1]][2] + T[tri[2]][2]) / 3,
-    };
-  }
-  triOrder.sort((a, b) => b.z - a.z);
+  const triCount = triFaces.length;
 
-  // Render each triangle
+  // Re-allocate sort scratch arrays only if model grew
+  if (!sortZ || sortZ.length < triCount) {
+    sortZ = new Float32Array(triCount);
+    sortIdx = new Uint32Array(triCount);
+  }
+
+  // Compute z-depths and fill index array
+  for (let i = 0; i < triCount; i++) {
+    const tri = triFaces[i];
+    sortZ[i] = (T[tri[0]][2] + T[tri[1]][2] + T[tri[2]][2]) / 3;
+    sortIdx[i] = i;
+  }
+
+  // Sort indices by z-depth (back-to-front) without allocating objects
+  sortIdx.subarray(0, triCount).sort((a, b) => sortZ[b] - sortZ[a]);
+
+  // Render each triangle in sorted order
   ctx.save();
-  
-  for (const item of triOrder) {
-    const [a, b, c] = item.tri;
+  ctx.lineWidth = 0.2;
+
+  for (let si = 0; si < triCount; si++) {
+    const triIdx = sortIdx[si];
+    const tri = triFaces[triIdx];
+    const [a, b, c] = tri;
     const ax = P2[a][0], ay = P2[a][1];
     const bx = P2[b][0], by = P2[b][1];
     const cx = P2[c][0], cy = P2[c][1];
@@ -91,7 +104,7 @@ export function renderMeshUnified(model, ctx) {
     if (Math.abs(area2) < 0.2) continue;
 
     // Compute normal for lighting
-    const normal = resolveTriangleNormal(item, T, triCornerNormals, useSmoothShading);
+    const normal = resolveTriangleNormal(tri, triIdx, T, triCornerNormals, useSmoothShading);
     if (!normal) continue;
 
     // Compute shade color
@@ -115,7 +128,6 @@ export function renderMeshUnified(model, ctx) {
     if (wireAlpha > 0.001) {
       ctx.globalAlpha = wireAlpha;
       ctx.strokeStyle = edgeColor;
-      ctx.lineWidth = 0.2;
       ctx.stroke();
     }
   }

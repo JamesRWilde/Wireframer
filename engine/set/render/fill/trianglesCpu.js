@@ -64,7 +64,7 @@ export function trianglesCpu({
     if (Math.abs(area2) < 0.2) continue; // Skip degenerate triangles (too small to render)
 
     // Resolve the triangle normal for lighting
-    const normal = resolveTriangleNormal(item, T, triCornerNormalsResult, useSmoothShading);
+    const normal = resolveTriangleNormal(item.tri, item.triIndex, T, triCornerNormalsResult, useSmoothShading);
     if (!normal) continue;
 
     // Compute the shaded color from the normal

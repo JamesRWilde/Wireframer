@@ -17,22 +17,23 @@
 /**
  * resolveTriangleNormal - Resolves surface normal for a triangle
  * 
- * @param {Object} item - Triangle item with tri indices and triIndex
+ * @param {Array<number>} tri - Triangle vertex indices [a, b, c]
+ * @param {number} triIndex - Index of this triangle in the face array
  * @param {Array<Array<number>>} T - Transformed vertex positions in view space
  * @param {Array<Array<Array<number>>>} triCornerNormals - Per-corner normals in model space
  * @param {boolean} useSmoothShading - Whether to use smooth shading
- * 
+ *
  * @returns {Array<number>|null} Normalized normal vector [nx, ny, nz], or null if degenerate
- * 
+ *
  * The function:
  * 1. For smooth shading: rotates corner normals to view space and averages
  * 2. For flat shading: computes face normal from edge cross product
  * 3. Normalizes the result
  * 4. Returns null if normal is degenerate (near-zero length)
  */
-export function triangleNormalCpu(item, T, triCornerNormals, useSmoothShading) {
+export function triangleNormalCpu(tri, triIndex, T, triCornerNormals, useSmoothShading) {
   // Get triangle vertex indices
-  const [a, b, c] = item.tri;
+  const [a, b, c] = tri;
   const v0 = T[a];
   const v1 = T[b];
   const v2 = T[c];
@@ -51,7 +52,7 @@ export function triangleNormalCpu(item, T, triCornerNormals, useSmoothShading) {
     // Smooth shading: use pre-computed corner normals
     // Corner normals are stored in model space; rotate them to view space
     // so lighting behaves as if the object spins under a fixed light source
-    const cn = triCornerNormals[item.triIndex];
+    const cn = triCornerNormals[triIndex];
     const R = globalThis.PHYSICS_STATE?.R;
     
     if (R) {
