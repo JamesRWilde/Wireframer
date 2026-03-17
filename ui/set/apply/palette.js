@@ -21,7 +21,7 @@
 "use strict";
 
 import { bldCustomTheme }from '@ui/set/bldCustomTheme.js';
-import {customRed,customGreen,customBlue,themeMode} from '@ui/state/dom.js';
+import {CUSTOM_RGB,customBlue,customGreen,customRed,themeMode} from '@ui/state/dom.js';
 
 /**
  * applyPalette - Applies current color theme to application

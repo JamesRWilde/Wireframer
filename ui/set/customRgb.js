@@ -20,11 +20,13 @@
 
 "use strict";
 
+import {CUSTOM_RGB,CUSTOM_RGB_KEY,customRed,customGreen,customBlue} from '@ui/state/dom.js';
+
+
 import { clampByte }from '@ui/get/color/clampByte.js';
 import { updateCustomColor }from '@ui/set/updateCustomColor.js';
 import { customRgb }from '@ui/get/read/customRgb.js';
 import { palette }from '@ui/set/apply/palette.js';
-import {customRed,customGreen,customBlue} from '@ui/state/dom.js';
 
 export function customRgb(rgb, options = {}) {
   const { persist = true, apply = true } = options;

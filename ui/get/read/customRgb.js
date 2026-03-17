@@ -16,7 +16,7 @@
 
 "use strict";
 
-import {customRed,customGreen,customBlue} from '@ui/state/dom.js';
+import {customRed,customGreen,customBlue, CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT }from '@ui/state/dom.js';
 import { clampByte }from '@ui/get/color/clampByte.js';
 
 export function customRgb() {
