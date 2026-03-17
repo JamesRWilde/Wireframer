@@ -31,7 +31,7 @@
 "use strict";
 
 // Import canvas initialization - sets up all canvas elements and resize handling
-import { initCanvas } from '../render/init/initCanvas.js';
+import { initCanvas } from './render/init/initCanvas.js';
 
 // Import physics state early so its initialization code runs and sets up
 // wx/wy/wz/AUTO_* defaults before the main loop starts
@@ -55,10 +55,10 @@ import { initObjectSelector } from '../ui/init/initObjectSelector.js';
 import { frame } from './frame.js';
 
 // Import rotation matrix initialization
-import { rotationInitialize } from '../render/rotation/rotationInitialize.js';
+import { rotationInitialize } from './render/rotation/rotationInitialize.js';
 
 // Import the rotation matrix reference
-import { R } from '../render/rotation/rotationMatrixRef.js';
+import { R } from './render/rotation/rotationMatrixRef.js';
 
 // Import render toggle synchronization
 import { syncRenderToggles } from '../ui/syncRenderToggles.js';

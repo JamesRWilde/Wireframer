@@ -14,11 +14,11 @@
  *   Falls back to main-thread rendering if worker is unavailable.
  */
 
-import { getModelFrameData } from '../render/get/getModelFrameData.js';
-import { getModelTriangles } from '../render/get/getModelTriangles.js';
+import { getModelFrameData } from '../engine/render/get/getModelFrameData.js';
+import { getModelTriangles } from '../engine/render/get/getModelTriangles.js';
 import { getModelShadingMode } from './getModelShadingMode.js';
-import { getModelTriCornerNormals } from '../render/get/getModelTriCornerNormals.js';
-import { renderFillTriangles } from '../render/renderFillTrianglesCpu.js';
+import { getModelTriCornerNormals } from '../engine/render/get/getModelTriCornerNormals.js';
+import { renderFillTriangles } from '../engine/render/renderFillTrianglesCpu.js';
 import { fillSendRenderCommand } from './fill/fillSendRenderCommand.js';
 import { initFillWorker } from "./fill/initFillWorker.js";
 import { fillGetCachedFrame } from './fill/fillGetCachedFrame.js';

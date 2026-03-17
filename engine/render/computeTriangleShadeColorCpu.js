@@ -16,7 +16,7 @@
  *   - Final color: Interpolation between theme shadeDark and shadeBright
  */
 
-import { lerpColor } from '../ui/color/lerpColor.js';
+import { lerpColor } from '../../ui/color/lerpColor.js';
 
 /**
  * View-space light direction: top-left ceiling light

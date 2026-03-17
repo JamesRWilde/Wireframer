@@ -24,7 +24,7 @@
 
 // Import the dynamic mesh list loader
 // Fetches available .obj files from the server's /api/meshes endpoint
-import { getObjectList } from './render/meshObjectList.js';
+import { getObjectList } from './engine/render/meshObjectList.js';
 
 // Import the OBJ parser that converts raw OBJ text to engine mesh format
 // This is imported explicitly (not dynamically) so it's bundled in the output

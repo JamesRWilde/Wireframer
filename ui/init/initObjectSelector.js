@@ -18,7 +18,7 @@
 
 "use strict";
 
-import { getObjectList } from '../../render/meshObjectList.js';
+import { getObjectList } from '../../engine/render/meshObjectList.js';
 import { persistUiState } from '../persist/persistUiState.js';
 
 export async function initObjectSelector(restoredShapeName = null) {

@@ -1,4 +1,4 @@
-import { state } from '../../engine/loopState.js';
+import { state } from '../../../engine/loopState.js';
 import { sendToWorker } from '../worker/sendToWorker.js';
 import { getCachedTransformResult } from './getCachedTransformResult.js';
 import { convertFlatToNested } from '../convertFlatToNested.js';
