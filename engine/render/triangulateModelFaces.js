@@ -38,7 +38,7 @@ import { triangulateFaceEarClipping } from './triangulation.js';
  * - Quad faces (4 vertices): split into 2 triangles
  * - N-gon faces (5+ vertices): triangulated using ear clipping
  */
-export function getModelTriangles(model) {
+export function triangulateModelFaces(model) {
   // Guard: return empty array if model is invalid or missing required data
   if (!model?.F || !model?.V) return [];
   

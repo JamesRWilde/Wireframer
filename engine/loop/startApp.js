@@ -31,11 +31,11 @@
 "use strict";
 
 // Import canvas initialization - sets up all canvas elements and resize handling
-import { initCanvas } from '../core/initCanvas.js';
+import { initCanvas } from '../render/initCanvas.js';
 
 // Import physics state early so its initialization code runs and sets up
 // wx/wy/wz/AUTO_* defaults before the main loop starts
-import '../physics/physicsState.js';
+import '../render/physicsState.js';
 
 // Bring in loader and mesh loader side-effects (globals) before any mesh operations
 // These set up globalThis.loadObjMesh and globalThis.loadMesh
@@ -43,10 +43,10 @@ import '../../loader.js';
 import '../mesh/loadMesh.js';
 
 // Import model state to make setActiveModel available globally
-import '../core/modelState.js';
+import '../render/modelState.js';
 
 // Expose morph API globally for finalizeModel and renderScene
-import '../morph/initMorphApi.js';
+import '../mesh/initMorphApi.js';
 
 // Import UI initialization functions
 import { initObjectSelector } from '../ui/initObjectSelector.js';
@@ -55,10 +55,10 @@ import { initObjectSelector } from '../ui/initObjectSelector.js';
 import { frame } from './frame.js';
 
 // Import rotation matrix initialization
-import { initializeRotation } from '../math/initializeRotation.js';
+import { initializeRotation } from '../render/initializeRotation.js';
 
 // Import the rotation matrix reference
-import { R } from '../math/R.js';
+import { R } from '../render/R.js';
 
 // Import render toggle synchronization
 import { syncRenderToggles } from '../ui/syncRenderToggles.js';

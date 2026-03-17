@@ -17,7 +17,7 @@
  *   synchronous transformation if worker is unavailable.
  */
 
-import { state } from '../../loop/loopState.js';
+import { state } from '../loop/loopState.js';
 import { sendToWorker, getCachedResult } from './vertexTransformBridge.js';
 
 /**

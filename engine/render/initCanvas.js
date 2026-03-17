@@ -24,7 +24,7 @@
 
 // Import background state to wire up the background canvas reference
 // This coupling is necessary because the background renderer needs direct canvas access
-import { bgState } from '../render/background/backgroundState.js';
+import { bgState } from './backgroundState.js';
 
 /**
  * initCanvas - Initializes canvas elements and sets up resize handling

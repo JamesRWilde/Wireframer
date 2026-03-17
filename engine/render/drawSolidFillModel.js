@@ -14,13 +14,13 @@
  *   Falls back to main-thread rendering if worker is unavailable.
  */
 
-import { getModelFrameData } from '../../camera/getModelFrameData.js';
-import { getModelTriangles } from '../getModelTriangles.js';
-import { getModelShadingMode } from '../normals/getModelShadingMode.js';
-import { getModelTriCornerNormals } from '../normals/getModelTriCornerNormals.js';
+import { getModelFrameData } from './getModelFrameData.js';
+import { getModelTriangles } from './getModelTriangles.js';
+import { getModelShadingMode } from './getModelShadingMode.js';
+import { getModelTriCornerNormals } from './getModelTriCornerNormals.js';
 import { renderFillTriangles } from './renderFillTriangles.js';
 import { initFillWorker, sendRenderCommand, getCachedFrame, isFillWorkerAvailable } from './fillRenderBridge.js';
-import { state } from '../../../loop/loopState.js';
+import { state } from '../loop/loopState.js';
 
 // Track if worker has been initialized
 let workerInitialized = false;
