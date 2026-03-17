@@ -10,9 +10,9 @@ let state = {
   themeMode: 'dark'
 };
 
-import { initWorkersParticles } from './initWorkersParticles.js';
-import { setWorkersUpdateParticles } from './setWorkersUpdateParticles.js';
-import { getWorkersPackParticles } from './getWorkersPackParticles.js';
+import { workersParticles } from './workersParticles.js';
+import { workersUpdateParticles } from './workersUpdateParticles.js';
+import { workersPackParticles } from './workersPackParticles.js';
 
 onmessage = (event) => {
   const { type, width, height, density, speed, timestamp, themeMode } = event.data;
