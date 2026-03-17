@@ -25,7 +25,7 @@
  * 2. Sets fill color with alpha
  * 3. Fills the triangle
  */
-export function fillTriangleOnLayer(ctx2d, tri2d, shadeColor) {
+export function setCpuFillTriangleOnLayer(ctx2d, tri2d, shadeColor) {
   // Accepts optional alpha as 4th argument (for backwards compatibility)
   let alpha = 1;
   if (arguments.length > 3 && typeof arguments[3] === 'number') {

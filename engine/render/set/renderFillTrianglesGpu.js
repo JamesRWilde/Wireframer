@@ -33,7 +33,7 @@
 import { resolveTriangleNormal } from '../resolve/resolveTriangleNormalGpu.js';
 import { computeTriangleShadeColor } from '../get/computeTriangleShadeColorGpu.js';
 import { expandTriangleForSeam } from '../get/expandTriangleForSeamGpu.js';
-import { fillTriangle } from '../../cpu/fill/fillTriangle.js';
+import { fillTriangle } from '../../cpu/set/setCpuFillTriangle.js';
 
 export function renderFillTriangles({ T, P2, triFaces, triCornerNormals, useSmoothShading, theme, fillAlpha, seamExpandPx, R, ctx }) {
   // Sort triangles back-to-front (painter's algorithm). Sorting by average depth helps
@@ -72,6 +72,6 @@ export function renderFillTriangles({ T, P2, triFaces, triCornerNormals, useSmoo
     const tri2d = expandTriangleForSeam([[ax, ay], [bx, by], [cx, cy]], seamExpandPx);
 
     // Rasterize the triangle into the 2D canvas context.
-    fillTriangle(ctx, tri2d, shadeColor, fillAlpha);
+    setCpuFillTriangle(ctx, tri2d, shadeColor, fillAlpha);
   }
 }

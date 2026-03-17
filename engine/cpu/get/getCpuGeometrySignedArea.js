@@ -33,7 +33,7 @@
  * The factor of 2 is intentional - it avoids division and keeps the result
  * compatible with cross product comparisons in the convexity test.
  */
-export function geometrySignedArea(poly) {
+export function getCpuGeometrySignedArea(poly) {
   let area2 = 0;
   
   // Iterate over all edges of the polygon

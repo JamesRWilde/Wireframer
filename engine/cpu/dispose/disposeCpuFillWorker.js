@@ -1,6 +1,6 @@
-import * as state from './fillRenderBridgeState.js';
+import * as state from '../fillRenderBridgeState.js';
 
-export function terminateFillWorker() {
+export function disposeCpuFillWorker() {
   if (state.worker) {
     state.worker.terminate();
     state.worker = null;

@@ -1,6 +1,6 @@
-import * as state from './fillRenderBridgeState.js';
+import * as state from '../fillRenderBridgeState.js';
 
-export function fillSendRenderCommand(renderData, frameId) {
+export function setCpuFillSendRenderCommand(renderData, frameId) {
   if (!state.worker || !state.workerReady) return;
   state.worker.postMessage({
     type: 'render',

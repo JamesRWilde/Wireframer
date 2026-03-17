@@ -31,7 +31,7 @@
  * Uses barycentric coordinates with a small epsilon (1e-8) for floating-point
  * tolerance. This prevents false negatives due to numerical precision issues.
  */
-export function geometryPointInTriangle(p, a, b, c) {
+export function getCpuGeometryPointInTriangle(p, a, b, c) {
   // Compute edge vectors from vertex a
   const v0 = [c[0] - a[0], c[1] - a[1]];  // Vector a->c
   const v1 = [b[0] - a[0], b[1] - a[1]];  // Vector a->b

@@ -19,10 +19,10 @@ import { getModelTriangles } from '../../render/get/getModelTriangles.js';
 import { getModelShadingMode } from '../get/getCpuModelShadingMode.js';
 import { getModelTriCornerNormals } from '../../render/get/getModelTriCornerNormals.js';
 import { renderFillTriangles } from '../../render/set/renderFillTrianglesCpu.js';
-import { fillSendRenderCommand } from '../fill/fillSendRenderCommand.js';
-import { initFillWorker } from "../fill/initFillWorker.js";
-import { fillGetCachedFrame } from '../fill/fillGetCachedFrame.js';
-import { isFillWorkerAvailable } from '../fill/isFillWorkerAvailable.js';
+import { fillSendRenderCommand } from './setCpuFillSendRenderCommand.js';
+import { initFillWorker } from "../init/initCpuFillWorker.js";
+import { fillGetCachedFrame } from '../get/getCpuFillCachedFrame.js';
+import { isFillWorkerAvailable } from '../get/isCpuFillWorkerAvailable.js';
 import { state } from '../../loopState.js';
 
 // Track if worker has been initialized
@@ -67,15 +67,15 @@ export function drawCpuSolidFillModel(model, alphaScale = 1) {
 
   // Try to use worker for parallel rendering
   if (!workerInitialized) {
-    workerInitialized = initFillWorker(W, H);
+    workerInitialized = initCpuFillWorker(W, H);
   }
 
-  if (isFillWorkerAvailable()) {
+  if (isCpuFillWorkerAvailable()) {
     // Send current frame data to worker
     const R = globalThis.PHYSICS_STATE?.R;
     const theme = globalThis.THEME ?? { shadeDark: '#000000', shadeBright: '#ffffff' };
 
-    fillSendRenderCommand({
+    setCpuFillSendRenderCommand({
       T,
       P2,
       triFaces,
@@ -88,7 +88,7 @@ export function drawCpuSolidFillModel(model, alphaScale = 1) {
     }, state.RENDER_FRAME_ID);
 
     // Draw cached frame from previous render
-    const cached = fillGetCachedFrame();
+    const cached = getCpuFillCachedFrame();
     if (cached?.imageBitmap) {
       fillLayerCtx.setTransform(1, 0, 0, 1, 0, 0);
       fillLayerCtx.clearRect(0, 0, W, H);

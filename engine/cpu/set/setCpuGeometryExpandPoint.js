@@ -17,7 +17,7 @@
  *   - If the point is at the centroid, returns the original point.
  *   - Otherwise, normalizes the direction and moves the point outward by expandPx.
  */
-export function geometryExpandPoint(px, py, mx, my, expandPx) {
+export function setCpuGeometryExpandPoint(px, py, mx, my, expandPx) {
   // Vector from centroid to point
   let dx = px - mx;
   let dy = py - my;

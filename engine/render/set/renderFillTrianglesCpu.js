@@ -1,7 +1,7 @@
 import { computeTriangleShadeColor } from '../get/computeTriangleShadeColorCpu.js';
 import { resolveTriangleNormal } from '../resolve/resolveTriangleNormalCpu.js';
 import { expandTriangleForSeam } from '../get/expandTriangleForSeamCpu.js';
-import { fillTriangleOnLayer } from '../../cpu/fill/fillTriangleOnLayer.js';
+import { fillTriangleOnLayer } from '../../cpu/set/setCpuFillTriangleOnLayer.js';
 
 export function renderFillTriangles({
   triOrder,
@@ -28,6 +28,6 @@ export function renderFillTriangles({
     const shadeColor = computeTriangleShadeColor(normal, useSmoothShading);
 
     const tri2d = expandTriangleForSeam([[ax, ay], [bx, by], [cx, cy]], seamExpandPx);
-    fillTriangleOnLayer(fillLayerCtx, tri2d, shadeColor, fillAlpha);
+    setCpuFillTriangleOnLayer(fillLayerCtx, tri2d, shadeColor, fillAlpha);
   }
 }

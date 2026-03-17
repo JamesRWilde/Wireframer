@@ -1,6 +1,6 @@
-import * as state from './fillRenderBridgeState.js';
+import * as state from '../fillRenderBridgeState.js';
 
-export function initFillWorker(width, height) {
+export function initCpuFillWorker(width, height) {
   if (state.worker) return true;
 
   if (typeof OffscreenCanvas === 'undefined') {
