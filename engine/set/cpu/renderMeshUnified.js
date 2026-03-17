@@ -125,10 +125,6 @@ export function renderMeshUnified(model, ctx) {
     const normal = resolveTriangleNormal(tri, triIdx, T, triCornerNormals, useSmoothShading);
     if (!normal) continue;
 
-    // Back-face culling: skip triangles facing away from camera
-    // In view space, camera looks down -Z, so a front-facing normal has nz < 0
-    if (normal[2] > 0.1) continue;
-
     // Compute shade color
     const shadeColor = computeTriangleShadeColor(normal, useSmoothShading);
 
