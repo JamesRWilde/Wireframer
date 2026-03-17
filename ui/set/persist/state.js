@@ -16,8 +16,7 @@
 
 const UI_STATE_KEY = 'wireframer.uiState';
 
-import { themeMode } from '@ui/set/apply/themeMode.js';
-import {bgDensity,bgOpacity,bgVelocity,fillOpacity,lodSlider,select,themeMode,wireOpacity} from '@ui/state/dom.js';
+import {bgDensity,bgOpacity,bgVelocity,fillOpacity,lodSlider,select,themeMode as themeModeEl,wireOpacity} from '@ui/state/dom.js';
 
 /**
  * persistUiState - Saves current UI state to localStorage
