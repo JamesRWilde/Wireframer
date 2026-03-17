@@ -1,9 +1,9 @@
 import * as state from '../set/engineFrameBudgetState.js';
-import { engineFrameAverageTime } from './engineFrameAverageTime.js';
-import { engineQualityDetermineTarget } from '../get/engineQualityDetermineTarget.js';
-import { engineQualityApplyChange } from '../set/engineQualityApplyChange.js';
+import { averageTime } from './averageTime.js';
+import { determineTarget } from '../get/determineTarget.js';
+import { qualityApplyChange } from '../set/qualityApplyChange.js';
 
-export function engineFrameBudget() {
+export function budget() {
   const avgFrameTime = GetEngineFrameAverageTime();
   if (avgFrameTime === 0) return state.currentQuality;
 

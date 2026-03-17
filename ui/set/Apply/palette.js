@@ -20,7 +20,7 @@
 
 "use strict";
 
-import { uiBuildCustomTheme } from './uiBuildCustomTheme.js';
+import { bldCustomTheme } from './bldCustomTheme.js';
 import { CUSTOM_RGB } from '../state/uiDom.js';
 
 /**
@@ -33,7 +33,7 @@ import { CUSTOM_RGB } from '../state/uiDom.js';
  * 2. Sets global THEME object for runtime color access
  * 3. Updates CSS custom properties for UI styling
  */
-export function uiApplyPalette() {
+export function palette() {
   // Build complete theme palette from base color
   const palette = SetUiBuildCustomTheme(CUSTOM_RGB);
   

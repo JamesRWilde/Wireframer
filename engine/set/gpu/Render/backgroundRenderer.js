@@ -26,7 +26,7 @@
  *   - This file must only contain this function and its export.
  *   - Update comments if the render logic or parameter structure changes.
  */
-export function gpuEngineRenderBackgroundRenderer(opts) {
+export function backgroundRenderer(opts) {
   const { gl, locations, buffer, params, needsRebuild, rebuildBuffer, SetGpuEngineRenderBackground, particleCount: prevCount } = opts;
   const { particles } = params;
   let particleCount = prevCount;

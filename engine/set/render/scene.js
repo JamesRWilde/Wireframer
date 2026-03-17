@@ -22,26 +22,26 @@
 
 // Import the background particle renderer
 // Draws animated ambient particles on the background canvas
-import { drawBackground } from './renderEngineDrawBackground.js';
+import { drawBackground } from './background.js';
 
 // Import the CPU foreground renderer
 // Draws solid fill and wireframe using Canvas 2D
-import { renderEngineCpuPath } from './renderEngineCpuPath.js';
+import { cpuPath } from './cpuPath.js';
 
 // Import the GPU foreground renderer
 // Draws using WebGL for hardware-accelerated rendering
-import { renderGpuPath } from './renderEngineGpuPath.js';
+import { renderGpuPath } from './gpuPath.js';
 
 // Import the render mode resolver
 // Determines whether to use GPU or CPU based on WebGL availability
-import { engineForegroundRenderMode } from '../get/engineForegroundRenderMode.js';
+import { foregroundRenderMode } from '../get/foregroundRenderMode.js';
 
 // Import loop state to read the current render mode
 import { state } from '../state/engineLoop.js';
 
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU
-import { engineMixedRenderFlags } from '../set/engineMixedRenderFlags.js';
+import { mixedRenderFlags } from '../set/mixedRenderFlags.js';
 
 /**
  * renderScene - Renders the complete scene (background + foreground)
@@ -57,7 +57,7 @@ import { engineMixedRenderFlags } from '../set/engineMixedRenderFlags.js';
  * 
  * These metrics are used by SetEngineTelemetry to display performance stats.
  */
-export function renderEngineScene(nowMs) {
+export function scene(nowMs) {
   // Get the current active model
   // If no model is loaded, we still render the background but skip foreground
   const currentModel = globalThis.MODEL;

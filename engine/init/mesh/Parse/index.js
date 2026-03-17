@@ -30,7 +30,7 @@
  *   parseIndex("-1", 10) => 9 (last element)
  *   parseIndex("0", 10) => null (invalid)
  */
-export function meshEngineParseIndex(str, arrayLen) {
+export function index(str, arrayLen) {
   // Empty string is invalid
   if (!str) return null;
   

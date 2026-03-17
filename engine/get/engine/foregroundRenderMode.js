@@ -24,10 +24,10 @@
 import { state } from '../state/engineLoop.js';
 
 // Import HUD updater to display the current render mode (GPU/CPU)
-import { engineRendererHud } from '../set/engineRendererHud.js';
+import { hud } from '../set/hud.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { gpuEngineSceneRenderer } from '../get/gpuEngineSceneRenderer.js';
+import { sceneRenderer } from '../get/sceneRenderer.js';
 
 /**
  * GetEngineForegroundRenderMode - Determines and caches the foreground render mode
@@ -42,7 +42,7 @@ import { gpuEngineSceneRenderer } from '../get/gpuEngineSceneRenderer.js';
  * - startApp() during initialization
  * - Any code that needs to know the current render mode
  */
-export function engineForegroundRenderMode() {
+export function foregroundRenderMode() {
   // If mode is already resolved (not 'unknown'), return the cached value
   // This avoids repeated detection and ensures consistent behavior
   if (state.foregroundRenderMode !== 'unknown') return state.foregroundRenderMode;

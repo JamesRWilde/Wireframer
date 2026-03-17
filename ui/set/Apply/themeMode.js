@@ -12,7 +12,7 @@
  */
 import { themeMode } from '../state/uiDom.js';
 
-export function uiApplyThemeMode(state) {
+export function themeMode(state) {
   if (!themeMode || !('themeMode' in state)) return;
   themeMode.value = state.themeMode === 'light' ? 'light' : 'dark';
 }

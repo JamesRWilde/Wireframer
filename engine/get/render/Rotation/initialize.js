@@ -19,13 +19,13 @@
 "use strict";
 
 // Import matrix multiplication for combining rotations
-import { renderEngineMatrixMultiply3x3 } from './renderEngineMatrixMultiply3x3.js';
+import { matrixMultiply3x3 } from './matrixMultiply3x3.js';
 
 // Import Y-axis rotation matrix constructor
-import { renderEngineRotationMatrixY } from './renderEngineRotationMatrixY.js';
+import { matrixY } from './matrixY.js';
 
 // Import X-axis rotation matrix constructor
-import { renderEngineRotationMatrixX } from './renderEngineRotationMatrixX.js';
+import { matrixX } from './matrixX.js';
 
 // Import the global rotation matrix reference
 import { R } from '../state/renderEngineRotationMatrixRef.js';
@@ -40,7 +40,7 @@ import { R } from '../state/renderEngineRotationMatrixRef.js';
  * This gives a pleasing three-quarter view of the model.
  * Falls back to identity matrix if rotation functions aren't available.
  */
-export function renderEngineRotationInitialize() {
+export function initialize() {
   // Check if rotation functions are available
   if (typeof mry === 'function' && typeof mrx === 'function' && typeof mmul === 'function') {
     // Create initial rotation: Ry(0.4) * Rx(0.18)

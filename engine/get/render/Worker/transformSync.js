@@ -1,4 +1,4 @@
-export function renderEngineWorkerTransformSync(V, Rmat, fov, halfW, halfH, modelCy, vertexCount) {
+export function transformSync(V, Rmat, fov, halfW, halfH, modelCy, vertexCount) {
   const r00 = Rmat[0], r01 = Rmat[1], r02 = Rmat[2];
   const r10 = Rmat[3], r11 = Rmat[4], r12 = Rmat[5];
   const r20 = Rmat[6], r21 = Rmat[7], r22 = Rmat[8];

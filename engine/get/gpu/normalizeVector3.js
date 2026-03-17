@@ -1,4 +1,4 @@
-export function gpuEngineNormalizeVector3(out, v, fallback) {
+export function normalizeVector3(out, v, fallback) {
   const x = Number(v?.[0]);
   const y = Number(v?.[1]);
   const z = Number(v?.[2]);

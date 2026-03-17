@@ -15,7 +15,7 @@
 
 import { CUSTOM_RGB_KEY, CUSTOM_RGB } from '../state/uiDom.js';
 
-export function uiPersistCustomRgb() {
+export function customRgb() {
   try {
     localStorage.setItem(CUSTOM_RGB_KEY, JSON.stringify(CUSTOM_RGB));
   } catch {

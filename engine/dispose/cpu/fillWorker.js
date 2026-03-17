@@ -1,6 +1,6 @@
 import * as state from '../state/cpuEngineFillRenderBridge.js';
 
-export function cpuEngineFillWorker() {
+export function fillWorker() {
   if (state.worker) {
     state.worker.terminate();
     state.worker = null;

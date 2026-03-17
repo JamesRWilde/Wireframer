@@ -33,7 +33,7 @@ import { state, MIN_FRAME_INTERVAL_MS } from '../state/engineLoop.js';
  * When MAX_FPS is 0 (uncapped), this always returns a number (never null).
  * When MAX_FPS is set, frames are skipped if they arrive too quickly.
  */
-export function engineShouldRunFrame(nowMs) {
+export function shouldRunFrame(nowMs) {
   // Check if frame rate limiting is enabled (MIN_FRAME_INTERVAL_MS > 0)
   // AND we have a valid last frame timestamp (state.lastFrameMs >= 0)
   // AND insufficient time has passed since the last frame

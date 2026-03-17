@@ -34,7 +34,7 @@
  * 2. V array exists and has at least 3 vertices
  * 3. F array exists and has at least 1 face
  */
-export function meshEngineValidate(mesh, name, meshFileName, meshType) {
+export function validationResult(mesh, name, meshFileName, meshType) {
   // Check 1: Mesh must exist (not null or undefined)
   if (mesh === undefined || mesh === null) {
     throw new Error(`[InitMeshEngineLoad] Mesh input is ${mesh === null ? 'null' : 'undefined'} for '${name}'.\n  - Source: mesh file did not return a valid OBJ string.`);

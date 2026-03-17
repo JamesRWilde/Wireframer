@@ -30,7 +30,7 @@
  * 1. Simple arrays: [[0,1,2], [1,2,3], ...]
  * 2. Objects with indices: [{indices: [0,1,2]}, {indices: [1,2,3]}, ...]
  */
-export function meshEngineNormalizeFaces(F) {
+export function normalizeFaces(F) {
   // Guard: return empty array if input is invalid
   if (!Array.isArray(F) || F.length === 0) return [];
   

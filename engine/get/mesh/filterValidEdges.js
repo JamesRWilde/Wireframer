@@ -31,7 +31,7 @@
  * The function uses the global InitMeshEngineBuildEdgesFromFacesRuntime if available,
  * otherwise falls back to a simple filter that checks array structure.
  */
-export function meshEngineFilterValidEdges(E, V) {
+export function filterValidEdges(E, V) {
   // Check if the global edge builder is available
   if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
     // Fallback: simple filter for basic validity

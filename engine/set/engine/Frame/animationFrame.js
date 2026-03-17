@@ -24,7 +24,7 @@
 
 // Import the runFrame function that performs the actual per-frame work
 // This includes physics updates, rendering, and telemetry updates
-import { runFrame } from './engineFrameRun.js';
+import { runFrame } from './run.js';
 
 // Initialize shared frame state flags on first load
 // These track whether GPU or CPU rendering was used last frame, which affects
@@ -54,7 +54,7 @@ let __lastRafMs = 0;
  * 
  * The browser will call this ~60 times per second (or matching display refresh rate).
  */
-export function engineFrame(nowMs = 0) {
+export function animationFrame(nowMs = 0) {
   // Debug logging: measure time between consecutive frames
   // This helps diagnose jank (dropped frames) during development
   // Only logs when DEBUG_RAF global is set to avoid performance overhead

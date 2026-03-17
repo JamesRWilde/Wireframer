@@ -33,7 +33,7 @@
  *   clusterCount: Number of clusters along each axis
  *   cellSize: Size of each grid cell in world units
  */
-export function meshEngineComputeClusterParams(targetFaces, extent) {
+export function computeClusterParams(targetFaces, extent) {
   // Compute cluster count from target face count
   // Cube root because we're in 3D space
   // Multiply by 2 to get more clusters than faces (finer granularity)

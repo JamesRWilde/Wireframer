@@ -36,7 +36,7 @@
  * @returns {Map<string, Array<number>>} Map from cell keys to vertex indices
  *   Cell keys are strings like "gx,gy,gz" where gx/gy/gz are grid coordinates
  */
-export function meshEngineAssignVerticesToCells(V, minX, minY, minZ, cellSize) {
+export function assignVerticesToCells(V, minX, minY, minZ, cellSize) {
   // Create map to store cell assignments
   const cellMap = new Map();
 

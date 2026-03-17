@@ -8,9 +8,9 @@
 
 "use strict";
 
-import { uiRestoreState } from '../../ui/set/uiRestoreState.js';
+import { restoreState } from '../../ui/set/restoreState.js';
 
-export function engineRestoredState() {
+export function restoredState() {
   let restoredShapeName = null;
   try {
     restoredShapeName = SetUiRestoreState();

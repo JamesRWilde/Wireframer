@@ -21,7 +21,7 @@
 
 // Import the mesh decimation algorithm
 // This reduces vertex count while preserving the model's overall shape
-import { meshEngineDecimateByPercent } from '../init/meshEngineDecimateByPercent.js';
+import { decimateByPercent } from '../init/decimateByPercent.js';
 
 /**
  * SetMeshEngineDetailLevel - Sets the LOD detail level for the active model
@@ -38,7 +38,7 @@ import { meshEngineDecimateByPercent } from '../init/meshEngineDecimateByPercent
  * 3. Decimates the base model to the target vertex count
  * 4. Sets the decimated model as active for rendering
  */
-export function meshEngineDetailLevel(percent, name = 'Shape') {
+export function detailLevel(percent, name = 'Shape') {
   // Guard: return if no base model is loaded
   if (!globalThis.BASE_MODEL) return;
   

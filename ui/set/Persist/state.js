@@ -30,7 +30,7 @@ import {
  * persistUiState - Saves current UI state to localStorage
  * @param {Array<{key: string, name: string, obj: string}>} objects - The mesh object list
  */
-export function uiPersistState(objects = []) {
+export function state(objects = []) {
   const select = document.getElementById('obj-select');
   const selectedIndex = Number(select ? select.value : Number.NaN);
   const selectedObject = Number.isInteger(selectedIndex) && selectedIndex >= 0 && selectedIndex < objects.length

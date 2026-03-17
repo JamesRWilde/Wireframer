@@ -25,23 +25,23 @@
 "use strict";
 
 // Import edge filtering to remove degenerate edges
-import { meshEngineFilterValidEdges } from '../get/meshEngineFilterValidEdges.js';
+import { filterValidEdges } from '../get/filterValidEdges.js';
 
 // Import mesh validation to ensure data integrity
-import { meshEngineValidate } from '../get/meshEngineValidate.js';
+import { validationResult } from '../get/validationResult.js';
 
 // Import LOD range setup for detail level control
-import { meshEngineLodRangeForModel } from '../set/meshEngineLodRangeForModel.js';
+import { lodRangeForModel } from '../set/lodRangeForModel.js';
 
 // Import camera fitting to frame the model properly
-import { meshEngineFitCameraToModel } from './meshEngineFitCameraToModel.js';
+import { fitCameraToModel } from './fitCameraToModel.js';
 
 // Import model finalization (activation, morph setup)
-import { meshEngineFinalizeModel } from './meshEngineFinalizeModel.js';
+import { finalizeModel } from './finalizeModel.js';
 
 // Import edge building utility
 // Register globally so any consumer can invoke it without circular imports
-import { meshEngineBuildEdgesFromFacesRuntime } from './meshEngineBuildEdgesFromFacesRuntime.js';
+import { edgesFromFacesRuntime } from './edgesFromFacesRuntime.js';
 if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
   globalThis.InitMeshEngineBuildEdgesFromFacesRuntime = InitMeshEngineBuildEdgesFromFacesRuntime;
 }
@@ -59,7 +59,7 @@ if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
  * 
  * @returns {Object} The processed model ready for rendering
  */
-export function meshEngineLoad(mesh, name = 'Shape', options = {}) {
+export function load(mesh, name = 'Shape', options = {}) {
   console.debug('[InitMeshEngineLoad] called', name, 'mesh', mesh?.V?.length, 'vertices');
   
   // Extract options with defaults

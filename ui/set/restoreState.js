@@ -15,10 +15,10 @@
 
 "use strict";
 
-import { uiReadState } from '../get/uiReadState.js';
-import { uiApplyClampedValue } from './uiApplyClampedValue.js';
-import { uiApplyThemeMode } from './uiApplyThemeMode.js';
-import { uiBuildMigratedState } from '../init/uiBuildMigratedState.js';
+import { state } from '../get/state.js';
+import { clampedValue } from './clampedValue.js';
+import { themeMode } from './themeMode.js';
+import { bldMigratedState } from '../init/bldMigratedState.js';
 import {
   lodSlider,
   fillOpacity,
@@ -30,7 +30,7 @@ import {
 
 const UI_STATE_KEY = 'wireframer.uiState';
 
-export function uiRestoreState() {
+export function restoreState() {
   const state = GetUiReadState();
   if (!state) return null;
 

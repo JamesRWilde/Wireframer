@@ -22,11 +22,11 @@
 
 // Import the function that applies Euler angle increments to the rotation matrix
 // This updates the rotation matrix in-place based on angular velocities
-import { applyEulerIncrementInPlace } from '../get/renderEngineApplyEulerIncrement.js';
+import { applyEulerIncrementInPlace } from '../get/applyEulerIncrement.js';
 
 // Import the re-orthogonalization function
 // This corrects numerical drift in the rotation matrix (prevents skewing)
-import { reorthogonalize } from '../get/renderEngineReorthogonalize.js';
+import { reorthogonalize } from '../get/reorthogonalize.js';
 
 // Import loop state for frame counting
 import { state } from '../state/engineLoop.js';
@@ -43,7 +43,7 @@ import { state } from '../state/engineLoop.js';
  * 3. Periodically re-orthogonalizes the rotation matrix
  * 4. Updates angular velocities based on drag state
  */
-export function enginePhysics() {
+export function physics() {
   // Record start time for performance measurement
   const physStartMs = performance.now();
   

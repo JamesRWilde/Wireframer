@@ -20,7 +20,7 @@ import {
   bgOpacity,
 } from '../state/uiDom.js';
 
-export function uiBuildMigratedState(state) {
+export function bldMigratedState(state) {
   return {
     selectedShapeName: state.selectedShapeName || null,
     themeMode: state.themeMode || 'dark',

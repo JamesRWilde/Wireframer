@@ -30,7 +30,7 @@ import { morphState } from '../state/meshEngineMorph.js';
  * Note: This does NOT invoke the onComplete callback, as the morph
  * was cancelled rather than completed naturally.
  */
-export function meshEngineStopMorph() {
+export function stopMorph() {
   // Mark morph as inactive
   morphState.active = false;
   

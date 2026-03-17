@@ -21,14 +21,14 @@
 
 "use strict";
 
-import { renderEngineModelFrameData } from '../get/renderEngineModelFrameData.js';
-import { getModelTriangles } from '../get/renderEngineModelTriangles.js';
-import { getModelShadingMode } from '../get/cpuEngineModelShadingMode.js';
-import { getModelTriCornerNormals } from '../get/renderEngineModelTriCornerNormals.js';
+import { frameData } from '../get/frameData.js';
+import { getModelTriangles } from '../get/triangles.js';
+import { getModelShadingMode } from '../get/shadingMode.js';
+import { getModelTriCornerNormals } from '../get/triCornerNormals.js';
 import { resolveTriangleNormal } from '../get/renderEngineResolveTriangleNormalCpu.js';
-import { computeTriangleShadeColor } from '../get/renderEngineComputeTriangleCpu.js';
-import { uiColorRelativeLuminance } from '../../ui/get/uiColorRelativeLuminance.js';
-import { renderEngineRgbaString } from '../get/renderEngineRgbaString.js';
+import { computeTriangleShadeColor } from '../get/triangleCpu.js';
+import { relativeLuminance } from '../../ui/get/relativeLuminance.js';
+import { rgbaString } from '../get/rgbaString.js';
 
 /**
  * renderMeshUnified - Renders mesh with per-triangle fill and edges
@@ -36,7 +36,7 @@ import { renderEngineRgbaString } from '../get/renderEngineRgbaString.js';
  * @param {Object} model - Model with V, F, E data
  * @param {CanvasRenderingContext2D} ctx - Canvas context to draw to
  */
-export function cpuEngineRenderMeshUnified(model, ctx) {
+export function renderMeshUnified(model, ctx) {
   if (!model?.V?.length || !model?.F?.length || !ctx) return;
 
   // Get transformed vertices

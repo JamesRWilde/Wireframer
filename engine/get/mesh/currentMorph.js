@@ -29,7 +29,7 @@ import { morphState } from '../state/meshEngineMorph.js';
  * progress point. When no morph is active, returns null so renderScene knows
  * to use the regular model.
  */
-export function meshEngineCurrentMorph() {
+export function currentMorph() {
   // Return current mesh if morph is active, otherwise null
   if (morphState.active) return morphState.currentMesh;
   return null;

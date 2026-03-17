@@ -11,7 +11,7 @@
  *   The server scans the meshes/ directory and returns all .obj files.
  * 
  * USAGE:
- *   import { getObjectList } from './renderEngineObjectList.js';
+ *   import { getObjectList } from './objectList.js';
  *   const objects = await getObjectList();
  */
 
@@ -31,7 +31,7 @@ let _pending = null;
  * @returns {Promise<Array<{key: string, name: string, obj: string}>>}
  *   Array of mesh objects sorted alphabetically by key
  */
-export function renderEngineObjectList() {
+export function objectList() {
   if (_cache !== null) return Promise.resolve(_cache);
   
   // Static mesh list (no server API needed for static hosting)

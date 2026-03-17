@@ -27,7 +27,7 @@
 
 "use strict";
 
-export function renderEngineResolveTriangleGpu(tri, triIndex, T, triCornerNormals, useSmoothShading, R) {
+export function triangleNormalGpu(tri, triIndex, T, triCornerNormals, useSmoothShading, R) {
   const [a, b, c] = tri;
   const v0 = T[a], v1 = T[b], v2 = T[c];
   let nx, ny, nz;

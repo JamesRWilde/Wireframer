@@ -1,6 +1,6 @@
 import * as state from '../state/renderEngineVertexTransformBridge.js';
 
-export function renderEngineWorkerTransform() {
+export function workerTransform() {
   if (state.worker) return true;
 
   try {

@@ -20,7 +20,7 @@
 
 "use strict";
 
-export function renderEngineLerpColor(color1, color2, t) {
+export function lerpColor(color1, color2, t) {
   // Handle both hex strings and [r,g,b] arrays
   let r1, g1, b1, r2, g2, b2;
   if (Array.isArray(color1)) {

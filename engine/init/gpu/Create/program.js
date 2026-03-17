@@ -1,6 +1,6 @@
-import { gpuEngineCompileShader } from './gpuEngineCompileShader.js';
+import { compileShader } from './compileShader.js';
 
-export function gpuEngineCreateProgram(gl, vs, fs) {
+export function program(gl, vs, fs) {
   const v = InitGpuEngineCompileShader(gl, gl.VERTEX_SHADER, vs);
   const f = InitGpuEngineCompileShader(gl, gl.FRAGMENT_SHADER, fs);
   const program = gl.createProgram();

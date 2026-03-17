@@ -1,4 +1,4 @@
-import { renderEngineCreateParticle } from '../init/renderEngineCreateParticle.js';
+import { createParticle } from '../init/createParticle.js';
 
 const MAX_DENSITY_MULT = 1.6;
 const MAX_VELOCITY_MULT = 1;
@@ -6,7 +6,7 @@ const MAX_VELOCITY_MULT = 1;
 let lastSize = { w: 0, h: 0 };
 let lastDensity = 1;
 
-export function renderEngineSeedParticles(particles, w, h) {
+export function seedParticles(particles, w, h) {
   const baseCount = Math.max(8, Math.round((w * h) / 45000));
   const densityPct = globalThis.BG_PARTICLE_DENSITY_PCT ?? 1;
   const density = densityPct * MAX_DENSITY_MULT;

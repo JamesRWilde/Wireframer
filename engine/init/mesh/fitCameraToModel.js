@@ -18,7 +18,7 @@
  */
 
 // Import frame parameter computation for projection setup
-import { computeFrameParams } from '../get/renderEngineComputeFrameParams.js';
+import { computeFrameParams } from '../get/frameParams.js';
 
 /**
  * InitMeshEngineFitCameraToModel - Adjusts camera to frame the model
@@ -36,7 +36,7 @@ import { computeFrameParams } from '../get/renderEngineComputeFrameParams.js';
  * 
  * We solve for ZOOM to make the model fill a target fraction of the screen.
  */
-export function meshEngineFitCameraToModel(model) {
+export function fitCameraToModel(model) {
   // Guard: return if model has no vertices
   if (!model?.V?.length) return;
 

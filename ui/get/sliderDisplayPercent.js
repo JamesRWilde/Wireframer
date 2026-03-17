@@ -25,7 +25,7 @@
  * 3. Calculates percentage: ((value - min) / (max - min)) * 100
  * 4. Rounds to nearest integer
  */
-export function uiSliderDisplayPercent(slider) {
+export function sliderDisplayPercent(slider) {
   // Extract slider properties
   const min = Number(slider.min);
   const max = Number(slider.max);

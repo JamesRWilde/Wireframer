@@ -17,7 +17,7 @@
 "use strict";
 
 import { themeMode } from '../state/uiDom.js';
-import { uiApplyPalette } from './uiApplyPalette.js';
+import { palette } from './palette.js';
 
 /**
  * SetUiThemeMode - Sets application theme mode
@@ -33,7 +33,7 @@ import { uiApplyPalette } from './uiApplyPalette.js';
  * 2. Updates theme mode select element
  * 3. Optionally applies palette to update UI
  */
-export function uiThemeMode(mode, options = {}) {
+export function themeMode(mode, options = {}) {
   const { apply = true } = options;
   
   // Set global theme mode (normalize to 'light' or 'dark')

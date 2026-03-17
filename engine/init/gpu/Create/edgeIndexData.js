@@ -17,7 +17,7 @@
  *   edgeData: The index buffer for all model edges (2 indices per edge).
  *   indexType: The WebGL constant for the index type (gl.UNSIGNED_SHORT or gl.UNSIGNED_INT).
  */
-export function gpuEngineCreateEdgeIndexData(model, vertexCount, supportsUint32, gl) {
+export function edgeIndexData(model, vertexCount, supportsUint32, gl) {
   // Compute total number of edge indices (2 per edge)
   const edgeIndexCount = model.E.length * 2;
   // Use 32-bit indices if model is large and context supports it, else 16-bit

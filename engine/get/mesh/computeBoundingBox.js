@@ -35,7 +35,7 @@
  *   @returns {number} extent - Largest dimension (max of width/height/depth)
  *     Defaults to 1 if all dimensions are zero (degenerate case)
  */
-export function meshEngineComputeBoundingBox(V) {
+export function computeBoundingBox(V) {
   // Initialize min/max to opposite extremes
   let minX = Infinity;
   let maxX = -Infinity;

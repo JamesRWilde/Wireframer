@@ -26,23 +26,23 @@
 import { state } from '../state/engineLoop.js';
 
 // Import physics update function - handles rotation and input
-import { enginePhysics } from './enginePhysics.js';
+import { physics } from './physics.js';
 
 // Import scene renderer - draws background and foreground
-import { renderScene } from './renderEngineScene.js';
+import { renderScene } from './scene.js';
 
 // Import telemetry HUD updater - displays stats in the UI
-import { engineTelemetryHud } from './engineTelemetryHud.js';
+import { hud } from './hud.js';
 
 // Import frame throttling check - skips frames if running too fast
-import { shouldRunFrame } from '../get/engineShouldRunFrame.js';
+import { shouldRunFrame } from '../get/shouldRunFrame.js';
 
 // Import telemetry collector - smooths and stores timing metrics
-import { engineTelemetry } from './engineTelemetry.js';
+import { telemetryState } from './telemetryState.js';
 
 // Import frame budget manager for adaptive quality
-import { engineFrameTime } from './engineFrameTime.js';
-import { engineFrameBudget } from '../get/engineFrameBudget.js';
+import { time } from './time.js';
+import { budget } from '../get/budget.js';
 
 /**
  * runFrame - Executes all operations for a single animation frame
@@ -58,7 +58,7 @@ import { engineFrameBudget } from '../get/engineFrameBudget.js';
  * 5. Collects performance metrics
  * 6. Updates the telemetry HUD display
  */
-export function engineFrameRun(nowMs = 0) {
+export function run(nowMs = 0) {
   // Record frame start time for performance measurement
   const frameStartMs = performance.now();
 

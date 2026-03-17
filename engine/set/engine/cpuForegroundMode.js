@@ -23,7 +23,7 @@ import { state } from '../state/engineLoop.js';
 
 // Import the HUD update function to display the current render mode
 // This shows "GPU" or "CPU" in the stats display so users know which path is active
-import { engineRendererHud } from './engineRendererHud.js';
+import { hud } from './hud.js';
 
 /**
  * SetEngineCpuForegroundMode - Switches foreground rendering to CPU path
@@ -35,7 +35,7 @@ import { engineRendererHud } from './engineRendererHud.js';
  * The CPU path uses Canvas 2D for rendering, which is universally supported
  * but typically slower than WebGL for complex scenes.
  */
-export function engineCpuForegroundMode() {
+export function cpuForegroundMode() {
   // Update the render mode to CPU in loop state
   // This variable is read by the frame loop to determine which rendering path to use
   state.foregroundRenderMode = 'cpu';

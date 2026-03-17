@@ -32,7 +32,7 @@
  * 2. Returns existing index if key already exists
  * 3. Otherwise creates new unique vertex and returns its index
  */
-export function meshEngineOrCreateVertIdx(v, vt, vn, state) {
+export function orCreateVertIdx(v, vt, vn, state) {
   // Create unique key from position/normal/UV indices
   const key = `${v}/${vt ?? ''}/${vn ?? ''}`;
   

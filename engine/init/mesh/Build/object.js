@@ -20,7 +20,7 @@
  */
 
 // Import edge building utility
-import { meshEngineBuildEdgesFromFacesRuntime } from './meshEngineBuildEdgesFromFacesRuntime.js';
+import { edgesFromFacesRuntime } from './edgesFromFacesRuntime.js';
 
 // Register helper globally so callers don't have to import it repeatedly
 if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
@@ -36,7 +36,7 @@ if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
  * 
  * @returns {Object} Complete mesh object ready for rendering
  */
-export function meshEngineBuildObject(uniqueVerts, faces) {
+export function object(uniqueVerts, faces) {
   // Build base mesh object with vertices and faces
   const meshObj = {
     V: uniqueVerts,  // [x, y, z, u, v, nx, ny, nz]
@@ -50,7 +50,7 @@ export function meshEngineBuildObject(uniqueVerts, faces) {
   // Ensure edge builder is available (parsing may run before loader.js)
   if (!globalThis.InitMeshEngineBuildEdgesFromFacesRuntime) {
     // eslint-disable-next-line import/no-cycle
-    const { meshEngineBuildEdgesFromFacesRuntime } = require(''./meshEngineBuildEdgesFromFacesRuntime.js');
+    const { edgesFromFacesRuntime } = require(''./edgesFromFacesRuntime.js');
     globalThis.InitMeshEngineBuildEdgesFromFacesRuntime = InitMeshEngineBuildEdgesFromFacesRuntime;
   }
   

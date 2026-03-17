@@ -15,7 +15,7 @@
  *   Edges are deduplicated so shared edges between faces appear only once.
  */
 
-import { meshEngineAddEdge } from './meshEngineAddEdge.js';
+import { addEdge } from './addEdge.js';
 
 /**
  * InitMeshEngineBuildEdgesFromFacesRuntime - Extracts unique edges from face arrays
@@ -29,7 +29,7 @@ import { meshEngineAddEdge } from './meshEngineAddEdge.js';
  * @returns {Array<Array<number>>} Array of unique edges as [lo, hi] pairs
  *   where lo < hi for consistent deduplication
  */
-export function meshEngineBuildEdgesFromFacesRuntime(faces) {
+export function edgesFromFacesRuntime(faces) {
   const E = [];
   const edgeSet = new Set();
 

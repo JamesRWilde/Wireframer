@@ -16,7 +16,7 @@
  *   const flatNormals = getFlatCornerNormals(faceNormals);
  *   // flatNormals[i][c] gives the normal for corner c of triangle i
  */
-export function cpuEngineGeometryFlatNormals(faceNormals) {
+export function flatNormals(faceNormals) {
   // Allocate output array for per-triangle, per-corner normals
   const cornerNormals = new Array(faceNormals.length);
   let i = 0;

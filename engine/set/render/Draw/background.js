@@ -1,17 +1,17 @@
-import { getBackgroundCanvas } from '../get/renderEngineBackgroundCanvas.js';
-import { getBackgroundColors } from '../get/renderEngineBackgroundColors.js';
-import { renderEngineSeedParticles } from './renderEngineSeedParticles.js';
+import { getBackgroundCanvas } from '../get/canvas.js';
+import { getBackgroundColors } from '../get/colors.js';
+import { seedParticles } from './seedParticles.js';
 import { workersUpdateParticles } from '../../workers/workersUpdateParticles.js';
-import { drawParticles } from './renderEngineDrawParticles.js';
-import { renderEngineBackgroundWorker } from '../init/renderEngineBackgroundWorker.js';
-import { renderEngineIsBackgroundWorkerReady } from '../get/renderEngineIsBackgroundWorkerReady.js';
-import { renderEnginePendingWorkerParticles } from '../get/renderEnginePendingWorkerParticles.js';
-import { renderEnginePostToBackgroundWorker } from './renderEnginePostToBackgroundWorker.js';
+import { drawParticles } from './particles.js';
+import { backgroundWorker } from '../init/backgroundWorker.js';
+import { isBackgroundWorkerReady } from '../get/isBackgroundWorkerReady.js';
+import { pendingWorkerParticles } from '../get/pendingWorkerParticles.js';
+import { postToBackgroundWorker } from './postToBackgroundWorker.js';
 
 let particles = [];
 let workerInitialized = false;
 
-export function renderEngineDrawBackground(nowMs) {
+export function background(nowMs) {
   const canvasState = getBackgroundCanvas();
   if (!canvasState) return false;
   const { ctx, w, h } = canvasState;

@@ -1,4 +1,4 @@
-export function renderEngineConvertFlatToNested(flatT, flatP2, vertexCount) {
+export function convertFlatToNested(flatT, flatP2, vertexCount) {
   const T = new Array(vertexCount);
   const P2 = new Array(vertexCount);
   for (let i = 0; i < vertexCount; i++) {

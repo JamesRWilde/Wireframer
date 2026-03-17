@@ -20,7 +20,7 @@
 "use strict";
 
 // Import the mouse/touch move handler
-import { onMove } from '../set/renderEngineOnMove.js';
+import { onMove } from '../set/onMove.js';
 
 /**
  * attachInputListeners - Attaches input event listeners to canvas
@@ -33,7 +33,7 @@ import { onMove } from '../set/renderEngineOnMove.js';
  * 3. Attaches touch event handlers (touchstart, touchend, touchmove)
  * 4. Attaches wheel event handler for zoom
  */
-export function renderEngineAttachInputListeners(canvas) {
+export function attachInputListeners(canvas) {
   // Guard: return if canvas doesn't exist
   if (!canvas) return;
   

@@ -1,6 +1,6 @@
 import * as state from '../state/cpuEngineFillRenderBridge.js';
 
-export function cpuEngineFillWorker(width, height) {
+export function fillWorker(width, height) {
   if (state.worker) return true;
 
   if (typeof OffscreenCanvas === 'undefined') {

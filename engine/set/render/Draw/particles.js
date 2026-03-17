@@ -32,7 +32,7 @@
  * 3. Parses color string to rgba with computed alpha
  * 4. Draws circle with glow effect using shadow blur
  */
-export function renderEngineDrawParticles(ctx, particles, color, opacityScale, themeAlphaBoost) {
+export function particles(ctx, particles, color, opacityScale, themeAlphaBoost) {
   // Store base color for reuse across particles
   const baseColor = color;
 

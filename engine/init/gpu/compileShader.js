@@ -1,4 +1,4 @@
-export function gpuEngineCompileShader(gl, type, source) {
+export function compileShader(gl, type, source) {
   const shader = gl.createShader(type);
   gl.shaderSource(shader, source);
   gl.InitGpuEngineCompileShader(shader);

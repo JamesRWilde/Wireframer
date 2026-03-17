@@ -36,7 +36,7 @@
  * 2. Multiplying by the polygon's signed area to account for winding order
  * 3. If the result is positive, the angle is convex
  */
-export function cpuEngineGeometryConvex(proj, i0, i1, i2, area2) {
+export function convex(proj, i0, i1, i2, area2) {
   // Get the three vertices
   const a = proj[i0], b = proj[i1], c = proj[i2];
   

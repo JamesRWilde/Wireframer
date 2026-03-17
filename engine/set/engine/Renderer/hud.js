@@ -34,7 +34,7 @@ import { statsState } from '../../ui/state/uiStats.js';
  * - "CPU" when Canvas 2D fallback is active
  * - "--" when the mode is unknown (during initialization)
  */
-export function engineRendererHud(mode) {
+export function hud(mode) {
   // Get the DOM element for the renderer stat display
   const statRenderer = statsState.statRenderer;
   

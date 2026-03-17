@@ -21,8 +21,8 @@
 
 "use strict";
 
-import { uiColorContrastRatio } from './uiColorContrastRatio.js';
-import { uiColorMixRgb } from './uiColorMixRgb.js';
+import { contrastRatio } from './contrastRatio.js';
+import { mixRgb } from './mixRgb.js';
 
 /**
  * enforceContrast - Adjusts foreground color to meet contrast requirements
@@ -38,7 +38,7 @@ import { uiColorMixRgb } from './uiColorMixRgb.js';
  * 2. Tries mixing toward white and black in 24 steps
  * 3. Returns first color meeting minimum, or best found
  */
-export function uiColorEnforceContrast(fg, bg, minRatio) {
+export function enforceContrast(fg, bg, minRatio) {
   // Check current contrast
   const current = GetUiColorContrastRatio(fg, bg);
   if (current >= minRatio) return fg;

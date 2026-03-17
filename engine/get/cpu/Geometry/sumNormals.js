@@ -22,7 +22,7 @@
  *   const [nx, ny, nz] = sumSimilarNormals(nRef, faceNormals, adjacent, cosThreshold);
  *   // Normalize if needed: const len = Math.hypot(nx, ny, nz);
  */
-export function cpuEngineGeometrySumNormals(nRef, faceNormals, adjacent, cosThreshold) {
+export function sumNormals(nRef, faceNormals, adjacent, cosThreshold) {
   // Initialize sum vector
   let nx = 0, ny = 0, nz = 0;
   // For each adjacent face, check if its normal is within the crease threshold

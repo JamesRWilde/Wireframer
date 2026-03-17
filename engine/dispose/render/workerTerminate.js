@@ -1,6 +1,6 @@
 import * as state from '../state/renderEngineVertexTransformBridge.js';
 
-export function renderEngineWorkerTerminate() {
+export function workerTerminate() {
   if (state.worker) {
     state.worker.terminate();
     state.worker = null;

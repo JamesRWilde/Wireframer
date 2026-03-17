@@ -20,13 +20,13 @@
 
 "use strict";
 
-import { uiColorClampByte } from '../get/uiColorClampByte.js';
-import { uiUpdateCustomColor } from './uiUpdateCustomColor.js';
-import { uiPersistCustomRgb } from './uiPersistCustomRgb.js';
-import { uiApplyPalette } from './uiApplyPalette.js';
+import { clampByte } from '../get/clampByte.js';
+import { updateCustomColor } from './updateCustomColor.js';
+import { customRgb } from './customRgb.js';
+import { palette } from './palette.js';
 import { CUSTOM_RGB } from '../state/uiDom.js';
 
-export function uiCustomRgb(rgb, options = {}) {
+export function customRgb(rgb, options = {}) {
   const { persist = true, apply = true } = options;
   const newRgb = [GetUiColorClampByte(rgb[0]), GetUiColorClampByte(rgb[1]), GetUiColorClampByte(rgb[2])];
 

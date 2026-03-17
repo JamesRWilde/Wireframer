@@ -28,7 +28,7 @@
  * This function is idempotent - it only updates the DOM if the current display
  * value differs from the target value, avoiding unnecessary DOM mutations.
  */
-export function gpuEngineCanvasHidden(hidden) {
+export function canvasHidden(hidden) {
   // Get the GPU canvas element
   const gpuCanvas = globalThis.gpuCanvas;
   

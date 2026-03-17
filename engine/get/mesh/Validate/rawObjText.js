@@ -27,7 +27,7 @@
  * @returns {Array<string>} Array of OBJ file lines
  * @throws {Error} If input is invalid
  */
-export function meshEngineValidateRawObjText(rawObjText, overrides = {}) {
+export function rawObjText(rawObjText, overrides = {}) {
   // Check for null/undefined input
   if (rawObjText === undefined || rawObjText === null) {
     console.error('[InitMeshEngineToRuntime] Input mesh is undefined/null.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ' });

@@ -26,14 +26,14 @@
  *   // cornerNormals[i][c] gives the normal for corner c of triangle i
  */
 
-import { cpuEngineModelShadingMode } from '../get/cpuEngineModelShadingMode.js';
-import { cpuEngineModelFaceNormals } from '../get/cpuEngineModelFaceNormals.js';
-import { geometrySumNormals } from '../get/cpuEngineGeometrySumNormals.js';
-import { cpuEngineBuildVertexToFaces } from '../init/cpuEngineBuildVertexToFaces.js';
-import { geometryGetFlatNormals } from '../get/cpuEngineGeometryFlatNormals.js';
-import { geometryGetTriNormals } from '../get/cpuEngineGeometryTriNormals.js';
+import { shadingMode } from '../get/shadingMode.js';
+import { faceNormals } from '../get/faceNormals.js';
+import { geometrySumNormals } from '../get/sumNormals.js';
+import { buildVertexToFaces } from '../init/buildVertexToFaces.js';
+import { geometryGetFlatNormals } from '../get/flatNormals.js';
+import { geometryGetTriNormals } from '../get/triNormals.js';
 
-export function renderEngineModelTriCornerNormals(model, triFaces) {
+export function triCornerNormals(model, triFaces) {
   // Determine shading mode ('flat', 'smooth', or 'auto')
   const shadingMode = GetCpuEngineModelShadingMode(model, triFaces);
   // Use crease angle if present, otherwise default to 62 degrees

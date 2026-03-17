@@ -14,10 +14,10 @@
 
 "use strict";
 
-import { uiColorHsvToRgb } from './uiColorHsvToRgb.js';
-import { uiColorRelativeLuminance } from './uiColorRelativeLuminance.js';
+import { hsvToRgb } from './hsvToRgb.js';
+import { relativeLuminance } from './relativeLuminance.js';
 
-export function uiRandomPresetRgb() {
+export function randomPresetRgb() {
   for (let i = 0; i < 18; i++) {
     const hue = Math.random();
     const saturation = 0.68 + Math.random() * 0.28;

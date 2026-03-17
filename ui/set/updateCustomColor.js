@@ -13,11 +13,11 @@
 "use strict";
 
 import { customRed, customGreen, customBlue, customRedValue, customGreenValue, customBlueValue, customHex, customSwatch, PRESET_SWATCH_BUTTONS, CUSTOM_RGB } from '../state/uiDom.js';
-import { uiColorToHex } from '../get/uiColorToHex.js';
-import { uiColorToRgbCss } from '../get/uiColorToRgbCss.js';
-import { uiColorRgbEquals } from '../get/uiColorRgbEquals.js';
+import { toHex } from '../get/toHex.js';
+import { toRgbCss } from '../get/toRgbCss.js';
+import { rgbEquals } from '../get/rgbEquals.js';
 
-export function uiUpdateCustomColor() {
+export function updateCustomColor() {
   if (!customRed || !customGreen || !customBlue) return;
 
   const [r, g, b] = CUSTOM_RGB;

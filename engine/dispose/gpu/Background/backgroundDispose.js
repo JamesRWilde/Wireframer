@@ -25,7 +25,7 @@
  *   - This file must only contain this function and its export.
  *   - Update comments if WebGL resource management changes.
  */
-export function gpuEngineBackground(gl, buffer, program) {
+export function backgroundDispose(gl, buffer, program) {
   if (buffer) gl.deleteBuffer(buffer);
   if (program) gl.deleteProgram(program);
 }

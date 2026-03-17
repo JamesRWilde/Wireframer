@@ -43,7 +43,7 @@ import { state, TELEMETRY_ALPHA } from '../state/engineLoop.js';
  * On the first call (emaFrameMs === 0), values are initialized directly.
  * On subsequent calls, EMA smoothing is applied.
  */
-export function engineTelemetry(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs) {
+export function telemetryState(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs) {
   // Check if this is the first telemetry update (EMA values are zero)
   if (state.emaFrameMs === 0) {
     // First frame: initialize EMA values directly (no smoothing)

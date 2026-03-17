@@ -36,7 +36,7 @@
  * 3. Converts delta to angular velocities
  * 4. Updates last pointer position
  */
-export function renderEngineOnMove(cx, cy) {
+export function onMove(cx, cy) {
   // Skip if not dragging
   if (!globalThis.PHYSICS_STATE?.dragging) return;
   

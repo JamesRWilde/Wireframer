@@ -1,4 +1,4 @@
-export function renderEngineSyncCanvasSize(cpuCanvas) {
+export function syncCanvasSize(cpuCanvas) {
   const w = globalThis.innerWidth;
   const h = globalThis.innerHeight;
   

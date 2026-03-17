@@ -28,7 +28,7 @@
  * 
  * @returns {Object} Interpolated mesh with blended vertex positions
  */
-export function meshEngineInterpolateMeshes(fromMesh, toMesh, t) {
+export function interpolateMeshes(fromMesh, toMesh, t) {
   // Use maximum vertex count to ensure all vertices are interpolated
   const n = Math.max(fromMesh.V.length, toMesh.V.length);
   const V = [];

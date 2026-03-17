@@ -29,7 +29,7 @@
  *    - Low values: linear (v / 12.92)
  *    - High values: power function ((v + 0.055) / 1.055)^2.4
  */
-export function uiColorLinearChannel(v) {
+export function linearChannel(v) {
   // Normalize to 0-1 range
   const n = v / 255;
   

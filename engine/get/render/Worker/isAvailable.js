@@ -1,5 +1,5 @@
 import * as state from '../state/renderEngineVertexTransformBridge.js';
 
-export function renderEngineWorkerIsAvailable() {
+export function isAvailable() {
   return state.workerAvailable;
 }

@@ -1,8 +1,8 @@
 import { state, TELEMETRY_UI_INTERVAL_MS } from '../state/engineLoop.js';
 import { statsState } from '../../ui/state/uiStats.js';
-import { uiWriteStat } from '../../ui/set/uiWriteStat.js';
+import { writeStat } from '../../ui/set/writeStat.js';
 
-export function engineTelemetryHud(nowMs) {
+export function hud(nowMs) {
   if (nowMs - state.telemetryLastUiMs < TELEMETRY_UI_INTERVAL_MS) return;
   state.telemetryLastUiMs = nowMs;
 

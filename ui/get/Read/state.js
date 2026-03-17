@@ -18,7 +18,7 @@
 
 const UI_STATE_KEY = 'wireframer.uiState';
 
-export function uiReadState() {
+export function state() {
   try {
     let saved = localStorage.getItem(UI_STATE_KEY);
     if (!saved) {

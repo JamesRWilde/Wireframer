@@ -1,16 +1,16 @@
 // Import shader program creation
 // Compiles vertex and fragment shaders for fill and wire rendering
-import { gpuEngineCreateScenePrograms } from './gpuEngineCreateScenePrograms.js';
+import { scenePrograms } from './scenePrograms.js';
 
 // Import buffer store creation
 // Manages vertex buffers for fill positions, normals, and wire edges
-import { gpuEngineCreateSceneBufferStore } from './gpuEngineCreateSceneBufferStore.js';
+import { sceneBufferStore } from './sceneBufferStore.js';
 
 // Import draw API creation
 // Provides SetGpuEngineRenderModel and clear functions for WebGL rendering
-import { gpuEngineCreateSceneDraw } from './gpuEngineCreateSceneDraw.js';
+import { sceneDraw } from './sceneDraw.js';
 
-export function gpuEngineCreateSceneRenderer(canvas) {
+export function sceneRenderer(canvas) {
   if (!canvas) return null;
 
   const glOpts = {

@@ -21,7 +21,7 @@
 
 // Import the greedy cluster decimation algorithm
 // This groups nearby vertices and merges them to reduce face count
-import { meshEngineGreedyClusterDecimator } from './meshEngineGreedyClusterDecimator.js';
+import { greedyClusterDecimator } from './greedyClusterDecimator.js';
 
 /**
  * InitMeshEngineDecimateByPercent - Decimates a mesh to a target percentage of faces
@@ -40,7 +40,7 @@ import { meshEngineGreedyClusterDecimator } from './meshEngineGreedyClusterDecim
  * 3. Returns original model if target >= current (no decimation needed)
  * 4. Otherwise delegates to InitMeshEngineGreedyClusterDecimator
  */
-export function meshEngineDecimateByPercent(model, percent) {
+export function decimateByPercent(model, percent) {
     // Guard: return original model if invalid or too few vertices
     if (!model || !Array.isArray(model.V) || model.V.length < 3) return model;
     

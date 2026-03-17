@@ -17,9 +17,9 @@
  * @param {number} params.max - Maximum allowed value
  * @param {number} params.defaultValue - Default value to use when state value is missing or invalid
  */
-import { uiColorClampNumber } from '../get/uiColorClampNumber.js';
+import { clampNumber } from '../get/clampNumber.js';
 
-export function uiApplyClampedValue({ state, key, element, min, max, defaultValue }) {
+export function clampedValue({ state, key, element, min, max, defaultValue }) {
   if (!(key in state) || !element) return;
   element.value = String(GetUiColorClampNumber(state[key], min, max, defaultValue));
 }

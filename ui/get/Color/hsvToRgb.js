@@ -32,7 +32,7 @@
  * 3. Maps to RGB using sector-specific formula
  * 4. Scales to 0-255 range
  */
-export function uiColorHsvToRgb(h, s, v) {
+export function hsvToRgb(h, s, v) {
   // Determine hue sector (0-5)
   const i = Math.floor(h * 6);
   

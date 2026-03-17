@@ -17,6 +17,6 @@
  *   - This file must only contain this function and its export.
  *   - Update comments if resource management changes.
  */
-export function gpuEngineBackgroundRenderer(gl, buffer, program, DisposeGpuEngineBackground) {
+export function renderer(gl, buffer, program, DisposeGpuEngineBackground) {
   DisposeGpuEngineBackground(gl, buffer, program);
 }

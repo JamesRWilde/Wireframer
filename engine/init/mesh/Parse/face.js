@@ -21,10 +21,10 @@
  */
 
 // Import token parser for extracting vertex/uv/normal indices
-import { idxFromToken } from './meshEngineParseIdxFromToken.js';
+import { idxFromToken } from './idxFromToken.js';
 
 // Import vertex deduplication helper
-import { meshEngineOrCreateVertIdx } from '../get/meshEngineOrCreateVertIdx.js';
+import { orCreateVertIdx } from '../get/orCreateVertIdx.js';
 
 /**
  * parseFace - Parses an OBJ face line into triangles
@@ -33,7 +33,7 @@ import { meshEngineOrCreateVertIdx } from '../get/meshEngineOrCreateVertIdx.js';
  * @param {string} originalLine - Original line text for error messages
  * @param {Object} state - Parse state with vertices, faces, etc.
  */
-export function meshEngineParseFace(parts, originalLine, state) {
+export function face(parts, originalLine, state) {
   // Extract face vertex tokens (everything after "f")
   const rawTokens = parts.slice(1);
   

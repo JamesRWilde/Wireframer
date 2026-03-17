@@ -17,9 +17,9 @@
 "use strict";
 
 import { CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT } from '../state/uiDom.js';
-import { uiColorClampByte } from './uiColorClampByte.js';
+import { clampByte } from './clampByte.js';
 
-export function uiReadCustomRgb() {
+export function customRgb() {
   try {
     const saved = localStorage.getItem(CUSTOM_RGB_KEY);
     if (!saved) return CUSTOM_RGB_DEFAULT.slice();

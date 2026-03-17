@@ -1,7 +1,7 @@
-import { gpuEngineRenderModel } from "'../SetGpuEngineRenderModel.js";
-import { gpuEngineClearDraw } from "../gpuEngineClearDraw.js'";
+import { model } from "'../SetGpuEngineRenderModel.js";
+import { draw } from "../draw.js'";
 
-export function gpuEngineCreateSceneDraw(gl, canvas, shaderPack, bufferStore) {
+export function sceneDraw(gl, canvas, shaderPack, bufferStore) {
   const tmpArrays = {
     tmpLight: new Float32Array(3),
     tmpView: new Float32Array(3),

@@ -27,7 +27,7 @@
  * 2. Applies perspective division with depth offset
  * 3. Centers result in viewport with model vertical offset
  */
-export function renderEngineProjectVertices(p) {
+export function projectVertices(p) {
   // Calculate field of view: smaller viewport dimension * 0.9 * zoom
   const fov = Math.min(window.innerWidth, window.innerHeight) * 0.9 * globalThis.ZOOM;
   

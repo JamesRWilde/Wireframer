@@ -20,23 +20,23 @@
 
 // Import the function to create clickable preset color swatches in the UI
 // These provide quick access to curated color combinations
-import { initPresetSwatches } from '../../ui/init/uiPresetSwatches.js';
+import { initPresetSwatches } from '../../ui/init/presetSwatches.js';
 
 // Import the function to read saved custom RGB values from localStorage
 // Returns null if no saved colors exist (first visit or cleared storage)
-import { uiReadCustomRgb } from '../../ui/get/uiReadCustomRgb.js';
+import { customRgb } from '../../ui/get/customRgb.js';
 
 // Import the function to apply custom RGB values to the theme
 // Updates CSS variables, particle colors, wire colors, etc.
-import { uiCustomRgb } from '../../ui/set/uiCustomRgb.js';
+import { customRgb } from '../../ui/set/customRgb.js';
 
 // Import the function to set dark/light theme mode
 // Adjusts background brightness, contrast enforcement, etc.
-import { uiThemeMode } from '../../ui/set/uiThemeMode.js';
+import { themeMode } from '../../ui/set/themeMode.js';
 
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences
-import { uiPersistState } from '../../ui/set/uiPersistState.js';
+import { state } from '../../ui/set/state.js';
 
 /**
  * InitEngineThemeControls - Initializes the theme system and wires up event handlers
@@ -50,7 +50,7 @@ import { uiPersistState } from '../../ui/set/uiPersistState.js';
  * All operations are wrapped in try/catch because theme initialization is
  * non-critical - the app should work even if theming fails.
  */
-export function engineThemeControls() {
+export function themeControls() {
   try {
     // Step 1: Create preset color swatches in the UI
     // These are clickable buttons that apply predefined color schemes

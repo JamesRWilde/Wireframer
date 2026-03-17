@@ -32,7 +32,7 @@
  * - Whether to clear the GPU scene canvas next frame
  * - Whether CPU foreground is currently composited on the main canvas
  */
-export function engineMixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn) {
+export function mixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn) {
   // Mark that GPU scene was drawn (for next frame's clearing logic)
   globalThis.FRAME_LOOP_STATE.gpuSceneDrawnLastFrame = true;
 }

@@ -1,5 +1,5 @@
-import { gpuEngineClearSceneCanvas } from "'./scene/gpuEngineClearSceneCanvas.js'";
+import { sceneCanvas } from "'./scene/sceneCanvas.js'";
 
-export function gpuEngineClearDraw(gl, canvas) {
+export function draw(gl, canvas) {
   SetGpuEngineClearSceneCanvas(gl, canvas);
 }

@@ -10,7 +10,7 @@ import { gpuState } from '../state/gpuEngineScene.js';
  * 
  * @param {Error} err - The error that caused the GPU renderer to fail
  */
-export function gpuEngineDisableSceneRenderer(err) {
+export function disableSceneRenderer(err) {
   if (gpuState.renderer && typeof gpuState.renderer.dispose === 'function') {
     try {
       gpuState.renderer.dispose();

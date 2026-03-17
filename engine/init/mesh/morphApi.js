@@ -22,11 +22,11 @@
 "use strict";
 
 // Import morph API functions
-import { meshEngineStartMorph } from './meshEngineStartMorph.js';
-import { meshEngineAdvanceMorphFrame } from './meshEngineAdvanceMorphFrame.js';
-import { meshEngineCurrentMorph } from '../get/meshEngineCurrentMorph.js';
-import { meshEngineIsMorphing } from '../get/meshEngineIsMorphing.js';
-import { meshEngineStopMorph } from '../dispose/meshEngineStopMorph.js';
+import { startMorph } from './startMorph.js';
+import { advanceMorphFrame } from './advanceMorphFrame.js';
+import { currentMorph } from '../get/currentMorph.js';
+import { isMorphing } from '../get/isMorphing.js';
+import { stopMorph } from '../dispose/stopMorph.js';
 
 // Set default morph duration (1.6 seconds)
 // This provides a smooth transition that's not too fast or too slow

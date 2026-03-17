@@ -20,16 +20,16 @@
  */
 
 // Import OBJ line parser
-import { meshEngineParseObjLines } from './meshEngineParseObjLines.js';
+import { objLines } from './objLines.js';
 
 // Import raw text validator
-import { meshEngineValidateRawObjText } from '../get/meshEngineValidateRawObjText.js';
+import { rawObjText } from '../get/rawObjText.js';
 
 // Import parse result checker
-import { meshEngineParseCheckResults } from '../get/meshEngineParseCheckResults.js';
+import { parseCheckResults } from '../get/parseCheckResults.js';
 
 // Import mesh object builder
-import { meshEngineBuildObject } from './meshEngineBuildObject.js';
+import { object } from './object.js';
 
 /**
  * InitMeshEngineToRuntime - Converts OBJ text to engine mesh format
@@ -42,7 +42,7 @@ import { meshEngineBuildObject } from './meshEngineBuildObject.js';
  * @returns {Object} Mesh object with V, F, E arrays and metadata
  * @throws {Error} If input is invalid or parsing fails critically
  */
-export function meshEngineToRuntime(rawObjText, overrides = {}) {
+export function toRuntime(rawObjText, overrides = {}) {
   // Validate input is not null/undefined
   if (rawObjText === undefined || rawObjText === null) {
     console.error('[InitMeshEngineToRuntime] Input mesh is undefined/null.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ' });

@@ -16,13 +16,13 @@
 
 "use strict";
 
-import { uiColorClampByte } from '../get/uiColorClampByte.js';
-import { uiColorMixRgb } from '../get/uiColorMixRgb.js';
-import { uiColorToRgbCss } from '../get/uiColorToRgbCss.js';
-import { uiColorToRgbaCss } from '../get/uiColorToRgbaCss.js';
-import { uiColorEnforceContrast } from '../get/uiColorEnforceContrast.js';
+import { clampByte } from '../get/clampByte.js';
+import { mixRgb } from '../get/mixRgb.js';
+import { toRgbCss } from '../get/toRgbCss.js';
+import { toRgbaCss } from '../get/toRgbaCss.js';
+import { enforceContrast } from '../get/enforceContrast.js';
 
-export function uiBuildCustomTheme(rgbInput) {
+export function bldCustomTheme(rgbInput) {
   const base = [GetUiColorClampByte(rgbInput[0]), GetUiColorClampByte(rgbInput[1]), GetUiColorClampByte(rgbInput[2])];
   const isLight = globalThis.THEME_MODE === 'light';
   const choose = (lightVal, darkVal) => (isLight ? lightVal : darkVal);

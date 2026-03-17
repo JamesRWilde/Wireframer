@@ -16,7 +16,7 @@
 
 "use strict";
 
-import { uiColorLinearChannel } from './uiColorLinearChannel.js';
+import { linearChannel } from './linearChannel.js';
 
 /**
  * relativeLuminance - Calculates WCAG relative luminance
@@ -30,7 +30,7 @@ import { uiColorLinearChannel } from './uiColorLinearChannel.js';
  * 2. Applies WCAG luminance weights
  * 3. Returns weighted sum
  */
-export function uiColorRelativeLuminance(rgb) {
+export function relativeLuminance(rgb) {
   // Convert sRGB channels to linear RGB
   const r = GetUiColorLinearChannel(rgb[0]);
   const g = GetUiColorLinearChannel(rgb[1]);

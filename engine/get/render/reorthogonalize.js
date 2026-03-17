@@ -39,7 +39,7 @@
  * 3. Makes Y axis perpendicular to X, then normalizes
  * 4. Computes Z axis as cross product of X and Y (already unit length)
  */
-export function renderEngineReorthogonalize(R) {
+export function reorthogonalize(R) {
   // Guard: return identity matrix if input is invalid
   if (!R || !Array.isArray(R) || R.length < 6) {
     return [1,0,0,0,1,0,0,0,1];

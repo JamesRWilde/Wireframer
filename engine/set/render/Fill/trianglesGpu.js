@@ -31,11 +31,11 @@
 
 "use strict";
 import { resolveTriangleNormal } from '../get/renderEngineResolveTriangleNormalGpu.js';
-import { computeTriangleShadeColor } from '../get/renderEngineComputeTriangleGpu.js';
-import { expandTriangleForSeam } from '../get/renderEngineExpandSeamGpu.js';
-import { fillTriangle } from '../set/cpuEngineFillTriangle.js';
+import { computeTriangleShadeColor } from '../get/triangleGpu.js';
+import { expandTriangleForSeam } from '../get/seamGpu.js';
+import { fillTriangle } from '../set/triangle.js';
 
-export function renderEngineFillTrianglesGpu({ T, P2, triFaces, triCornerNormals, useSmoothShading, theme, fillAlpha, seamExpandPx, R, ctx }) {
+export function trianglesGpu({ T, P2, triFaces, triCornerNormals, useSmoothShading, theme, fillAlpha, seamExpandPx, R, ctx }) {
   // Sort triangles back-to-front (painter's algorithm). Sorting by average depth helps
   // ensure proper overlap when drawing triangles directly to a 2D canvas.
   const triOrder = new Array(triFaces.length);

@@ -21,7 +21,7 @@
 
 "use strict";
 
-export function cpuEngineFillTriangle(ctx, tri2d, color, alpha) {
+export function triangle(ctx, tri2d, color, alpha) {
   // Draw a filled path for the triangle.
   ctx.beginPath();
   ctx.moveTo(tri2d[0][0], tri2d[0][1]);

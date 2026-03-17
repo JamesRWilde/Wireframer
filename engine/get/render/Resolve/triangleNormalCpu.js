@@ -30,7 +30,7 @@
  * 3. Normalizes the result
  * 4. Returns null if normal is degenerate (near-zero length)
  */
-export function renderEngineResolveTriangleCpu(item, T, triCornerNormals, useSmoothShading) {
+export function triangleNormalCpu(item, T, triCornerNormals, useSmoothShading) {
   // Get triangle vertex indices
   const [a, b, c] = item.tri;
   const v0 = T[a];

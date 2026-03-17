@@ -1,10 +1,10 @@
 import { state } from '../state/engineLoop.js';
-import { renderEngineWorkerSend } from '../set/renderEngineWorkerSend.js';
-import { renderEngineCachedTransformResult } from './renderEngineCachedTransformResult.js';
-import { renderEngineConvertFlatToNested } from './renderEngineConvertFlatToNested.js';
-import { renderEngineWorkerTransformSync } from '../get/renderEngineWorkerTransformSync.js';
+import { workerSend } from '../set/workerSend.js';
+import { cachedTransformResult } from './cachedTransformResult.js';
+import { convertFlatToNested } from './convertFlatToNested.js';
+import { transformSync } from '../get/transformSync.js';
 
-export function renderEngineModelFrameData(model) {
+export function frameData(model) {
   if (!model?.V?.length) return null;
   if (model._frameData?.id === state.RENDER_FRAME_ID) return model._frameData;
 

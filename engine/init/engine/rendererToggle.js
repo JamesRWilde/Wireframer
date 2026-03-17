@@ -23,10 +23,10 @@
 import { statsState } from '../../ui/state/uiStats.js';
 
 // Import the toggle function
-import { engineRendererMode } from '../set/engineRendererMode.js';
+import { mode } from '../set/mode.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { gpuEngineSceneRenderer } from '../get/gpuEngineSceneRenderer.js';
+import { sceneRenderer } from '../get/sceneRenderer.js';
 
 /**
  * InitEngineRendererToggle - Initializes the renderer stat as a toggle button
@@ -40,7 +40,7 @@ import { gpuEngineSceneRenderer } from '../get/gpuEngineSceneRenderer.js';
  * - Switch back to GPU mode for better performance
  * - See which mode is currently active via the HUD display
  */
-export function engineRendererToggle() {
+export function rendererToggle() {
   // Get the renderer stat DOM element
   const statRenderer = statsState.statRenderer;
   

@@ -20,7 +20,7 @@
 
 "use strict";
 
-export function renderEngineExpandSeamGpu(tri2d, expandPx) {
+export function seamGpu(tri2d, expandPx) {
   if (expandPx <= 0) return tri2d;
   const [a, b, c] = tri2d;
   // Compute triangle centroid in screen space.

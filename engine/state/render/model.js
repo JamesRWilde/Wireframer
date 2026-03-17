@@ -26,7 +26,7 @@ import { statsState } from '../../ui/state/uiStats.js';
 
 // Import render mode resolver to update GPU/CPU indicator when model changes
 // The render mode may need to be re-evaluated based on the new model's complexity
-import { engineForegroundRenderMode } from '../get/engineForegroundRenderMode.js';
+import { foregroundRenderMode } from '../get/foregroundRenderMode.js';
 
 // Import loop state to access telemetry EMA (Exponential Moving Average) values
 // These need to be reset when switching models to avoid stale timing data
@@ -52,7 +52,7 @@ import { state } from '../state/engineLoop.js';
  *   setActiveModel(parsedMesh, "My Custom Shape");
  *   setActiveModel(null); // Clear the current model
  */
-export function renderEngineModel(model, name = '') {
+export function model(model, name = '') {
   // Debug logging to trace model changes during development
   // Shows whether a model is present or null, helpful for diagnosing loading issues
   console.debug('[setActiveModel] name', name, 'model', model ? 'present' : 'null');

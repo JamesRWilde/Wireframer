@@ -1,11 +1,11 @@
 // Import the GPU renderer factory function
 // Creates WebGL context, shaders, and buffer management
-import { gpuEngineCreateSceneRenderer } from '../init/gpuEngineCreateSceneRenderer.js';
+import { sceneRenderer } from '../init/sceneRenderer.js';
 
 // Import shared GPU renderer state
 import { gpuState } from '../state/gpuEngineScene.js';
 
-export function gpuEngineSceneRenderer() {
+export function sceneRenderer() {
   if (gpuState.renderer || gpuState.failed) return gpuState.renderer;
   
   // Use the dedicated GPU canvas for WebGL rendering

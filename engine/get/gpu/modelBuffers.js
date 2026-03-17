@@ -8,9 +8,9 @@
  * @param {Object} model - The model object containing geometry data.
  * @returns {Object|null} The GPU buffer store for the model, or null if invalid.
  */
-import { gpuEngineBuildModelBuffers } from '../init/gpuEngineBuildModelBuffers.js';
+import { buildModelBuffers } from '../init/buildModelBuffers.js';
 
-export function gpuEngineModelBuffers(gl, modelCache, supportsUint32, model) {
+export function modelBuffers(gl, modelCache, supportsUint32, model) {
   if (!model) return null; // Defensive: must have a model
   let buffers = modelCache.get(model); // Check cache first
   if (!buffers) {

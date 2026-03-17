@@ -1,6 +1,6 @@
-import { gpuEngineCreateProgram } from './gpuEngineCreateProgram.js';
+import { program } from './program.js';
 
-export function gpuEngineCreateScenePrograms(gl) {
+export function scenePrograms(gl) {
   const fillVertSrc = `
     attribute vec3 a_pos;
     attribute vec3 a_normal;

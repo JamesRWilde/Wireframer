@@ -25,7 +25,7 @@
  * 
  * @returns {void}
  */
-export function meshEngineAddEdge(a, b, E, edgeSet) {
+export function addEdge(a, b, E, edgeSet) {
   // Canonical form: lower index first
   const lo = Math.min(a, b);
   const hi = Math.max(a, b);

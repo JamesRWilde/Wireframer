@@ -22,10 +22,10 @@
  */
 
 // Import individual line parsers
-import { parseVertex } from './meshEngineParseVertex.js';
-import { parseNormal } from './meshEngineParseNormal.js';
-import { parseUv } from './meshEngineParseUv.js';
-import { parseFace } from './meshEngineParseFace.js';
+import { parseVertex } from './vertex.js';
+import { parseNormal } from './normal.js';
+import { parseUv } from './uv.js';
+import { parseFace } from './face.js';
 
 /**
  * parseObjLines - Parses OBJ text lines into mesh data
@@ -39,7 +39,7 @@ import { parseFace } from './meshEngineParseFace.js';
  *   - failingLines: Array of error messages
  *   - vertices, normals, uvs: Raw parsed data
  */
-export function meshEngineParseObjLines(lines, overrides) {
+export function objLines(lines, overrides) {
   // Initialize parse state
   const state = {
     lineNumber: 0,

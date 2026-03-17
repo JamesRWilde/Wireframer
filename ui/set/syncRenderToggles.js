@@ -23,10 +23,10 @@ import {
   fillOpacity, fillOpacityValue,
   wireOpacity, wireOpacityValue,
 } from '../state/uiDom.js';
-import { uiSliderDisplayPercent } from '../get/uiSliderDisplayPercent.js';
-import { uiPersistState } from './uiPersistState.js';
+import { sliderDisplayPercent } from '../get/sliderDisplayPercent.js';
+import { state } from './state.js';
 
-export function uiSyncRenderToggles() {
+export function syncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;
   lodValue.textContent = `${GetUiSliderDisplayPercent(lodSlider)}%`;
 

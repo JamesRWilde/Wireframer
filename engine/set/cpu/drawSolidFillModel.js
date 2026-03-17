@@ -14,15 +14,15 @@
  *   Falls back to main-thread rendering if worker is unavailable.
  */
 
-import { renderEngineModelFrameData } from '../get/renderEngineModelFrameData.js';
-import { getModelTriangles } from '../get/renderEngineModelTriangles.js';
-import { getModelShadingMode } from '../get/cpuEngineModelShadingMode.js';
-import { getModelTriCornerNormals } from '../get/renderEngineModelTriCornerNormals.js';
-import { renderEngineFillTrianglesCpu } from '../set/renderEngineFillTrianglesCpu.js';
-import { cpuEngineFillSendRenderCommand } from './cpuEngineFillSendRenderCommand.js';
-import { initFillWorker } from "'../init/cpuEngineFillWorker.js'";
-import { cpuEngineFillCachedFrame } from '../get/cpuEngineFillCachedFrame.js';
-import { cpuEngineIsFillWorkerAvailable } from '../get/cpuEngineIsFillWorkerAvailable.js';
+import { frameData } from '../get/frameData.js';
+import { getModelTriangles } from '../get/triangles.js';
+import { getModelShadingMode } from '../get/shadingMode.js';
+import { getModelTriCornerNormals } from '../get/triCornerNormals.js';
+import { trianglesCpu } from '../set/trianglesCpu.js';
+import { sendRenderCommand } from './sendRenderCommand.js';
+import { initFillWorker } from "'../init/fillWorker.js'";
+import { fillCachedFrame } from '../get/fillCachedFrame.js';
+import { isFillWorkerAvailable } from '../get/isFillWorkerAvailable.js';
 import { state } from '../state/engineLoop.js';
 
 // Track if worker has been initialized
@@ -34,7 +34,7 @@ let workerInitialized = false;
  * @param {Object} model - Model with V, F, E data
  * @param {number} [alphaScale=1] - Opacity multiplier
  */
-export function cpuEngineDrawSolidFillModel(model, alphaScale = 1) {
+export function drawSolidFillModel(model, alphaScale = 1) {
   const fillLayerCtx = globalThis.fillLayerCtx;
   const fillLayerCanvas = globalThis.fillLayerCanvas;
   const W = globalThis.W;

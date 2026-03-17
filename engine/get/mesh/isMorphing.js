@@ -29,6 +29,6 @@ import { morphState } from '../state/meshEngineMorph.js';
  * Used by renderScene to determine whether to use the interpolated morph
  * mesh or the regular model for rendering.
  */
-export function meshEngineIsMorphing() {
+export function isMorphing() {
   return morphState.active;
 }

@@ -35,7 +35,7 @@
  *   newVerts: Array of merged vertex positions
  *   oldToNew: Map from original vertex indices to new vertex indices
  */
-export function meshEngineClusterVertices(V, cellMap) {
+export function clusterVertices(V, cellMap) {
   // Map from old vertex indices to new vertex indices
   const oldToNew = new Map();
   

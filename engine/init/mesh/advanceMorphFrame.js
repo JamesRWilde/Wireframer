@@ -23,13 +23,13 @@
 import { morphState } from '../state/meshEngineMorph.js';
 
 // Import easing function for smooth animation
-import { easeInOut } from '../get/meshEngineEaseOut.js';
+import { easeInOut } from '../get/easeOut.js';
 
 // Import mesh interpolation for computing intermediate meshes
-import { meshEngineInterpolateMeshes } from './meshEngineInterpolateMeshes.js';
+import { interpolateMeshes } from './interpolateMeshes.js';
 
 // Import mesh cloning for final mesh copy
-import { meshEngineClone } from './meshEngineClone.js';
+import { clone } from './clone.js';
 
 /**
  * InitMeshEngineAdvanceMorphFrame - Advances morph animation by one frame
@@ -40,7 +40,7 @@ import { meshEngineClone } from './meshEngineClone.js';
  * 3. Interpolates meshes at current progress
  * 4. Handles completion (finalizes mesh, invokes callback)
  */
-export function meshEngineAdvanceMorphFrame() {
+export function advanceMorphFrame() {
   // Skip if no morph is active
   if (!morphState.active) return;
   

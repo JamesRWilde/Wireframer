@@ -1,4 +1,4 @@
-export function renderEngineCreateParticle(w, h, velocityScale = 1) {
+export function createParticle(w, h, velocityScale = 1) {
   const speed = 0.2 + Math.random() * 0.8;
   const angle = (Math.random() - 0.5) * Math.PI * 2;
   const vx = Math.cos(angle) * speed * velocityScale;

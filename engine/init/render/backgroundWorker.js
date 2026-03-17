@@ -1,7 +1,7 @@
-import * as state from '../state/renderEngineBackgroundWorker.js';
-import { getBackgroundCanvas } from '../get/renderEngineBackgroundCanvas.js';
+import * as state from '../state/backgroundWorker.js';
+import { getBackgroundCanvas } from '../get/canvas.js';
 
-export function renderEngineBackgroundWorker() {
+export function backgroundWorker() {
   if (state.workerInitialized) return state.workerReady;
   state.workerInitialized = true;
   

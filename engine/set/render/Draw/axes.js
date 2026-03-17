@@ -1,6 +1,6 @@
-import { renderEngineProjectVertices } from '../get/renderEngineProjectVertices.js';
+import { projectVertices } from '../get/projectVertices.js';
 
-export function renderEngineDrawAxes(ctx) {
+export function axes(ctx) {
   const R = globalThis.PHYSICS_STATE.R;
   const rotate = v => [
     R[0]*v[0] + R[1]*v[1] + R[2]*v[2],

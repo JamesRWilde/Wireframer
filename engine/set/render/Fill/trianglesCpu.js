@@ -1,9 +1,9 @@
-import { computeTriangleShadeColor } from '../get/renderEngineComputeTriangleCpu.js';
+import { computeTriangleShadeColor } from '../get/triangleCpu.js';
 import { resolveTriangleNormal } from '../get/renderEngineResolveTriangleNormalCpu.js';
-import { expandTriangleForSeam } from '../get/renderEngineExpandSeamCpu.js';
-import { fillTriangleOnLayer } from '../set/cpuEngineFillTriangleOnLayer.js';
+import { expandTriangleForSeam } from '../get/seamCpu.js';
+import { fillTriangleOnLayer } from '../set/triangleOnLayer.js';
 
-export function renderEngineFillTrianglesCpu({
+export function trianglesCpu({
   triOrder,
   P2,
   T,

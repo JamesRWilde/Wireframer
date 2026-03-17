@@ -23,7 +23,7 @@
 import { morphState } from '../state/meshEngineMorph.js';
 
 // Import mesh cloning to prevent mutation of original meshes
-import { meshEngineClone } from './meshEngineClone.js';
+import { clone } from './clone.js';
 
 /**
  * InitMeshEngineStartMorph - Starts a morph animation between two meshes
@@ -36,7 +36,7 @@ import { meshEngineClone } from './meshEngineClone.js';
  * Both meshes are cloned to prevent mutation during interpolation.
  * The current mesh is initialized to the source mesh.
  */
-export function meshEngineStartMorph(fromMesh, toMesh, durationMs, onComplete) {
+export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
   // Mark morph as active
   morphState.active = true;
   

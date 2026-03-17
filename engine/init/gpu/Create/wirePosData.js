@@ -13,7 +13,7 @@
  * @param {Object} model - The model object containing geometry data. Must have a V array of vertices.
  * @returns {Float32Array} The wireframe vertex position array ([x, y, z] per vertex).
  */
-export function gpuEngineCreateWirePosData(model) {
+export function wirePosData(model) {
   // Get the number of vertices in the model
   const vertexCount = model.V.length;
   // Allocate a contiguous array for all vertex positions

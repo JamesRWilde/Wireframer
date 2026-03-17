@@ -31,7 +31,7 @@ import { bgState } from '../state/renderEngineBackground.js';
  * 3. Synchronizes dimensions from CSS to pixel size
  * 4. Returns all values or null if unavailable
  */
-export function renderEngineBackgroundCanvas() {
+export function canvas() {
   // Get canvas from background state
   const canvas = bgState.canvas;
   if (!canvas) return null;

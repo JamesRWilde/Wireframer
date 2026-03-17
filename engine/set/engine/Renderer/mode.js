@@ -24,13 +24,13 @@
 import { state } from '../state/engineLoop.js';
 
 // Import HUD updater to display the current render mode
-import { engineRendererHud } from './engineRendererHud.js';
+import { hud } from './hud.js';
 
 // Import GPU canvas clearing for when switching from GPU to CPU
-import { gpuEngineClearSceneCanvas } from '../set/gpuEngineClearSceneCanvas.js';
+import { sceneCanvas } from '../set/sceneCanvas.js';
 
 // Import GPU renderer getter to check if GPU is available
-import { gpuEngineSceneRenderer } from '../get/gpuEngineSceneRenderer.js';
+import { sceneRenderer } from '../get/sceneRenderer.js';
 
 /**
  * SetEngineRendererMode - Toggles between GPU and CPU rendering modes
@@ -43,7 +43,7 @@ import { gpuEngineSceneRenderer } from '../get/gpuEngineSceneRenderer.js';
  *   true: mode was toggled successfully
  *   false: toggle was not performed (GPU not supported or mode unchanged)
  */
-export function engineRendererMode() {
+export function mode() {
   // Check if GPU renderer is available
   // If not, we can't toggle - CPU is the only option
   const renderer = GetGpuEngineSceneRenderer();

@@ -27,28 +27,28 @@
 "use strict";
 
 // Import mesh deep copy utility
-import { meshEngineDeepCopy } from './meshEngineDeepCopy.js';
+import { deepCopy } from './deepCopy.js';
 
 // Import face normalization (ensures consistent face format)
-import { meshEngineNormalizeFaces } from './meshEngineNormalizeFaces.js';
+import { normalizeFaces } from './normalizeFaces.js';
 
 // Import bounding box computation
-import { meshEngineComputeBoundingBox } from '../get/meshEngineComputeBoundingBox.js';
+import { computeBoundingBox } from '../get/computeBoundingBox.js';
 
 // Import cluster parameter calculation
-import { meshEngineComputeClusterParams } from './meshEngineComputeClusterParams.js';
+import { computeClusterParams } from './computeClusterParams.js';
 
 // Import vertex-to-cell assignment
-import { meshEngineAssignVerticesToCells } from './meshEngineAssignVerticesToCells.js';
+import { assignVerticesToCells } from './assignVerticesToCells.js';
 
 // Import vertex clustering (merging nearby vertices)
-import { meshEngineClusterVertices } from './meshEngineClusterVertices.js';
+import { clusterVertices } from './clusterVertices.js';
 
 // Import face rebuilding (updating face indices after clustering)
-import { meshEngineRebuildFaces } from './meshEngineRebuildFaces.js';
+import { rebuildFaces } from './rebuildFaces.js';
 
 // Import LOD cache pruning (removes old cache entries)
-import { meshEnginePruneLodCache } from '../dispose/meshEnginePruneLodCache.js';
+import { pruneLodCache } from '../dispose/pruneLodCache.js';
 
 /**
  * InitMeshEngineGreedyClusterDecimator - Decimates a mesh using greedy cluster merging
@@ -66,7 +66,7 @@ import { meshEnginePruneLodCache } from '../dispose/meshEnginePruneLodCache.js';
  * 5. Rebuilds faces with new vertex indices
  * 6. Caches result and returns deep copy
  */
-export function meshEngineGreedyClusterDecimator(model, targetFaces) {
+export function greedyClusterDecimator(model, targetFaces) {
   // Create cache key from vertex count and target faces
   // This allows reusing LOD results for the same model at the same detail level
   const cacheKey = `${model.V.length}:${targetFaces}`;

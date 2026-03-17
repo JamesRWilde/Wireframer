@@ -33,7 +33,7 @@
  *   - This file must only contain this function and its export.
  *   - Update comments if attribute/uniform layout or rendering logic changes.
  */
-export function gpuEngineRenderBackground(gl, locations, buffer, particleCount, params) {
+export function background(gl, locations, buffer, particleCount, params) {
   const { resLoc, timeLoc, velocityScaleLoc, opacityScaleLoc, colorLoc, seedPosLoc, velLoc, sizeLoc, alphaBaseLoc, speedLoc, phaseLoc } = locations;
   const { width, height, time, velocityScale, opacityScale, color } = params;
 

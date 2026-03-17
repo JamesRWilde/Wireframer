@@ -26,7 +26,7 @@
  * 
  * @throws {Error} If vertices or faces are empty, or if parse errors occurred
  */
-export function meshEngineParseCheckResults(uniqueVerts, faces, failingLines, overrides = {}) {
+export function parseCheckResults(uniqueVerts, faces, failingLines, overrides = {}) {
   // Check for empty mesh or parse errors
   if (uniqueVerts.length === 0 || faces.length === 0 || failingLines.length > 0) {
     console.error('[InitMeshEngineToRuntime] Mesh load failure:', {

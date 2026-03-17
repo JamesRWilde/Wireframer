@@ -18,7 +18,7 @@
  */
 
 // Import index parser for handling OBJ's 1-based indexing
-import { parseIndex } from './meshEngineParseIndex.js';
+import { parseIndex } from './index.js';
 
 /**
  * idxFromToken - Parses an OBJ face token into indices
@@ -31,7 +31,7 @@ import { parseIndex } from './meshEngineParseIndex.js';
  *   vt: Texture coordinate index (0-based, or null if not specified)
  *   vn: Normal index (0-based, or null if not specified)
  */
-export function meshEngineParseIdxFromToken(token, state) {
+export function idxFromToken(token, state) {
   // Split token by '/' to get individual indices
   const fields = token.split('/');
   

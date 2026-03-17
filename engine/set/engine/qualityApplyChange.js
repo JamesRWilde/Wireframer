@@ -1,7 +1,7 @@
 import * as state from '../set/engineFrameBudgetState.js';
-import { engineQualityPriority } from '../get/engineQualityPriority.js';
+import { priority } from '../get/priority.js';
 
-export function engineQualityApplyChange(targetQuality, avgFrameTime) {
+export function qualityApplyChange(targetQuality, avgFrameTime) {
   const isDowngrade = GetEngineQualityPriority(targetQuality) < GetEngineQualityPriority(state.currentQuality);
   const isUpgrade = GetEngineQualityPriority(targetQuality) > GetEngineQualityPriority(state.currentQuality);
 

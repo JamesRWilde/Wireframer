@@ -1,5 +1,5 @@
-import { gpuEngineRenderSceneModel } from "'./gpuEngineRenderSceneModel.js'";
+import { sceneModel } from "'./sceneModel.js'";
 
-export function gpuEngineRenderModel(gl, model, params, shaderPack, bufferStore, tmpArrays) {
+export function model(gl, model, params, shaderPack, bufferStore, tmpArrays) {
   return SetGpuEngineRenderSceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays);
 }

@@ -34,7 +34,7 @@
  * - Metadata: _meshFormat, _shadingMode, _creaseAngleDeg
  * - Optional: groups, objects, smoothingGroups, triangleNormals, triangleUVs
  */
-export function meshEngineDeepCopy(model) {
+export function deepCopy(model) {
   return {
     // Deep copy vertices: map each vertex and slice its array
     V: model.V.map(v => v.slice()),

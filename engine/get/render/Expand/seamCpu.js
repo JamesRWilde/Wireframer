@@ -15,7 +15,7 @@
  *   Expanding each triangle slightly ensures edges overlap, eliminating gaps.
  */
 
-import { geometryExpandPoint } from '../set/cpuEngineGeometryExpandPoint.js';
+import { geometryExpandPoint } from '../set/geometryExpandPoint.js';
 
 /**
  * expandTriangleForSeam - Expands triangle vertices outward from centroid
@@ -30,7 +30,7 @@ import { geometryExpandPoint } from '../set/cpuEngineGeometryExpandPoint.js';
  * 2. Computes triangle centroid
  * 3. Moves each vertex outward from centroid by seamExpandPx pixels
  */
-export function renderEngineExpandSeamCpu(tri2d, seamExpandPx) {
+export function seamCpu(tri2d, seamExpandPx) {
   // Extract vertex coordinates
   const ax = tri2d[0][0];
   const ay = tri2d[0][1];

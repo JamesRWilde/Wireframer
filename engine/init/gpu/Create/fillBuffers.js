@@ -11,7 +11,7 @@
  * @param {Array} triCornerNormals Per-corner normals for each triangle
  * @returns {Object} { fillPosData, fillNormalData, fillUVData, fillSourceIndex }
  */
-export function gpuEngineCreateFillBuffers(model, triFaces, triCornerNormals) {
+export function fillBuffers(model, triFaces, triCornerNormals) {
   const fillVertexCount = triFaces.length * 3;
   const fillPosData = new Float32Array(fillVertexCount * 3);
   const fillNormalData = new Float32Array(fillVertexCount * 3);

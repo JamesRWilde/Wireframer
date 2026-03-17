@@ -1,4 +1,4 @@
-export function gpuEngineProjectionUniforms(gl, programLoc, params) {
+export function projectionUniforms(gl, programLoc, params) {
   const minDim = Math.min(params.width, params.height);
   const fov = minDim * 0.9 * params.zoom;
   const projX = (2 * fov) / Math.max(1, params.width);

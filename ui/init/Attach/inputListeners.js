@@ -8,9 +8,9 @@
 
 "use strict";
 
-import { attachInputListeners } from '../../engine/init/renderEngineAttachInputListeners.js';
+import { attachInputListeners } from '../../engine/init/attachInputListeners.js';
 
-export function uiAttachInputListeners() {
+export function inputListeners() {
   try {
     const cpuCanvas = document.getElementById('c');
     attachInputListeners(cpuCanvas);

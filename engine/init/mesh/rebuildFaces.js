@@ -33,7 +33,7 @@
  * @returns {Array<Array<number>>} New face array with updated indices
  *   Degenerate faces are removed
  */
-export function meshEngineRebuildFaces(F, oldToNew) {
+export function rebuildFaces(F, oldToNew) {
   const newFaces = [];
   
   // Process each face

@@ -29,7 +29,7 @@
  * 3. Finds maximum distance from origin for bounding sphere
  * 4. Adds 5% padding to zHalf for comfortable framing
  */
-export function renderEngineComputeFrameParams(vertices) {
+export function frameParams(vertices) {
   // Return defaults if no vertices
   if (!Array.isArray(vertices) || vertices.length === 0) {
     return { cy: 0, zHalf: 1 };

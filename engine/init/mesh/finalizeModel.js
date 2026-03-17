@@ -17,7 +17,7 @@
  */
 
 // Import the detail level setter for LOD control
-import { meshEngineDetailLevel } from '../set/meshEngineDetailLevel.js';
+import { detailLevel } from '../set/detailLevel.js';
 
 /**
  * InitMeshEngineFinalizeModel - Finalizes and activates a mesh model
@@ -32,7 +32,7 @@ import { meshEngineDetailLevel } from '../set/meshEngineDetailLevel.js';
  * 2. If animateMorph is true and there's an old model, starts a morph animation
  * 3. Otherwise, directly sets the detail level (instant transition)
  */
-export function meshEngineFinalizeModel(newModelCopy, animateMorph, name, detailLevel) {
+export function finalizeModel(newModelCopy, animateMorph, name, detailLevel) {
   // Get the current model (if any) for morph source
   const oldModel = globalThis.MODEL;
   

@@ -67,7 +67,7 @@ if (!globalThis.PHYSICS_STATE) {
  * greater than zero. When the counter is positive, rotation is paused to
  * provide visual feedback during user interaction.
  */
-export function renderEnginePhysics() {
+export function physics() {
   if (globalThis.PHYSICS_STATE.HOLD_ROTATION_FRAMES > 0) globalThis.PHYSICS_STATE.HOLD_ROTATION_FRAMES--;
 }
 

@@ -28,7 +28,7 @@
  *    - Custom RGB color (user selection)
  *    - Default light blue (ultimate fallback)
  */
-export function renderEngineBackgroundColors() {
+export function colors() {
   // Get background color from theme, default to black
   const bgRgb = globalThis.THEME?.bg ?? [0, 0, 0];
   const bgColor = `rgba(${bgRgb[0]},${bgRgb[1]},${bgRgb[2]},1)`;

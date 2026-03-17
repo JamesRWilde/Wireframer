@@ -1,7 +1,7 @@
 import { bgState } from '../state/renderEngineBackground.js';
-import { renderEngineSyncCanvasSize } from '../set/renderEngineSyncCanvasSize.js';
+import { syncCanvasSize } from '../set/syncCanvasSize.js';
 
-export function renderEngineCanvas() {
+export function canvas() {
   if (typeof document === 'undefined') return;
 
   const cpuCanvas = document.getElementById('c');

@@ -1,4 +1,4 @@
-export function engineQualityPriority(quality) {
+export function priority(quality) {
   switch (quality) {
     case 'high': return 3;
     case 'medium': return 2;

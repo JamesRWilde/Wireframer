@@ -37,7 +37,7 @@
  * - If R is not a 9-element array, returns R unchanged
  * - If all angles are zero or non-finite, returns R unchanged (optimization)
  */
-export function renderEngineApplyEulerIncrement(R, ax, ay, az) {
+export function applyEulerIncrement(R, ax, ay, az) {
   // Guard: ensure R is a valid 3x3 matrix (9 elements)
   if (R?.length !== 9) return R;
   

@@ -11,10 +11,10 @@
  * @param {Object} buffers - The GPU buffer store to update.
  * @returns {boolean} True if update succeeded, false if model is invalid.
  */
-import { getModelTriangles } from '../get/renderEngineModelTriangles.js';
-import { getModelTriCornerNormals } from '../get/renderEngineModelTriCornerNormals.js';
+import { getModelTriangles } from '../get/triangles.js';
+import { getModelTriCornerNormals } from '../get/triCornerNormals.js';
 
-export function gpuEngineUpdateDynamicBuffers(gl, model, buffers) {
+export function dynamicBuffers(gl, model, buffers) {
   // Defensive: must have valid model and buffers
   if (!model || !buffers) return false;
 

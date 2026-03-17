@@ -1,2 +1,2 @@
-import * as state from '../state/renderEngineBackgroundWorker.js';
-export function renderEnginePendingWorkerParticles() { return state.pendingWorkerParticles; }
+import * as state from '../state/backgroundWorker.js';
+export function pendingWorkerParticles() { return state.pendingWorkerParticles; }

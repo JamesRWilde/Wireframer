@@ -16,7 +16,7 @@
  *   - Final color: Interpolation between theme shadeDark and shadeBright
  */
 
-import { renderEngineLerpColor } from './renderEngineLerpColor.js';
+import { lerpColor } from './lerpColor.js';
 
 /**
  * View-space light direction: top-left ceiling light
@@ -39,7 +39,7 @@ const LIGHT_DIR_VIEW = [-0.532, 0.847, 0];
  * 3. Combines ambient, diffuse, and specular components
  * 4. Interpolates between theme shade colors based on lighting
  */
-export function renderEngineComputeTriangleCpu(normal, useSmoothShading) {
+export function triangleCpu(normal, useSmoothShading) {
   // Get theme colors with fallbacks
   const THEME = globalThis.THEME ?? { shadeDark: '#000000', shadeBright: '#ffffff' };
 
