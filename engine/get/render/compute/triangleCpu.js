@@ -1,85 +1,85 @@
 /**
  * computeTriangleShadeColor.js - Triangle Lighting Calculation
- * 
+ *
  * PURPOSE:
  *   Computes the shaded color for a triangle using Blinn-Phong lighting.
  *   Combines ambient, diffuse, and specular components for realistic shading.
- * 
- * ARCHITECTURE ROLE:
- *   Called by fill renderer for each triangle to determine its color.
- *   Uses view-space normals from resolveTriangleNormal.
- * 
- * LIGHTING MODEL:
- *   - Ambient: Constant base illumination (0.26)
- *   - Diffuse: Light-dependent shading based on surface angle (0.72 * NdotL)
- *   - Specular: Highlight based on view angle (Blinn-Phong with half vector)
- *   - Final color: Interpolation between theme shadeDark and shadeBright
  */
 
-import { lerpColor }from '@engine/get/render/lerpColor.js';
+"use strict";
 
 /**
  * View-space light direction: top-left ceiling light
  * In view space: X=-0.5 (left), Y=0.8 (up), Z=0 (no depth bias)
  * Normalized: magnitude = sqrt(0.25 + 0.64) = sqrt(0.89) ≈ 0.943
  */
-const LIGHT_DIR_VIEW = [-0.532, 0.847, 0];
+const Lx = -0.532, Ly = 0.847, Lz = 0;
+
+/**
+ * Precomputed half-vector (normalize(L + V)) where V = [0, 0, -1]
+ * H = normalize([-0.532, 0.847, -1])
+ * |H| = sqrt(0.283 + 0.717 + 1) = sqrt(2.0) ≈ 1.414
+ * Hx = -0.532 / 1.414 ≈ -0.376
+ * Hy =  0.847 / 1.414 ≈ 0.599
+ * Hz = -1.000 / 1.414 ≈ -0.707
+ */
+const Hx = -0.376, Hy = 0.599, Hz = -0.707;
+
+// Cached theme RGB values (updated when theme changes)
+let themeDarkR = 0, themeDarkG = 0, themeDarkB = 0;
+let themeBrightR = 255, themeBrightG = 255, themeBrightB = 255;
+let themeVersion = -1;
+
+function syncThemeColors() {
+  const v = globalThis._themeVersion | 0;
+  if (v === themeVersion) return;
+  themeVersion = v;
+
+  const dark = globalThis.THEME?.shadeDark ?? '#000000';
+  const bright = globalThis.THEME?.shadeBright ?? '#ffffff';
+  themeDarkR = parseInt(dark.slice(1, 3), 16);
+  themeDarkG = parseInt(dark.slice(3, 5), 16);
+  themeDarkB = parseInt(dark.slice(5, 7), 16);
+  themeBrightR = parseInt(bright.slice(1, 3), 16);
+  themeBrightG = parseInt(bright.slice(3, 5), 16);
+  themeBrightB = parseInt(bright.slice(5, 7), 16);
+}
 
 /**
  * computeTriangleShadeColor - Computes shaded color for a triangle
- * 
+ *
  * @param {Array<number>} normal - Surface normal in view space [nx, ny, nz]
  * @param {boolean} useSmoothShading - Whether smooth shading is enabled
- * 
- * @returns {Array<number>} RGB color array [r, g, b] with values 0-255
- * 
- * The function:
- * 1. Computes NdotL for diffuse lighting
- * 2. Computes Blinn-Phong specular with half vector
- * 3. Combines ambient, diffuse, and specular components
- * 4. Interpolates between theme shade colors based on lighting
+ * @returns {[number, number, number]} RGB color [r, g, b] with values 0-255
  */
 export function triangleCpu(normal, useSmoothShading) {
-  // Get theme colors with fallbacks
-  const THEME = globalThis.THEME ?? { shadeDark: '#000000', shadeBright: '#ffffff' };
+  syncThemeColors();
 
-  // Extract normal components (already in view space)
-  const nx = normal[0];
-  const ny = normal[1];
-  const nz = normal[2];
-  
-  // Compute diffuse term: N dot L (clamped to positive)
-  const ndotl = Math.max(0, nx * LIGHT_DIR_VIEW[0] + ny * LIGHT_DIR_VIEW[1] + nz * LIGHT_DIR_VIEW[2]);
-  
-  // Compute Blinn-Phong specular with half vector
-  // View direction in view space is [0, 0, -1] (camera looks down -Z)
-  const VIEW_DIR = [0, 0, -1];
-  
-  // Half vector = normalize(L + V)
-  const hx = LIGHT_DIR_VIEW[0] + VIEW_DIR[0];
-  const hy = LIGHT_DIR_VIEW[1] + VIEW_DIR[1];
-  const hz = LIGHT_DIR_VIEW[2] + VIEW_DIR[2];
-  const hl = Math.hypot(hx, hy, hz);
-  const hnx = hx / hl;
-  const hny = hy / hl;
-  const hnz = hz / hl;
-  
-  // Specular term: (N dot H)^shininess
-  const nh = Math.max(0, nx * hnx + ny * hny + nz * hnz);
-  // Higher shininess for smooth shading (24 vs 18)
-  const spec = Math.pow(nh, useSmoothShading ? 24 : 18);
+  const nx = normal[0], ny = normal[1], nz = normal[2];
 
-  // Combine lighting components
-  // Ambient: constant base illumination
-  const ambient = 0.26;
-  // Diffuse: light-dependent shading
-  const diffuse = 0.72 * ndotl;
-  // Specular: view-dependent highlight (stronger for flat shading)
-  const specular = useSmoothShading ? 0.18 * spec : 0.3 * spec;
-  
-  // Total lighting intensity, clamped to [0, 1]
-  const lit = Math.max(0, Math.min(1, ambient + diffuse + specular));
-  
-  // Interpolate between dark and bright theme colors
-  return lerpColor(THEME.shadeDark, THEME.shadeBright, lit);
+  // Diffuse: N dot L
+  const ndotl = nx * Lx + ny * Ly + nz * Lz;
+  const diffuse = ndotl > 0 ? 0.72 * ndotl : 0;
+
+  // Specular: (N dot H)^shininess using precomputed half vector
+  const nh = nx * Hx + ny * Hy + nz * Hz;
+  const nhClamped = nh > 0 ? nh : 0;
+  const spec = Math.pow(nhClamped, useSmoothShading ? 24 : 18);
+
+  // Combine: ambient + diffuse + specular
+  const specWeight = useSmoothShading ? 0.18 : 0.3;
+  let lit = 0.26 + diffuse + specWeight * spec;
+  if (lit > 1) lit = 1;
+  else if (lit < 0) lit = 0;
+
+  // Lerp theme colors (inline, no array creation)
+  const dr = themeDarkR, dg = themeDarkG, db = themeDarkB;
+  return [
+    (dr + (themeBrightR - dr) * lit) | 0,
+    (dg + (themeBrightG - dg) * lit) | 0,
+    (db + (themeBrightB - db) * lit) | 0,
+  ];
 }
+
+// Call this when theme changes to bump the cache version
+export function invalidateThemeCache() { themeVersion = -1; }

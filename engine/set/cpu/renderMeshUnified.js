@@ -96,9 +96,6 @@ export function renderMeshUnified(model, ctx) {
   // ── Telemetry: per-phase timing ──
   let tLight = 0, tFill = 0, tStroke = 0;
 
-  // Path2D for batched edge strokes (all edges drawn in one stroke() call)
-  const wirePath = wireAlpha > 0.001 ? new Path2D() : null;
-
   // Render each triangle in sorted order
   ctx.save();
   ctx.lineWidth = 0.2;
@@ -152,24 +149,14 @@ export function renderMeshUnified(model, ctx) {
 
     tFill += performance.now() - t0;
 
-    // ── Edge accumulation (stroked later in one batch) ──
-    if (wirePath) {
+    // ── Canvas stroke phase ──
+    if (wireAlpha > 0.001) {
       t0 = performance.now();
-      wirePath.moveTo(ax, ay);
-      wirePath.lineTo(bx, by);
-      wirePath.lineTo(cx, cy);
-      wirePath.closePath();
+      ctx.globalAlpha = wireAlpha;
+      ctx.strokeStyle = edgeColor;
+      ctx.stroke();
       tStroke += performance.now() - t0;
     }
-  }
-
-  // ── Batch stroke: draw all edges in one call ──
-  if (wirePath && wireAlpha > 0.001) {
-    const t0 = performance.now();
-    ctx.globalAlpha = wireAlpha;
-    ctx.strokeStyle = edgeColor;
-    ctx.stroke(wirePath);
-    tStroke += performance.now() - t0;
   }
 
   ctx.globalAlpha = 1;
