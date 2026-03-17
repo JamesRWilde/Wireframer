@@ -1,4 +1,4 @@
-import { initFillWorker } from '@engine/init/cpu/fillWorker.js';
+import { fillWorker } from '@engine/init/cpu/fillWorker.js';
 /**
  * drawSolidFillModel.js - Solid Fill Model Renderer
  * 

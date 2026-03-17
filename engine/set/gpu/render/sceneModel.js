@@ -1,7 +1,7 @@
 import { normalizeVector3 } from '@engine/get/gpu/normalizeVector3.js';
-import { convertRgbToNormalized } from '@engine/set/gpu/render/convertRgbToNormalized.js';
-import { toRowMajorRotation } from '@engine/set/gpu/render/toRowMajorRotation.js';
-import { projectionUniforms } from '@engine/set/gpu/scene/projectionUniforms.js';
+import { convertRgbToNormalized } from '@engine/get/gpu/convertRgbToNormalized.js';
+import { toRowMajorRotation } from '@engine/get/gpu/toRowMajorRotation.js';
+import { projectionUniforms } from '@engine/set/gpu/projectionUniforms.js';
 
 export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays) {
   if (!params?.theme || !params?.width || !params?.height) return false;

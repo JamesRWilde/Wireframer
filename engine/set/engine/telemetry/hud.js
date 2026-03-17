@@ -1,4 +1,4 @@
-import { state, TELEMETRY_UI_INTERVAL_MS }from '@ui/get/read/state.js';
+import { state, TELEMETRY_UI_INTERVAL_MS }from '@engine/state/engine/loop.js';
 import {statsState} from '@ui/state/stats.js';
 import { writeStat }from '@ui/set/writeStat.js';
 
