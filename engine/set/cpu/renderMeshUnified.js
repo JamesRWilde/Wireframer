@@ -96,9 +96,15 @@ export function renderMeshUnified(model, ctx) {
   // ── Telemetry: per-phase timing ──
   let tLight = 0, tFill = 0, tStroke = 0;
 
+  // Path2D for batched edge strokes (all edges drawn in one stroke() call)
+  const wirePath = wireAlpha > 0.001 ? new Path2D() : null;
+
   // Render each triangle in sorted order
   ctx.save();
   ctx.lineWidth = 0.2;
+
+  // Cache fillStyle to avoid redundant string creation
+  let lastFillStyle = '';
 
   for (let si = 0; si < triCount; si++) {
     const triIdx = sortIdx[si];
@@ -119,6 +125,10 @@ export function renderMeshUnified(model, ctx) {
     const normal = resolveTriangleNormal(tri, triIdx, T, triCornerNormals, useSmoothShading);
     if (!normal) continue;
 
+    // Back-face culling: skip triangles facing away from camera
+    // In view space, camera looks down -Z, so a front-facing normal has nz < 0
+    if (normal[2] > 0.1) continue;
+
     // Compute shade color
     const shadeColor = computeTriangleShadeColor(normal, useSmoothShading);
 
@@ -135,21 +145,34 @@ export function renderMeshUnified(model, ctx) {
 
     if (fillAlpha > 0.001) {
       ctx.globalAlpha = fillAlpha;
-      ctx.fillStyle = `rgb(${shadeColor[0]}, ${shadeColor[1]}, ${shadeColor[2]})`;
+      // Only update fillStyle if color actually changed
+      const fillStyle = `rgb(${shadeColor[0]}, ${shadeColor[1]}, ${shadeColor[2]})`;
+      if (fillStyle !== lastFillStyle) {
+        ctx.fillStyle = fillStyle;
+        lastFillStyle = fillStyle;
+      }
       ctx.fill();
     }
 
     tFill += performance.now() - t0;
 
-    // ── Canvas stroke phase ──
-    t0 = performance.now();
-
-    if (wireAlpha > 0.001) {
-      ctx.globalAlpha = wireAlpha;
-      ctx.strokeStyle = edgeColor;
-      ctx.stroke();
+    // ── Edge accumulation (stroked later in one batch) ──
+    if (wirePath) {
+      t0 = performance.now();
+      wirePath.moveTo(ax, ay);
+      wirePath.lineTo(bx, by);
+      wirePath.lineTo(cx, cy);
+      wirePath.closePath();
+      tStroke += performance.now() - t0;
     }
+  }
 
+  // ── Batch stroke: draw all edges in one call ──
+  if (wirePath && wireAlpha > 0.001) {
+    const t0 = performance.now();
+    ctx.globalAlpha = wireAlpha;
+    ctx.strokeStyle = edgeColor;
+    ctx.stroke(wirePath);
     tStroke += performance.now() - t0;
   }
 
