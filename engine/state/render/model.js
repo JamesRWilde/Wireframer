@@ -100,4 +100,4 @@ export function model(model, name = '') {
 // Some modules (like loader.js) call this via globalThis.setActiveModel()
 // This global exposure is a deliberate architectural choice to support
 // flexible loading patterns without circular import dependencies
-globalThis.setActiveModel = setActiveModel;
+globalThis.setActiveModel = model;
