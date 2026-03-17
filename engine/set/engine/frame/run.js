@@ -92,7 +92,7 @@ export function run(nowMs = 0) {
   // Note: we used to guard against zero opacity values here, but that forced
   // sliders to jump back to opaque when dragged to 0. The sliders now
   // initialize correctly in startApp, so we allow genuine transparency.
-  const { bgMs, fgMs, drewCpuForeground, backgroundOnSeparateCanvas } = renderScene(nowMs);
+  const { bgMs, fgMs, drewCpuForeground, backgroundOnSeparateCanvas } = scene(nowMs);
 
   // Calculate total frame time
   const frameMs = performance.now() - frameStartMs;
