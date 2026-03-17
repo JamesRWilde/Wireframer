@@ -1,7 +1,3 @@
-// Import the GPU renderer factory function
-// Creates WebGL context, shaders, and buffer management
-import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
-
 // Import shared GPU renderer state
 import {gpuState} from '@engine/state/gpu/scene.js';
 

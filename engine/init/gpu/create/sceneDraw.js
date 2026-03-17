@@ -1,5 +1,5 @@
-import { model } from "'../SetGpuEngineRenderModel.js";
-import { draw } from "../draw.js'";
+import { model } from '@engine/set/gpu/render/model.js';
+import { draw } from '@engine/set/gpu/clear/draw.js';
 
 export function sceneDraw(gl, canvas, shaderPack, bufferStore) {
   const tmpArrays = {

@@ -12,7 +12,7 @@ export function fillWorker(width, height) {
     state.offscreenCanvas = new OffscreenCanvas(width, height);
 
     state.worker = new Worker(
-      new URL('./fill-render-worker.js', import.meta.url).href,
+      new URL('../state/gpu/fillWorker.js', import.meta.url).href,
       { type: 'module' }
     );
     state.workerAvailable = true;

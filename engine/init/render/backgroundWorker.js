@@ -9,7 +9,7 @@ export function backgroundWorker() {
   
   try {
     state.worker = new Worker(
-      new URL('./workers/workersBackground.js', import.meta.url).href,
+      new URL('../../workers/workersBackground.js', import.meta.url).href,
       { type: 'module' }
     );
     

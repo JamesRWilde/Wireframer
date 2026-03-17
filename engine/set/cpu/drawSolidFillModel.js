@@ -1,3 +1,4 @@
+import { initFillWorker } from '@engine/init/cpu/fillWorker.js';
 /**
  * drawSolidFillModel.js - Solid Fill Model Renderer
  * 
@@ -20,7 +21,7 @@ import {shadingMode}from '@engine/get/cpu/model/shadingMode.js';
 import {triCornerNormals}from '@engine/get/render/model/triCornerNormals.js';
 import { trianglesCpu }from '@engine/set/render/fill/trianglesCpu.js';
 import { sendRenderCommand }from '@engine/set/cpu/fill/sendRenderCommand.js';
-import { initFillWorker } from "'../init/fillWorker.js'";
+
 import { fillCachedFrame }from '@engine/get/cpu/fillCachedFrame.js';
 import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
 import { state }from '@ui/get/read/state.js';

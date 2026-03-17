@@ -4,7 +4,7 @@ export function workerTransform() {
 
   try {
     state.worker = new Worker(
-      new URL('./vertex-transform-worker.js', import.meta.url).href,
+      new URL('../state/gpu/vertexTransformWorker.js', import.meta.url).href,
       { type: 'module' }
     );
     state.workerAvailable = true;
