@@ -24,7 +24,7 @@
 import { state } from './loopState.js';
 
 // Import HUD updater to display the current render mode (GPU/CPU)
-import { updateRendererHud } from './updateRendererHud.js';
+import { updateRendererHud } from './update/updateRendererHud.js';
 
 // Import GPU renderer getter to check if GPU is available
 import { getSceneGpuRenderer } from '../gpu/scene/getSceneGpuRenderer.js';

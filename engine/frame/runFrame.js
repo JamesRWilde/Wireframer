@@ -26,19 +26,19 @@
 import { state } from '../loopState.js';
 
 // Import physics update function - handles rotation and input
-import { updatePhysics } from '../updatePhysics.js';
+import { updatePhysics } from '../update/updatePhysics.js';
 
 // Import scene renderer - draws background and foreground
 import { renderScene } from '../renderScene.js';
 
 // Import telemetry HUD updater - displays stats in the UI
-import { updateTelemetryHud } from '../updateTelemetryHud.js';
+import { updateTelemetryHud } from '../update/updateTelemetryHud.js';
 
 // Import frame throttling check - skips frames if running too fast
 import { shouldRunFrame } from './shouldRunFrame.js';
 
 // Import telemetry collector - smooths and stores timing metrics
-import { updateTelemetry } from '../updateTelemetry.js';
+import { updateTelemetry } from '../update/updateTelemetry.js';
 
 // Import frame budget manager for adaptive quality
 import { updateFrameTime } from './updateFrameTime.js';

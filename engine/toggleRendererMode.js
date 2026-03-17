@@ -24,7 +24,7 @@
 import { state } from './loopState.js';
 
 // Import HUD updater to display the current render mode
-import { updateRendererHud } from './updateRendererHud.js';
+import { updateRendererHud } from './update/updateRendererHud.js';
 
 // Import GPU canvas clearing for when switching from GPU to CPU
 import { clearGpuSceneCanvas } from '../gpu/scene/clearGpuSceneCanvas.js';
