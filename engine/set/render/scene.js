@@ -98,15 +98,16 @@ export function scene(nowMs) {
   foregroundRenderMode();
 
   // Select model based on render mode:
-  // GPU: use full-detail BASE_MODEL for best quality
+  // GPU: use full-detail BASE_MODEL by default; only match LOD if slider moved (< 1)
   // CPU: use CURRENT_LOD_MODEL (decimated from CPU_BASE_MODEL) for performance safety
   let meshToRender = baseMesh;
+  const lodChanged = globalThis.CURRENT_LOD_PCT !== undefined && globalThis.CURRENT_LOD_PCT < 1;
   if (state.foregroundRenderMode === 'gpu' && globalThis.BASE_MODEL?.V?.length) {
-    // If detail slider has been used, decimate BASE_MODEL to match CPU LOD percentage
-    if (globalThis.CURRENT_LOD_MODEL && globalThis.CURRENT_LOD_MODEL !== globalThis.BASE_MODEL) {
-      const pct = globalThis.CURRENT_LOD_MODEL.V.length / globalThis.BASE_MODEL.V.length;
-      meshToRender = decimateByPercent(globalThis.BASE_MODEL, pct);
+    if (lodChanged) {
+      // User moved the detail slider — mirror the same LOD on GPU
+      meshToRender = decimateByPercent(globalThis.BASE_MODEL, globalThis.CURRENT_LOD_PCT);
     } else {
+      // Slider at 100% — use full detail
       meshToRender = globalThis.BASE_MODEL;
     }
   } else {

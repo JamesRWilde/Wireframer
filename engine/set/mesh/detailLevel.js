@@ -56,6 +56,9 @@ export function detailLevel(percent, name = 'Shape') {
   // Always decimate from CPU_BASE_MODEL to avoid quality loss from repeated decimation
   globalThis.CURRENT_LOD_MODEL = decimateByPercent(base, clampedPercent);
 
+  // Track the LOD percentage so scene.js can mirror it on GPU
+  globalThis.CURRENT_LOD_PCT = clampedPercent;
+
   // Set the decimated model as active for rendering
   if (typeof globalThis.setActiveModel === 'function') {
     globalThis.setActiveModel(globalThis.CURRENT_LOD_MODEL, name);

@@ -46,6 +46,9 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct, 
   // Create CPU_BASE_MODEL: capped version for CPU mode only
   // GPU uses BASE_MODEL (full detail), detail slider uses CPU_BASE_MODEL
   globalThis.CPU_BASE_MODEL = capModelForCpu(newModelCopy);
+
+  // Reset LOD to full detail on new model load
+  globalThis.CURRENT_LOD_PCT = 1;
   
   // Decide between morph animation and instant transition
   if (animateMorph && oldModel?.V?.length && globalThis.morph?.startMorph) {
