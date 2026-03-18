@@ -17,7 +17,7 @@
 "use strict";
 
 import { palette }from '@ui/set/apply/palette.js';
-import { setThemeMode }from '@engine/state/renderState.js';
+import { setThemeMode }from '@engine/state/render/renderState.js';
 
 /**
  * themeMode - Sets application theme mode

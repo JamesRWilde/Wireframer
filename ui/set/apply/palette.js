@@ -22,7 +22,7 @@
 
 import { bldCustomTheme }from '@ui/set/bldCustomTheme.js';
 import {CUSTOM_RGB, customBlue, customGreen, customRed, themeMode as themeModeEl } from '@ui/state/dom.js';
-import { setTheme }from '@engine/state/renderState.js';
+import { setTheme }from '@engine/state/render/renderState.js';
 
 /**
  * applyPalette - Applies current color theme to application

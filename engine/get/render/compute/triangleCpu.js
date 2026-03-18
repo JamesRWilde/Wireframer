@@ -8,7 +8,7 @@
 
 "use strict";
 
-import { getShadeDarkRgb, getShadeBrightRgb }from '@engine/state/renderState.js';
+import { getShadeDarkRgb, getShadeBrightRgb }from '@engine/state/render/renderState.js';
 
 /**
  * View-space light direction: top-left ceiling light

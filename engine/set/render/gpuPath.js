@@ -49,7 +49,7 @@ import { getRotation }from '@engine/state/render/physicsState.js';
  * 2. Updates canvas visibility based on success/failure
  * 3. Falls back to CPU mode if GPU rendering fails
  */
-import { getFillOpacity, getWireOpacity, getTheme }from '@engine/state/renderState.js';
+import { getFillOpacity, getWireOpacity, getTheme }from '@engine/state/render/renderState.js';
 
 export function gpuPath(meshToRender, morphing) {
   // Call the GPU renderer with all necessary parameters

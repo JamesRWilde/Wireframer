@@ -27,7 +27,7 @@ import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.
 import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
 import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/resolve/triangleNormalCpu.js';
 import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/compute/triangleCpu.js';
-import { getFillRgb, getEdgeColor, getFillOpacity, getWireOpacity }from '@engine/state/renderState.js';
+import { getFillRgb, getEdgeColor, getFillOpacity, getWireOpacity }from '@engine/state/render/renderState.js';
 
 // Pre-allocated sort scratch space (reused across frames to avoid per-frame allocation)
 let sortZ = null;    // Float32Array of z-depths per triangle

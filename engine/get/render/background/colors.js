@@ -14,7 +14,7 @@
  *   3. Default light blue fallback
  */
 
-import { getBgColor, getParticleColor } from '@engine/state/renderState.js';
+import { getBgColor, getParticleColor } from '@engine/state/render/renderState.js';
 
 /**
  * getBackgroundColors - Gets background and particle colors from theme
