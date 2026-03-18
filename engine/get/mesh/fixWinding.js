@@ -7,6 +7,11 @@
  *   from different exporters may use CW or CCW winding — this
  *   normalizes them to point outward.
  *
+ * ARCHITECTURE ROLE:
+ *   Called during mesh loading (toRuntime or object builder) to ensure
+ *   consistent face orientation before rendering. Sets _windingFixed
+ *   and _windingDirection flags on the mesh for diagnostic use.
+ *
  * APPROACH:
  *   1. Compute the bounding box center
  *   2. For each face, compute the normal (cross product of edges)
@@ -18,33 +23,23 @@
  * should fix the source).
  */
 
-/**
- * Computes the face normal (non-normalized) from three vertex positions.
- * Uses the cross product of edge vectors.
- */
-function faceNormal(a, b, c) {
-  const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
-  const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
-  return [
-    uy * vz - uz * vy,
-    uz * vx - ux * vz,
-    ux * vy - uy * vx
-  ];
-}
+"use strict";
+
+import { faceNormal } from '@engine/get/mesh/faceNormal.js';
+import { dot3 } from '@engine/get/mesh/dot3.js';
 
 /**
- * Dot product of two 3D vectors.
- */
-function dot3(a, b) {
-  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-}
-
-/**
- * fixWinding - Detects and corrects inverted face normals
+ * fixWinding - Detects and corrects inverted face normals.
+ *
+ * Analyzes face winding by checking whether normals point inward or
+ * outward relative to the mesh centroid. If a majority (>50%) point
+ * inward, all faces are flipped to correct the winding.
+ *
+ * Sets meshObj._windingFixed (true/false) and meshObj._windingDirection
+ * ('cw', 'ccw', or 'mixed') for downstream consumers.
  *
  * @param {Object} meshObj - Mesh with V (vertices) and F (faces)
- * @returns {Object} The same meshObj with corrected face winding.
- *   Sets meshObj._windingFixed = true and meshObj._windingDirection = 'cw' or 'ccw'
+ * @returns {Object} The same meshObj with corrected face winding
  */
 export function fixWinding(meshObj) {
   const V = meshObj.V;

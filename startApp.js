@@ -19,8 +19,11 @@ import { canvas } from '@engine/init/render/canvas.js';
 // Physics state side-effect
 import '@engine/state/render/physics.js';
 
-// Loader side-effects (sets up globalThis.loadObjMesh)
+// Loader side-effects (sets up globalThis.load)
 import '@engine/init/mesh/load.js';
+
+// OBJ loader side-effects (sets up globalThis.loadObjMesh)
+import '@engine/init/mesh/loadObjMesh.js';
 
 // Model state side-effect
 import '@engine/state/render/model.js';

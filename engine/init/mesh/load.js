@@ -1,62 +1,61 @@
 /**
  * load.js - Mesh Loading and Processing Pipeline
- * 
+ *
  * PURPOSE:
  *   Orchestrates the complete mesh loading pipeline from raw mesh data to
- *   a ready-to-render model. This is the primary entry point for loading
- *   new 3D objects into the application.
- * 
+ *   a ready-to-render model. Validates, normalises to bounding sphere space,
+ *   and finalises the model for rendering.
+ *
  * ARCHITECTURE ROLE:
- *   Called by loader.js when loading OBJ files, and by other modules that
- *   need to process mesh data. Exposed globally as globalThis.load for
- *   flexible access without circular imports.
- * 
+ *   Primary entry point for loading new 3D objects. Called by loader.js
+ *   for OBJ files and by other modules that need to process mesh data.
+ *   Exposed globally as globalThis.load for flexible access.
+ *
  * PIPELINE STEPS:
  *   1. Validate mesh data structure
  *   2. Build edges from faces (if not provided)
  *   3. Filter invalid edges (zero-length, duplicate)
- *   4. Set LOD range for the model
- *   5. Clone the mesh (for caching)
- *   6. Fit camera to model bounds
- *   7. Finalize model (activate, optionally morph)
- *   8. Set as active model
+ *   4. Normalise to bounding sphere space (centre at origin, radius 1)
+ *   5. Set LOD range for the model
+ *   6. Clone the mesh (for caching)
+ *   7. Fit camera to model bounds (first load only)
+ *   8. Finalize model (activate, optionally morph)
+ *   9. Set as active model
+ *
+ * SPHERE LAW:
+ *   Every mesh is normalised to a unit bounding sphere (radius 1, centre at
+ *   origin). This means size = zoom (constant across all meshes), centre =
+ *   origin (always centre of screen), and rotation pivots around sphere centre.
  */
 
 "use strict";
 
-// Import edge filtering to remove degenerate edges
 import { filterValidEdges }from '@engine/get/mesh/filterValidEdges.js';
-
-// Import mesh validation to ensure data integrity
 import { validationResult }from '@engine/get/mesh/validate/validationResult.js';
-
-// Import LOD range setup for detail level control
 import { lodRangeForModel }from '@engine/set/mesh/lodRangeForModel.js';
-
-// Import camera fitting to frame the model properly
 import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
-
-// Import model finalization (activation, morph setup)
 import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
-
-// Import edge building utility
-// Register globally so any consumer can invoke it without circular imports
 import { edgesFromFacesRuntime }from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
+import { toRuntime } from '@engine/init/mesh/toRuntime.js';
+
+// Register globally so any consumer can invoke it without circular imports
 if (!globalThis.edgesFromFacesRuntime) {
   globalThis.edgesFromFacesRuntime = edgesFromFacesRuntime;
 }
 
 /**
- * load - Loads and processes a mesh for rendering
- * 
+ * load - Loads and processes a mesh for rendering.
+ *
+ * Runs the full pipeline: validation, edge extraction, bounding sphere
+ * normalisation, LOD setup, camera fitting, finalisation, and activation.
+ *
  * @param {Object} mesh - Raw mesh data with V (vertices) and F (faces)
  * @param {string} [name='Shape'] - Display name for the mesh
  * @param {Object} [options={}] - Loading options
- * @param {boolean} [options.animateMorph=false] - Whether to animate transition
- * @param {number} [options.detailPercent=1] - LOD detail level (0-1)
+ * @param {boolean} [options.animateMorph=false] - Whether to animate transition from current mesh
+ * @param {number} [options.detailPercent=1] - LOD detail level (0-1, where 1 = full detail)
  * @param {string} [options.meshFileName] - Source filename for error messages
  * @param {string} [options.meshType='OBJ'] - Mesh format type
- * 
  * @returns {Object} The processed model ready for rendering
  */
 export function load(mesh, name = 'Shape', options = {}) {
@@ -78,17 +77,12 @@ export function load(mesh, name = 'Shape', options = {}) {
   
   // Step 3: Use edges from mesh if already present (OBJ parser merges
   // explicit OBJ edges with face-derived edges), otherwise derive from faces.
-  // This preserves author-defined edges from "e" and "l" directives.
   const E = mesh.E && mesh.E.length > 0
     ? mesh.E
     : (globalThis.edgesFromFacesRuntime ? globalThis.edgesFromFacesRuntime(F) : []);
 
-  // Step 4b: Normalize to bounding sphere space.
-  // The bounding sphere IS the shape — mesh lives inside it.
-  // All meshes become radius-1 sphere at origin, so:
-  //   - Size = zoom (constant across all meshes)
-  //   - Centre = sphere centre = origin (always centre of screen)
-  //   - Rotation pivots around sphere centre (always spins in place)
+  // Step 4: Normalise to bounding sphere space.
+  // Centre at origin, scale to radius 1, then hard-clamp to sphere.
   const vLen = V.length;
   let bx = Infinity, by = Infinity, bz = Infinity;
   let Bx = -Infinity, By = -Infinity, Bz = -Infinity;
@@ -101,7 +95,6 @@ export function load(mesh, name = 'Shape', options = {}) {
   const sphereCX = (bx + Bx) * 0.5;
   const sphereCY = (by + By) * 0.5;
   const sphereCZ = (bz + Bz) * 0.5;
-  // Max radius from sphere centre to any vertex
   let maxR = 0;
   for (let i = 0; i < vLen; i++) {
     const v = V[i];
@@ -125,41 +118,36 @@ export function load(mesh, name = 'Shape', options = {}) {
     }
   }
 
-  // Step 4b.5: No Z-shift needed. Orthographic projection has no
-  // perspective distortion and no behind-camera issues.
-  // The OBJ shape is preserved exactly as-is.
-
-  // Step 4c: Create the model object with filtered edges
+  // Step 5: Create the model object with filtered edges
   const newModel = {
     V,
     F,
-    E: filterValidEdges(E, V),  // Remove degenerate edges
+    E: filterValidEdges(E, V),
     _meshFormat: 'obj-style',
     _shadingMode: 'auto',
     _creaseAngleDeg: undefined,
   };
 
-  // Step 5: Set LOD range for detail level control
+  // Step 6: Set LOD range for detail level control
   lodRangeForModel(newModel);
 
-  // Step 6: Clamp detail percent to valid range
+  // Step 7: Clamp detail percent to valid range
   const clampedDetail = Math.max(0, Math.min(1, Number(detailPercent) || 1));
 
-  // Step 7: Clone the mesh for caching (if cloner is available)
+  // Step 8: Clone the mesh for caching
   const newModelCopy = globalThis.clone ? globalThis.clone(newModel) : newModel;
 
-  // Step 8: Fit camera to model bounds (only on first load, not morphs)
-  // Sphere is law — zoom is constant for all meshes. Only set it on first
-  // load; during morphs, zoom stays whatever the user set it to.
+  // Step 9: Fit camera to model bounds (first load only, not morphs)
+  // Zoom is constant for all meshes — only set it on first load
   if (!globalThis.MODEL) {
     fitCameraToModel(newModel);
   }
   const targetZoom = globalThis.ZOOM;
 
-  // Step 9: Finalize model (activate, optionally morph)
+  // Step 10: Finalize model (activate, optionally morph)
   finalizeModel(newModelCopy, animateMorph, name, clampedDetail, targetZoom);
 
-  // Step 10: Set as active model for rendering
+  // Step 11: Set as active model for rendering
   if (typeof globalThis.setActiveModel === 'function') {
     try {
       globalThis.setActiveModel(newModelCopy, name);
@@ -171,24 +159,5 @@ export function load(mesh, name = 'Shape', options = {}) {
   return newModelCopy;
 }
 
-// Import toRuntime for OBJ text parsing (used by loadObjMesh)
-import { toRuntime } from '@engine/init/mesh/toRuntime.js';
-
-/**
- * loadObjMesh - Fetches an OBJ file and loads it through the pipeline
- *
- * @param {string} objPath - Path to the OBJ file
- * @param {string} [name='Shape'] - Display name for the mesh
- * @returns {Promise<Object>} The processed model ready for rendering
- */
-export async function loadObjMesh(objPath, name = 'Shape') {
-  const resp = await fetch(objPath);
-  if (!resp.ok) throw new Error('Failed to fetch OBJ: ' + objPath);
-  const objText = await resp.text();
-  const mesh = toRuntime(objText, { meshFileName: objPath, meshType: 'OBJ' });
-  return load(mesh, name, { animateMorph: true });
-}
-
 // Expose for engine modules
 globalThis.load = load;
-globalThis.loadObjMesh = loadObjMesh;
