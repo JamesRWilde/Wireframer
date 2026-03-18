@@ -10,7 +10,6 @@
 
 import { morphState } from '@engine/state/mesh/morph.js';
 import { easeOut } from '@engine/get/mesh/easeOut.js';
-import { interpolateMeshes } from '@engine/init/mesh/interpolateMeshes.js';
 import { clone } from '@engine/init/mesh/clone.js';
 
 /** Phase boundaries (of total progress 0→1) */
@@ -104,24 +103,17 @@ export function advanceMorphFrame() {
     // ===== PHASE 2: Low-poly spatial morph along sphere surface =====
     const t = easeOut((tRaw - PHASE1_END) / (PHASE2_END - PHASE1_END));
 
-    let V;
-    if (morphMap) {
-      const decV = fromDec.V;
-      const tx = morphMap.tx;
-      const ty = morphMap.ty;
-      const tz = morphMap.tz;
+    if (!morphMap) throw new Error('Phase 2 morph requires morphMap but it was null');
 
-      V = decV.map((v, i) => {
-        const target = [tx[i], ty[i], tz[i]];
-        return interpolateInSphere(v, target, t);
-      });
-    } else {
-      const fallback = interpolateMeshes(fromDec, toDec, t, null);
-      V = fallback.V.map(v => {
-        const r = Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
-        return r > 0 ? [v[0]/r, v[1]/r, v[2]/r] : v;
-      });
-    }
+    const decV = fromDec.V;
+    const tx = morphMap.tx;
+    const ty = morphMap.ty;
+    const tz = morphMap.tz;
+
+    const V = decV.map((v, i) => {
+      const target = [tx[i], ty[i], tz[i]];
+      return interpolateInSphere(v, target, t);
+    });
 
     mesh = {
       V,
