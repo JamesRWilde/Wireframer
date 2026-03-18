@@ -32,6 +32,7 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 
 // Import GPU canvas visibility toggle
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
+import { state } from '@engine/state/engine/loop.js';
 
 /**
  * cpuPath - Executes the CPU rendering path for a frame
@@ -48,9 +49,9 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
   canvasHidden(true);
 
   // Clear the GPU canvas if it rendered last frame (prevent stale artifacts)
-  if (globalThis.FRAME_LOOP_STATE.gpuSceneDrawnLastFrame) {
+  if (state.gpuSceneDrawnLastFrame) {
     const _r = sceneRenderer(); if (_r?.gl) sceneCanvas(_r.gl, globalThis.gpuCanvas);
-    globalThis.FRAME_LOOP_STATE.gpuSceneDrawnLastFrame = false;
+    state.gpuSceneDrawnLastFrame = false;
   }
 
   // Clear the main canvas for new frame

@@ -51,13 +51,15 @@ export const state = {
   telemetryLastUiMs: 0,
   
   // EMA (Exponential Moving Average) metrics for performance telemetry
-  // These provide smoothed values that reduce jitter in the stats display
-  // EMA formula: newValue = alpha * currentSample + (1 - alpha) * previousEMA
-  emaFrameMs: 0,           // Total frame time (physics + bg + fg rendering)
-  emaFpsFrameIntervalMs: 0, // Time between frames (for FPS calculation)
-  emaPhysMs: 0,            // Physics update time (rotation, input)
-  emaBgMs: 0,              // Background particle rendering time
-  emaFgMs: 0,              // Foreground model rendering time
+  emaFrameMs: 0,
+  emaFpsFrameIntervalMs: 0,
+  emaPhysMs: 0,
+  emaBgMs: 0,
+  emaFgMs: 0,
+
+  // Render path tracking flags (previously globalThis.FRAME_LOOP_STATE)
+  gpuSceneDrawnLastFrame: false,         // Was GPU path used last frame?
+  cpuForegroundDrawnOnMainCanvas: false, // Is CPU foreground currently on main canvas?
 };
 
 /**

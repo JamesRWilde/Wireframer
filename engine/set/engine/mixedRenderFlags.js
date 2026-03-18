@@ -21,6 +21,8 @@
 
 "use strict";
 
+import { state } from '@engine/state/engine/loop.js';
+
 /**
  * mixedRenderFlags - Manages rendering state for mixed canvas configurations
  * 
@@ -28,11 +30,11 @@
  *   on a separate canvas (bg) rather than the main canvas
  * @param {boolean} gpuDrawn - Whether GPU rendering was successfully used this frame
  * 
- * This function updates FRAME_LOOP_STATE flags that control:
+ * This function updates loop state flags that control:
  * - Whether to clear the GPU scene canvas next frame
  * - Whether CPU foreground is currently composited on the main canvas
  */
 export function mixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn) {
   // Mark that GPU scene was drawn (for next frame's clearing logic)
-  globalThis.FRAME_LOOP_STATE.gpuSceneDrawnLastFrame = true;
+  state.gpuSceneDrawnLastFrame = true;
 }

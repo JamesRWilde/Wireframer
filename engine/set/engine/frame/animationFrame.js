@@ -26,15 +26,8 @@
 // This includes physics updates, rendering, and telemetry updates
 import {run}from '@engine/set/engine/frame/run.js';
 
-// Initialize shared frame state flags on first load
-// These track whether GPU or CPU rendering was used last frame, which affects
-// canvas clearing and compositing decisions in subsequent frames
-if (!globalThis.FRAME_LOOP_STATE) {
-  globalThis.FRAME_LOOP_STATE = {
-    gpuSceneDrawnLastFrame: false,        // Was GPU path used last frame?
-    cpuForegroundDrawnOnMainCanvas: false // Is CPU foreground currently on main canvas?
-  };
-}
+// Frame state flags (gpuSceneDrawnLastFrame, cpuForegroundDrawnOnMainCanvas)
+// are now on the shared loop state object imported from engine/state/engine/loop.js
 
 // Track the timestamp of the previous frame for interval calculation
 // Used for debug logging of rAF timing (helps diagnose jank)

@@ -117,5 +117,5 @@ export function run(nowMs = 0) {
   // Update frame loop state for next frame's canvas management
   // This tracks whether CPU foreground is on the main canvas, which affects
   // clearing and compositing decisions in subsequent frames
-  globalThis.FRAME_LOOP_STATE.cpuForegroundDrawnOnMainCanvas = drewCpuForeground && backgroundOnSeparateCanvas;
+  state.cpuForegroundDrawnOnMainCanvas = drewCpuForeground && backgroundOnSeparateCanvas;
 }
