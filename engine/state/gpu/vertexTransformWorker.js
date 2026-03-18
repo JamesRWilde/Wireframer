@@ -68,10 +68,10 @@ function transformVertices(V, R, fov, halfW, halfH, modelCy) {
     T[vi + 1] = ty;
     T[vi + 2] = tz;
 
-    // Perspective projection
-    const d = tz + 3;
-    P2[pi] = halfW + tx * fov / d;
-    P2[pi + 1] = halfH - (ty - modelCy) * fov / d;
+    // Orthographic projection: no depth-dependent scaling.
+    // The OBJ shape is preserved exactly — no perspective distortion.
+    P2[pi] = halfW + tx * fov;
+    P2[pi + 1] = halfH - (ty - modelCy) * fov;
   }
 
   return { T, P2 };

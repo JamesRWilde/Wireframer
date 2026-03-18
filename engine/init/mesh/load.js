@@ -103,15 +103,9 @@ export function load(mesh, name = 'Shape', options = {}) {
     V[i][2] -= cz;
   }
 
-  // Step 4b.5: Push mesh forward in Z so all vertices are in front of the camera.
-  // The perspective projection uses d = z + CAMERA_DIST (camera at z = -CAMERA_DIST).
-  // Vertices with z < -CAMERA_DIST have negative d, projecting to infinity.
-  // Large models (e.g. jet fighters spanning ±65 units) break if not shifted.
-  const CAMERA_DIST = 3;
-  const zShift = -minz + cz + CAMERA_DIST + 1; // back vertex ends up at z = CAMERA_DIST + 1
-  for (let i = 0; i < vLen; i++) {
-    V[i][2] += zShift;
-  }
+  // Step 4b.5: No Z-shift needed. Orthographic projection has no
+  // perspective distortion and no behind-camera issues.
+  // The OBJ shape is preserved exactly as-is.
 
   // Step 4c: Create the model object with filtered edges
   const newModel = {

@@ -59,13 +59,15 @@ export function fitCameraToModel(model) {
   if (typeof params.cy === 'number') globalThis.MODEL_CY = params.cy;
   if (typeof params.zHalf === 'number') globalThis.Z_HALF = params.zHalf;
   
-  // Use bounding sphere radius as the extent to ensure fitting works
-  // regardless of rotation - a pyramid tip at z=-radius will project larger
-  // than its 2D bounding box suggests
-  const maxExtent = Math.max(sizeX, sizeY, params.zHalf * 2);
+  // Use XY extents for orthographic zoom calculation.
+  // Orthographic projection has no depth-dependent scaling, so only
+  // the 2D extents matter for fitting the model in the viewport.
+  const maxExtent = Math.max(sizeX, sizeY);
 
   // Set expanded zoom bounds to allow wide range of zoom levels
-  globalThis.ZOOM_MIN = 0.1;
+  // Orthographic projection allows much smaller zoom values.
+  // Deep models (jet fighters) need small ZOOM to fit their 2D extents.
+  globalThis.ZOOM_MIN = 0.001;
   globalThis.ZOOM_MAX = 10;
 
   // Calculate optimal zoom to fit model in viewport
@@ -77,7 +79,9 @@ export function fitCameraToModel(model) {
     //   ZOOM = 3 * targetFraction / (0.9 * maxExtent)
     
     const targetFraction = 0.5;  // Model should fill 50% of viewport
-    const fitZoom = (3 * targetFraction) / (0.9 * maxExtent);
+    // Orthographic projection: screenPos = dim/2 + coord * minDim * 0.9 * ZOOM
+    // No depth-dependent scaling (no /3 factor like perspective).
+    const fitZoom = targetFraction / (0.9 * maxExtent);
     
     // Clamp zoom to valid range
     globalThis.ZOOM = Math.max(globalThis.ZOOM_MIN, Math.min(globalThis.ZOOM_MAX, fitZoom));

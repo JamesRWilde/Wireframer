@@ -52,9 +52,8 @@ export function scenePrograms(gl) {
     void main() {
       vec3 p = applyRot(a_pos);
       vec3 n = normalize(applyRot(a_normal));
-      // Perspective projection: divide by depth
-      float d = p.z + 3.0;
-      gl_Position = vec4(p.x * u_projX / d, (p.y - u_modelCy) * u_projY / d, clamp(p.z * u_depthScale, -1.0, 1.0), 1.0);
+      // Orthographic projection: no depth-dependent scaling
+      gl_Position = vec4(p.x * u_projX, (p.y - u_modelCy) * u_projY, clamp(p.z * u_depthScale, -1.0, 1.0), 1.0);
       v_normal = n;
       v_uv = a_uv;
     }
@@ -101,8 +100,8 @@ export function scenePrograms(gl) {
     }
     void main() {
       vec3 p = applyRot(a_pos);
-      float d = p.z + 3.0;
-      gl_Position = vec4(p.x * u_projX / d, (p.y - u_modelCy) * u_projY / d, clamp(p.z * u_depthScale, -1.0, 1.0), 1.0);
+      // Orthographic projection: no depth-dependent scaling
+      gl_Position = vec4(p.x * u_projX, (p.y - u_modelCy) * u_projY, clamp(p.z * u_depthScale, -1.0, 1.0), 1.0);
       // Compute depth-based interpolation factor for color fading
       float denom = max(0.0001, u_zHalf * 2.0);
       v_t = clamp((u_zHalf - p.z) / denom, 0.0, 0.999);

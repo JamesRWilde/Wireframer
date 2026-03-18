@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>OBJ Jet Test</title>
+<style>
+  body { margin: 0; background: #111; display: flex; align-items: center; justify-content: center; height: 100vh; }
+  canvas { border: 1px solid #333; }
+</style>
+</head>
+<body>
+<canvas id="c" width="960" height="540"></canvas>
+<script>
+async function run() {
+  const res = await fetch('meshes/jet-fighter.obj');
+  const text = await res.text();
+
+  // Parse OBJ
+  const rawVerts = [], rawFaces = [];
+  for (const line of text.split('\n')) {
+    if (!line || line.startsWith('#')) continue;
+    const p = line.trim().split(/\s+/);
+    if (p[0] === 'v') rawVerts.push([+p[1], +p[2], +p[3]]);
+    if (p[0] === 'f') {
+      // Extract vertex indices only (ignore vt/vn)
+      const indices = p.slice(1).map(t => {
+        const idx = parseInt(t.split('/')[0]);
+        return idx > 0 ? idx - 1 : rawVerts.length + idx;
+      });
+      rawFaces.push(indices);
+    }
+  }
+  console.log('Verts:', rawVerts.length, 'Faces:', rawFaces.length);
+
+  // Center the mesh
+  let minX = Infinity, maxX = -Infinity;
+  let minY = Infinity, maxY = -Infinity;
+  let minZ = Infinity, maxZ = -Infinity;
+  for (const v of rawVerts) {
+    if (v[0] < minX) minX = v[0]; if (v[0] > maxX) maxX = v[0];
+    if (v[1] < minY) minY = v[1]; if (v[1] > maxY) maxY = v[1];
+    if (v[2] < minZ) minZ = v[2]; if (v[2] > maxZ) maxZ = v[2];
+  }
+  const cx = (minX + maxX) / 2;
+  const cy = (minY + maxY) / 2;
+  const cz = (minZ + maxZ) / 2;
+  const centered = rawVerts.map(v => [v[0] - cx, v[1] - cy, v[2] - cz]);
+
+  // Scale to fit viewport
+  const sizeX = maxX - minX;
+  const sizeY = maxY - minY;
+  const sizeZ = maxZ - minZ;
+  const maxSize = Math.max(sizeX, sizeY);
+  const scale = 400 / maxSize; // fit within 400px
+
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+
+  // Simple 3D rotation (Y=0.3, X=0.2) for a slight 3/4 view
+  const ay = 0.3, ax = 0.2;
+  const cosY = Math.cos(ay), sinY = Math.sin(ay);
+  const cosX = Math.cos(ax), sinX = Math.sin(ax);
+
+  function project(v) {
+    const x = v[0], y = v[1], z = v[2];
+    // Rotate Y then X
+    const rx = cosY * x + sinY * z;
+    const ry = -sinX * sinY * x + cosX * y - cosX * sinY * z;
+    const rz = -cosX * sinY * x - sinX * y + cosX * cosY * z;
+    // Orthographic projection, scaled and centered on canvas
+    return [W / 2 + rx * scale, H / 2 - ry * scale, rz];
+  }
+
+  // Project all vertices
+  const projected = centered.map(project);
+
+  // Sort faces by average Z (back to front)
+  const sortedFaces = rawFaces.map((f, i) => ({ f, i, z: f.reduce((s, vi) => s + projected[vi][2], 0) / f.length }))
+    .sort((a, b) => a.z - b.z); // back first (most negative Z)
+
+  // Draw filled faces
+  for (const { f } of sortedFaces) {
+    if (f.length < 3) continue;
+    ctx.beginPath();
+    let [px, py] = projected[f[0]];
+    ctx.moveTo(px, py);
+    for (let i = 1; i < f.length; i++) {
+      [px, py] = projected[f[i]];
+      ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    // Z-based shading: closer = brighter
+    const avgZ = f.reduce((s, vi) => s + projected[vi][2], 0) / f.length;
+    const brightness = Math.floor(40 + (avgZ + sizeZ / 2) / sizeZ * 60);
+    ctx.fillStyle = `rgb(${brightness}, ${brightness}, ${brightness + 20})`;
+    ctx.fill();
+    ctx.strokeStyle = '#0ff';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  }
+
+  console.log('Done. Drew', sortedFaces.length, 'faces.');
+  console.log('X range after centering:', minX - cx, 'to', maxX - cx);
+  console.log('Y range after centering:', minY - cy, 'to', maxY - cy);
+  console.log('Z range after centering:', minZ - cz, 'to', maxZ - cz);
+  console.log('Scale:', scale);
+}
+run();
+</script>
+</body>
+</html>

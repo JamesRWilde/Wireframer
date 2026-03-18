@@ -53,9 +53,9 @@ export function transformSync(V, Rmat, fov, halfW, halfH, modelCy, vertexCount) 
     // Store 3D transformed position
     T[i] = [tx, ty, tz];
 
-    // Perspective projection: divide by (depth + 3.0 offset)
-    const d = tz + 3;
-    P2[i] = [halfW + tx * fov / d, halfH - (ty - modelCy) * fov / d];
+    // Orthographic projection: no depth-dependent scaling.
+    // The OBJ shape is preserved exactly — no perspective distortion.
+    P2[i] = [halfW + tx * fov, halfH - (ty - modelCy) * fov];
   }
 
   return { T, P2 };
