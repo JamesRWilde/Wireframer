@@ -116,6 +116,14 @@ export function load(mesh, name = 'Shape', options = {}) {
     V[i][1] = (V[i][1] - sphereCY) / maxR;
     V[i][2] = (V[i][2] - sphereCZ) / maxR;
   }
+  // Sphere clamp: hard guarantee no vertex exceeds radius 1
+  for (let i = 0; i < vLen; i++) {
+    const r2 = V[i][0]*V[i][0] + V[i][1]*V[i][1] + V[i][2]*V[i][2];
+    if (r2 > 1) {
+      const r = Math.sqrt(r2);
+      V[i][0] /= r; V[i][1] /= r; V[i][2] /= r;
+    }
+  }
 
   // Step 4b.5: No Z-shift needed. Orthographic projection has no
   // perspective distortion and no behind-camera issues.

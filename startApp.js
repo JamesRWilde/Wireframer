@@ -54,6 +54,11 @@ import { themeControls } from '@engine/init/engine/themeControls.js';
 // Renderer toggle
 import { rendererToggle } from '@engine/init/engine/rendererToggle.js';
 
+// Debug overlay (sphere outline + centre cross)
+import { initDebugOverlay, toggleDebugOverlay } from '@engine/get/render/debugOverlay.js';
+initDebugOverlay();
+globalThis.toggleDebugOverlay = toggleDebugOverlay;
+
 // Detail level
 import { detailLevel } from '@engine/set/mesh/detailLevel.js';
 

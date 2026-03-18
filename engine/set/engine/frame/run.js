@@ -44,6 +44,9 @@ import { telemetryState }from '@engine/set/engine/telemetry/telemetryState.js';
 import { time }from '@engine/set/engine/frame/time.js';
 import { budget }from '@engine/get/engine/frame/budget.js';
 
+// Import debug overlay for sphere/centre visualisation
+import {renderDebugOverlay}from '@engine/get/render/debugOverlay.js';
+
 /**
  * runFrame - Executes all operations for a single animation frame
  * 
@@ -87,12 +90,15 @@ export function run(nowMs = 0) {
   // to maintain target FPS when the system is under load
   budget();
   
-  // Step 3: Render the scene (background + foreground)
+// Step 3: Render the scene (background + foreground)
   // Returns timing metrics and rendering state
   // Note: we used to guard against zero opacity values here, but that forced
   // sliders to jump back to opaque when dragged to 0. The sliders now
   // initialize correctly in startApp, so we allow genuine transparency.
   const { bgMs, fgMs, drewCpuForeground, backgroundOnSeparateCanvas } = scene(nowMs);
+
+  // Render debug overlay (sphere outline + centre cross) if enabled
+  renderDebugOverlay();
 
   // Calculate total frame time
   const frameMs = performance.now() - frameStartMs;
