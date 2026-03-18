@@ -58,5 +58,8 @@ export function deepCopy(model) {
     // Deep copy nested arrays (normals and UVs are arrays of arrays)
     triangleNormals: model.triangleNormals ? model.triangleNormals.map(n => n.map(x => x.slice())) : undefined,
     triangleUVs: model.triangleUVs ? model.triangleUVs.map(uv => uv.map(x => x.slice())) : undefined,
+    
+    // Copy old-to-new vertex mapping for smooth decimation
+    _oldToNew: model._oldToNew ? model._oldToNew.slice() : undefined,
   };
 }

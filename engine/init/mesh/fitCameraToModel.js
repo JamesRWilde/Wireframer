@@ -54,36 +54,17 @@ export function fitCameraToModel(model) {
   const sizeX = maxX - minX;
   const sizeY = maxY - minY;
   
-  // Update frame parameters for projection (also computes bounding sphere radius)
-  const params = frameParams(model.V);
-  if (typeof params.cy === 'number') globalThis.MODEL_CY = params.cy;
-  if (typeof params.zHalf === 'number') globalThis.Z_HALF = params.zHalf;
+  // Update frame parameters for projection
+  globalThis.MODEL_CY = 0;  // Sphere is centred at origin — no offset needed
+  globalThis.Z_HALF = 1;    // Sphere radius is 1
   
-  // Use XY extents for orthographic zoom calculation.
-  // Orthographic projection has no depth-dependent scaling, so only
-  // the 2D extents matter for fitting the model in the viewport.
-  const maxExtent = Math.max(sizeX, sizeY);
-
-  // Set expanded zoom bounds to allow wide range of zoom levels
-  // Orthographic projection allows much smaller zoom values.
-  // Deep models (jet fighters) need small ZOOM to fit their 2D extents.
+  // Set zoom bounds
   globalThis.ZOOM_MIN = 0.001;
   globalThis.ZOOM_MAX = 10;
 
-  // Calculate optimal zoom to fit model in viewport
-  if (maxExtent > 0) {
-    // Projection formula: screenPos = dim/2 + coord * (minDim * 0.9 * ZOOM) / (z + 3)
-    // For object at z=0 (center), distance factor d = 3
-    // To fit maxExtent to targetScreenFraction of minDim:
-    //   maxExtent * (minDim * 0.9 * ZOOM) / 3 = minDim * targetFraction
-    //   ZOOM = 3 * targetFraction / (0.9 * maxExtent)
-    
-    const targetFraction = 0.5;  // Model should fill 50% of viewport
-    // Orthographic projection: screenPos = dim/2 + coord * minDim * 0.9 * ZOOM
-    // No depth-dependent scaling (no /3 factor like perspective).
-    const fitZoom = targetFraction / (0.9 * maxExtent);
-    
-    // Clamp zoom to valid range
-    globalThis.ZOOM = Math.max(globalThis.ZOOM_MIN, Math.min(globalThis.ZOOM_MAX, fitZoom));
-  }
+  // Sphere is law — all meshes are unit sphere (radius 1, diameter 2).
+  // The sphere, not the mesh, defines the visual extent.
+  // Zoom is constant for all meshes.
+  const targetFraction = 0.5;
+  globalThis.ZOOM = targetFraction / (0.9 * 2);  // 0.278
 }

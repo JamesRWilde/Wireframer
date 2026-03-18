@@ -113,6 +113,14 @@ export function greedyClusterDecimator(model, targetFaces) {
     _creaseAngleDeg: model._creaseAngleDeg,
   };
 
+  // Store old-to-new vertex mapping for smooth decimation
+  // Convert Map to array: oldToNewArray[i] = new vertex index for original vertex i
+  const oldToNewArray = new Array(V.length);
+  for (let i = 0; i < V.length; i++) {
+    oldToNewArray[i] = oldToNew.get(i) ?? 0;
+  }
+  decimated._oldToNew = oldToNewArray;
+
   // Cache the decimated mesh for future use
   model._lodCache.set(cacheKey, decimated);
   

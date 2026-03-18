@@ -83,24 +83,38 @@ export function load(mesh, name = 'Shape', options = {}) {
     ? mesh.E
     : (globalThis.edgesFromFacesRuntime ? globalThis.edgesFromFacesRuntime(F) : []);
 
-  // Step 4b: Center vertices so rotation pivots around bounding box center
-  // Without this, asymmetric meshes appear to orbit rather than spin
+  // Step 4b: Normalize to bounding sphere space.
+  // The bounding sphere IS the shape — mesh lives inside it.
+  // All meshes become radius-1 sphere at origin, so:
+  //   - Size = zoom (constant across all meshes)
+  //   - Centre = sphere centre = origin (always centre of screen)
+  //   - Rotation pivots around sphere centre (always spins in place)
   const vLen = V.length;
-  let minx = Infinity, miny = Infinity, minz = Infinity;
-  let maxx = -Infinity, maxy = -Infinity, maxz = -Infinity;
+  let bx = Infinity, by = Infinity, bz = Infinity;
+  let Bx = -Infinity, By = -Infinity, Bz = -Infinity;
   for (let i = 0; i < vLen; i++) {
     const v = V[i];
-    if (v[0] < minx) minx = v[0]; if (v[0] > maxx) maxx = v[0];
-    if (v[1] < miny) miny = v[1]; if (v[1] > maxy) maxy = v[1];
-    if (v[2] < minz) minz = v[2]; if (v[2] > maxz) maxz = v[2];
+    if (v[0] < bx) bx = v[0]; if (v[0] > Bx) Bx = v[0];
+    if (v[1] < by) by = v[1]; if (v[1] > By) By = v[1];
+    if (v[2] < bz) bz = v[2]; if (v[2] > Bz) Bz = v[2];
   }
-  const cx = (minx + maxx) * 0.5;
-  const cy = (miny + maxy) * 0.5;
-  const cz = (minz + maxz) * 0.5;
+  const sphereCX = (bx + Bx) * 0.5;
+  const sphereCY = (by + By) * 0.5;
+  const sphereCZ = (bz + Bz) * 0.5;
+  // Max radius from sphere centre to any vertex
+  let maxR = 0;
   for (let i = 0; i < vLen; i++) {
-    V[i][0] -= cx;
-    V[i][1] -= cy;
-    V[i][2] -= cz;
+    const v = V[i];
+    const dx = v[0] - sphereCX, dy = v[1] - sphereCY, dz = v[2] - sphereCZ;
+    const r = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    if (r > maxR) maxR = r;
+  }
+  if (maxR < 1e-10) maxR = 1;
+  // Transform: centre at origin, scale to radius 1
+  for (let i = 0; i < vLen; i++) {
+    V[i][0] = (V[i][0] - sphereCX) / maxR;
+    V[i][1] = (V[i][1] - sphereCY) / maxR;
+    V[i][2] = (V[i][2] - sphereCZ) / maxR;
   }
 
   // Step 4b.5: No Z-shift needed. Orthographic projection has no
@@ -126,23 +140,15 @@ export function load(mesh, name = 'Shape', options = {}) {
   // Step 7: Clone the mesh for caching (if cloner is available)
   const newModelCopy = globalThis.clone ? globalThis.clone(newModel) : newModel;
 
-  // Step 7b: Capture current zoom and old model's extent before fitting
-  const startZoom = globalThis.ZOOM;
-  const oldExtent = globalThis.Z_HALF * 2 || 1;
-
-  // Step 8: Fit camera to model bounds
-  fitCameraToModel(newModel);
+  // Step 8: Fit camera to model bounds (only on first load, not morphs)
+  // Sphere is law — zoom is constant for all meshes. Only set it on first
+  // load; during morphs, zoom stays whatever the user set it to.
+  if (!globalThis.MODEL) {
+    fitCameraToModel(newModel);
+  }
   const targetZoom = globalThis.ZOOM;
-  const newExtent = globalThis.Z_HALF * 2 || 1;
 
   // Step 9: Finalize model (activate, optionally morph)
-  // If morphing, calculate the zoom that makes the new shape appear the same
-  // visual size as the current shape, then use it for the morph duration
-  if (animateMorph) {
-    // Visual size ∝ extent * zoom, so to match: newZoom = startZoom * oldExtent / newExtent
-    globalThis.ZOOM = startZoom * (oldExtent / newExtent);
-    globalThis.ZOOM = Math.max(globalThis.ZOOM_MIN || 0.1, Math.min(globalThis.ZOOM_MAX || 10, globalThis.ZOOM));
-  }
   finalizeModel(newModelCopy, animateMorph, name, clampedDetail, targetZoom);
 
   // Step 10: Set as active model for rendering
