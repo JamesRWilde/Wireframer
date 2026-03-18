@@ -1,40 +1,47 @@
 /**
  * modelState.js - Centralized Model State Management
- * 
+ *
  * PURPOSE:
- *   Provides the single source of truth for the currently active 3D mesh model.
- *   This module manages the global MODEL reference and coordinates all side effects
- *   that occur when the active model changes: UI updates, telemetry resets, and
- *   render mode resolution.
- * 
+ *   Single source of truth for the active 3D mesh model and its derivatives
+ *   (base model, CPU-safe model, current LOD model, LOD percentage).
+ *
  * ARCHITECTURE ROLE:
- *   Imported early during engine bootstrap so that setActiveModel is available
- *   globally before other modules need it. The MODEL global is the primary data
- *   contract between the mesh loading system and the rendering pipeline.
- * 
+ *   Imported by mesh loading, LOD switching, and rendering modules.
+ *   setActiveModel() is the ONLY function that should change the active model,
+ *   ensuring UI stats, telemetry, and render mode stay synchronized.
+ *
  * WHY CENTRALIZED:
- *   Having a single setActiveModel function ensures that all model changes go
- *   through the same validation and side-effect path. This prevents bugs where
- *   the MODEL is updated but UI stats or telemetry aren't synchronized.
+ *   MODEL, BASE_MODEL, CPU_BASE_MODEL, CURRENT_LOD_MODEL, and CURRENT_LOD_PCT
+ *   are tightly coupled — they all change together when a new model loads or
+ *   LOD level switches. Keeping them in one module prevents partial updates.
  */
 
 "use strict";
 
-// Import stat display helpers to update vertex/edge counts in the HUD
-// These return DOM element references that are cached in statsState.js
 import {statsState} from '@ui/state/stats.js';
-
-// Import render mode resolver to update GPU/CPU indicator when model changes
-// The render mode may need to be re-evaluated based on the new model's complexity
 import { foregroundRenderMode }from '@engine/get/engine/foregroundRenderMode.js';
-
-// Import loop state to access telemetry EMA (Exponential Moving Average) values
-// These need to be reset when switching models to avoid stale timing data
 import { state }from '@engine/state/engine/loop.js';
 
 /**
+ * modelState - Mutable model state object.
+ * Properties:
+ *   model        - The currently active mesh (what's being rendered)
+ *   baseModel    - Full-detail model copy (never decimated)
+ *   cpuBaseModel - CPU-capped version of the base model (may be pre-decimated)
+ *   currentLodModel - Current LOD-decimated model
+ *   currentLodPct   - Current LOD percentage (0-1, 1 = full detail)
+ */
+export const modelState = {
+  model: null,
+  baseModel: null,
+  cpuBaseModel: null,
+  currentLodModel: null,
+  currentLodPct: 1,
+};
+
+/**
  * setActiveModel - Updates the active mesh model and synchronizes all dependent state
- * 
+ *
  * This is the ONLY function that should be used to change the active model.
  * It handles:
  * 1. Setting the global MODEL reference
@@ -42,61 +49,38 @@ import { state }from '@engine/state/engine/loop.js';
  * 3. Updating vertex/edge count displays in the HUD
  * 4. Resetting telemetry smoothing values for fresh stats
  * 5. Updating the object label in the UI
- * 
+ *
  * @param {Object|null} model - The mesh object to activate, or null to clear
  *   Expected shape: { V: [[x,y,z],...], F: [[i,j,k,...],...], E: [[i,j],...] }
  * @param {string} [name=''] - Human-readable name for display (e.g., "Torus Knot")
- *   Used in the bottom label and potentially in telemetry/logging
- * 
+ *
  * @example
  *   setActiveModel(parsedMesh, "My Custom Shape");
  *   setActiveModel(null); // Clear the current model
  */
-export function model(model, name = '') {
-  // Debug logging to trace model changes during development
-  // Shows whether a model is present or null, helpful for diagnosing loading issues
-  
-  // Step 1: Update the global MODEL reference
-  // This is the primary state that the rendering pipeline reads each frame
-  // Setting it to null effectively clears the display (no model rendered)
-  globalThis.MODEL = model;
-  
+export function setActiveModel(model, name = '') {
+  // Step 1: Update the active model
+  modelState.model = model;
+
   // Step 2: Re-evaluate the foreground render mode
-  // The optimal render mode (GPU vs CPU) may change based on model complexity
-  // or browser capabilities. We wrap in try/catch because this is non-critical -
-  // if it fails, the existing render mode will continue to work
   try {
     foregroundRenderMode();
   } catch {}
 
   // Step 3: Update vertex and edge count displays in the HUD
-  // These stats help users understand model complexity and LOD effects
-  // We use optional chaining (?.) because the model might be null
-  // The nullish coalescing operator (??) provides '--' as fallback text
   const statV = statsState.statV;
   const statE = statsState.statE;
   if (statV) statV.textContent = model?.V?.length ?? '--';
   if (statE) statE.textContent = model?.E?.length ?? '--';
 
-  // Step 4: Reset all telemetry EMA (Exponential Moving Average) values
-  // When switching models, we want fresh timing data rather than smoothed
-  // values that blend old and new model performance. This gives users an
-  // accurate view of the new model's performance characteristics.
-  state.emaFrameMs = 0;           // Total frame time
-  state.emaFpsFrameIntervalMs = 0; // FPS calculation base
-  state.emaPhysMs = 0;            // Physics update time
-  state.emaBgMs = 0;              // Background render time
-  state.emaFgMs = 0;              // Foreground render time
+  // Step 4: Reset all telemetry EMA values
+  state.emaFrameMs = 0;
+  state.emaFpsFrameIntervalMs = 0;
+  state.emaPhysMs = 0;
+  state.emaBgMs = 0;
+  state.emaFgMs = 0;
 
   // Step 5: Update the object label in the UI
-  // This is the text label at the bottom of the screen showing the current shape
-  // We use getElementById because this element may not always be present
   const labelEl = document.getElementById('obj-label');
   if (labelEl) labelEl.textContent = name || '';
 }
-
-// Expose setActiveModel globally for legacy code paths and dynamic loading
-// Some modules (like loader.js) call this via globalThis.setActiveModel()
-// This global exposure is a deliberate architectural choice to support
-// flexible loading patterns without circular import dependencies
-globalThis.setActiveModel = model;

@@ -21,6 +21,7 @@ import { detailLevel }from '@engine/set/mesh/detailLevel.js';
 
 // Import CPU detail cap for performance safety
 import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
+import { modelState } from '@engine/state/render/model.js';
 
 /**
  * finalizeModel - Finalizes and activates a mesh model
@@ -37,18 +38,16 @@ import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
  */
 export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct, targetZoom) {
   // Get the current model (if any) for morph source
-  const oldModel = globalThis.MODEL;
+  const oldModel = modelState.model;
   
   // Always set BASE_MODEL so LOD slider works after morph completes
-  // This is the "full detail" version that LOD scales down from
-  globalThis.BASE_MODEL = newModelCopy;
+  modelState.baseModel = newModelCopy;
 
   // Create CPU_BASE_MODEL: capped version for CPU mode only
-  // GPU uses BASE_MODEL (full detail), detail slider uses CPU_BASE_MODEL
-  globalThis.CPU_BASE_MODEL = capModelForCpu(newModelCopy);
+  modelState.cpuBaseModel = capModelForCpu(newModelCopy);
 
   // Reset LOD to full detail on new model load
-  globalThis.CURRENT_LOD_PCT = 1;
+  modelState.currentLodPct = 1;
   
   // Decide between morph animation and instant transition
   if (animateMorph && oldModel?.V?.length && globalThis.morph?.startMorph) {

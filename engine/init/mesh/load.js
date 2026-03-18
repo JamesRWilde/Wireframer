@@ -38,6 +38,7 @@ import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
 import { edgesFromFacesRuntime }from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 import { toRuntime } from '@engine/init/mesh/toRuntime.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
+import { modelState, setActiveModel } from '@engine/state/render/model.js';
 
 // Register globally so any consumer can invoke it without circular imports
 if (!globalThis.edgesFromFacesRuntime) {
@@ -140,7 +141,7 @@ export function load(mesh, name = 'Shape', options = {}) {
 
   // Step 9: Fit camera to model bounds (first load only, not morphs)
   // Zoom is constant for all meshes — only set it on first load
-  if (!globalThis.MODEL) {
+  if (!modelState.model) {
     fitCameraToModel(newModel);
   }
   const targetZoom = getZoom();
@@ -149,12 +150,10 @@ export function load(mesh, name = 'Shape', options = {}) {
   finalizeModel(newModelCopy, animateMorph, name, clampedDetail, targetZoom);
 
   // Step 11: Set as active model for rendering
-  if (typeof globalThis.setActiveModel === 'function') {
-    try {
-      globalThis.setActiveModel(newModelCopy, name);
-    } catch (err) {
-      console.warn('[load] setActiveModel failed', err);
-    }
+  try {
+    setActiveModel(newModelCopy, name);
+  } catch (err) {
+    console.warn('[load] setActiveModel failed', err);
   }
 
   return newModelCopy;

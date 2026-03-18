@@ -8,7 +8,7 @@
  *
  * ARCHITECTURE ROLE:
  *   Called by finalizeModel after BASE_MODEL is set. Creates
- *   globalThis.CPU_BASE_MODEL as either the original or a pre-decimated
+ *   modelState.cpuBaseModel as either the original or a pre-decimated
  *   version. detailLevel() then decimates from CPU_BASE_MODEL for the
  *   detail slider, ensuring CPU mode never exceeds the caps.
  *

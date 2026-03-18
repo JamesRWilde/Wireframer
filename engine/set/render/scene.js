@@ -45,6 +45,7 @@ import { state }from '@engine/state/engine/loop.js';
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU
 import { mixedRenderFlags }from '@engine/set/engine/mixedRenderFlags.js';
+import { modelState } from '@engine/state/render/model.js';
 
 /**
  * renderScene - Renders the complete scene (background + foreground)
@@ -63,7 +64,7 @@ import { mixedRenderFlags }from '@engine/set/engine/mixedRenderFlags.js';
 export function scene(nowMs) {
   // Get the current active model
   // If no model is loaded, we still render the background but skip foreground
-  const currentModel = globalThis.MODEL;
+  const currentModel = modelState.model;
   
   // Early exit: if no model is loaded, render background only
   // This allows the particle background to animate even before a shape is selected
@@ -102,18 +103,18 @@ export function scene(nowMs) {
   // GPU: use full-detail BASE_MODEL by default; only match LOD if slider moved (< 1)
   // CPU: use CURRENT_LOD_MODEL (decimated from CPU_BASE_MODEL) for performance safety
   let meshToRender = baseMesh;
-  const lodChanged = globalThis.CURRENT_LOD_PCT !== undefined && globalThis.CURRENT_LOD_PCT < 1;
+  const lodChanged = modelState.currentLodPct !== 1;
   if (morphing) {
     // During morph, render the interpolated morph mesh regardless of mode
     meshToRender = baseMesh;
-  } else if (state.foregroundRenderMode === 'gpu' && globalThis.BASE_MODEL?.V?.length) {
+  } else if (state.foregroundRenderMode === 'gpu' && modelState.baseModel?.V?.length) {
     if (lodChanged) {
-      meshToRender = decimateByPercent(globalThis.BASE_MODEL, globalThis.CURRENT_LOD_PCT);
+      meshToRender = decimateByPercent(modelState.baseModel, modelState.currentLodPct);
     } else {
-      meshToRender = globalThis.BASE_MODEL;
+      meshToRender = modelState.baseModel;
     }
   } else {
-    meshToRender = globalThis.CURRENT_LOD_MODEL || baseMesh;
+    meshToRender = modelState.currentLodModel || baseMesh;
   }
 
   // Step 5: Render foreground using GPU or CPU path based on resolved mode

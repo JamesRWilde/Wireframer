@@ -22,6 +22,7 @@
 
 import { objectList } from '@engine/get/render/objectList.js';
 import { toRuntime } from '@engine/init/mesh/toRuntime.js';
+import { setActiveModel } from '@engine/state/render/model.js';
 
 /**
  * loadObjMesh - Asynchronously loads and parses an OBJ file
@@ -41,8 +42,8 @@ globalThis.loadObjMesh = async function(objPath, name) {
   if (globalThis.InitMeshEngineLoad) {
     try {
       const result = globalThis.InitMeshEngineLoad(mesh, name || objPath, { animateMorph: true });
-      if (result && typeof globalThis.setActiveModel === 'function') {
-        globalThis.setActiveModel(result, name || objPath);
+      if (result) {
+        setActiveModel(result, name || objPath);
       }
     } catch (err) {
       console.error('[loadObjMesh] engine load failed', err);
