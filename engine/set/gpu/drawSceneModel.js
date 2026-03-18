@@ -19,6 +19,7 @@ import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 // Import GPU renderer disabler for fallback on errors
 import { disableSceneRenderer }from '@engine/dispose/gpu/disableSceneRenderer.js';
+import { trace } from '@engine/state/render/forensicLog.js';
 
 /**
  * drawGpuSceneModel - Renders the 3D model using the GPU (WebGL) renderer
@@ -35,11 +36,15 @@ export function drawSceneModel(model, params) {
   const renderer = sceneRenderer();
   if (!renderer) return false;
 
+  const gpuEnd = trace('gpuDrawCall', 'gpu', { verts: model?.V?.length, tris: model?.F?.length });
   try {
     // Delegate to the renderer's model() method for actual GPU draw calls
-    return renderer.model(model, params);
+    const result = renderer.model(model, params);
+    gpuEnd({ drawn: result });
+    return result;
   } catch (err) {
     // On GPU error, disable the renderer and mark GPU as failed
+    gpuEnd({ error: err.message });
     disableSceneRenderer(err);
     return false;
   }

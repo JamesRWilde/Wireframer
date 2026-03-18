@@ -49,6 +49,7 @@ import { getFillOpacity, getTheme }from '@engine/state/render/renderState.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getW, getH } from '@engine/state/render/viewportState.js';
 import { getDebugLogFill } from '@engine/state/render/debugFlags.js';
+import { DENSE_SEAM_EXPAND_PX } from '@ui/state/dom.js';
 
 // Track if worker has been initialized to avoid redundant setup
 let workerInitialized = false;
@@ -90,7 +91,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   // Determine shading mode and compute corner normals if needed
   const shadingMode = getShadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
-  const seamExpandPx = useSmoothShading ? (globalThis.DENSE_SEAM_EXPAND_PX ?? 0) : 0;
+  const seamExpandPx = useSmoothShading ? DENSE_SEAM_EXPAND_PX : 0;
 
   const triCornerNormalsResult = useSmoothShading
     ? getTriCornerNormals(model, triFaces)

@@ -65,6 +65,33 @@ app.get('/api/meshes', (req, res) => {
   }
 });
 
+// Forensic log endpoint - receives batched log entries from browser
+// Writes to wireframer.log in project root for agent inspection
+const logFile = path.join(__dirname, 'wireframer.log');
+const fs = require('node:fs');
+
+// Truncate log file on server start
+fs.writeFileSync(logFile, `=== Log started at ${new Date().toISOString()} ===\n`);
+
+// Accept JSON body for log endpoint
+app.use('/api/log', express.json({ limit: '1mb' }));
+
+app.post('/api/log', (req, res) => {
+  try {
+    const entries = req.body;
+    if (!Array.isArray(entries)) return res.status(400).json({ error: 'expected array' });
+    const lines = entries.map(e => {
+      const t = e.t?.toFixed?.(3) ?? e.t;
+      return `[${t}] ${e.cat} ${e.fn} ${e.phase}${e.data ? ' ' + JSON.stringify(e.data) : ''}`;
+    }).join('\n') + '\n';
+    fs.appendFileSync(logFile, lines);
+    res.json({ ok: true, written: entries.length });
+  } catch (err) {
+    console.error('[api/log] write failed:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Start listening for incoming HTTP requests
 // The callback logs the URL so developers know where to open the app
 app.listen(port, () => {

@@ -28,6 +28,7 @@ import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model
 import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/resolve/triangleNormalCpu.js';
 import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/compute/triangleCpu.js';
 import { getFillRgb, getEdgeColor, getFillOpacity, getWireOpacity }from '@engine/state/render/renderState.js';
+import { setCpuSortMs, setCpuLightMs, setCpuFillMs, setCpuStrokeMs }from '@engine/state/render/debugFlags.js';
 
 // Pre-allocated sort scratch space (reused across frames to avoid per-frame allocation)
 let sortZ = null;    // Float32Array of z-depths per triangle
@@ -159,10 +160,10 @@ export function renderMeshUnified(model, ctx) {
 
   // Store telemetry for HUD
   const sortEntry = performance.getEntriesByName('cpu-sort').at(-1);
-  globalThis._CPU_SORT_MS = sortEntry?.duration ?? 0;
-  globalThis._CPU_LIGHT_MS = tLight;
-  globalThis._CPU_FILL_MS = tFill;
-  globalThis._CPU_STROKE_MS = tStroke;
+  setCpuSortMs(sortEntry?.duration ?? 0);
+  setCpuLightMs(tLight);
+  setCpuFillMs(tFill);
+  setCpuStrokeMs(tStroke);
 
   // Keep perf entries tidy
   if (performance.getEntriesByName('cpu-sort').length > 30) {

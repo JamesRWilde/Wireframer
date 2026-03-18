@@ -34,6 +34,7 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { state } from '@engine/state/engine/loop.js';
 import { getW, getH } from '@engine/state/render/viewportState.js';
+import { trace } from '@engine/state/render/forensicLog.js';
 
 /**
  * cpuPath - Executes the CPU rendering path for a frame
@@ -64,7 +65,9 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
   }
 
   // Render the mesh using the unified CPU pipeline
+  const meshEnd = trace('renderMeshUnified', 'render', { verts: meshToRender?.V?.length, tris: meshToRender?.F?.length });
   renderMeshUnified(meshToRender, ctx);
+  meshEnd({});
 
   return true;
 }

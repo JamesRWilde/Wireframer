@@ -68,7 +68,7 @@ const statV = document.getElementById('stat-v');
 const statE = document.getElementById('stat-e');
 
 // Static seam overlap tuning for dense meshes (engine-owned mesh only).
-const DENSE_SEAM_EXPAND_PX = 0.56;
+export const DENSE_SEAM_EXPAND_PX = 0.56;
 
 export const PRESET_SWATCHES = [
   { name: 'Ruby', rgb: [235, 64, 52] },

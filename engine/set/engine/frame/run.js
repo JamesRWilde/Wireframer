@@ -47,6 +47,9 @@ import { budget }from '@engine/get/engine/frame/budget.js';
 // Import debug overlay for sphere/centre visualisation
 import {renderDebugOverlay}from '@engine/get/render/debugOverlay.js';
 
+// Forensic logging
+import { trace, mark } from '@engine/state/render/forensicLog.js';
+
 /**
  * runFrame - Executes all operations for a single animation frame
  * 
@@ -68,33 +71,30 @@ export function run(nowMs = 0) {
   // Check if this frame should be skipped due to FPS limiting
   // Returns frame interval in ms, or null if frame should be skipped
   const frameIntervalMs = shouldRunFrame(nowMs);
-  if (frameIntervalMs === null) return;
-  
+  if (frameIntervalMs === null) {
+    mark('frame-skip', 'frame', { reason: 'fps-limit' });
+    return;
+  }
+
   // Update frame timing state
-  // lastPresentedFrameMs tracks when frames are actually rendered (not skipped)
-  // lastFrameMs tracks the most recent frame attempt
   state.lastPresentedFrameMs = nowMs;
   state.lastFrameMs = nowMs;
-  
+
   // Increment frame counter
-  // Used for throttled operations (e.g., telemetry updates every N frames)
   state.RENDER_FRAME_ID++;
+  const fid = state.RENDER_FRAME_ID;
+
+  const frameEnd = trace('frame', 'frame', { fid });
 
   // Step 1: Update rotation physics
-  // This handles auto-rotation, angular velocity decay, and input integration
-  // Returns the time spent on physics for telemetry
+  const physEnd = trace('physics', 'physics', { fid });
   const physMs = physics();
+  physEnd({ ms: physMs });
 
   // Step 2: Check frame budget and adjust quality level
-  // This tracks rolling average frame time and adjusts rendering quality
-  // to maintain target FPS when the system is under load
   budget();
-  
-// Step 3: Render the scene (background + foreground)
-  // Returns timing metrics and rendering state
-  // Note: we used to guard against zero opacity values here, but that forced
-  // sliders to jump back to opaque when dragged to 0. The sliders now
-  // initialize correctly in startApp, so we allow genuine transparency.
+
+  // Step 3: Render the scene (background + foreground)
   const { bgMs, fgMs, drewCpuForeground, backgroundOnSeparateCanvas } = scene(nowMs);
 
   // Render debug overlay (sphere outline + centre cross) if enabled
@@ -107,15 +107,13 @@ export function run(nowMs = 0) {
   time(frameMs);
 
   // Step 5: Update telemetry with timing metrics
-  // This smooths values using EMA and stores them for HUD display
   telemetryState(nowMs, frameMs, physMs, bgMs, fgMs, frameIntervalMs);
-  
+
   // Step 6: Update the telemetry HUD display
-  // This is throttled to avoid expensive DOM updates every frame
   hud(nowMs);
-  
+
   // Update frame loop state for next frame's canvas management
-  // This tracks whether CPU foreground is on the main canvas, which affects
-  // clearing and compositing decisions in subsequent frames
   state.cpuForegroundDrawnOnMainCanvas = drewCpuForeground && backgroundOnSeparateCanvas;
+
+  frameEnd({ totalMs: frameMs, bgMs, fgMs, physMs });
 }

@@ -39,6 +39,7 @@ import { edgesFromFacesRuntime }from '@engine/init/mesh/build/edgesFromFacesRunt
 import { toRuntime } from '@engine/init/mesh/toRuntime.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { modelState, setActiveModel } from '@engine/state/render/model.js';
+import { trace } from '@engine/state/render/forensicLog.js';
 
 // Register globally so any consumer can invoke it without circular imports
 if (!globalThis.edgesFromFacesRuntime) {
@@ -61,7 +62,7 @@ if (!globalThis.edgesFromFacesRuntime) {
  * @returns {Object} The processed model ready for rendering
  */
 export function load(mesh, name = 'Shape', options = {}) {
-  
+
   // Extract options with defaults
   const {
     animateMorph = false,
@@ -69,6 +70,8 @@ export function load(mesh, name = 'Shape', options = {}) {
     meshFileName,
     meshType = 'OBJ',
   } = options || {};
+
+  const loadEnd = trace('meshLoad', 'mesh', { name, verts: mesh?.V?.length, faces: mesh?.F?.length });
 
   // Step 1: Validate mesh structure
   validationResult(mesh, name, meshFileName, meshType);
@@ -156,6 +159,7 @@ export function load(mesh, name = 'Shape', options = {}) {
     console.warn('[load] setActiveModel failed', err);
   }
 
+  loadEnd({ verts: newModelCopy?.V?.length, tris: newModelCopy?.F?.length });
   return newModelCopy;
 }
 

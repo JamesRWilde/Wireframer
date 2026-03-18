@@ -46,6 +46,7 @@ import { state }from '@engine/state/engine/loop.js';
 // Manages canvas visibility when switching between GPU and CPU
 import { mixedRenderFlags }from '@engine/set/engine/mixedRenderFlags.js';
 import { modelState } from '@engine/state/render/model.js';
+import { trace, mark } from '@engine/state/render/forensicLog.js';
 
 /**
  * renderScene - Renders the complete scene (background + foreground)
@@ -62,50 +63,36 @@ import { modelState } from '@engine/state/render/model.js';
  * These metrics are used by telemetryState to display performance stats.
  */
 export function scene(nowMs) {
-  // Get the current active model
-  // If no model is loaded, we still render the background but skip foreground
   const currentModel = modelState.model;
-  
-  // Early exit: if no model is loaded, render background only
-  // This allows the particle background to animate even before a shape is selected
+
   if (!currentModel) {
     drawBackground(nowMs);
-    // Return zero metrics since no foreground was rendered
     return { bgMs: 0, fgMs: 0, drewCpuForeground: false, backgroundOnSeparateCanvas: false };
   }
 
-  // Step 1: Render background particles and measure time
-  // drawBackground returns true if background is on a separate canvas
+  // Step 1: Render background particles
+  const bgEnd = trace('background', 'render');
   const bgStartMs = performance.now();
   const backgroundOnSeparateCanvas = drawBackground(nowMs) === true;
   const bgMs = performance.now() - bgStartMs;
+  bgEnd({ ms: bgMs });
 
   // Step 2: Prepare foreground rendering
   const fgStartMs = performance.now();
   let drewCpuForeground = false;
 
-  // Step 3: Advance morph animation if one is in progress
-  // This updates the morph state and prepares interpolated vertices
-  // The morph system is accessed via globalThis.morph for flexibility
+  // Step 3: Advance morph animation
   if (globalThis.morph?.advanceMorphFrame) globalThis.morph.advanceMorphFrame();
 
   // Step 4: Determine which mesh to render
-  // If morphing, use the interpolated morph mesh; otherwise use the current model
   const morphing = globalThis.morph?.isMorphing?.() ?? false;
   const baseMesh = morphing ? globalThis.morph?.currentMorph?.() ?? currentModel : currentModel;
 
-  // Resolve render mode if not yet determined
-  // This checks WebGL availability and caches the result in state.foregroundRenderMode
   foregroundRenderMode();
 
-  // Select model based on render mode:
-  // Morphing: always use the interpolated morph mesh directly
-  // GPU: use full-detail BASE_MODEL by default; only match LOD if slider moved (< 1)
-  // CPU: use CURRENT_LOD_MODEL (decimated from CPU_BASE_MODEL) for performance safety
   let meshToRender = baseMesh;
   const lodChanged = modelState.currentLodPct !== 1;
   if (morphing) {
-    // During morph, render the interpolated morph mesh regardless of mode
     meshToRender = baseMesh;
   } else if (state.foregroundRenderMode === 'gpu' && modelState.baseModel?.V?.length) {
     if (lodChanged) {
@@ -117,30 +104,27 @@ export function scene(nowMs) {
     meshToRender = modelState.currentLodModel || baseMesh;
   }
 
-  // Step 5: Render foreground using GPU or CPU path based on resolved mode
-  // GPU path is preferred when available for better performance
-  // CPU path is the fallback for systems without WebGL support
+  const triCount = meshToRender?.F?.length ?? 0;
+
+  // Step 5: Render foreground
   let gpuDrawn = false;
   if (state.foregroundRenderMode === 'gpu') {
-    // Attempt GPU rendering
+    const gpuEnd = trace('gpuPath', 'render', { triCount });
     gpuDrawn = renderGpuPath(meshToRender, morphing);
-    // If GPU failed, renderGpuPath already called fallbackToCpuForegroundMode
-    // which updated state.foregroundRenderMode to 'cpu'
+    gpuEnd({ drawn: gpuDrawn });
     if (!gpuDrawn) {
+      const cpuEnd = trace('cpuPath', 'render', { triCount });
       drewCpuForeground = cpuPath(meshToRender, backgroundOnSeparateCanvas);
+      cpuEnd({});
     }
   } else {
-    // Use CPU rendering path
+    const cpuEnd = trace('cpuPath', 'render', { triCount });
     drewCpuForeground = cpuPath(meshToRender, backgroundOnSeparateCanvas);
+    cpuEnd({});
   }
-  
-  // Step 6: Manage canvas visibility based on rendering mode
-  // This handles edge cases where canvases might be visible from a previous frame
+
   mixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn);
 
-  // Calculate foreground rendering time
   const fgMs = performance.now() - fgStartMs;
-  
-  // Return metrics for telemetry
   return { bgMs, fgMs, drewCpuForeground, backgroundOnSeparateCanvas };
 }

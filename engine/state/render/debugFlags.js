@@ -129,3 +129,43 @@ export function setDebugRaf(v) { debug.RAF = v; }
 export function setDebugParticles(v) { debug.PARTICLES = v; }
 export function setDebugP(v) { debug.P = v; }
 export function setDebugLogFill(v) { debug.LOG_FILL = v; }
+
+// ══════════════════════════════════════════════
+// CPU Perf Telemetry (per-frame timing, in ms)
+// ══════════════════════════════════════════════
+
+/** @type {number} Last frame sort duration (ms) */
+let _cpuSortMs = 0;
+
+/** @type {number} Last frame lighting phase duration (ms) */
+let _cpuLightMs = 0;
+
+/** @type {number} Last frame fill phase duration (ms) */
+let _cpuFillMs = 0;
+
+/** @type {number} Last frame stroke phase duration (ms) */
+let _cpuStrokeMs = 0;
+
+/** @returns {number} Last frame sort duration (ms) */
+export function getCpuSortMs() { return _cpuSortMs; }
+
+/** @returns {number} Last frame lighting duration (ms) */
+export function getCpuLightMs() { return _cpuLightMs; }
+
+/** @returns {number} Last frame fill duration (ms) */
+export function getCpuFillMs() { return _cpuFillMs; }
+
+/** @returns {number} Last frame stroke duration (ms) */
+export function getCpuStrokeMs() { return _cpuStrokeMs; }
+
+/** @param {number} v - Sort duration (ms) */
+export function setCpuSortMs(v) { _cpuSortMs = v; }
+
+/** @param {number} v - Lighting duration (ms) */
+export function setCpuLightMs(v) { _cpuLightMs = v; }
+
+/** @param {number} v - Fill duration (ms) */
+export function setCpuFillMs(v) { _cpuFillMs = v; }
+
+/** @param {number} v - Stroke duration (ms) */
+export function setCpuStrokeMs(v) { _cpuStrokeMs = v; }

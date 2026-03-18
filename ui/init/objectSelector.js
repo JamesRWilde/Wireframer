@@ -21,6 +21,7 @@
 import {objectList}from '@engine/get/render/objectList.js';
 import { state }from '@ui/get/read/state.js';
 import { state as persistState }from '@ui/set/persist/state.js';
+import { mark, trace } from '@engine/state/render/forensicLog.js';
 
 export async function initObjectSelector(restoredShapeName = null) {
   // Fetch the dynamic list of available meshes from the server
@@ -57,7 +58,11 @@ export async function initObjectSelector(restoredShapeName = null) {
   select.addEventListener('change', async () => {
     const idx = Number(select.value);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
-      await globalThis.loadObjMesh(OBJECTS[idx].obj, OBJECTS[idx].name);
+      const name = OBJECTS[idx].name;
+      mark('shape-select', 'ui', { name });
+      const loadEnd = trace('loadObjMesh', 'ui', { name });
+      await globalThis.loadObjMesh(OBJECTS[idx].obj, name);
+      loadEnd({});
       persistState(OBJECTS);
     }
   });

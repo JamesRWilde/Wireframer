@@ -21,6 +21,7 @@
 // Import the function that reads slider values and updates global render parameters
 // This syncs FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM to globals
 import { syncRenderToggles }from '@ui/set/syncRenderToggles.js';
+import { mark } from '@engine/state/render/forensicLog.js';
 
 /**
  * attachSliderListeners - Binds input event handlers to all UI sliders
@@ -46,6 +47,7 @@ export function sliderListeners(sliders, lodSlider, detailLevel) {
           try {
             // Sync all slider values to global render parameters
             // This reads FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM
+            mark('slider', 'ui', { name, value: el.value });
             syncRenderToggles();
           } catch (e) {
             // Log but don't throw - allows other sliders to continue working
@@ -63,13 +65,17 @@ export function sliderListeners(sliders, lodSlider, detailLevel) {
     if (lodSlider) {
       lodSlider.addEventListener('input', () => {
         try {
+          const lodPct = Number(lodSlider.value) / 100;
+          mark('lod-slider', 'ui', { value: lodSlider.value, pct: lodPct });
           // First, sync the LOD value to global state (like other sliders)
           syncRenderToggles();
-          
+
           // Then trigger model decimation if the callback is available
           // We divide by 100 because the slider range is 0-100 but the engine expects 0-1
           if (typeof detailLevel === 'function') {
-            detailLevel(Number(lodSlider.value) / 100);
+            const decEnd = trace('decimate', 'ui', { pct: lodPct });
+            detailLevel(lodPct);
+            decEnd({});
           }
         } catch (e) {
           // Log but don't throw - the app can continue at the current LOD
