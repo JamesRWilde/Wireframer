@@ -36,6 +36,9 @@ import { gpuPath as renderGpuPath }from '@engine/set/render/gpuPath.js';
 // Determines whether to use GPU or CPU based on WebGL availability
 import { foregroundRenderMode }from '@engine/get/engine/foregroundRenderMode.js';
 
+// Import decimation for GPU LOD matching
+import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
+
 // Import loop state to read the current render mode
 import { state }from '@engine/state/engine/loop.js';
 
@@ -88,13 +91,30 @@ export function scene(nowMs) {
   // Step 4: Determine which mesh to render
   // If morphing, use the interpolated morph mesh; otherwise use the current model
   const morphing = globalThis.morph?.isMorphing?.() ?? false;
-  const meshToRender = morphing ? globalThis.morph?.currentMorph?.() ?? currentModel : currentModel;
+  const baseMesh = morphing ? globalThis.morph?.currentMorph?.() ?? currentModel : currentModel;
 
-  // Step 5: Resolve render mode if not yet determined
+  // Resolve render mode if not yet determined
   // This checks WebGL availability and caches the result in state.foregroundRenderMode
   foregroundRenderMode();
 
-  // Step 6: Render foreground using GPU or CPU path based on resolved mode
+  // Select model based on render mode:
+  // GPU: use full-detail BASE_MODEL for best quality
+  // CPU: use CURRENT_LOD_MODEL (decimated from CPU_BASE_MODEL) for performance safety
+  let meshToRender = baseMesh;
+  if (state.foregroundRenderMode === 'gpu' && globalThis.BASE_MODEL?.V?.length) {
+    // If detail slider has been used, decimate BASE_MODEL to match CPU LOD percentage
+    if (globalThis.CURRENT_LOD_MODEL && globalThis.CURRENT_LOD_MODEL !== globalThis.BASE_MODEL) {
+      const pct = globalThis.CURRENT_LOD_MODEL.V.length / globalThis.BASE_MODEL.V.length;
+      meshToRender = decimateByPercent(globalThis.BASE_MODEL, pct);
+    } else {
+      meshToRender = globalThis.BASE_MODEL;
+    }
+  } else {
+    // CPU: use the detail-level model if available, else baseMesh
+    meshToRender = globalThis.CURRENT_LOD_MODEL || baseMesh;
+  }
+
+  // Step 5: Render foreground using GPU or CPU path based on resolved mode
   // GPU path is preferred when available for better performance
   // CPU path is the fallback for systems without WebGL support
   let gpuDrawn = false;
@@ -111,7 +131,7 @@ export function scene(nowMs) {
     drewCpuForeground = cpuPath(meshToRender, backgroundOnSeparateCanvas);
   }
   
-  // Step 7: Manage canvas visibility based on rendering mode
+  // Step 6: Manage canvas visibility based on rendering mode
   // This handles edge cases where canvases might be visible from a previous frame
   mixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn);
 

@@ -19,6 +19,9 @@
 // Import the detail level setter for LOD control
 import { detailLevel }from '@engine/set/mesh/detailLevel.js';
 
+// Import CPU detail cap for performance safety
+import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
+
 /**
  * finalizeModel - Finalizes and activates a mesh model
  * 
@@ -39,6 +42,10 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct, 
   // Always set BASE_MODEL so LOD slider works after morph completes
   // This is the "full detail" version that LOD scales down from
   globalThis.BASE_MODEL = newModelCopy;
+
+  // Create CPU_BASE_MODEL: capped version for CPU mode only
+  // GPU uses BASE_MODEL (full detail), detail slider uses CPU_BASE_MODEL
+  globalThis.CPU_BASE_MODEL = capModelForCpu(newModelCopy);
   
   // Decide between morph animation and instant transition
   if (animateMorph && oldModel?.V?.length && globalThis.morph?.startMorph) {

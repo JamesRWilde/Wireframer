@@ -39,19 +39,22 @@ import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
  * 4. Sets the decimated model as active for rendering
  */
 export function detailLevel(percent, name = 'Shape') {
+  // Use CPU_BASE_MODEL if available (capped), fall back to BASE_MODEL
+  const base = globalThis.CPU_BASE_MODEL || globalThis.BASE_MODEL;
+
   // Guard: return if no base model is loaded
-  if (!globalThis.BASE_MODEL) return;
+  if (!base) return;
   
   // Clamp percentage to valid range (0-1)
   const clampedPercent = Math.max(0, Math.min(1, percent));
   
   // Calculate target vertex count
   // This is used by the UI to display current LOD vertex count
-  globalThis.CURRENT_LOD_VERTS = Math.round(clampedPercent * globalThis.BASE_MODEL.V.length);
+  globalThis.CURRENT_LOD_VERTS = Math.round(clampedPercent * base.V.length);
   
   // Decimate the base model to the target detail level
-  // Always decimate from BASE_MODEL to avoid quality loss from repeated decimation
-  globalThis.CURRENT_LOD_MODEL = decimateByPercent(globalThis.BASE_MODEL, clampedPercent);
+  // Always decimate from CPU_BASE_MODEL to avoid quality loss from repeated decimation
+  globalThis.CURRENT_LOD_MODEL = decimateByPercent(base, clampedPercent);
 
   // Set the decimated model as active for rendering
   if (typeof globalThis.setActiveModel === 'function') {
