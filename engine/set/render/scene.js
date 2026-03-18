@@ -98,20 +98,21 @@ export function scene(nowMs) {
   foregroundRenderMode();
 
   // Select model based on render mode:
+  // Morphing: always use the interpolated morph mesh directly
   // GPU: use full-detail BASE_MODEL by default; only match LOD if slider moved (< 1)
   // CPU: use CURRENT_LOD_MODEL (decimated from CPU_BASE_MODEL) for performance safety
   let meshToRender = baseMesh;
   const lodChanged = globalThis.CURRENT_LOD_PCT !== undefined && globalThis.CURRENT_LOD_PCT < 1;
-  if (state.foregroundRenderMode === 'gpu' && globalThis.BASE_MODEL?.V?.length) {
+  if (morphing) {
+    // During morph, render the interpolated morph mesh regardless of mode
+    meshToRender = baseMesh;
+  } else if (state.foregroundRenderMode === 'gpu' && globalThis.BASE_MODEL?.V?.length) {
     if (lodChanged) {
-      // User moved the detail slider — mirror the same LOD on GPU
       meshToRender = decimateByPercent(globalThis.BASE_MODEL, globalThis.CURRENT_LOD_PCT);
     } else {
-      // Slider at 100% — use full detail
       meshToRender = globalThis.BASE_MODEL;
     }
   } else {
-    // CPU: use the detail-level model if available, else baseMesh
     meshToRender = globalThis.CURRENT_LOD_MODEL || baseMesh;
   }
 
