@@ -36,6 +36,7 @@ import { convertFlatToNested }from '@engine/get/render/convertFlatToNested.js';
 import { transformSync }from '@engine/get/render/worker/transformSync.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
+import { getModelCy } from '@engine/state/render/viewportState.js';
 
 /**
  * frameData - Computes or retrieves per-frame vertex transform data
@@ -69,7 +70,7 @@ export function frameData(model) {
   const fov = Math.min(w, h) * 0.9 * getZoom();
   const halfW = w * 0.5;
   const halfH = h * 0.5;
-  const modelCy = globalThis.MODEL_CY;
+  const modelCy = getModelCy();
 
   let T, P2;
 

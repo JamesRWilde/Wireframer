@@ -33,6 +33,7 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 // Import GPU canvas visibility toggle
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { state } from '@engine/state/engine/loop.js';
+import { getW, getH } from '@engine/state/render/viewportState.js';
 
 /**
  * cpuPath - Executes the CPU rendering path for a frame
@@ -58,7 +59,7 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
   if (ctx) {
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, globalThis.W, globalThis.H);
+    ctx.clearRect(0, 0, getW(), getH());
     ctx.restore();
   }
 

@@ -19,6 +19,7 @@
 
 // Import frame parameter computation for projection setup
 import { setZoom, setZoomMin, setZoomMax } from '@engine/state/render/zoomState.js';
+import { setModelCy, setZHalf } from '@engine/state/render/viewportState.js';
 
 /**
  * fitCameraToModel - Adjusts camera to frame the model
@@ -55,8 +56,8 @@ export function fitCameraToModel(model) {
   const sizeY = maxY - minY;
   
   // Update frame parameters for projection
-  globalThis.MODEL_CY = 0;  // Sphere is centred at origin — no offset needed
-  globalThis.Z_HALF = 1;    // Sphere radius is 1
+  setModelCy(0);  // Sphere is centred at origin — no offset needed
+  setZHalf(1);    // Sphere radius is 1
   
   // Set zoom bounds
   setZoomMin(0.001);

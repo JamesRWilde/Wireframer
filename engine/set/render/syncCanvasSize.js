@@ -17,6 +17,8 @@
 
 "use strict";
 
+import { setW, setH } from '@engine/state/render/viewportState.js';
+
 /**
  * syncCanvasSize - Synchronizes all canvas dimensions to viewport size
  *
@@ -29,8 +31,8 @@ export function syncCanvasSize(cpuCanvas) {
   const h = globalThis.innerHeight;
 
   // Store viewport dimensions globally
-  globalThis.W = w;
-  globalThis.H = h;
+  setW(w);
+  setH(h);
 
   // Resize the CPU canvas
   if (cpuCanvas) {

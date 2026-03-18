@@ -33,6 +33,7 @@ import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
+import { getModelCy, getZHalf, getW, getH } from '@engine/state/render/viewportState.js';
 
 /**
  * renderGpuPath - Renders the 3D model using the GPU (WebGL) rendering path
@@ -62,15 +63,15 @@ export function gpuPath(meshToRender, morphing) {
     
     // Camera parameters - control view and projection
     zoom: getZoom(),
-    modelCy: globalThis.MODEL_CY,  // Model vertical center for projection
-    zHalf: globalThis.Z_HALF,      // Half-depth for depth calculations
+    modelCy: getModelCy(),  // Model vertical center for projection
+    zHalf: getZHalf(),      // Half-depth for depth calculations
     
     // Rotation matrix - applied to all vertices
     rotation: getRotation(),
     
     // Viewport dimensions
-    width: globalThis.W,
-    height: globalThis.H,
+    width: getW(),
+    height: getH(),
     
     // Visual parameters
     theme: getTheme(),       // Color theme for fill/wire

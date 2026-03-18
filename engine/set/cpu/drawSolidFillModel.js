@@ -47,6 +47,7 @@ import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
 import { state }from '@engine/state/engine/loop.js';
 import { getFillOpacity, getTheme }from '@engine/state/render/renderState.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
+import { getW, getH } from '@engine/state/render/viewportState.js';
 
 // Track if worker has been initialized to avoid redundant setup
 let workerInitialized = false;
@@ -61,8 +62,8 @@ let workerInitialized = false;
 export function drawSolidFillModel(model, alphaScale = 1) {
   const fillLayerCtx = globalThis.fillLayerCtx;
   const fillLayerCanvas = globalThis.fillLayerCanvas;
-  const W = globalThis.W;
-  const H = globalThis.H;
+  const W = getW();
+  const H = getH();
 
   // Compute effective opacity from slider and alpha scale
   const opacity = getFillOpacity() * alphaScale;

@@ -16,6 +16,7 @@
  */
 
 import { getZoom } from '@engine/state/render/zoomState.js';
+import { getModelCy } from '@engine/state/render/viewportState.js';
 
 /**
  * projectVerticesVertices - Projects a 3D point to 2D screen coordinates
@@ -41,6 +42,6 @@ export function projectVertices(p) {
     // X: center + (worldX * fov) / depth
     window.innerWidth * 0.5 + p[0] * fov / d,
     // Y: center - ((worldY - modelCy) * fov) / depth (inverted for screen space)
-    window.innerHeight * 0.5 - (p[1] - globalThis.MODEL_CY) * fov / d,
+    window.innerHeight * 0.5 - (p[1] - getModelCy()) * fov / d,
   ];
 }

@@ -24,6 +24,7 @@ import {bgState} from '@engine/state/render/background/backgroundState.js';
 
 // Import canvas size synchronization to keep all canvases in sync
 import { syncCanvasSize }from '@engine/set/render/syncCanvasSize.js';
+import { setW, setH } from '@engine/state/render/viewportState.js';
 
 /**
  * canvas - Initializes all canvas elements and rendering contexts
@@ -65,8 +66,8 @@ export function canvas() {
     // On resize, synchronize all canvas dimensions to viewport size
     globalThis.addEventListener('resize', () => syncCanvasSize(cpuCanvas));
     globalThis.addEventListener('resize', () => {
-      globalThis.W = globalThis.innerWidth;
-      globalThis.H = globalThis.innerHeight;
+      setW(globalThis.innerWidth);
+      setH(globalThis.innerHeight);
     });
   }
 
