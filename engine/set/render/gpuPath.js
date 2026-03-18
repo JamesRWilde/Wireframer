@@ -31,6 +31,7 @@ import { cpuForegroundMode as fallbackToCpuForegroundMode }from '@engine/set/eng
 // GPU path shows the GPU canvas and hides the CPU canvas
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
+import { getRotation }from '@engine/state/render/physicsState.js';
 
 /**
  * renderGpuPath - Renders the 3D model using the GPU (WebGL) rendering path
@@ -64,7 +65,7 @@ export function gpuPath(meshToRender, morphing) {
     zHalf: globalThis.Z_HALF,      // Half-depth for depth calculations
     
     // Rotation matrix - applied to all vertices
-    rotation: globalThis.PHYSICS_STATE.R,
+    rotation: getRotation(),
     
     // Viewport dimensions
     width: globalThis.W,

@@ -14,6 +14,8 @@
  *   - Smooth: Averages pre-computed corner normals, rotated to view space
  */
 
+import { getRotation }from '@engine/state/render/physicsState.js';
+
 /**
  * resolveTriangleNormal - Resolves surface normal for a triangle
  * 
@@ -53,7 +55,7 @@ export function triangleNormalCpu(tri, triIndex, T, triCornerNormals, useSmoothS
     // Corner normals are stored in model space; rotate them to view space
     // so lighting behaves as if the object spins under a fixed light source
     const cn = triCornerNormals[triIndex];
-    const R = globalThis.PHYSICS_STATE?.R;
+    const R = getRotation();
     
     if (R) {
       // Rotate each corner normal by current physics rotation matrix

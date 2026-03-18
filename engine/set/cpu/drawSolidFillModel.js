@@ -46,6 +46,7 @@ import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
 // Import render loop state for frame ID tracking
 import { state }from '@engine/state/engine/loop.js';
 import { getFillOpacity, getTheme }from '@engine/state/renderState.js';
+import { getRotation }from '@engine/state/render/physicsState.js';
 
 // Track if worker has been initialized to avoid redundant setup
 let workerInitialized = false;
@@ -105,7 +106,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   // Try to use worker for parallel rendering
   if (isFillWorkerAvailable()) {
     // Send current frame data to worker for async rendering
-    const R = globalThis.PHYSICS_STATE?.R;
+    const R = getRotation();
     const workerTheme = getTheme() ?? { shadeDark: [0,0,0], shadeBright: [255,255,255] };
 
     sendRenderCommand({

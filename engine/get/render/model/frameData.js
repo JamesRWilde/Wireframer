@@ -34,6 +34,7 @@ import { convertFlatToNested }from '@engine/get/render/convertFlatToNested.js';
 
 // Import synchronous transform fallback
 import { transformSync }from '@engine/get/render/worker/transformSync.js';
+import { getRotation }from '@engine/state/render/physicsState.js';
 
 /**
  * frameData - Computes or retrieves per-frame vertex transform data
@@ -54,7 +55,7 @@ export function frameData(model) {
   const vertexCount = V.length;
 
   // Get the current physics rotation matrix
-  const Rmat = globalThis.PHYSICS_STATE?.R;
+  const Rmat = getRotation();
   if (!Rmat) return null;
 
   // Compute Z half-extent for wire color interpolation (scales with rotation magnitude)

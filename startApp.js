@@ -16,8 +16,9 @@
 // Canvas init
 import { canvas } from '@engine/init/render/canvas.js';
 
-// Physics state side-effect
-import '@engine/state/render/physics.js';
+// Physics state (self-initializes on import)
+import '@engine/state/render/physicsState.js';
+import { setRotation } from '@engine/state/render/physicsState.js';
 
 // Loader side-effects (sets up globalThis.load)
 import '@engine/init/mesh/load.js';
@@ -93,17 +94,8 @@ export function startApp() {
     globalThis.ZOOM_MAX = 2.75;
   }
   
-  // Step 3: Ensure PHYSICS_STATE exists with fallback defaults
-  if (!globalThis.PHYSICS_STATE) {
-    globalThis.PHYSICS_STATE = {
-      wx:0, wy:0, wz:0,
-      AUTO_WX:0.02, AUTO_WY:0.03, AUTO_WZ:0.005,
-      R: null,
-      dragging: false,
-      HOLD_ROTATION_FRAMES: 0,
-    };
-  }
-  globalThis.PHYSICS_STATE.R = R.value;
+  // Step 3: Set rotation matrix in physics state
+  setRotation(R.value);
 
   // Step 4: Disable all debug flags
   globalThis.DEBUG_FORCE_FILL = false;

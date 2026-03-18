@@ -23,7 +23,7 @@
  *   - morphState: animation state (engine/state/mesh/morph.js)
  *   - model: current model geometry (engine/state/render/model.js)
  *   - rotationState: rotation matrix (engine/state/render/rotationMatrixRef.js)
- *   - physics: rendering mode flags (engine/state/render/physics.js)
+ *   - physics: rotation physics and input state (engine/state/render/physicsState.js)
  */
 
 "use strict";

@@ -1,16 +1,16 @@
 /**
  * physics.js - Rotation Physics Update
- * 
+ *
  * PURPOSE:
  *   Updates the model's rotation each frame based on angular velocities and
- *   user input. Handles auto-rotation, drag interaction, and rotation matrix
+ *   user input. Handles auto-rotation, drag friction, and rotation matrix
  *   maintenance (re-orthogonalization to prevent drift).
- * 
+ *
  * ARCHITECTURE ROLE:
- *   Called by runFrame() each frame before rendering. Updates the global
- *   rotation matrix (PHYSICS_STATE.R) that the rendering pipeline uses
- *   to transform vertices.
- * 
+ *   Called by runFrame() each frame before rendering. Updates the rotation
+ *   matrix via physicsState setters so the rendering pipeline reads a fresh
+ *   matrix each frame to transform vertices.
+ *
  * PHYSICS MODEL:
  *   - Angular velocities (wx, wy, wz) control rotation speed around each axis
  *   - Auto-rotation gradually eases velocities toward AUTO_* targets
@@ -20,111 +20,92 @@
 
 "use strict";
 
-// Import the function that applies Euler angle increments to the rotation matrix
-// This updates the rotation matrix in-place based on angular velocities
-import {applyEulerIncrement}from '@engine/get/render/applyEulerIncrement.js';
+import { applyEulerIncrement } from '@engine/get/render/applyEulerIncrement.js';
+import { reorthogonalize } from '@engine/get/render/reorthogonalize.js';
+import { state } from '@engine/state/engine/loop.js';
+import {
+  getRotation, setRotation,
+  getWx, setWx, getWy, setWy, getWz, setWz,
+  getAutoWx, getAutoWy, getAutoWz,
+  setAutoWx, setAutoWy, setAutoWz,
+  isDragging, setDragging,
+  getHoldRotationFrames, decrementHoldRotationFrames,
+  getAxisAngleX, setAxisAngleX, getAxisAngleY, setAxisAngleY,
+  applyFriction, easeTowardAuto,
+} from '@engine/state/render/physicsState.js';
 
-// Import the re-orthogonalization function
-// This corrects numerical drift in the rotation matrix (prevents skewing)
-import { reorthogonalize }from '@engine/get/render/reorthogonalize.js';
-
-// Import loop state for frame counting
-import { state }from '@engine/state/engine/loop.js';
+// Debug flag — read from globalThis since it's set by UI toggle
+// (debug flags will get their own state module later)
+import { DEBUG_LOG_PHYSICS } from '@engine/state/render/debugFlags.js';
 
 /**
- * physics - Updates rotation physics for the current frame
- * 
- * @returns {number} Time spent on physics update (milliseconds)
- *   Used by telemetry to display physics performance
- * 
- * This function:
+ * physics - Updates rotation physics for the current frame.
+ *
  * 1. Checks if rotation is paused (HOLD_ROTATION_FRAMES > 0)
  * 2. Applies angular velocity to rotation matrix
  * 3. Periodically re-orthogonalizes the rotation matrix
  * 4. Updates angular velocities based on drag state
+ *
+ * @returns {number} Time spent on physics update (milliseconds)
  */
 export function physics() {
-  // Record start time for performance measurement
   const physStartMs = performance.now();
-  
+
   // Check if rotation is paused (user is interacting)
-  // HOLD_ROTATION_FRAMES is decremented each frame until it reaches 0
-  if (globalThis.PHYSICS_STATE.HOLD_ROTATION_FRAMES > 0) {
-    // Rotation is paused - just decrement the counter
-    globalThis.PHYSICS_STATE.HOLD_ROTATION_FRAMES = globalThis.PHYSICS_STATE.HOLD_ROTATION_FRAMES - 1;
+  if (getHoldRotationFrames() > 0) {
+    decrementHoldRotationFrames();
   } else {
-    // Rotation is active - apply angular velocities to rotation matrix
-    
-    // Get the current rotation matrix
-    const currentR = globalThis.PHYSICS_STATE.R;
-    
-    // Apply Euler angle increments based on current angular velocities
-    // This updates the rotation matrix in-place
-    applyEulerIncrement(currentR, globalThis.PHYSICS_STATE.wx, globalThis.PHYSICS_STATE.wy, globalThis.PHYSICS_STATE.wz);
-    
-    // Periodically re-orthogonalize the rotation matrix
-    // Numerical errors accumulate over time, causing the matrix to drift
-    // from being a pure rotation (skewing/scaling artifacts)
-    // We do this every 120 frames (~2 seconds at 60fps) to balance
-    // accuracy with performance
+    // Rotation is active — apply angular velocities to rotation matrix
+    const currentR = getRotation();
+    applyEulerIncrement(currentR, getWx(), getWy(), getWz());
+
+    // Periodically re-orthogonalize to prevent numerical drift (~2s at 60fps)
     if ((++state.frameCount) % 120 === 0) {
-      globalThis.PHYSICS_STATE.R = reorthogonalize(globalThis.PHYSICS_STATE.R);
+      setRotation(reorthogonalize(getRotation()));
     }
 
-    // Update angular velocities based on interaction state
-    if (globalThis.PHYSICS_STATE.dragging) {
-      // User is dragging - apply friction to angular velocities
-      // This causes the model to slow down when the user stops dragging
-      // The 0.85 factor means velocity retains 85% each frame
-      // This creates a smooth deceleration effect
-      globalThis.PHYSICS_STATE.wx *= 0.85;
-      globalThis.PHYSICS_STATE.wy *= 0.85;
-      globalThis.PHYSICS_STATE.wz *= 0.85;
+    if (isDragging()) {
+      // User dragging — apply friction for smooth deceleration
+      applyFriction(0.85);
     } else {
-      // Not dragging - ease velocities toward auto-rotation targets
-      // This produces smooth continuous rotation without oscillation
-      // The 0.04 factor means we move 4% of the way toward the target each frame
-      // This creates a smooth acceleration/deceleration curve
-      globalThis.PHYSICS_STATE.wx += (globalThis.PHYSICS_STATE.AUTO_WX - globalThis.PHYSICS_STATE.wx) * 0.04;
-      globalThis.PHYSICS_STATE.wy += (globalThis.PHYSICS_STATE.AUTO_WY - globalThis.PHYSICS_STATE.wy) * 0.04;
-      globalThis.PHYSICS_STATE.wz += (globalThis.PHYSICS_STATE.AUTO_WZ - globalThis.PHYSICS_STATE.wz) * 0.04;
+      // Not dragging — ease toward auto-rotation targets
+      easeTowardAuto();
 
-      // Slowly orbit the spin axis through 3D space at fixed speed
-      // The axis direction wanders smoothly, eventually visiting every orientation
-      // Two slow oscillators at different rates ensure the axis traces a complex path
-      if (!globalThis.PHYSICS_STATE._axisAngleX) {
-        globalThis.PHYSICS_STATE._axisAngleX = Math.random() * Math.PI * 2;
-        globalThis.PHYSICS_STATE._axisAngleY = Math.random() * Math.PI * 2;
+      // Slowly orbit the spin axis through 3D space at fixed speed.
+      // Two slow oscillators at different rates ensure the axis traces
+      // a complex path that eventually visits every orientation.
+      if (getAxisAngleX() === 0 && getAxisAngleY() === 0) {
+        setAxisAngleX(Math.random() * Math.PI * 2);
+        setAxisAngleY(Math.random() * Math.PI * 2);
       }
-      // Slow oscillation rates (radians per frame at 60fps)
-      // Full cycle: ~140s for X, ~200s for Y - different enough to avoid repetition
-      globalThis.PHYSICS_STATE._axisAngleX += 0.00075;
-      globalThis.PHYSICS_STATE._axisAngleY += 0.00052;
-      
-      const speed = 0.010;
-      const ax = Math.sin(globalThis.PHYSICS_STATE._axisAngleX);
-      const ay = Math.sin(globalThis.PHYSICS_STATE._axisAngleY);
-      const az = Math.cos(globalThis.PHYSICS_STATE._axisAngleX) * Math.cos(globalThis.PHYSICS_STATE._axisAngleY);
-      // Normalize axis
-      const len = Math.sqrt(ax*ax + ay*ay + az*az);
-      globalThis.PHYSICS_STATE.AUTO_WX = (ax / len) * speed;
-      globalThis.PHYSICS_STATE.AUTO_WY = (ay / len) * speed;
-      globalThis.PHYSICS_STATE.AUTO_WZ = (az / len) * speed;
 
-      // Debug logging for physics state (only when DEBUG_LOG_PHYSICS is set)
-      if (globalThis.DEBUG_LOG_PHYSICS) {
+      // Slow oscillation rates (radians per frame at 60fps)
+      // Full cycle: ~140s for X, ~200s for Y — different enough to avoid repetition
+      setAxisAngleX(getAxisAngleX() + 0.00075);
+      setAxisAngleY(getAxisAngleY() + 0.00052);
+
+      const speed = 0.010;
+      const ax = Math.sin(getAxisAngleX());
+      const ay = Math.sin(getAxisAngleY());
+      const az = Math.cos(getAxisAngleX()) * Math.cos(getAxisAngleY());
+      const len = Math.sqrt(ax*ax + ay*ay + az*az);
+      setAutoWx((ax / len) * speed);
+      setAutoWy((ay / len) * speed);
+      setAutoWz((az / len) * speed);
+
+      // Debug logging
+      if (DEBUG_LOG_PHYSICS) {
         console.log('[physics] wx,wy,wz',
-                    globalThis.PHYSICS_STATE.wx.toFixed(3),
-                    globalThis.PHYSICS_STATE.wy.toFixed(3),
-                    globalThis.PHYSICS_STATE.wz.toFixed(3));
+                    getWx().toFixed(3),
+                    getWy().toFixed(3),
+                    getWz().toFixed(3));
         console.log('[physics] R row0',
-                    globalThis.PHYSICS_STATE.R[0].toFixed(3),
-                    globalThis.PHYSICS_STATE.R[1].toFixed(3),
-                    globalThis.PHYSICS_STATE.R[2].toFixed(3));
+                    getRotation()[0].toFixed(3),
+                    getRotation()[1].toFixed(3),
+                    getRotation()[2].toFixed(3));
       }
     }
   }
-  
-  // Return time spent on physics for telemetry
+
   return performance.now() - physStartMs;
 }
