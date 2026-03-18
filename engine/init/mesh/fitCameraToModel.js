@@ -18,9 +18,7 @@
  */
 
 // Import frame parameter computation for projection setup
-
-
-/**
+import { setZoom, setZoomMin, setZoomMax } from '@engine/state/render/zoomState.js';
  * fitCameraToModel - Adjusts camera to frame the model
  * 
  * @param {Object} model - The mesh model with V (vertices) array
@@ -59,12 +57,12 @@ export function fitCameraToModel(model) {
   globalThis.Z_HALF = 1;    // Sphere radius is 1
   
   // Set zoom bounds
-  globalThis.ZOOM_MIN = 0.001;
-  globalThis.ZOOM_MAX = 10;
+  setZoomMin(0.001);
+  setZoomMax(10);
 
   // Sphere is law — all meshes are unit sphere (radius 1, diameter 2).
   // The sphere, not the mesh, defines the visual extent.
   // Zoom is constant for all meshes.
   const targetFraction = 0.5;
-  globalThis.ZOOM = targetFraction / (0.9 * 2);  // 0.278
+  setZoom(targetFraction / (0.9 * 2));  // 0.278
 }

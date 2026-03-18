@@ -18,6 +18,9 @@ import { canvas } from '@engine/init/render/canvas.js';
 
 // Physics state (self-initializes on import)
 import '@engine/state/render/physicsState.js';
+// Zoom state (self-initializes on import)
+import '@engine/state/render/zoomState.js';
+import { getZoom, setZoom, getZoomMin, setZoomMax } from '@engine/state/render/zoomState.js';
 import { setRotation } from '@engine/state/render/physicsState.js';
 
 // Loader side-effects (sets up globalThis.load)
@@ -83,16 +86,8 @@ export function startApp() {
   // Step 1: Initialize rotation matrix
   rotationInitialize();
   
-  // Step 2: Ensure zoom parameters exist with sensible defaults
-  if (typeof globalThis.ZOOM !== 'number' || !Number.isFinite(globalThis.ZOOM)) {
-    globalThis.ZOOM = 1;
-  }
-  if (typeof globalThis.ZOOM_MIN !== 'number' || !Number.isFinite(globalThis.ZOOM_MIN)) {
-    globalThis.ZOOM_MIN = 0.45;
-  }
-  if (typeof globalThis.ZOOM_MAX !== 'number' || !Number.isFinite(globalThis.ZOOM_MAX)) {
-    globalThis.ZOOM_MAX = 2.75;
-  }
+  // Step 2: Zoom state is self-initializing via zoomState.js import
+  // (defaults: zoom=1, min=0.45, max=2.75)
   
   // Step 3: Set rotation matrix in physics state
   setRotation(R.value);

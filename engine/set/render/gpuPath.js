@@ -32,6 +32,7 @@ import { cpuForegroundMode as fallbackToCpuForegroundMode }from '@engine/set/eng
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
+import { getZoom } from '@engine/state/render/zoomState.js';
 
 /**
  * renderGpuPath - Renders the 3D model using the GPU (WebGL) rendering path
@@ -60,7 +61,7 @@ export function gpuPath(meshToRender, morphing) {
     wireAlpha: getWireOpacity(),
     
     // Camera parameters - control view and projection
-    zoom: globalThis.ZOOM,
+    zoom: getZoom(),
     modelCy: globalThis.MODEL_CY,  // Model vertical center for projection
     zHalf: globalThis.Z_HALF,      // Half-depth for depth calculations
     

@@ -37,6 +37,7 @@ import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
 import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
 import { edgesFromFacesRuntime }from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 import { toRuntime } from '@engine/init/mesh/toRuntime.js';
+import { getZoom } from '@engine/state/render/zoomState.js';
 
 // Register globally so any consumer can invoke it without circular imports
 if (!globalThis.edgesFromFacesRuntime) {
@@ -142,7 +143,7 @@ export function load(mesh, name = 'Shape', options = {}) {
   if (!globalThis.MODEL) {
     fitCameraToModel(newModel);
   }
-  const targetZoom = globalThis.ZOOM;
+  const targetZoom = getZoom();
 
   // Step 10: Finalize model (activate, optionally morph)
   finalizeModel(newModelCopy, animateMorph, name, clampedDetail, targetZoom);

@@ -24,6 +24,7 @@ import {
   setDragging, setLastPointerX, setLastPointerY,
   setWx, setWy,
 } from '@engine/state/render/physicsState.js';
+import { getZoom, setZoom, getZoomMin, getZoomMax } from '@engine/state/render/zoomState.js';
 
 /**
  * attachInputListeners - Attaches input event listeners to canvas.
@@ -84,7 +85,8 @@ export function attachInputListeners(canvas) {
     if (e.ctrlKey) return;
     e.preventDefault();
     const factor = Math.exp(-e.deltaY * 0.0012);
-    globalThis.ZOOM = Math.max(globalThis.ZOOM_MIN, Math.min(globalThis.ZOOM_MAX, globalThis.ZOOM * factor));
+    const newZoom = Math.max(getZoomMin(), Math.min(getZoomMax(), getZoom() * factor));
+    setZoom(newZoom);
   }, { passive: false });
 
   // Expose canvas reference for other modules if needed

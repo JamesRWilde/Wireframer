@@ -20,6 +20,8 @@
 
 "use strict";
 
+import { getZoom } from '@engine/state/render/zoomState.js';
+
 /** @type {HTMLCanvasElement|null} Overlay canvas element */
 let overlay = null;
 
@@ -159,7 +161,7 @@ export function renderDebugOverlay() {
   // to a circle on screen. Radius = viewport_min_dimension / 2 (unit sphere
   // fills half the viewport based on targetFraction = 0.5).
   const minDim = Math.min(w, h);
-  const zoom = globalThis.ZOOM || 0.2778;
+  const zoom = getZoom() || 0.2778;
   const projFactor = minDim * 0.9 * zoom;
   const screenRadius = projFactor;
   

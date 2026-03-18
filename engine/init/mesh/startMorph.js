@@ -39,6 +39,7 @@ import { morphState } from '@engine/state/mesh/morph.js';
 import { clone } from '@engine/init/mesh/clone.js';
 import { computeMorphMap } from '@engine/init/mesh/computeMorphMap.js';
 import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
+import { getZoom } from '@engine/state/render/zoomState.js';
 
 /**
  * Target detail level for decimated meshes (10% of original vertex count).
@@ -110,5 +111,5 @@ export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
   morphState.currentMesh = clone(fromClone);
   morphState.progress = 0;
   morphState.onComplete = typeof onComplete === 'function' ? onComplete : null;
-  morphState.startZoom = globalThis.ZOOM;
+  morphState.startZoom = getZoom();
 }

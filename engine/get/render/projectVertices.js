@@ -15,6 +15,8 @@
  *   The +3 offset prevents division by zero and provides reasonable depth scaling.
  */
 
+import { getZoom } from '@engine/state/render/zoomState.js';
+
 /**
  * projectVerticesVertices - Projects a 3D point to 2D screen coordinates
  * 
@@ -29,7 +31,7 @@
  */
 export function projectVertices(p) {
   // Calculate field of view: smaller viewport dimension * 0.9 * zoom
-  const fov = Math.min(window.innerWidth, window.innerHeight) * 0.9 * globalThis.ZOOM;
+  const fov = Math.min(window.innerWidth, window.innerHeight) * 0.9 * getZoom();
   
   // Depth with offset to prevent division by zero
   const d = p[2] + 3;
