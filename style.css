@@ -51,7 +51,7 @@ body {
 #gpu {
   z-index: 2;
   pointer-events: none;
-  display: none;
+  visibility: hidden;
 }
 
 canvas {
