@@ -31,6 +31,9 @@ import { parseCheckResults }from '@engine/get/mesh/parseCheckResults.js';
 // Import mesh object builder
 import { object }from '@engine/init/mesh/build/object.js';
 
+// Import winding correction
+import { fixWinding }from '@engine/get/mesh/fixWinding.js';
+
 /**
  * toRuntime - Converts OBJ text to engine mesh format
  * 
@@ -59,8 +62,8 @@ export function toRuntime(text, overrides = {}) {
   const lines = rawObjText(text, overrides);
 
   // Step 2: Parse lines into raw mesh data
-  const {uniqueVerts, faces, failingLines} = objLines(lines, overrides);
-  
+  const {uniqueVerts, faces, rawEdges, rawLines, materialSections, failingLines} = objLines(lines, overrides);
+
   // Store parse errors globally for debugging
   globalThis.lastMeshParseErrors = failingLines;
 
@@ -68,14 +71,18 @@ export function toRuntime(text, overrides = {}) {
   parseCheckResults(uniqueVerts, faces, failingLines, overrides);
 
   // Step 4: Build final mesh object with all properties
-  const meshObj = object(uniqueVerts, faces);
+  // Passes raw edges, lines, and material sections through — no auto-deriving
+  const meshObj = object(uniqueVerts, faces, rawEdges, rawLines, materialSections);
 
-  // Step 5: Sanity validate the result
+  // Step 5: Fix face winding (detect inward normals and flip if needed)
+  fixWinding(meshObj);
+
+  // Step 6: Sanity validate the result
   if (!Array.isArray(meshObj.V) || !Array.isArray(meshObj.F)) {
     console.error('[toRuntime] Returned mesh object V or F is not an array.', meshObj);
     throw new Error('[toRuntime] Returned mesh object V or F is not an array');
   }
-  
+
   return meshObj;
 }
 

@@ -76,8 +76,12 @@ export function load(mesh, name = 'Shape', options = {}) {
   const V = mesh.V;
   const F = mesh.F;
   
-  // Step 3: Build edges from faces (if edge builder is available)
-  const E = globalThis.edgesFromFacesRuntime ? globalThis.edgesFromFacesRuntime(F) : [];
+  // Step 3: Use edges from mesh if already present (OBJ parser merges
+  // explicit OBJ edges with face-derived edges), otherwise derive from faces.
+  // This preserves author-defined edges from "e" and "l" directives.
+  const E = mesh.E && mesh.E.length > 0
+    ? mesh.E
+    : (globalThis.edgesFromFacesRuntime ? globalThis.edgesFromFacesRuntime(F) : []);
 
   // Step 4b: Center vertices so rotation pivots around bounding box center
   // Without this, asymmetric meshes appear to orbit rather than spin

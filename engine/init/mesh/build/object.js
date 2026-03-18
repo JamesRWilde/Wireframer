@@ -1,22 +1,23 @@
 /**
  * object.js - Mesh Object Construction
- * 
+ *
  * PURPOSE:
  *   Constructs the final mesh object from parsed vertex and face data.
- *   This includes computing edges, extracting triangle data, and building
- *   per-corner normals and UVs for rendering.
- * 
+ *   Preserves explicit OBJ edge data separately from face-derived edges.
+ *   Tracks material sections per face for mesh separation.
+ *
  * ARCHITECTURE ROLE:
  *   Called by toRuntime after parsing is complete. Produces the mesh
  *   object format expected by the engine's rendering pipeline.
- * 
+ *
  * MESH OBJECT STRUCTURE:
  *   - V: Vertex positions (with embedded normals and UVs)
- *   - F: Face index arrays
- *   - E: Edge index pairs (computed from faces)
- *   - groups/objects/smoothingGroups: Metadata
- *   - triangles/triangleGroups/etc.: Per-triangle data
- *   - triangleNormals/triangleUVs: Per-corner rendering data
+ *   - F: Face index arrays (objects with indices, material, etc.)
+ *   - E: Edge index pairs (face-derived, for topology)
+ *   - Eobj: Explicit OBJ edges (from "e" lines, author-defined)
+ *   - Lobj: Explicit OBJ lines (from "l" lines, author-defined)
+ *   - materials/materialSections: Material group metadata
+ *   - triangles/triangleNormals: Per-corner rendering data
  */
 
 // Import edge building utility
@@ -28,45 +29,139 @@ if (!globalThis.edgesFromFacesRuntime) {
 }
 
 /**
+ * Deduplicates edges stored as [lo, hi] pairs.
+ * Returns a new array with no duplicates.
+ */
+function dedupEdges(edges) {
+  const seen = new Set();
+  const result = [];
+  for (const e of edges) {
+    const lo = e[0] < e[1] ? e[0] : e[1];
+    const hi = e[0] < e[1] ? e[1] : e[0];
+    const key = `${lo},${hi}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push([lo, hi]);
+    }
+  }
+  return result;
+}
+
+/**
+ * Merges two edge arrays (OBJ edges and face-derived edges),
+ * keeping explicit OBJ edges where they exist and adding any
+ * face-derived edges not already covered.
+ */
+function mergeEdges(objEdges, faceEdges) {
+  const seen = new Set();
+  const result = [];
+
+  // Add OBJ edges first (author-defined, takes priority)
+  for (const e of objEdges) {
+    const lo = e[0] < e[1] ? e[0] : e[1];
+    const hi = e[0] < e[1] ? e[1] : e[0];
+    const key = `${lo},${hi}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push([lo, hi]);
+    }
+  }
+
+  // Add face-derived edges not already present
+  for (const e of faceEdges) {
+    const lo = e[0] < e[1] ? e[0] : e[1];
+    const hi = e[0] < e[1] ? e[1] : e[0];
+    const key = `${lo},${hi}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push([lo, hi]);
+    }
+  }
+
+  return result;
+}
+
+/**
  * object - Constructs final mesh object from parsed data
- * 
- * @param {Array<Array<number>>} uniqueVerts - Unique vertex positions
- *   Each vertex is [x, y, z, u, v, nx, ny, nz] (position, UV, normal)
- * @param {Array<Object>} faces - Parsed face objects with indices and metadata
- * 
+ *
+ * @param {Array} uniqueVerts - Unique vertex positions [x,y,z,u,v,nx,ny,nz]
+ * @param {Array<Object>} faces - Parsed face objects
+ * @param {Array} rawEdges - Explicit OBJ edges from "e" lines
+ * @param {Array} rawLines - Explicit OBJ lines from "l" lines
+ * @param {Array} materialSections - Material section boundaries
+ *
  * @returns {Object} Complete mesh object ready for rendering
  */
-export function object(uniqueVerts, faces) {
-  // Build base mesh object with vertices and faces
+export function object(uniqueVerts, faces, rawEdges, rawLines, materialSections) {
+  rawEdges = rawEdges || [];
+  rawLines = rawLines || [];
+  materialSections = materialSections || [];
+
+  // Build face-derived edges for topology
+  const faceIndexArrays = faces.map(f => f.indices);
+  const derivedEdges = globalThis.edgesFromFacesRuntime
+    ? globalThis.edgesFromFacesRuntime(faceIndexArrays)
+    : [];
+
+  // Merge: OBJ edges first, then fill gaps with face-derived
+  const hasObjEdges = rawEdges.length > 0;
+  const hasObjLines = rawLines.length > 0;
+
+  const finalEdges = hasObjEdges || hasObjLines
+    ? mergeEdges([...rawEdges, ...rawLines], derivedEdges)
+    : derivedEdges;
+
+  // Collect unique materials from faces
+  const materials = Array.from(new Set(faces.map(f => f.material).filter(Boolean)));
+
+  // Finalize material section boundaries (add end marker)
+  const finalSections = materialSections.map(s => ({
+    material: s.material,
+    faceStart: s.faceStart
+  }));
+  // Close the last section
+  if (finalSections.length > 0) {
+    finalSections[finalSections.length - 1].faceEnd = faces.length;
+  }
+
   const meshObj = {
-    V: uniqueVerts,  // [x, y, z, u, v, nx, ny, nz]
+    V: uniqueVerts,
     F: faces,
-    // Extract unique groups, objects, and smoothing groups from faces
+
+    // Edges: merged (OBJ + face-derived)
+    E: finalEdges,
+
+    // Raw OBJ edge data (for inspection and validation)
+    Eobj: rawEdges,
+    Lobj: rawLines,
+    _hasExplicitEdges: hasObjEdges || hasObjLines,
+
+    // Material metadata
+    materials: materials,
+    materialSections: finalSections.length > 1 ? finalSections : null,
+
+    // Group/object/smoothing metadata
     groups: Array.from(new Set(faces.map(f => f.group).filter(Boolean))),
     objects: Array.from(new Set(faces.map(f => f.object).filter(Boolean))),
-    smoothingGroups: Array.from(new Set(faces.map(f => f.smoothing).filter(Boolean)))
+    smoothingGroups: Array.from(new Set(faces.map(f => f.smoothing).filter(Boolean))),
+
+    // Extract triangle indices for rendering
+    triangles: faceIndexArrays,
+
+    // Per-triangle metadata
+    triangleGroups: faces.map(f => f.group),
+    triangleObjects: faces.map(f => f.object),
+    triangleSmoothing: faces.map(f => f.smoothing),
+    triangleMaterials: faces.map(f => f.material),
+
+    // Per-corner normals and UVs from embedded vertex data
+    triangleNormals: faces.map(f => f.indices.map(i => [uniqueVerts[i][5], uniqueVerts[i][6], uniqueVerts[i][7]])),
+    triangleUVs: faces.map(f => f.indices.map(i => [uniqueVerts[i][3], uniqueVerts[i][4]])),
+
+    // Winding: will be set by fixWinding if needed
+    _windingFixed: false,
+    _windingDirection: 'unknown'
   };
-  
-  // Ensure edge builder is available (parsing may run before loader.js)
-  if (!globalThis.edgesFromFacesRuntime) {
-    globalThis.edgesFromFacesRuntime = edgesFromFacesRuntime;
-  }
-  
-  // Build edges from face indices for wireframe rendering
-  meshObj.E = globalThis.edgesFromFacesRuntime ? globalThis.edgesFromFacesRuntime(faces.map(f => f.indices)) : [];
-  
-  // Extract triangle indices for rendering
-  meshObj.triangles = faces.map(f => f.indices);
-  
-  // Extract per-triangle metadata
-  meshObj.triangleGroups = faces.map(f => f.group);
-  meshObj.triangleObjects = faces.map(f => f.object);
-  meshObj.triangleSmoothing = faces.map(f => f.smoothing);
-  
-  // Build per-corner normals and UVs for rendering
-  // These are extracted from the embedded vertex data
-  meshObj.triangleNormals = faces.map(f => f.indices.map(i => [uniqueVerts[i][5], uniqueVerts[i][6], uniqueVerts[i][7]]));
-  meshObj.triangleUVs = faces.map(f => f.indices.map(i => [uniqueVerts[i][3], uniqueVerts[i][4]]));
-  
+
   return meshObj;
 }

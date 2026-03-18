@@ -70,7 +70,8 @@ export function face(parts, originalLine, state) {
         indices: tri,
         group: state.currentGroup,
         object: state.currentObject,
-        smoothing: state.currentSmoothing
+        smoothing: state.currentSmoothing,
+        material: state.currentMaterial
       });
     }
   }

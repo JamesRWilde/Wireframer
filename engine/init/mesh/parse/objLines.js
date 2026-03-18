@@ -26,6 +26,7 @@ import {vertex}from '@engine/init/mesh/parse/vertex.js';
 import {normal}from '@engine/init/mesh/parse/normal.js';
 import {uv}from '@engine/init/mesh/parse/uv.js';
 import {face}from '@engine/init/mesh/parse/face.js';
+import {edge}from '@engine/init/mesh/parse/edge.js';
 
 /**
  * parseObjLines - Parses OBJ text lines into mesh data
@@ -49,9 +50,13 @@ export function objLines(lines, overrides) {
     uniqueVerts: [],   // Unique vertex positions (deduplicated)
     vertMap: new Map(), // Map for vertex deduplication
     faces: [],         // Parsed faces
+    rawEdges: [],      // Explicit OBJ edges (from "e" lines)
+    rawLines: [],      // Explicit OBJ lines (from "l" lines)
+    materialSections: [], // Material section boundaries
     currentGroup: null,
     currentObject: null,
     currentSmoothing: null,
+    currentMaterial: null,
     failingLines: []   // Error messages
   };
 
@@ -64,8 +69,33 @@ export function objLines(lines, overrides) {
     g: parts => { state.currentGroup = parts.length > 1 ? parts.slice(1).join(' ') : null; },
     o: parts => { state.currentObject = parts.length > 1 ? parts.slice(1).join(' ') : null; },
     s: parts => { state.currentSmoothing = parts.length > 1 ? parts[1] : null; },
-    mtllib: () => {},  // Material library (ignored)
-    usemtl: () => {}   // Material use (ignored)
+    e: parts => edge(parts, state),
+    l: parts => {
+      // Line elements: l v1 v2 [v3 ... vn]
+      // Store as pairs of consecutive vertex indices
+      for (let i = 1; i < parts.length - 1; i++) {
+        const a = Number(parts[i]);
+        const b = Number(parts[i + 1]);
+        if (!Number.isFinite(a) || a === 0 || !Number.isFinite(b) || b === 0) continue;
+        const ai = a > 0 ? a - 1 : state.vertices.length + a;
+        const bi = b > 0 ? b - 1 : state.vertices.length + b;
+        if (ai < 0 || ai >= state.vertices.length || bi < 0 || bi >= state.vertices.length) continue;
+        if (ai === bi) continue;
+        state.rawLines.push(ai < bi ? [ai, bi] : [bi, ai]);
+      }
+    },
+    mtllib: () => {},  // Material library (not used for textures)
+    usemtl: parts => {
+      const matName = parts.length > 1 ? parts.slice(1).join(' ') : null;
+      if (matName !== state.currentMaterial) {
+        state.currentMaterial = matName;
+        // Record material section boundary: faces from this point onward belong to this material
+        state.materialSections.push({
+          material: matName,
+          faceStart: state.faces.length
+        });
+      }
+    }
   };
 
   // Process each line

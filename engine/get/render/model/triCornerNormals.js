@@ -80,19 +80,24 @@ export function triCornerNormals(model, triFaces) {
   // 6. Set crease threshold: -1 for full smooth, cos(angle) for crease mode
   const cosThreshold = shadingMode === 'smooth' ? -1 : Math.cos((crease * Math.PI) / 180);
 
-  // 7. Compute per-corner normals for each triangle
+  // 7. Per-face smoothing groups (from OBJ "s" directives)
+  const smoothGroups = model.triangleSmoothing || null;
+
+  // 8. Compute per-corner normals for each triangle
   const cornerNormals = new Array(triFaces.length);
   let i = 0;
   for (const tri of triFaces) {
     const nRef = faceNormals[i]; // Reference normal for this triangle
+    const refGroup = smoothGroups ? smoothGroups[i] : null;
     const triCorner = new Array(3);
 
     for (let c = 0; c < 3; c++) {
       const vi = tri[c]; // Vertex index for this corner
       const adjacent = vertexToFaces[vi]; // All faces sharing this vertex
 
-      // Sum normals of adjacent faces within crease threshold
-      const [nx, ny, nz] = sumNormals(nRef, faceNormals, adjacent, cosThreshold);
+      // Sum normals of adjacent faces within crease threshold,
+      // respecting OBJ smoothing groups if present
+      const [nx, ny, nz] = sumNormals(nRef, faceNormals, adjacent, cosThreshold, smoothGroups, refGroup);
       const nl = Math.hypot(nx, ny, nz);
 
       if (nl < 1e-9) {
