@@ -19,6 +19,8 @@
 
 // Import frame parameter computation for projection setup
 import { setZoom, setZoomMin, setZoomMax } from '@engine/state/render/zoomState.js';
+
+/**
  * fitCameraToModel - Adjusts camera to frame the model
  * 
  * @param {Object} model - The mesh model with V (vertices) array
