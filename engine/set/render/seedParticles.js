@@ -23,6 +23,7 @@ import { createParticle }from '@engine/init/render/createParticle.js';
 
 // Import centralized render state
 import { getThemeMode } from '@engine/state/render/renderState.js';
+import { bgState } from '@engine/state/render/background/backgroundState.js';
 
 /** Maximum density multiplier to cap particle count */
 const MAX_DENSITY_MULT = 1.6;
@@ -47,9 +48,9 @@ export function seedParticles(particles, w, h) {
   const baseCount = Math.max(8, Math.round((w * h) / 45000));
 
   // Read user density and velocity settings
-  const densityPct = globalThis.BG_PARTICLE_DENSITY_PCT ?? 1;
+  const densityPct = bgState.densityPct;
   const density = densityPct * MAX_DENSITY_MULT;
-  const velocityPct = globalThis.BG_PARTICLE_VELOCITY_PCT ?? 1;
+  const velocityPct = bgState.velocityPct;
   const velocityScale = velocityPct * MAX_VELOCITY_MULT;
 
   // Determine if reseeding is needed
@@ -69,7 +70,7 @@ export function seedParticles(particles, w, h) {
 
   // Compute per-frame scaling factors
   const velScale = velocityPct * MAX_VELOCITY_MULT;
-  const opacityScale = (globalThis.BG_PARTICLE_OPACITY_PCT ?? 1) * 1;
+  const opacityScale = bgState.opacityPct * 1;
   // Light theme needs higher alpha to be visible against light backgrounds
   const themeAlphaBoost = getThemeMode() === 'light' ? 1.75 : 1;
 

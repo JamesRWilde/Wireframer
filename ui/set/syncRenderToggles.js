@@ -20,6 +20,7 @@ import { sliderDisplayPercent }from '@ui/get/sliderDisplayPercent.js';
 import { state }from '@ui/get/read/state.js';
 import { state as persistState }from '@ui/set/persist/state.js';
 import { setFillOpacity, setWireOpacity }from '@engine/state/render/renderState.js';
+import { bgState } from '@engine/state/render/background/backgroundState.js';
 
 export function syncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;
@@ -27,17 +28,17 @@ export function syncRenderToggles() {
 
   const rawDensity = Number(bgDensity.value);
   const densityPct = rawDensity / 100;
-  globalThis.BG_PARTICLE_DENSITY_PCT = densityPct;
+  bgState.densityPct = densityPct;
   bgDensityValue.textContent = `${sliderDisplayPercent(bgDensity)}%`;
 
   const rawVelocity = Number(bgVelocity.value);
   const velocityPct = rawVelocity / 100;
-  globalThis.BG_PARTICLE_VELOCITY_PCT = velocityPct;
+  bgState.velocityPct = velocityPct;
   bgVelocityValue.textContent = `${sliderDisplayPercent(bgVelocity)}%`;
 
   const rawOpacity = Number(bgOpacity.value);
   const opacityPct = rawOpacity / 100;
-  globalThis.BG_PARTICLE_OPACITY_PCT = opacityPct;
+  bgState.opacityPct = opacityPct;
   bgOpacityValue.textContent = `${Math.round(opacityPct * 100)}%`;
 
   const fillOp = Number(fillOpacity.value) / 100;

@@ -24,6 +24,7 @@ import { getThemeMode } from '@engine/state/render/renderState.js';
 
 // Import background canvas getter to read current dimensions
 import {canvas}from '@engine/get/render/background/canvas.js';
+import { bgState } from '@engine/state/render/background/backgroundState.js';
 
 /**
  * backgroundWorker - Creates and initializes the background particle worker
@@ -73,8 +74,8 @@ export function backgroundWorker() {
         type: 'init',
         width: canvasState.w,
         height: canvasState.h,
-        density: globalThis.BG_PARTICLE_DENSITY_PCT ?? 1,
-        speed: globalThis.BG_PARTICLE_VELOCITY_PCT ?? 1,
+        density: bgState.densityPct,
+        speed: bgState.velocityPct,
         themeMode: getThemeMode()
       });
     }

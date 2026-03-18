@@ -47,4 +47,11 @@ export const bgState = {
 	rendererFailed: false,
 	gpuLastRenderMs: -1,
 	canvas: null,
+
+	// Particle density multiplier (1.0 = default)
+	densityPct: 1,
+	// Particle speed multiplier (1.0 = default)
+	velocityPct: 1,
+	// Particle opacity multiplier (1.0 = default)
+	opacityPct: 1,
 };

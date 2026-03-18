@@ -48,6 +48,7 @@ import { postToBackgroundWorker }from '@engine/set/render/postToBackgroundWorker
 
 // Import centralized render state
 import { getThemeMode } from '@engine/state/render/renderState.js';
+import { bgState } from '@engine/state/render/background/backgroundState.js';
 
 // Main-thread particle array (used as fallback when worker is unavailable)
 let particles = [];
@@ -78,9 +79,9 @@ export function background(nowMs) {
 
   // Worker path: send update command and render received particle data
   if (isBackgroundWorkerReady()) {
-    const density = globalThis.BG_PARTICLE_DENSITY_PCT ?? 1;
-    const speed = globalThis.BG_PARTICLE_VELOCITY_PCT ?? 1;
-    const opacity = globalThis.BG_PARTICLE_OPACITY_PCT ?? 1;
+    const density = bgState.densityPct;
+    const speed = bgState.velocityPct;
+    const opacity = bgState.opacityPct;
 
     // Send update command to background worker
     postToBackgroundWorker({
