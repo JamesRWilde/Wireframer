@@ -21,6 +21,7 @@ import { state }from '@ui/get/read/state.js';
 import { state as persistState }from '@ui/set/persist/state.js';
 import { setFillOpacity, setWireOpacity }from '@engine/state/render/renderState.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
+import { getDebugLogToggles } from '@engine/state/render/debugFlags.js';
 
 export function syncRenderToggles() {
   globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;
@@ -49,7 +50,7 @@ export function syncRenderToggles() {
   setWireOpacity(wireOp);
   wireOpacityValue.textContent = `${Math.round(wireOp * 100)}%`;
 
-  if (globalThis.DEBUG_LOG_TOGGLES) {
+  if (getDebugLogToggles()) {
     console.debug('[syncRenderToggles] FILL_OPACITY', fillOp,
                   'WIRE_OPACITY', wireOp);
   }

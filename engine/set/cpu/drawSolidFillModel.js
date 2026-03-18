@@ -48,6 +48,7 @@ import { state }from '@engine/state/engine/loop.js';
 import { getFillOpacity, getTheme }from '@engine/state/render/renderState.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getW, getH } from '@engine/state/render/viewportState.js';
+import { getDebugLogFill } from '@engine/state/render/debugFlags.js';
 
 // Track if worker has been initialized to avoid redundant setup
 let workerInitialized = false;
@@ -153,7 +154,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   fillLayerCtx.globalCompositeOperation = 'source-over';
 
   // Debug logging for fill opacity values
-  if (globalThis.DEBUG_LOG_FILL) {
+  if (getDebugLogFill()) {
     console.debug(
       '[drawSolidFillModel] FILL_OPACITY slider:',
       getFillOpacity(),

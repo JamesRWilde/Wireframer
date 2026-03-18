@@ -24,6 +24,7 @@ import { budgetState, DOWNGRADE_THRESHOLD, UPGRADE_THRESHOLD } from "@engine/set
 
 // Import quality priority comparison helper
 import { priority }from '@engine/get/engine/quality/priority.js';
+import { getDebugBudget } from '@engine/state/render/debugFlags.js';
 
 /**
  * qualityApplyChange - Evaluates and applies a quality level change with hysteresis
@@ -46,7 +47,7 @@ export function qualityApplyChange(targetQuality, avgFrameTime) {
     if (budgetState.downgradeCounter >= DOWNGRADE_THRESHOLD) {
       budgetState.currentQuality = targetQuality;
       budgetState.downgradeCounter = 0;
-      if (globalThis.DEBUG_BUDGET) {
+      if (getDebugBudget()) {
         console.log('[frameBudget] Downgraded to', targetQuality.toUpperCase(), 'quality (avg:', avgFrameTime.toFixed(2), 'ms)');
       }
     }
@@ -59,7 +60,7 @@ export function qualityApplyChange(targetQuality, avgFrameTime) {
     if (budgetState.upgradeCounter >= UPGRADE_THRESHOLD) {
       budgetState.currentQuality = targetQuality;
       budgetState.upgradeCounter = 0;
-      if (globalThis.DEBUG_BUDGET) {
+      if (getDebugBudget()) {
         console.log('[frameBudget] Upgraded to', targetQuality.toUpperCase(), 'quality (avg:', avgFrameTime.toFixed(2), 'ms)');
       }
     }

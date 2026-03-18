@@ -25,6 +25,7 @@
 // Import the runFrame function that performs the actual per-frame work
 // This includes physics updates, rendering, and telemetry updates
 import {run}from '@engine/set/engine/frame/run.js';
+import { getDebugRaf } from '@engine/state/render/debugFlags.js';
 
 // Frame state flags (gpuSceneDrawnLastFrame, cpuForegroundDrawnOnMainCanvas)
 // are now on the shared loop state object imported from engine/state/engine/loop.js
@@ -53,7 +54,7 @@ export function animationFrame(nowMs = 0) {
   // Only logs when DEBUG_RAF global is set to avoid performance overhead
   if (__lastRafMs) {
     const diff = nowMs - __lastRafMs;
-    if (globalThis.DEBUG_RAF) console.log('[frame] rAF interval', diff.toFixed(2));
+    if (getDebugRaf()) console.log('[frame] rAF interval', diff.toFixed(2));
   }
   
   // Store current timestamp for next frame's interval calculation

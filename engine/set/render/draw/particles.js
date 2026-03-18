@@ -32,6 +32,9 @@
  * 3. Parses color string to rgba with computed alpha
  * 4. Draws circle with glow effect using shadow blur
  */
+
+import { getDebugParticles } from '@engine/state/render/debugFlags.js';
+
 export function particles(ctx, particles, color, opacityScale, themeAlphaBoost) {
   // Store base color for reuse across particles
   const baseColor = color;
@@ -41,7 +44,7 @@ export function particles(ctx, particles, color, opacityScale, themeAlphaBoost) 
     ctx.beginPath();
 
     // Debug mode: draw red squares instead of circles for visibility
-    if (globalThis.DEBUG_PARTICLES) {
+    if (getDebugParticles()) {
       ctx.fillStyle = 'rgba(255,0,0,0.8)';
       ctx.globalAlpha = 1;
       ctx.fillRect(p.x, p.y, 6, 6);

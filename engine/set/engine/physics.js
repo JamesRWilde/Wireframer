@@ -36,7 +36,7 @@ import {
 
 // Debug flag — read from globalThis since it's set by UI toggle
 // (debug flags will get their own state module later)
-import { DEBUG_LOG_PHYSICS } from '@engine/state/render/debugFlags.js';
+import { getDebugLogPhysics } from '@engine/state/render/debugFlags.js';
 
 /**
  * physics - Updates rotation physics for the current frame.
@@ -94,7 +94,7 @@ export function physics() {
       setAutoWz((az / len) * speed);
 
       // Debug logging
-      if (DEBUG_LOG_PHYSICS) {
+      if (getDebugLogPhysics()) {
         console.log('[physics] wx,wy,wz',
                     getWx().toFixed(3),
                     getWy().toFixed(3),

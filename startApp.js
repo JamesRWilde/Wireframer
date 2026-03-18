@@ -92,14 +92,7 @@ export function startApp() {
   // Step 3: Set rotation matrix in physics state
   setRotation(R.value);
 
-  // Step 4: Disable all debug flags
-  globalThis.DEBUG_FORCE_FILL = false;
-  globalThis.DEBUG_FORCE_RED  = false;
-  globalThis.DEBUG_FORCE_WIRE = false;
-  globalThis.DEBUG_P2_POINTS = false;
-  globalThis.DEBUG_SHOW_FILL_LAYER = false;
-  globalThis.DEBUG_LOG_PHYSICS = false;
-  globalThis.DEBUG_CLEAR = false;
+  // Step 4: Debug flags self-initialize via debugFlags.js import (all default false)
 
   // Step 5: Ensure opacity sliders start at full opacity
   if (fillOpacity) fillOpacity.value = '100';
