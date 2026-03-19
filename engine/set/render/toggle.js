@@ -29,8 +29,9 @@ import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
 // Import HUD updater
 import { hud } from '@engine/set/engine/renderer/hud.js';
 
-// Import GPU renderer getter
+// Import GPU renderer getter and shared GPU state
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
+import { gpuState } from '@engine/state/gpu/scene.js';
 
 // Import loop state for backward compatibility
 import { state } from '@engine/state/engine/loop.js';
@@ -61,6 +62,10 @@ function switchToCpuMode() {
   if (gpuGl) {
     const renderer = sceneRenderer();
     if (renderer?.dispose) renderer.dispose();
+
+    // Clear cached GPU renderer so it can be reinitialized later
+    gpuState.renderer = null;
+    gpuState.failed = false;
 
     const loseContext = gpuGl.getExtension('WEBGL_lose_context');
     if (loseContext) loseContext.loseContext();
