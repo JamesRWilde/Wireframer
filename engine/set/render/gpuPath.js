@@ -30,8 +30,7 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { getModelCy, getZHalf, getW, getH } from '@engine/state/render/viewportState.js';
-import { getTheme, getEdgeColor, getFillRgb, getFillOpacity, getWireOpacity } from '@engine/state/render/renderState.js';
-import { lerpColor } from '@engine/get/render/lerpColor.js';
+import { getTheme, getEdgeColor, getFillOpacity, getWireOpacity, getShadeDarkRgb, getShadeBrightRgb } from '@engine/state/render/renderState.js';
 
 // Utility: convert '#RRGGBB' to [r,g,b]
 function hexToRgb(hex) {
@@ -66,12 +65,11 @@ export function gpuPath(gl, meshToRender, morphing) {
   // Use the computed edge color (high contrast) for GPU wire rendering.
   // This ensures wires remain visible regardless of theme fill colors.
   const edgeColor = hexToRgb(getEdgeColor());
-  const fillRgb = getFillRgb();
 
-  // Create a shaded fill palette from the fill color so the model keeps shading,
-  // without relying on theme shade colors that may be too dark/flat.
-  const shadeDark = lerpColor(fillRgb, [0, 0, 0], 0.35);
-  const shadeBright = lerpColor(fillRgb, [255, 255, 255], 0.25);
+  // Use the theme-derived shade colors (same as CPU) so GPU shading matches.
+  // This ensures the fill color matches the HUD RGB-based theme palette.
+  const shadeDark = getShadeDarkRgb();
+  const shadeBright = getShadeBrightRgb();
 
   const gpuDrawn = drawGpuSceneModel(gl, meshToRender, {
     // Theme colors for shading and wire
