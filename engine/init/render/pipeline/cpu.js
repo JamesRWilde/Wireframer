@@ -68,7 +68,11 @@ export function initializeCpuPipeline() {
 
 // Refactored function to apply CPU LOD cap
 export function applyCpuLodCap() {
-  if (!modelState.baseModel) return;
+  // Use the base model if set, otherwise fall back to the active model.
+  // This protects against cases where setActiveModel() is called directly
+  // and baseModel was not updated (e.g. legacy load paths).
+  const baseModel = modelState.baseModel || modelState.model;
+  if (!baseModel) return;
 
   // Ensure the LOD percentage matches the UI slider/last user setting.
   // globalThis.DETAIL_LEVEL is updated by syncRenderToggles() and slider callbacks.
@@ -77,7 +81,7 @@ export function applyCpuLodCap() {
   }
 
   // Recalculate the capped model (only decimates if over the cap)
-  modelState.cpuBaseModel = capModelForCpu(modelState.baseModel);
+  modelState.cpuBaseModel = capModelForCpu(baseModel);
 
   // Debug logging for tracing CPU cap behavior
   console.log('[applyCpuLodCap] Base model verts/edges:', modelState.baseModel?.V?.length, modelState.baseModel?.E?.length);

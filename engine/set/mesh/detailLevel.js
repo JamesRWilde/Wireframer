@@ -38,8 +38,9 @@ import { modelState, setActiveModel } from '@engine/state/render/model.js';
  * 4. Sets the decimated model as active for rendering
  */
 export function detailLevel(percent, name = 'Shape') {
-  // Use CPU_BASE_MODEL if available (capped), fall back to BASE_MODEL
-  const base = modelState.cpuBaseModel || modelState.baseModel;
+  // Use CPU_BASE_MODEL if available (capped), fall back to BASE_MODEL.
+  // If neither exists (legacy path), fall back to whichever model is currently active.
+  const base = modelState.cpuBaseModel || modelState.baseModel || modelState.model;
 
   // Guard: return if no base model is loaded
   if (!base) return;
