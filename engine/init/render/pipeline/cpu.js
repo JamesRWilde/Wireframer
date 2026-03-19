@@ -68,15 +68,21 @@ export function initializeCpuPipeline() {
 
 // Refactored function to apply CPU LOD cap
 export function applyCpuLodCap() {
-  if (modelState.baseModel) {
-    // Recalculate the capped model
-    modelState.cpuBaseModel = capModelForCpu(modelState.baseModel);
+  if (!modelState.baseModel) return;
 
-    // Log the state for debugging
-    console.log('[applyCpuLodCap] Base model:', modelState.baseModel);
-    console.log('[applyCpuLodCap] Capped model:', modelState.cpuBaseModel);
-
-    // Recompute current LOD model from capped base
-    detailLevel(modelState.currentLodPct);
+  // Ensure the LOD percentage matches the UI slider/last user setting.
+  // globalThis.DETAIL_LEVEL is updated by syncRenderToggles() and slider callbacks.
+  if (typeof globalThis.DETAIL_LEVEL === 'number') {
+    modelState.currentLodPct = Math.max(0, Math.min(1, globalThis.DETAIL_LEVEL));
   }
+
+  // Recalculate the capped model (only decimates if over the cap)
+  modelState.cpuBaseModel = capModelForCpu(modelState.baseModel);
+
+  // Debug logging for tracing CPU cap behavior
+  console.log('[applyCpuLodCap] Base model verts/edges:', modelState.baseModel?.V?.length, modelState.baseModel?.E?.length);
+  console.log('[applyCpuLodCap] Capped model verts/edges:', modelState.cpuBaseModel?.V?.length, modelState.cpuBaseModel?.E?.length);
+
+  // Recompute current LOD model from capped base
+  detailLevel(modelState.currentLodPct);
 }
