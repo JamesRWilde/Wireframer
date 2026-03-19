@@ -44,10 +44,12 @@ export const modelState = {
  * This is the ONLY function that should be used to change the active model.
  * It handles:
  * 1. Setting the global MODEL reference
- * 2. Re-evaluating the foreground render mode (GPU vs CPU)
- * 3. Updating vertex/edge count displays in the HUD
- * 4. Resetting telemetry smoothing values for fresh stats
- * 5. Updating the object label in the UI
+ * 2. Updating vertex/edge count displays in the HUD
+ * 3. Resetting telemetry smoothing values for fresh stats
+ * 4. Updating the object label in the UI
+ *
+ * NOTE: This function does NOT modify baseModel, cpuBaseModel, currentLodModel,
+ * or currentLodPct. Those are managed by finalizeModel() and detailLevel().
  *
  * @param {Object|null} model - The mesh object to activate, or null to clear
  *   Expected shape: { V: [[x,y,z],...], F: [[i,j,k,...],...], E: [[i,j],...] }
@@ -58,14 +60,6 @@ export const modelState = {
  *   setActiveModel(null); // Clear the current model
  */
 export function setActiveModel(model, name = '') {
-  // If the active model is changing, clear derived LOD/cap state so we
-  // don't mistakenly reuse a capped model from a previously loaded mesh.
-  if (model !== modelState.model) {
-    modelState.baseModel = null;
-    modelState.cpuBaseModel = null;
-    modelState.currentLodModel = null;
-    modelState.currentLodPct = 1;
-  }
 
   // Step 1: Update the active model
   modelState.model = model;

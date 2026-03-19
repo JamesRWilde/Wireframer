@@ -22,6 +22,7 @@
 
 import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
 import { modelState, setActiveModel } from '@engine/state/render/model.js';
+import { isGpuMode } from '@engine/set/render/renderForeground.js';
 
 /**
  * detailLevel - Sets the LOD detail level for the active model
@@ -38,9 +39,17 @@ import { modelState, setActiveModel } from '@engine/state/render/model.js';
  * 4. Sets the decimated model as active for rendering
  */
 export function detailLevel(percent, name = 'Shape') {
-  // Use CPU_BASE_MODEL if available (capped), fall back to BASE_MODEL.
-  // If neither exists (legacy path), fall back to whichever model is currently active.
-  const base = modelState.cpuBaseModel || modelState.baseModel || modelState.model;
+  // Choose the appropriate base model based on render mode:
+  // - GPU mode: use baseModel (full detail, no CPU cap)
+  // - CPU mode: use cpuBaseModel (capped for performance)
+  let base;
+  if (isGpuMode()) {
+    base = modelState.baseModel;
+  } else {
+    base = modelState.cpuBaseModel || modelState.baseModel;
+  }
+  // Legacy fallback: if neither exists, use currently active model
+  if (!base) base = modelState.model;
 
   // Guard: return if no base model is loaded
   if (!base) return;

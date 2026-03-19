@@ -57,6 +57,9 @@ import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 // Import loop state to maintain backward compatibility
 import { state } from '@engine/state/engine/loop.js';
 
+// Import model state for LOD management
+import { modelState } from '@engine/state/render/model.js';
+
 // Import CPU pipeline initialization helper
 import { initializeCpuPipeline } from '@engine/init/render/pipeline/cpu.js';
 
@@ -123,6 +126,9 @@ export function initRenderPipeline() {
   // Show GPU canvas, hide CPU canvas
   canvasHidden(false);
   canvasCpuHidden(true);
+  
+  // Reset LOD to full detail for GPU mode (GPU should not apply CPU LOD caps)
+  modelState.currentLodPct = 1;
   
   // Debug: log canvas states
   console.log('[initRenderPipeline] Canvas states:', {

@@ -19,6 +19,9 @@ import { setRenderForeground, setIsGpuMode, isGpuMode } from '@engine/set/render
 // Import GPU path function (for WebGL rendering)
 import { gpuPath } from '@engine/set/render/gpuPath.js';
 
+// Import decimation for GPU LOD matching
+import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
+
 // Import CPU pipeline initialization
 import { initializeCpuPipeline, applyCpuLodCap } from '@engine/init/render/pipeline/cpu.js';
 
@@ -37,7 +40,7 @@ import { gpuState } from '@engine/state/gpu/scene.js';
 import { state } from '@engine/state/engine/loop.js';
 
 // Import model state
-import { modelState } from '@engine/state/render/model.js';
+import { modelState, setActiveModel } from '@engine/state/render/model.js';
 
 // Import CPU model capping
 import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
@@ -129,6 +132,14 @@ function switchToGpuMode() {
 
   canvasHidden(false);
   canvasCpuHidden(true);
+
+  // Update modelState.model and HUD telemetry to reflect what GPU will render
+  if (modelState.baseModel) {
+    const modelToShow = modelState.currentLodPct < 1
+      ? decimateByPercent(modelState.baseModel, modelState.currentLodPct)
+      : modelState.baseModel;
+    setActiveModel(modelToShow);
+  }
 
   console.log('[toggleRenderMode] Switched to GPU mode');
   return true;
