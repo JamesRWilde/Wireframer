@@ -36,6 +36,16 @@ import { state } from '@engine/state/engine/loop.js';
 import { getW, getH } from '@engine/state/render/viewportState.js';
 import { trace } from '@engine/state/render/forensicLog.js';
 
+// Import model state to ensure CPU mode uses capped model
+import { modelState } from '@engine/state/render/model.js';
+
+// Import detail level to allow CPU path to react to slider changes
+import { detailLevel } from '@engine/set/mesh/detailLevel.js';
+
+// Keep track of last vertex count and LOD percent to avoid flooding console
+let lastCpuMeshVertCount = -1;
+let lastCpuLodPct = null;
+
 /**
  * cpuPath - Executes the CPU rendering path for a frame
  *
@@ -46,13 +56,35 @@ import { trace } from '@engine/state/render/forensicLog.js';
 export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
   const ctx = globalThis.ctx;
 
+  // Ensure CPU rendering respects the current LOD slider value.
+  // If the slider changed since last frame, re-run detailLevel to update currentLodModel.
+  const lodPct = modelState.currentLodPct ?? 1;
+  if (lodPct !== lastCpuLodPct) {
+    lastCpuLodPct = lodPct;
+    console.log(`[cpuPath] lodPct changed to ${lodPct.toFixed(2)} - recalculating LOD`);
+    detailLevel(lodPct);
+  }
+
+  // Always prefer the CPU-safe pre-capped/LOD model when rendering in CPU mode.
+  // This ensures CPU mode never renders a full-detail (uncapped) model.
+  const cpuMesh = modelState.currentLodModel || modelState.cpuBaseModel || modelState.baseModel || meshToRender;
+
+  const vertCount = cpuMesh?.V?.length ?? 0;
+  if (vertCount !== lastCpuMeshVertCount) {
+    console.log(`[cpuPath] rendering mesh verts=${vertCount} (cpuBase=${modelState.cpuBaseModel?.V?.length ?? 0}, currentLod=${modelState.currentLodModel?.V?.length ?? 0})`);
+    lastCpuMeshVertCount = vertCount;
+  }
+
   // Show CPU canvas, hide GPU canvas
   canvasCpuHidden(false);
   canvasHidden(true);
 
   // Clear the GPU canvas if it rendered last frame (prevent stale artifacts)
-  if (state.gpuSceneDrawnLastFrame) {
-    const _r = sceneRenderer(); if (_r?.gl) sceneCanvas(_r.gl, globalThis.gpuCanvas);
+  if (state.gpuSceneDrawnLastFrame && globalThis.gpuCanvas) {
+    const _r = sceneRenderer(); 
+    if (_r?.gl) {
+      sceneCanvas(_r.gl, globalThis.gpuCanvas);
+    }
     state.gpuSceneDrawnLastFrame = false;
   }
 
@@ -65,8 +97,8 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
   }
 
   // Render the mesh using the unified CPU pipeline
-  const meshEnd = trace('renderMeshUnified', 'render', { verts: meshToRender?.V?.length, tris: meshToRender?.F?.length });
-  renderMeshUnified(meshToRender, ctx);
+  const meshEnd = trace('renderMeshUnified', 'render', { verts: cpuMesh?.V?.length, tris: cpuMesh?.F?.length });
+  renderMeshUnified(cpuMesh, ctx);
   meshEnd({});
 
   return true;

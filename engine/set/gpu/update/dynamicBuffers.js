@@ -30,8 +30,8 @@ export function dynamicBuffers(gl, model, buffers) {
 
   const fillVertexCount = triFaces.length * 3;
   // Allocate new arrays for updated positions and normals
-  const fillPosData = new Float32Array(fillVertexCount * 3);
-  const fillNormalData = new Float32Array(fillVertexCount * 3);
+  const fillPosData = buffers.fillPosData || new Float32Array(fillVertexCount * 3);
+  const fillNormalData = buffers.fillNormalData || new Float32Array(fillVertexCount * 3);
 
   // Populate fill vertex positions and normals
   for (let i = 0; i < triFaces.length; i++) {
@@ -62,6 +62,10 @@ export function dynamicBuffers(gl, model, buffers) {
   gl.bufferData(gl.ARRAY_BUFFER, fillPosData, gl.DYNAMIC_DRAW);
   gl.bindBuffer(gl.ARRAY_BUFFER, buffers.fillNormalBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, fillNormalData, gl.DYNAMIC_DRAW);
+
+  // Cache the arrays for reuse
+  buffers.fillPosData = fillPosData;
+  buffers.fillNormalData = fillNormalData;
 
   // Update fill vertex count for downstream use
   buffers.fillVertexCount = fillVertexCount;

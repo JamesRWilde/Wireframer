@@ -1,3 +1,4 @@
+* Do not constatly kill and restart the server, hot reload is used for most things and if a build is required which is extremely rare then ask the user to restart their own server.
 * Do not confirm plans with user when the next step is clear, continue work until given solution is ready to test without constant prompting to continue.
 * Never ask user to copy and paste and information for which you have access to, this includes but is not limited to code files in the current codebase.
 * Do not ask user to explain current architecture where you could get your answers by inspecting the codebase.

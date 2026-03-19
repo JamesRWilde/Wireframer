@@ -14,6 +14,11 @@
  * @returns {Float32Array} The wireframe vertex position array ([x, y, z] per vertex).
  */
 export function wirePosData(model) {
+  // Validate that all vertices have at least 3 coordinates
+  if (!model.V.every(v => v.length >= 3)) {
+    throw new Error("Invalid vertex data: All vertices must have at least 3 coordinates.");
+  }
+
   // Get the number of vertices in the model
   const vertexCount = model.V.length;
   // Allocate a contiguous array for all vertex positions

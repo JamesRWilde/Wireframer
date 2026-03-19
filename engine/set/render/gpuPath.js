@@ -23,10 +23,6 @@
 // This includes shader compilation, buffer setup, and draw calls
 import { drawSceneModel as drawGpuSceneModel }from '@engine/set/gpu/drawSceneModel.js';
 
-// Import the fallback function to switch to CPU mode when GPU fails
-// This updates the render mode and HUD display
-import { cpuForegroundMode as fallbackToCpuForegroundMode }from '@engine/set/engine/cpuForegroundMode.js';
-
 // Import canvas visibility toggles
 // GPU path shows the GPU canvas and hides the CPU canvas
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
@@ -34,6 +30,18 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { getModelCy, getZHalf, getW, getH } from '@engine/state/render/viewportState.js';
+import { getTheme, getEdgeColor, getFillRgb, getFillOpacity, getWireOpacity } from '@engine/state/render/renderState.js';
+import { lerpColor } from '@engine/get/render/lerpColor.js';
+
+// Utility: convert '#RRGGBB' to [r,g,b]
+function hexToRgb(hex) {
+  const h = (hex || '#000000').replace('#', '');
+  return [
+    Number.parseInt(h.slice(0, 2), 16),
+    Number.parseInt(h.slice(2, 4), 16),
+    Number.parseInt(h.slice(4, 6), 16),
+  ];
+}
 
 /**
  * renderGpuPath - Renders the 3D model using the GPU (WebGL) rendering path
@@ -51,47 +59,57 @@ import { getModelCy, getZHalf, getW, getH } from '@engine/state/render/viewportS
  * 2. Updates canvas visibility based on success/failure
  * 3. Falls back to CPU mode if GPU rendering fails
  */
-import { getFillOpacity, getWireOpacity, getTheme }from '@engine/state/render/renderState.js';
 
-export function gpuPath(meshToRender, morphing) {
+export function gpuPath(gl, meshToRender, morphing) {
   // Call the GPU renderer with all necessary parameters
   // These are gathered from renderState and passed as a config object
-  let gpuDrawn = drawGpuSceneModel(meshToRender, {
+  // Use the computed edge color (high contrast) for GPU wire rendering.
+  // This ensures wires remain visible regardless of theme fill colors.
+  const edgeColor = hexToRgb(getEdgeColor());
+  const fillRgb = getFillRgb();
+
+  // Create a shaded fill palette from the fill color so the model keeps shading,
+  // without relying on theme shade colors that may be too dark/flat.
+  const shadeDark = lerpColor(fillRgb, [0, 0, 0], 0.35);
+  const shadeBright = lerpColor(fillRgb, [255, 255, 255], 0.25);
+
+  const gpuDrawn = drawGpuSceneModel(gl, meshToRender, {
+    // Theme colors for shading and wire
+    theme: {
+      ...getTheme(),
+      shadeDark,
+      shadeBright,
+      wireNear: edgeColor,
+      wireFar: edgeColor,
+    },
+
     // Opacity controls - modulate fill and wire visibility
     fillAlpha: getFillOpacity(),
     wireAlpha: getWireOpacity(),
-    
+
     // Camera parameters - control view and projection
     zoom: getZoom(),
     modelCy: getModelCy(),  // Model vertical center for projection
     zHalf: getZHalf(),      // Half-depth for depth calculations
-    
-    // Rotation matrix - applied to all vertices
-    rotation: getRotation(),
-    
-    // Viewport dimensions
+
+    // Canvas dimensions - required for viewport setup
     width: getW(),
     height: getH(),
-    
-    // Visual parameters
-    theme: getTheme(),       // Color theme for fill/wire
-    lightDir: globalThis.LIGHT_DIR, // Light direction for shading
-    viewDir: globalThis.VIEW_DIR,  // View direction for specular
-    
-    // Dynamic geometry flag - true during morphing for buffer updates
-    dynamic: morphing,
+
+    // Rotation matrix - applied to all vertices
+    rotation: getRotation(),
   });
   
-  // Update canvas visibility based on GPU rendering success
-  // If GPU succeeded: show GPU canvas, hide CPU canvas
-  // If GPU failed: hide GPU canvas, show CPU canvas (for fallback)
-  canvasHidden(!gpuDrawn);
-  canvasCpuHidden(gpuDrawn);
-  
-  // If GPU rendering failed, trigger fallback to CPU mode
-  // This updates foregroundRenderMode so subsequent frames use CPU path
-  if (!gpuDrawn) fallbackToCpuForegroundMode();
-  
-  // Return success/failure status for the frame loop
+  // Update canvas visibility based on rendering success
+  if (gpuDrawn) {
+    canvasHidden(false);
+    canvasCpuHidden(true);
+  } else {
+    // GPU rendering failed - this should be rare if initialization succeeded
+    // We don't fall back to CPU here because the CPU pipeline is not initialized
+    // Just hide the GPU canvas to show nothing rather than stale content
+    canvasHidden(true);
+  }
+
   return gpuDrawn;
 }

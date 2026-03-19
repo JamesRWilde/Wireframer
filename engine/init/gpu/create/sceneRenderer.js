@@ -39,33 +39,13 @@ import { sceneDraw }from '@engine/init/gpu/create/sceneDraw.js';
  * @returns {Object|null} Renderer object with { mode, model, clear, dispose }
  *   or null if WebGL initialization fails
  */
-export function sceneRenderer(canvas) {
-  // Guard against missing canvas
-  if (!canvas) { console.warn('[sceneRenderer] no canvas'); return null; }
-
-  // WebGL context options for optimal rendering performance
-  const glOpts = {
-    alpha: true,                // Allow transparent backgrounds
-    antialias: false,           // Disable AA for performance (manual SSAA)
-    depth: true,                // Enable depth buffer for z-sorting
-    stencil: false,             // No stencil buffer needed
-    premultipliedAlpha: true,   // Better compositing with page
-    preserveDrawingBuffer: true, // Retain buffer to prevent flashing
-    desynchronized: false,       // Sync with compositor for stable frames
-    powerPreference: 'high-performance', // Request discrete GPU if available
-  };
-
-  // Try WebGL2 first, then WebGL1, then experimental fallback
-  const gl =
-    canvas.getContext('webgl2', glOpts) ||
-    canvas.getContext('webgl', glOpts) ||
-    canvas.getContext('experimental-webgl', glOpts);
-
-  // Bail out if no WebGL context available
-  if (!gl) { console.warn('[sceneRenderer] no gl context'); return null; }
-
-  // Store the GL context globally for access by other GPU modules
-  globalThis.gpuGl = gl;
+export function sceneRenderer(gl) {
+  // Added debugging logs to trace WebGL context initialization
+  console.log('[sceneRenderer-init] Initializing WebGL context:', gl);
+  if (!gl) {
+    console.warn('[sceneRenderer-init] No WebGL context provided');
+    return null;
+  }
 
   // Check for 32-bit index support (needed for models with >65535 vertices)
   const supportsUint32 = !!gl.getExtension('OES_element_index_uint') ||
@@ -86,11 +66,12 @@ export function sceneRenderer(canvas) {
   if (!bufferStore) console.warn('[sceneRenderer] bufferStore failed');
 
   // Create the draw API that wraps all GPU rendering operations
-  const drawApi = sceneDraw(gl, canvas, shaderPack, bufferStore);
+  const drawApi = sceneDraw(gl, gl.canvas, shaderPack, bufferStore);
   if (!drawApi) console.warn('[sceneRenderer] drawApi failed');
 
   // Return the engine-owned renderer interface
   return {
+    gl, // Include the WebGL context in the returned object
     mode: 'gpu-scene',
     model: drawApi.model,
     clear: drawApi.clear,

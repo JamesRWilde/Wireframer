@@ -4,49 +4,47 @@
  * PURPOSE:
  *   Coordinates the rendering of all visual elements each frame: background particles
  *   and foreground 3D model. This is the main rendering entry point called by runFrame,
- *   and it handles the decision of what to render and how to measure performance.
+ *   and it handles the timing measurements for telemetry.
  * 
  * ARCHITECTURE ROLE:
- *   Sits between runFrame (which calls this) and the actual renderers (background,
- *   CPU path, GPU path). It manages the rendering order, morph state, and timing
- *   measurements that feed into the telemetry system.
+ *   Sits between runFrame (which calls this) and the active foreground renderer
+ *   (either GPU or CPU path, determined at startup). Manages rendering order,
+ *   morph state, and timing measurements.
  * 
  * RENDERING ORDER:
  *   1. Background particles (always rendered)
  *   2. Morph frame advancement (if morphing)
- *   3. Foreground model (CPU or GPU path)
+ *   3. Foreground model (active pipeline - no checks, just call)
  *   4. Canvas state management
+ * 
+ * NOTE:
+ *   The foreground renderer is selected once at startup via initRenderPipeline().
+ *   There is NO per-frame mode checking - we simply call the active renderer.
  */
 
 "use strict";
 
 // Import the background particle renderer
 // Draws animated ambient particles on the background canvas
-import { background as drawBackground }from '@engine/set/render/draw/background.js';
+import { background as drawBackground } from '@engine/set/render/draw/background.js';
 
-// Import the CPU foreground renderer
-// Draws solid fill and wireframe using Canvas 2D
-import { cpuPath }from '@engine/set/render/cpuPath.js';
-
-// Import the GPU foreground renderer
-// Draws using WebGL for hardware-accelerated rendering
-import { gpuPath as renderGpuPath }from '@engine/set/render/gpuPath.js';
-
-// Import the render mode resolver
-// Determines whether to use GPU or CPU based on WebGL availability
-import { foregroundRenderMode }from '@engine/get/engine/foregroundRenderMode.js';
+// Import the active foreground renderer function pointer
+// This is set to either gpuPath or cpuPath during initialization
+import { getRenderForeground, isGpuMode } from '@engine/set/render/renderForeground.js';
 
 // Import decimation for GPU LOD matching
-import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
+import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
 
-// Import loop state to read the current render mode
-import { state }from '@engine/state/engine/loop.js';
+// Import the forensic trace logger
+// Used to measure and log rendering performance
+import { trace } from '@engine/state/render/forensicLog.js';
 
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU
-import { mixedRenderFlags }from '@engine/set/engine/mixedRenderFlags.js';
+import { mixedRenderFlags } from '@engine/set/engine/mixedRenderFlags.js';
+
+// Import model state to access the current mesh
 import { modelState } from '@engine/state/render/model.js';
-import { trace, mark } from '@engine/state/render/forensicLog.js';
 
 /**
  * renderScene - Renders the complete scene (background + foreground)
@@ -79,7 +77,6 @@ export function scene(nowMs) {
 
   // Step 2: Prepare foreground rendering
   const fgStartMs = performance.now();
-  let drewCpuForeground = false;
 
   // Step 3: Advance morph animation
   if (globalThis.morph?.advanceMorphFrame) globalThis.morph.advanceMorphFrame();
@@ -88,40 +85,35 @@ export function scene(nowMs) {
   const morphing = globalThis.morph?.isMorphing?.() ?? false;
   const baseMesh = morphing ? globalThis.morph?.currentMorph?.() ?? currentModel : currentModel;
 
-  foregroundRenderMode();
-
-  let meshToRender = baseMesh;
-  const lodChanged = modelState.currentLodPct !== 1;
+  // Select mesh based on LOD and morph state
+  // GPU mode uses baseModel with optional LOD decimation
+  // CPU mode uses currentLodModel (which may be pre-decimated)
+  let meshToRender;
   if (morphing) {
     meshToRender = baseMesh;
-  } else if (state.foregroundRenderMode === 'gpu' && modelState.baseModel?.V?.length) {
+  } else if (isGpuMode && modelState.baseModel?.V?.length) {
+    // GPU path: use base model with optional LOD decimation
+    const lodChanged = modelState.currentLodPct !== 1;
     if (lodChanged) {
       meshToRender = decimateByPercent(modelState.baseModel, modelState.currentLodPct);
     } else {
       meshToRender = modelState.baseModel;
     }
   } else {
-    meshToRender = modelState.currentLodModel || baseMesh;
+    // CPU path: prefer the current LOD model (prepared by detailLevel).
+    // Fall back to the capped CPU base model if LOD hasn't been computed yet.
+    meshToRender = modelState.currentLodModel || modelState.cpuBaseModel || baseMesh;
   }
 
-  const triCount = meshToRender?.F?.length ?? 0;
-
-  // Step 5: Render foreground
-  let gpuDrawn = false;
-  if (state.foregroundRenderMode === 'gpu') {
-    const gpuEnd = trace('gpuPath', 'render', { triCount });
-    gpuDrawn = renderGpuPath(meshToRender, morphing);
-    gpuEnd({ drawn: gpuDrawn });
-    if (!gpuDrawn) {
-      const cpuEnd = trace('cpuPath', 'render', { triCount });
-      drewCpuForeground = cpuPath(meshToRender, backgroundOnSeparateCanvas);
-      cpuEnd({});
-    }
-  } else {
-    const cpuEnd = trace('cpuPath', 'render', { triCount });
-    drewCpuForeground = cpuPath(meshToRender, backgroundOnSeparateCanvas);
-    cpuEnd({});
-  }
+  // Step 5: Render foreground using the active pipeline
+  // getRenderForeground() returns the function pointer set during initialization
+  // There is NO fallback - only one pipeline exists and if it fails, nothing renders
+  const renderFn = getRenderForeground();
+  const drewCpuForeground = renderFn(meshToRender, backgroundOnSeparateCanvas, morphing);
+  
+  // For GPU mode, the return value indicates success (true) or failure (false)
+  // For CPU mode, the return value is always true
+  const gpuDrawn = isGpuMode && drewCpuForeground;
 
   mixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn);
 

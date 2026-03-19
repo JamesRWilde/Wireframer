@@ -58,6 +58,9 @@ export function hud(nowMs) {
     stats.push({ el: statsState.statFgMs, val: `L:${light} F:${fill} S:${stroke}` });
   }
 
+  // Add debug logging to verify FPS updates
+  console.log(`[HUD] Updating FPS: ${state.emaFpsFrameIntervalMs > 0.0001 ? Math.round(1000 / state.emaFpsFrameIntervalMs) : '--'}`);
+
   // Write all stats to their DOM elements
   for (const {el, val} of stats) {
     writeStat(el, val);

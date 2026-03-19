@@ -16,13 +16,6 @@
 // Canvas init
 import { canvas } from '@engine/init/render/canvas.js';
 
-// Physics state (self-initializes on import)
-import '@engine/state/render/physicsState.js';
-// Zoom state (self-initializes on import)
-import '@engine/state/render/zoomState.js';
-import { getZoom, setZoom, getZoomMin, setZoomMax } from '@engine/state/render/zoomState.js';
-import { setRotation } from '@engine/state/render/physicsState.js';
-
 // Loader side-effects (sets up globalThis.load)
 import '@engine/init/mesh/load.js';
 
@@ -44,6 +37,7 @@ import { animationFrame } from '@engine/set/engine/frame/animationFrame.js';
 // Rotation
 import { initialize as rotationInitialize } from '@engine/get/render/rotation/initialize.js';
 import { R } from '@engine/state/render/rotationMatrixRef.js';
+import { setRotation } from '@engine/state/render/physicsState.js';
 
 // Render toggles
 import { syncRenderToggles } from '@ui/set/syncRenderToggles.js';
@@ -60,6 +54,9 @@ import { themeControls } from '@engine/init/engine/themeControls.js';
 
 // Renderer toggle
 import { rendererToggle } from '@engine/init/engine/rendererToggle.js';
+
+// Render pipeline initialization (GPU/CPU selection)
+import { initRenderPipeline } from '@engine/init/render/pipeline/init.js';
 
 // Debug overlay (sphere outline + centre cross)
 import { initDebugOverlay, toggleDebugOverlay } from '@engine/get/render/debugOverlay.js';
@@ -124,11 +121,24 @@ export function startApp() {
   // Step 10: Initialize UI theme controls
   themeControls();
 
-  // Step 11: Initialize renderer toggle functionality
-  rendererToggle();
+  // Step 11: Initialize the render pipeline (GPU or CPU based on WebGL availability)
+  // This is a one-time initialization that sets the active renderer
+  console.log('[startApp] Initializing render pipeline');
+  initRenderPipeline();
+  console.log('[startApp] Render pipeline initialized');
 
-  // Step 12: Start the animation loop
-  requestAnimationFrame(animationFrame);
+  // Step 12: Initialize renderer toggle functionality
+  console.log('[startApp] Initializing rendererToggle');
+  rendererToggle();
+  console.log('[startApp] rendererToggle initialized successfully');
+
+  // Step 13: Start the animation loop
+  try {
+    console.log('[startApp] Starting animation loop');
+    requestAnimationFrame(animationFrame);
+  } catch (e) {
+    console.error('[startApp] Failed to start animation loop', e);
+  }
   
 }
 

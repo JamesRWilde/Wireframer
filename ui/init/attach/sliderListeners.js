@@ -21,7 +21,7 @@
 // Import the function that reads slider values and updates global render parameters
 // This syncs FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM to globals
 import { syncRenderToggles }from '@ui/set/syncRenderToggles.js';
-import { mark } from '@engine/state/render/forensicLog.js';
+import { mark, trace } from '@engine/state/render/forensicLog.js';
 
 /**
  * attachSliderListeners - Binds input event handlers to all UI sliders

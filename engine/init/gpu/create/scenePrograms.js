@@ -29,9 +29,19 @@ import { program }from '@engine/init/gpu/create/program.js';
  * @returns {Object} Shader pack with { fillProgram, wireProgram, fillLoc, wireLoc, dispose }
  *   fillLoc/wireLoc are objects mapping uniform/attribute names to GL locations
  */
-export function scenePrograms(gl) {
-  // --- Fill Shader (Blinn-Phong lighting with per-triangle normals) ---
 
+// Cache for compiled shaders to avoid redundant compilation
+const shaderCache = new Map();
+
+export function scenePrograms(gl) {
+  // Check if shaders are already compiled and cached
+  if (shaderCache.has('fillProgram') && shaderCache.has('wireProgram')) {
+    return shaderCache.get('fillProgram');
+  }
+
+  console.log('[scenePrograms] Compiling shaders...');
+
+  // --- Fill Shader (Blinn-Phong lighting with per-triangle normals) ---
   const fillVertSrc = `
     attribute vec3 a_pos;
     attribute vec3 a_normal;
@@ -60,30 +70,25 @@ export function scenePrograms(gl) {
   `;
 
   const fillFragSrc = `
-    precision mediump float;
+    precision mediump float; // Reduced precision for better compatibility
     uniform vec3 u_lightDir;
-    uniform vec3 u_viewDir;
     uniform vec3 u_shadeDark;
     uniform vec3 u_shadeBright;
     uniform float u_alpha;
     varying vec3 v_normal;
     void main() {
       vec3 n = normalize(v_normal);
-      // Diffuse term (Lambertian)
       float ndotl = max(0.0, dot(n, u_lightDir));
-      // Specular term (Blinn-Phong with half-vector)
-      vec3 h = normalize(u_lightDir + u_viewDir);
-      float nh = max(0.0, dot(n, h));
-      float spec = pow(nh, 24.0);
-      // Combine ambient + diffuse + specular
-      float lit = clamp(0.26 + 0.72 * ndotl + 0.18 * spec, 0.0, 1.0);
-      vec3 color = mix(u_shadeDark, u_shadeBright, lit);
+      vec3 color = mix(u_shadeDark, u_shadeBright, ndotl);
       gl_FragColor = vec4(color, u_alpha);
     }
   `;
 
-  // --- Wire Shader (depth-based color interpolation) ---
+  // Compile and link both shader programs
+  const fillProgram = program(gl, fillVertSrc, fillFragSrc);
+  shaderCache.set('fillProgram', fillProgram);
 
+  // --- Wire Shader (depth-based color interpolation) ---
   const wireVertSrc = `
     attribute vec3 a_pos;
     uniform vec3 u_r0;
@@ -109,29 +114,28 @@ export function scenePrograms(gl) {
   `;
 
   const wireFragSrc = `
-    precision mediump float;
+    precision mediump float; // Reduced precision for better compatibility
     uniform vec3 u_wireNear;
     uniform vec3 u_wireFar;
     uniform float u_alpha;
     varying float v_t;
     void main() {
-      // Interpolate wire color from near to far based on depth
-      vec3 c = mix(u_wireNear, u_wireFar, 0.2 + v_t * 0.8);
-      // Fade alpha toward far edges (reduces visual clutter)
-      float edgeAlpha = (0.06 + pow(v_t, 1.35) * 0.94) * u_alpha;
-      gl_FragColor = vec4(c, edgeAlpha);
+      // Interpolate wire color based on depth (v_t) for a subtle fade effect
+      vec3 color = mix(u_wireNear, u_wireFar, v_t);
+      gl_FragColor = vec4(color, u_alpha);
     }
   `;
 
-  // Compile and link both shader programs
-  const fillProgram = program(gl, fillVertSrc, fillFragSrc);
   const wireProgram = program(gl, wireVertSrc, wireFragSrc);
+  shaderCache.set('wireProgram', wireProgram);
 
-  // Resolve all attribute and uniform locations for the fill program
+  // Look up uniform and attribute locations for fill shader
   const fillLoc = {
+    // Attributes
     aPos: gl.getAttribLocation(fillProgram, 'a_pos'),
     aNormal: gl.getAttribLocation(fillProgram, 'a_normal'),
     aUV: gl.getAttribLocation(fillProgram, 'a_uv'),
+    // Uniforms
     uR0: gl.getUniformLocation(fillProgram, 'u_r0'),
     uR1: gl.getUniformLocation(fillProgram, 'u_r1'),
     uR2: gl.getUniformLocation(fillProgram, 'u_r2'),
@@ -146,9 +150,11 @@ export function scenePrograms(gl) {
     uAlpha: gl.getUniformLocation(fillProgram, 'u_alpha'),
   };
 
-  // Resolve all attribute and uniform locations for the wire program
+  // Look up uniform and attribute locations for wire shader
   const wireLoc = {
+    // Attributes
     aPos: gl.getAttribLocation(wireProgram, 'a_pos'),
+    // Uniforms
     uR0: gl.getUniformLocation(wireProgram, 'u_r0'),
     uR1: gl.getUniformLocation(wireProgram, 'u_r1'),
     uR2: gl.getUniformLocation(wireProgram, 'u_r2'),

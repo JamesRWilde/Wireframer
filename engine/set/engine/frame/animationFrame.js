@@ -49,6 +49,10 @@ let __lastRafMs = 0;
  * The browser will call this ~60 times per second (or matching display refresh rate).
  */
 export function animationFrame(nowMs = 0) {
+  // Log at the start of animationFrame
+  console.log('[animationFrame] Executing animationFrame at timestamp:', nowMs);
+  console.log('[animationFrame] Animation frame executed at timestamp:', nowMs);
+
   // Debug logging: measure time between consecutive frames
   // This helps diagnose jank (dropped frames) during development
   // Only logs when DEBUG_RAF global is set to avoid performance overhead

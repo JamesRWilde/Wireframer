@@ -55,3 +55,7 @@ export const bgState = {
 	// Particle opacity multiplier (1.0 = default)
 	opacityPct: 1,
 };
+
+export function throttleBackgroundRendering(lastRenderTime, currentTime) {
+  return (currentTime - lastRenderTime) >= BG_GPU_MIN_INTERVAL_MS;
+}

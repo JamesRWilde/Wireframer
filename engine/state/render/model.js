@@ -19,7 +19,6 @@
 "use strict";
 
 import {statsState} from '@ui/state/stats.js';
-import { foregroundRenderMode }from '@engine/get/engine/foregroundRenderMode.js';
 import { state }from '@engine/state/engine/loop.js';
 
 /**
@@ -62,12 +61,7 @@ export function setActiveModel(model, name = '') {
   // Step 1: Update the active model
   modelState.model = model;
 
-  // Step 2: Re-evaluate the foreground render mode
-  try {
-    foregroundRenderMode();
-  } catch {}
-
-  // Step 3: Update vertex and edge count displays in the HUD
+  // Step 2: Update vertex and edge count displays in the HUD
   const statV = statsState.statV;
   const statE = statsState.statE;
   if (statV) statV.textContent = model?.V?.length ?? '--';

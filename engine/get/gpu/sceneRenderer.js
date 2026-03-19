@@ -33,7 +33,9 @@ import { sceneRenderer as createSceneRenderer } from '@engine/init/gpu/create/sc
  */
 export function sceneRenderer() {
   // Return cached renderer or null if GPU previously failed
-  if (gpuState.renderer || gpuState.failed) return gpuState.renderer;
+  if (gpuState.renderer || gpuState.failed) {
+    return gpuState.renderer;
+  }
 
   // Get the GPU canvas element
   const gpuCanvas = globalThis.gpuCanvas;
@@ -43,11 +45,25 @@ export function sceneRenderer() {
     return null;
   }
 
+  // Create WebGL context from canvas
+  const gl = gpuCanvas.getContext('webgl2') || gpuCanvas.getContext('webgl') || gpuCanvas.getContext('experimental-webgl');
+  if (!gl) {
+    console.warn('[sceneRenderer-get] WebGL not supported');
+    gpuState.failed = true;
+    return null;
+  }
+
+  // Store the WebGL context globally for other modules to access
+  globalThis.gpuGl = gl;
+
   // Create the renderer (compiles shaders, sets up buffers)
-  gpuState.renderer = createSceneRenderer(gpuCanvas);
+  gpuState.renderer = createSceneRenderer(gl);
 
   // Mark as failed if creation returned null
-  if (!gpuState.renderer) { console.warn('[sceneRenderer-get] createSceneRenderer failed'); gpuState.failed = true; }
+  if (!gpuState.renderer) { 
+    console.warn('[sceneRenderer-get] createSceneRenderer failed'); 
+    gpuState.failed = true; 
+  }
 
   return gpuState.renderer;
 }

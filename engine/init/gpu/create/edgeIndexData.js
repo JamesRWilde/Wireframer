@@ -24,6 +24,11 @@ export function edgeIndexData(model, vertexCount, supportsUint32, gl) {
   const useUint32 = vertexCount > 65535 && supportsUint32;
   const edgeData = useUint32 ? new Uint32Array(edgeIndexCount) : new Uint16Array(edgeIndexCount);
 
+  // Validate that all edges are well-formed pairs of vertex indices
+  if (!model.E.every(e => e.length === 2)) {
+    throw new Error("Invalid edge data: Each edge must have exactly 2 vertex indices.");
+  }
+
   // Populate edge index buffer: each edge is two vertex indices
   for (let i = 0; i < model.E.length; i++) {
     const e = model.E[i]; // e: [startVertex, endVertex]

@@ -1,0 +1,82 @@
+/**
+ * cpu.js - CPU Pipeline Initialization
+ * 
+ * PURPOSE:
+ *   Sets up the CPU (Canvas 2D) rendering pipeline. Called when WebGL
+ *   is not available or when switching from GPU to CPU.
+ * 
+ * ARCHITECTURE ROLE:
+ *   Called by initRenderPipeline() and toggleRenderMode(). Configures
+ *   the render function pointer to use CPU rendering and updates UI.
+ */
+
+"use strict";
+
+// Import the render function pointer module
+import { setRenderForeground, setIsGpuMode } from '@engine/set/render/renderForeground.js';
+
+// Import CPU path function
+import { cpuPath } from '@engine/set/render/cpuPath.js';
+
+// Import canvas visibility controls
+import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
+import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
+
+// Import HUD updater
+import { hud } from '@engine/set/engine/renderer/hud.js';
+
+// Import loop state for backward compatibility
+import { state } from '@engine/state/engine/loop.js';
+
+// Import model state for LOD management
+import { modelState } from '@engine/state/render/model.js';
+
+// Import LOD detail level setter
+import { detailLevel } from '@engine/set/mesh/detailLevel.js';
+
+// Import CPU detail cap for performance safety
+import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
+
+/**
+ * initializeCpuPipeline - Sets up CPU (Canvas 2D) rendering path
+ * 
+ * Configures the render function pointer to use CPU rendering and
+ * updates the HUD and canvas visibility accordingly.
+ */
+export function initializeCpuPipeline() {
+  console.log('[initializeCpuPipeline] Setting up CPU pipeline');
+  
+  // Set the render function pointer to CPU path
+  setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {
+    return cpuPath(meshToRender, backgroundOnSeparateCanvas);
+  });
+  setIsGpuMode(false);
+  
+  // Set state for backward compatibility
+  state.foregroundRenderMode = 'cpu';
+  
+  // Update HUD to show CPU mode
+  hud('cpu');
+  
+  // Show CPU canvas, hide GPU canvas
+  canvasHidden(true);
+  canvasCpuHidden(false);
+
+  // Apply CPU LOD cap
+  applyCpuLodCap();
+}
+
+// Refactored function to apply CPU LOD cap
+export function applyCpuLodCap() {
+  if (modelState.baseModel) {
+    // Recalculate the capped model
+    modelState.cpuBaseModel = capModelForCpu(modelState.baseModel);
+
+    // Log the state for debugging
+    console.log('[applyCpuLodCap] Base model:', modelState.baseModel);
+    console.log('[applyCpuLodCap] Capped model:', modelState.cpuBaseModel);
+
+    // Recompute current LOD model from capped base
+    detailLevel(modelState.currentLodPct);
+  }
+}

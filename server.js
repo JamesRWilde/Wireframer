@@ -33,8 +33,10 @@ const path = require('node:path');
 const app = express();
 
 // Server port - hardcoded to 3000 for development consistency
-// Could be made configurable via environment variable for production use
 const port = 3000;
+
+// Middleware to parse JSON bodies for POST requests
+app.use(express.json());
 
 // Configure static file serving from the project root directory
 // __dirname is the directory containing this file (project root)
@@ -42,12 +44,12 @@ const port = 3000;
 // Express automatically sets correct Content-Type headers based on file extensions
 app.use(express.static(path.join(__dirname)));
 
-// Dynamic mesh listing endpoint - scans meshes/ directory for .obj files
-// Returns JSON array of { key, name, obj } objects for the shape selector
+// Reintroducing /api/meshes endpoint
+const fs = require('node:fs');
+
 app.get('/api/meshes', (req, res) => {
-  const fs = require('node:fs');
   const meshesDir = path.join(__dirname, 'meshes');
-  
+
   try {
     const files = fs.readdirSync(meshesDir)
       .filter(f => f.toLowerCase().endsWith('.obj'))
@@ -57,7 +59,7 @@ app.get('/api/meshes', (req, res) => {
         const name = key.replaceAll('-', ' ').replaceAll(/\b\w/g, c => c.toUpperCase());
         return { key, name, obj: `meshes/${filename}` };
       });
-    
+
     res.json(files);
   } catch (err) {
     console.error('[api/meshes] Failed to read meshes directory:', err.message);
@@ -65,35 +67,58 @@ app.get('/api/meshes', (req, res) => {
   }
 });
 
-// Forensic log endpoint - receives batched log entries from browser
-// Writes to wireframer.log in project root for agent inspection
-const logFile = path.join(__dirname, 'wireframer.log');
-const fs = require('node:fs');
-
-// Truncate log file on server start
-fs.writeFileSync(logFile, `=== Log started at ${new Date().toISOString()} ===\n`);
-
-// Accept JSON body for log endpoint
-app.use('/api/log', express.json({ limit: '1mb' }));
-
+// Forensic log endpoint - receives log entries from the client and writes to wireframer.log
 app.post('/api/log', (req, res) => {
   try {
     const entries = req.body;
-    if (!Array.isArray(entries)) return res.status(400).json({ error: 'expected array' });
-    const lines = entries.map(e => {
-      const t = e.t?.toFixed?.(3) ?? e.t;
-      return `[${t}] ${e.cat} ${e.fn} ${e.phase}${e.data ? ' ' + JSON.stringify(e.data) : ''}`;
-    }).join('\n') + '\n';
-    fs.appendFileSync(logFile, lines);
+    const logFile = path.join(__dirname, 'wireframer.log');
+    
+    // Format each entry as a line in the log file
+    const lines = entries.map(entry => {
+      const { t, cat, fn, phase, data } = entry;
+      const dataStr = data ? ` ${JSON.stringify(data)}` : '';
+      return `[${new Date(t).toISOString()}] ${cat}/${fn} ${phase}${dataStr}`;
+    });
+    
+    fs.appendFileSync(logFile, lines.join('\n') + '\n', 'utf8');
     res.json({ ok: true, written: entries.length });
   } catch (err) {
-    console.error('[api/log] write failed:', err.message);
+    console.error('[api/log] Failed to write log:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
 // Start listening for incoming HTTP requests
 // The callback logs the URL so developers know where to open the app
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+// Wrap server startup in a try-catch block to capture runtime errors
+try {
+  app.listen(port, () => {
+    console.log(`Simplified server running at http://localhost:${port}`);
+  });
+} catch (err) {
+  console.error('[ERROR] Server failed to start:', err.message);
+  process.exit(1);
+}
+
+// Added debugging logs to trace server initialization
+console.log('[server.js] Initializing server...');
+console.log('[server.js] Project root directory:', __dirname);
+
+// Enhanced debugging logs for server startup
+console.log('[DEBUG] Initializing server...');
+console.log(`[DEBUG] Serving static files from: ${path.join(__dirname)}`);
+
+// Check if meshes directory exists
+if (!fs.existsSync(path.join(__dirname, 'meshes'))) {
+  console.error('[ERROR] Meshes directory does not exist. Please ensure the "meshes" folder is present in the project root.');
+  process.exit(1);
+}
+
+// Check if log file is writable
+const logFile = path.join(__dirname, 'wireframer.log');
+try {
+  fs.appendFileSync(logFile, '[DEBUG] Log file is writable.\n');
+} catch (err) {
+  console.error('[ERROR] Unable to write to log file:', err.message);
+  process.exit(1);
+}

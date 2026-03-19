@@ -31,13 +31,34 @@ import { trace } from '@engine/state/render/forensicLog.js';
  *   true: GPU rendering completed successfully
  *   false: GPU rendering failed (renderer unavailable or error occurred)
  */
-export function drawSceneModel(model, params) {
+export function drawSceneModel(gl, model, params) {
   // Get the GPU scene renderer (lazy-creates on first call)
-  const renderer = sceneRenderer();
+  const renderer = sceneRenderer(gl);
   if (!renderer) return false;
+
+  // Log GPU rendering parameters for debugging
+  console.log('[drawGpuSceneModel] Rendering parameters:', {
+    verts: model?.V?.length,
+    tris: model?.F?.length,
+    fillAlpha: params.fillAlpha,
+    wireAlpha: params.wireAlpha,
+    zoom: params.zoom,
+    rotation: params.rotation,
+    theme: params.theme,
+  });
+
+  // Log the number of vertices and triangles being rendered
+  console.log('[drawGpuSceneModel] Vertices:', model?.V?.length, 'Triangles:', model?.F?.length);
 
   const gpuEnd = trace('gpuDrawCall', 'gpu', { verts: model?.V?.length, tris: model?.F?.length });
   try {
+    // Log WebGL state changes for debugging
+    console.log('[drawGpuSceneModel] WebGL state before draw:', {
+      depthTest: gl.isEnabled(gl.DEPTH_TEST),
+      blend: gl.isEnabled(gl.BLEND),
+      cullFace: gl.isEnabled(gl.CULL_FACE),
+    });
+
     // Delegate to the renderer's model() method for actual GPU draw calls
     const result = renderer.model(model, params);
     gpuEnd({ drawn: result });

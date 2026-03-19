@@ -43,16 +43,21 @@ export function detailLevel(percent, name = 'Shape') {
 
   // Guard: return if no base model is loaded
   if (!base) return;
-  
+
   // Clamp percentage to valid range (0-1)
   const clampedPercent = Math.max(0, Math.min(1, percent));
-  
+
   // Track the LOD percentage so scene.js can mirror it on GPU
   modelState.currentLodPct = clampedPercent;
-  
+
   // Decimate the base model to the target detail level
   // Always decimate from CPU_BASE_MODEL to avoid quality loss from repeated decimation
   modelState.currentLodModel = decimateByPercent(base, clampedPercent);
+
+  // Debug: log LOD changes for troubleshooting slider behavior
+  console.log(
+    `[detailLevel] pct=${clampedPercent.toFixed(2)} baseVerts=${base?.V?.length ?? 0} lodVerts=${modelState.currentLodModel?.V?.length ?? 0}`
+  );
 
   // Set the decimated model as active for rendering
   setActiveModel(modelState.currentLodModel, name);

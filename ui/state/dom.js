@@ -67,6 +67,13 @@ const statFgMs = document.getElementById('stat-fg-ms');
 const statV = document.getElementById('stat-v');
 const statE = document.getElementById('stat-e');
 
+// Add debugging log to verify statRenderer initialization
+console.log('[dom-state] statRenderer initialized:', statsState.statRenderer);
+// Added detailed logs for statRenderer initialization
+console.log('[dom-state] statRenderer element:', statsState.statRenderer);
+// Added even more detailed logs for statRenderer initialization
+console.log('[dom-state] statRenderer initialization details:', statsState.statRenderer);
+
 // Static seam overlap tuning for dense meshes (engine-owned mesh only).
 export const DENSE_SEAM_EXPAND_PX = 0.56;
 

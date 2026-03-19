@@ -143,9 +143,14 @@ export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays
     // Bind edge index buffer for indexed line drawing
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.edgeIndexBuffer);
 
-    // Draw wireframe edges with additive blending (glow effect)
+    // Draw wireframe edges with standard alpha blending so fill remains visible.
+    // Keep depth testing enabled to avoid drawing wires through the mesh.
+
+    // Debug log for wire visibility
+    console.log('[sceneModel] wire pass', { wireAlpha, edgeCount: buffers.edgeCount });
+
     gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.drawElements(gl.LINES, buffers.edgeCount, buffers.indexType, 0);
   }
 

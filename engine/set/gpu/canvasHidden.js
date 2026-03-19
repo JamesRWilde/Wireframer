@@ -26,10 +26,26 @@
  */
 export function canvasHidden(hidden) {
   const gpuCanvas = globalThis.gpuCanvas;
-  if (!gpuCanvas) return;
+  if (!gpuCanvas) {
+    console.warn('[canvasHidden] gpuCanvas is null');
+    return;
+  }
 
   const visibilityValue = hidden ? 'hidden' : 'visible';
   if (gpuCanvas.style.visibility !== visibilityValue) {
     gpuCanvas.style.visibility = visibilityValue;
+    // Log visibility changes for debugging
+    console.info(`[canvasHidden] GPU canvas visibility set to: ${visibilityValue}`);
   }
+  
+  // Debug: log canvas state
+  console.log('[canvasHidden] Canvas state:', {
+    visibility: gpuCanvas.style.visibility,
+    width: gpuCanvas.width,
+    height: gpuCanvas.height,
+    clientWidth: gpuCanvas.clientWidth,
+    clientHeight: gpuCanvas.clientHeight,
+    display: gpuCanvas.style.display,
+    opacity: gpuCanvas.style.opacity,
+  });
 }

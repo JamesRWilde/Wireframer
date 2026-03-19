@@ -12,6 +12,11 @@
  * @returns {Object} { fillPosData, fillNormalData, fillUVData, fillSourceIndex }
  */
 export function fillBuffers(model, triFaces, triCornerNormals) {
+  // Validate that all triangle faces and vertices are well-formed
+  if (!triFaces.every(tri => tri.length === 3)) {
+    throw new Error("Invalid triangle data: Each face must have exactly 3 vertices.");
+  }
+
   const fillVertexCount = triFaces.length * 3;
   const fillPosData = new Float32Array(fillVertexCount * 3);
   const fillNormalData = new Float32Array(fillVertexCount * 3);

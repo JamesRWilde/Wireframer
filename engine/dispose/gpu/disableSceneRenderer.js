@@ -38,5 +38,6 @@ export function disableSceneRenderer(err) {
   gpuState.failed = true;
 
   // Log the failure for debugging
-  console.warn('Wireframer: GPU scene renderer disabled, falling back to 2D.', err);
+  console.error('GPU renderer failed:', err);
+  console.info('Falling back to CPU rendering.');
 }

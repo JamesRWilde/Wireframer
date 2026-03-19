@@ -45,7 +45,9 @@ import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 export function foregroundRenderMode() {
   // If mode is already resolved (not 'unknown'), return the cached value
   // This avoids repeated detection and ensures consistent behavior
-  if (state.foregroundRenderMode !== 'unknown') return state.foregroundRenderMode;
+  if (state.foregroundRenderMode !== 'unknown') {
+    return state.foregroundRenderMode;
+  }
   
   // Check if GPU renderer is available
   // sceneRenderer returns the GPU renderer if WebGL is available and initialized

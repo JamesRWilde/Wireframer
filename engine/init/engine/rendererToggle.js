@@ -23,7 +23,7 @@
 import {statsState} from '@ui/state/stats.js';
 
 // Import the toggle function
-import { mode }from '@engine/set/engine/renderer/mode.js';
+import { toggleRenderMode } from '@engine/set/render/toggle.js';
 
 // Import GPU renderer getter to check if GPU is available
 import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
@@ -44,13 +44,19 @@ export function rendererToggle() {
   // Get the renderer stat DOM element
   const statRenderer = statsState.statRenderer;
   
+  // Added debugging logs to trace rendererToggle execution
+  console.log('[rendererToggle] Initializing renderer toggle');
   // Guard: if element doesn't exist, nothing to initialize
-  if (!statRenderer) return;
+  if (!statRenderer) {
+    console.warn('[rendererToggle] statRenderer element not found');
+    return;
+  }
   
   // Check if GPU renderer is available
   // If not, we don't enable the toggle (CPU is the only option)
   const renderer = sceneRenderer();
   if (!renderer) {
+    console.warn('[rendererToggle] GPU renderer not available');
     // GPU not supported - leave as static display
     // Add a title to explain why it's not clickable
     statRenderer.title = 'GPU rendering not available';
@@ -61,7 +67,7 @@ export function rendererToggle() {
   
   // Add click event listener to toggle between GPU and CPU modes
   statRenderer.addEventListener('click', () => {
-    mode();
+    toggleRenderMode();
   });
   
   // Add visual styling to indicate it's clickable
