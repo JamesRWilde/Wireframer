@@ -31,9 +31,6 @@ import { seedParticles }from '@engine/set/render/seedParticles.js';
 // Import main-thread particle updater for fallback path
 import { workersUpdateParticles }from '@workers/workersUpdateParticles.js';
 
-// Import particle drawer for main-thread fallback
-import { particles as drawParticlesFn }from '@engine/set/render/draw/particles.js';
-
 // Import background worker initialization
 import { backgroundWorker }from '@engine/init/render/backgroundWorker.js';
 
@@ -55,6 +52,154 @@ let particles = [];
 
 // Track whether the background worker has been initialized
 let workerInitialized = false;
+
+// Reusable bucket arrays to avoid per-frame allocations (16 buckets)
+let particleBuckets = null;
+
+// Color parsing cache (Map: colorString -> [r,g,b])
+const colorCache = new Map();
+
+/**
+ * parseColorToRgb - Parses a color string to RGB components (0-255)
+ * @param {string} color - Hex #RRGGBB or rgba() format
+ * @returns {[number, number, number]} RGB values
+ */
+function parseColorToRgb(color) {
+  let r = 0, g = 0, b = 0;
+  if (color.startsWith('#')) {
+    r = Number.parseInt(color.slice(1, 3), 16);
+    g = Number.parseInt(color.slice(3, 5), 16);
+    b = Number.parseInt(color.slice(5, 7), 16);
+  } else {
+    const match = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(color);
+    if (match) {
+      r = Number(match[1]);
+      g = Number(match[2]);
+      b = Number(match[3]);
+    }
+  }
+  return [r, g, b];
+}
+
+/**
+ * getCachedColorRgb - Gets RGB for a color, using cache if available
+ * @param {string} color - Color string to parse
+ * @returns {[number, number, number]} Cached or computed RGB
+ */
+function getCachedColorRgb(color) {
+  let rgb = colorCache.get(color);
+  if (!rgb) {
+    rgb = parseColorToRgb(color);
+    colorCache.set(color, rgb);
+  }
+  return rgb;
+}
+
+/**
+ * ensureBucketArrays - Ensures bucket arrays exist and are cleared
+ * @returns {Array<Array<number>>} 16 empty arrays for bucketing
+ */
+function ensureBucketArrays() {
+  if (!particleBuckets) {
+    particleBuckets = new Array(16);
+    for (let i = 0; i < 16; i++) {
+      particleBuckets[i] = [];
+    }
+  }
+  for (let i = 0; i < 16; i++) {
+    particleBuckets[i].length = 0;
+  }
+  return particleBuckets;
+}
+
+/**
+ * renderWorkerParticles - Renders particles from background worker (optimized)
+ * @param {CanvasRenderingContext2D} ctx - Canvas context
+ * @param {Float32Array} data - Packed particle data [x, y, size, alpha, ...]
+ * @param {number} count - Number of particles
+ * @param {number} opacity - Global opacity multiplier
+ * @param {string} particleColor - Particle color string
+ * @param {string} themeMode - 'light' or 'dark'
+ */
+function renderWorkerParticles(ctx, data, count, opacity, particleColor, themeMode) {
+  if (count === 0) return;
+
+  const [baseR, baseG, baseB] = getCachedColorRgb(particleColor);
+  const buckets = ensureBucketArrays();
+
+  // Bucket particles by alpha (store as flat [x, y, size])
+  for (let i = 0; i < count; i++) {
+    const idx = i * 4;
+    const x = data[idx];
+    const y = data[idx + 1];
+    const size = data[idx + 2];
+    const alpha = Math.max(0, Math.min(1, data[idx + 3] * opacity));
+    if (alpha <= 0) continue;
+    const bucketIdx = Math.min(15, Math.floor(alpha * 16));
+    const bucket = buckets[bucketIdx];
+    bucket.push(x, y, size);
+  }
+
+  // Render each bucket with fillRect (faster than arc)
+  for (let bucketIdx = 0; bucketIdx < 16; bucketIdx++) {
+    const bucket = buckets[bucketIdx];
+    const bucketLen = bucket.length;
+    if (bucketLen === 0) continue;
+
+    const alpha = (bucketIdx + 0.5) / 16;
+    ctx.fillStyle = `rgba(${baseR},${baseG},${baseB},${alpha})`;
+
+    for (let j = 0; j < bucketLen; j += 3) {
+      const x = bucket[j];
+      const y = bucket[j + 1];
+      const size = bucket[j + 2];
+      const radius = size * 0.5;
+      ctx.fillRect(x - radius, y - radius, size, size);
+    }
+  }
+}
+
+/**
+ * renderMainThreadParticles - Renders particles on main thread (optimized)
+ * @param {CanvasRenderingContext2D} ctx - Canvas context
+ * @param {Array<Object>} particles - Particle array with x, y, size, alpha
+ * @param {number} opacityScale - Opacity multiplier
+ * @param {number} themeAlphaBoost - Theme-specific alpha boost
+ * @param {string} particleColor - Particle color string
+ */
+function renderMainThreadParticles(ctx, particles, opacityScale, themeAlphaBoost, particleColor) {
+  if (particles.length === 0) return;
+
+  const [baseR, baseG, baseB] = getCachedColorRgb(particleColor);
+  const buckets = ensureBucketArrays();
+
+  // Bucket particles
+  for (const p of particles) {
+    const alpha = Math.max(0, Math.min(1, p.alpha * opacityScale * themeAlphaBoost));
+    if (alpha <= 0) continue;
+    const bucketIdx = Math.min(15, Math.floor(alpha * 16));
+    const bucket = buckets[bucketIdx];
+    bucket.push(p.x, p.y, p.size);
+  }
+
+  // Render buckets
+  for (let bucketIdx = 0; bucketIdx < 16; bucketIdx++) {
+    const bucket = buckets[bucketIdx];
+    const bucketLen = bucket.length;
+    if (bucketLen === 0) continue;
+
+    const alpha = (bucketIdx + 0.5) / 16;
+    ctx.fillStyle = `rgba(${baseR},${baseG},${baseB},${alpha})`;
+
+    for (let j = 0; j < bucketLen; j += 3) {
+      const x = bucket[j];
+      const y = bucket[j + 1];
+      const size = bucket[j + 2];
+      const radius = size * 0.5;
+      ctx.fillRect(x - radius, y - radius, size, size);
+    }
+  }
+}
 
 /**
  * background - Renders the animated particle background
@@ -98,18 +243,9 @@ export function background(nowMs) {
     // Render particles received from worker
     const pending = pendingWorkerParticles();
     if (pending) {
-      const { data, count } = pending;
       ctx.save();
-      // Use multiply blend for light theme, screen for dark
       ctx.globalCompositeOperation = getThemeMode() === 'light' ? 'multiply' : 'screen';
-      for (let i = 0; i < count; i++) {
-        const idx = i * 4; // 4 floats per particle: x, y, size, alpha
-        ctx.globalAlpha = data[idx + 3] * opacity;
-        ctx.fillStyle = particleColor;
-        ctx.beginPath();
-        ctx.arc(data[idx], data[idx + 1], data[idx + 2], 0, Math.PI * 2);
-        ctx.fill();
-      }
+      renderWorkerParticles(ctx, pending.data, pending.count, opacity, particleColor, getThemeMode());
       ctx.restore();
     }
 
@@ -130,7 +266,7 @@ export function background(nowMs) {
   // Draw particles with appropriate blend mode
   ctx.save();
   ctx.globalCompositeOperation = getThemeMode() === 'light' ? 'multiply' : 'screen';
-  drawParticlesFn(ctx, particles, particleColor, opacityScale, themeAlphaBoost);
+  renderMainThreadParticles(ctx, particles, opacityScale, themeAlphaBoost, particleColor);
   ctx.restore();
 
   if (particles.length === 0) console.debug('[drawBackground] no particles to draw');
