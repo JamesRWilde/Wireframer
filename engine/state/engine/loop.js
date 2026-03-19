@@ -70,7 +70,7 @@ export const state = {
  * 
  * Currently set to 0 (uncapped) for maximum smoothness.
  */
-export const MAX_FPS = 0;
+export const MAX_FPS = 60; // Cap rendering to 60 FPS to reduce GPU/CPU load (background particles, etc.)
 
 /**
  * MIN_FRAME_INTERVAL_MS - Minimum time between frames in milliseconds
