@@ -50,6 +50,19 @@ export function detailLevel(percent, name = 'Shape') {
   // Track the LOD percentage so scene.js can mirror it on GPU
   modelState.currentLodPct = clampedPercent;
 
+  // If the user requests full detail, avoid unnecessary decimation and
+  // ensure the active LOD model is the full base model (no intermediate copy).
+  if (clampedPercent >= 0.999) {
+    modelState.currentLodModel = base;
+
+    console.log(
+      `[detailLevel] pct=1.00 baseVerts=${base?.V?.length ?? 0} (full detail)
+`);
+
+    setActiveModel(modelState.currentLodModel, name);
+    return;
+  }
+
   // Decimate the base model to the target detail level
   // Always decimate from CPU_BASE_MODEL to avoid quality loss from repeated decimation
   modelState.currentLodModel = decimateByPercent(base, clampedPercent);
