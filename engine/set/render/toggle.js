@@ -57,20 +57,18 @@ export function toggleRenderMode() {
 function switchToCpuMode() {
   console.log('[toggleRenderMode] Switching from GPU to CPU');
 
-  // Dispose previous GPU pipeline and context (if any)
-  const gpuGl = globalThis.gpuGl;
-  if (gpuGl) {
-    const renderer = sceneRenderer();
-    if (renderer?.dispose) renderer.dispose();
+  // Dispose previous GPU pipeline (if any) so we can reinitialize cleanly later
+  const renderer = sceneRenderer();
+  if (renderer?.dispose) renderer.dispose();
 
-    // Clear cached GPU renderer so it can be reinitialized later
-    gpuState.renderer = null;
-    gpuState.failed = false;
+  // Clear cached GPU renderer so it can be reinitialized later
+  gpuState.renderer = null;
+  gpuState.failed = false;
 
-    const loseContext = gpuGl.getExtension('WEBGL_lose_context');
-    if (loseContext) loseContext.loseContext();
-  }
-  globalThis.gpuGl = null;
+  // NOTE: We intentionally do NOT call WEBGL_lose_context here because some
+  // browsers will not allow re-creating a new WebGL context after a context
+  // has been lost. Keeping the canvas and letting the context persist allows
+  // toggling back to GPU mode reliably.
 
   // Initialize CPU pipeline and ensure CPU LOD cap is applied
   initializeCpuPipeline();
@@ -112,11 +110,12 @@ function switchToGpuMode() {
   globalThis.gpuGl = gl;
   globalThis.gpuCanvas = gpuCanvas;
 
-  const renderer = sceneRenderer(gl);
+  // Ensure we attempt renderer creation even if a prior failure was recorded.
+  gpuState.failed = false;
+
+  const renderer = sceneRenderer();
   if (!renderer) {
     console.warn('[toggleRenderMode] GPU renderer creation failed');
-    delete globalThis.gpuGl;
-    delete globalThis.gpuCanvas;
     return false;
   }
 

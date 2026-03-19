@@ -57,12 +57,18 @@ export function sceneRenderer() {
   globalThis.gpuGl = gl;
 
   // Create the renderer (compiles shaders, sets up buffers)
-  gpuState.renderer = createSceneRenderer(gl);
+  try {
+    gpuState.renderer = createSceneRenderer(gl);
+  } catch (err) {
+    // CreateSceneRenderer can throw when shader compilation/linking fails.
+    console.error('[sceneRenderer-get] createSceneRenderer threw:', err);
+    gpuState.renderer = null;
+  }
 
   // Mark as failed if creation returned null
-  if (!gpuState.renderer) { 
-    console.warn('[sceneRenderer-get] createSceneRenderer failed'); 
-    gpuState.failed = true; 
+  if (!gpuState.renderer) {
+    console.warn('[sceneRenderer-get] createSceneRenderer failed');
+    gpuState.failed = true;
   }
 
   return gpuState.renderer;

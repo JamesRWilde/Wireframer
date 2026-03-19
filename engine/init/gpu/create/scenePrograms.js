@@ -31,12 +31,14 @@ import { program }from '@engine/init/gpu/create/program.js';
  */
 
 // Cache for compiled shaders to avoid redundant compilation
-const shaderCache = new Map();
+// - Uses WeakMap keyed by WebGLRenderingContext to avoid retaining old contexts
+// - Stores the full shaderPack object (including uniform locations), not just program handles
+const shaderCache = new WeakMap();
 
 export function scenePrograms(gl) {
-  // Check if shaders are already compiled and cached
-  if (shaderCache.has('fillProgram') && shaderCache.has('wireProgram')) {
-    return shaderCache.get('fillProgram');
+  // Return cached shader pack if already built for this GL context
+  if (shaderCache.has(gl)) {
+    return shaderCache.get(gl);
   }
 
   console.log('[scenePrograms] Compiling shaders...');
@@ -86,7 +88,6 @@ export function scenePrograms(gl) {
 
   // Compile and link both shader programs
   const fillProgram = program(gl, fillVertSrc, fillFragSrc);
-  shaderCache.set('fillProgram', fillProgram);
 
   // --- Wire Shader (depth-based color interpolation) ---
   const wireVertSrc = `
@@ -127,7 +128,6 @@ export function scenePrograms(gl) {
   `;
 
   const wireProgram = program(gl, wireVertSrc, wireFragSrc);
-  shaderCache.set('wireProgram', wireProgram);
 
   // Look up uniform and attribute locations for fill shader
   const fillLoc = {
@@ -168,7 +168,8 @@ export function scenePrograms(gl) {
     uAlpha: gl.getUniformLocation(wireProgram, 'u_alpha'),
   };
 
-  return {
+  // Build the shader pack and cache it so we don't recompile shaders every time
+  const shaderPack = {
     fillProgram,
     wireProgram,
     fillLoc,
@@ -179,6 +180,12 @@ export function scenePrograms(gl) {
     dispose() {
       gl.deleteProgram(fillProgram);
       gl.deleteProgram(wireProgram);
+      // Remove from cache so a new shader pack will be created if the GL context is reinitialized
+      shaderCache.delete(gl);
     },
   };
+
+  shaderCache.set(gl, shaderPack);
+
+  return shaderPack;
 }
