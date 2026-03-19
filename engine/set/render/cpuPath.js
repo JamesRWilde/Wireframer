@@ -53,7 +53,7 @@ let lastCpuLodPct = null;
  * @param {boolean} [backgroundOnSeparateCanvas] - Whether background renders on a separate canvas
  * @returns {boolean} true if the CPU path was executed
  */
-export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
+export function cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing) {
   const ctx = globalThis.ctx;
 
   // Ensure CPU rendering respects the current LOD slider value.
@@ -65,9 +65,11 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas) {
     detailLevel(lodPct);
   }
 
-  // Always prefer the CPU-safe pre-capped/LOD model when rendering in CPU mode.
-  // This ensures CPU mode never renders a full-detail (uncapped) model.
-  const cpuMesh = modelState.currentLodModel || modelState.cpuBaseModel || modelState.baseModel || meshToRender;
+  // If morphing, use the morph interpolated mesh directly.
+  // Otherwise, prefer the CPU LOD-capped model to avoid rendering full-detail geometry.
+  const cpuMesh = morphing
+    ? meshToRender
+    : (modelState.currentLodModel || modelState.cpuBaseModel || modelState.baseModel || meshToRender);
 
   const vertCount = cpuMesh?.V?.length ?? 0;
   if (vertCount !== lastCpuMeshVertCount) {

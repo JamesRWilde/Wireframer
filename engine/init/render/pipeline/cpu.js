@@ -48,7 +48,7 @@ export function initializeCpuPipeline() {
   
   // Set the render function pointer to CPU path
   setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {
-    return cpuPath(meshToRender, backgroundOnSeparateCanvas);
+    return cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing);
   });
   setIsGpuMode(false);
   
