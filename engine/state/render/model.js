@@ -58,6 +58,15 @@ export const modelState = {
  *   setActiveModel(null); // Clear the current model
  */
 export function setActiveModel(model, name = '') {
+  // If the active model is changing, clear derived LOD/cap state so we
+  // don't mistakenly reuse a capped model from a previously loaded mesh.
+  if (model !== modelState.model) {
+    modelState.baseModel = null;
+    modelState.cpuBaseModel = null;
+    modelState.currentLodModel = null;
+    modelState.currentLodPct = 1;
+  }
+
   // Step 1: Update the active model
   modelState.model = model;
 
