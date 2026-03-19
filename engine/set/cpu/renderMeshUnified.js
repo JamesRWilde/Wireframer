@@ -28,7 +28,6 @@ import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model
 import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/resolve/triangleNormalCpu.js';
 import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/compute/triangleCpu.js';
 import { getEdgeColor, getFillOpacity, getWireOpacity }from '@engine/state/render/renderState.js';
-import { setCpuSortMs, setCpuLightMs, setCpuFillMs, setCpuStrokeMs }from '@engine/state/render/debugFlags.js';
 
 // Pre-allocated sort scratch space (reused across frames to avoid per-frame allocation)
 let sortZ = null;    // Float32Array of z-depths per triangle
@@ -145,9 +144,7 @@ export function renderMeshUnified(model, ctx) {
   const triCount = triFaces.length;
 
   // ── Telemetry: sort ──
-  performance.mark('cpu-sort-start');
   const sortedIndices = sortTrianglesByDepth(triFaces, T, triCount);
-  performance.mark('cpu-sort-end');
   performance.measure('cpu-sort', 'cpu-sort-start', 'cpu-sort-end');
 
   // ── Telemetry: per-phase timing ──

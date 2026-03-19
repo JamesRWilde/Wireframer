@@ -41,8 +41,6 @@ export function scenePrograms(gl) {
     return shaderCache.get(gl);
   }
 
-  console.log('[scenePrograms] Compiling shaders...');
-
   // --- Fill Shader (Blinn-Phong lighting with per-triangle normals) ---
   const fillVertSrc = `
     attribute vec3 a_pos;

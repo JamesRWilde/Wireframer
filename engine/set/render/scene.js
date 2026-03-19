@@ -35,10 +35,6 @@ import { getRenderForeground, isGpuMode } from '@engine/set/render/renderForegro
 // Import decimation for GPU LOD matching
 import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
 
-// Import the forensic trace logger
-// Used to measure and log rendering performance
-import { trace } from '@engine/state/render/forensicLog.js';
-
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU
 import { mixedRenderFlags } from '@engine/set/engine/mixedRenderFlags.js';
@@ -69,11 +65,9 @@ export function scene(nowMs) {
   }
 
   // Step 1: Render background particles
-  const bgEnd = trace('background', 'render');
   const bgStartMs = performance.now();
   const backgroundOnSeparateCanvas = drawBackground(nowMs) === true;
   const bgMs = performance.now() - bgStartMs;
-  bgEnd({ ms: bgMs });
 
   // Step 2: Prepare foreground rendering
   const fgStartMs = performance.now();

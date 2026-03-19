@@ -25,7 +25,6 @@
 // Import the runFrame function that performs the actual per-frame work
 // This includes physics updates, rendering, and telemetry updates
 import {run}from '@engine/set/engine/frame/run.js';
-import { getDebugRaf } from '@engine/state/render/debugFlags.js';
 
 // Frame state flags (gpuSceneDrawnLastFrame, cpuForegroundDrawnOnMainCanvas)
 // are now on the shared loop state object imported from engine/state/engine/loop.js
@@ -48,19 +47,7 @@ let __lastRafMs = 0;
  * 
  * The browser will call this ~60 times per second (or matching display refresh rate).
  */
-export function animationFrame(nowMs = 0) {
-  // Log at the start of animationFrame
-  console.log('[animationFrame] Executing animationFrame at timestamp:', nowMs);
-  console.log('[animationFrame] Animation frame executed at timestamp:', nowMs);
-
-  // Debug logging: measure time between consecutive frames
-  // This helps diagnose jank (dropped frames) during development
-  // Only logs when DEBUG_RAF global is set to avoid performance overhead
-  if (__lastRafMs) {
-    const diff = nowMs - __lastRafMs;
-    if (getDebugRaf()) console.log('[frame] rAF interval', diff.toFixed(2));
-  }
-  
+export function animationFrame(nowMs = 0) {  
   // Store current timestamp for next frame's interval calculation
   __lastRafMs = nowMs;
   

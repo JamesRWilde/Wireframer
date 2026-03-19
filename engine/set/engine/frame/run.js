@@ -51,9 +51,6 @@ import {updateDebugOverlay}from '@engine/render/debugOverlay.js';
 // Import render mode flag (for telemetry display)
 import { isGpuMode } from '@engine/set/render/renderForeground.js';
 
-// Forensic logging
-import { trace, mark } from '@engine/state/render/forensicLog.js';
-
 /**
  * runFrame - Executes all operations for a single animation frame
  * 
@@ -64,14 +61,12 @@ export function run(nowMs = 0) {
   // Record frame start time for performance measurement
   const frameStartMs = performance.now();
 
-  // Log at the start of runFrame
-  console.log('[runFrame] Executing runFrame at timestamp:', nowMs);
+
 
   // Check if this frame should be skipped due to FPS limiting
   // Returns frame interval in ms, or null if frame should be skipped
   const frameIntervalMs = shouldRunFrame(nowMs);
   if (frameIntervalMs === null) {
-    mark('frame-skip', 'frame', { reason: 'fps-limit' });
     return;
   }
 
@@ -81,14 +76,9 @@ export function run(nowMs = 0) {
 
   // Increment frame counter
   state.RENDER_FRAME_ID++;
-  const fid = state.RENDER_FRAME_ID;
-
-  const frameEnd = trace('frame', 'frame', { fid });
 
   // Step 1: Update rotation physics
-  const physEnd = trace('physics', 'physics', { fid });
   const physMs = physics();
-  physEnd({ ms: physMs });
 
   // Step 2: Check frame budget and adjust quality level
   budget();
@@ -112,12 +102,6 @@ export function run(nowMs = 0) {
   hud(nowMs);
 
   // Update the debug overlay with telemetry metrics
-  console.log('[run] Calling updateDebugOverlay with metrics:', {
-    fps: 1000 / frameMs,
-    frameMs,
-    renderer: isGpuMode ? 'gpu' : 'cpu',
-  });
-
   updateDebugOverlay({
     fps: 1000 / frameMs, // Calculate FPS from frame time
     frameMs,
@@ -126,12 +110,7 @@ export function run(nowMs = 0) {
 
   // Update frame loop state for next frame's canvas management
   state.cpuForegroundDrawnOnMainCanvas = drewCpuForeground && backgroundOnSeparateCanvas;
-
-  frameEnd({ totalMs: frameMs, bgMs, fgMs, physMs });
 }
-
-// Enable debug logging for frame timing
-console.log('[runFrame] Debug logging enabled');
 
 /**
  * runFrame - Executes all operations for a single animation frame
@@ -140,45 +119,23 @@ console.log('[runFrame] Debug logging enabled');
  *   Used for timing calculations and animation interpolation
  */
 export function runFrame(nowMs = 0) {
-  const start = performance.now();
-
-  // Log at the start of runFrame
-  console.log('[runFrame] Executing runFrame at timestamp:', nowMs);
 
   // Step 1: Check if frame should run (FPS limiting)
   const frameIntervalMs = shouldRunFrame(nowMs);
   if (!frameIntervalMs) return;
-  console.log(`[runFrame] Frame throttled, interval: ${frameIntervalMs}ms`);
 
   // Step 2: Update rotation physics
-  const physicsStart = performance.now();
   physics(state);
-  console.log(`[runFrame] Physics update took ${performance.now() - physicsStart}ms`);
 
   // Step 3: Check frame budget and adjust quality
-  const budgetStart = performance.now();
   budget(state);
-  console.log(`[runFrame] Budget adjustment took ${performance.now() - budgetStart}ms`);
 
   // Step 4: Render scene (background + foreground)
-  const renderStart = performance.now();
   scene(state);
-  console.log(`[runFrame] Scene rendering took ${performance.now() - renderStart}ms`);
 
   // Step 5: Collect and update telemetry
-  const telemetryStart = performance.now();
   telemetryState(state);
-  console.log(`[runFrame] Telemetry update took ${performance.now() - telemetryStart}ms`);
 
   // Step 6: Update the telemetry HUD display
-  const hudStart = performance.now();
   hud(state);
-  console.log(`[runFrame] HUD update took ${performance.now() - hudStart}ms`);
-
-  // Log frame interval and rendering times
-  console.log(`[runFrame] Frame interval: ${frameIntervalMs}ms`);
-  console.log(`[runFrame] Foreground rendering time: ${fgMs}ms`);
-  console.log(`[runFrame] Background rendering time: ${bgMs}ms`);
-
-  console.log(`[runFrame] Total frame time: ${performance.now() - start}ms`);
 }

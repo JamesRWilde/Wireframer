@@ -25,18 +25,13 @@ import { reorthogonalize } from '@engine/get/render/reorthogonalize.js';
 import { state } from '@engine/state/engine/loop.js';
 import {
   getRotation, setRotation,
-  getWx, setWx, getWy, setWy, getWz, setWz,
-  getAutoWx, getAutoWy, getAutoWz,
+  getWx, getWy, getWz, 
   setAutoWx, setAutoWy, setAutoWz,
-  isDragging, setDragging,
+  isDragging, 
   getHoldRotationFrames, decrementHoldRotationFrames,
   getAxisAngleX, setAxisAngleX, getAxisAngleY, setAxisAngleY,
   applyFriction, easeTowardAuto,
 } from '@engine/state/render/physicsState.js';
-
-// Debug flag — read from globalThis since it's set by UI toggle
-// (debug flags will get their own state module later)
-import { getDebugLogPhysics } from '@engine/state/render/debugFlags.js';
 
 /**
  * physics - Updates rotation physics for the current frame.
@@ -84,26 +79,14 @@ export function physics() {
       setAxisAngleX(getAxisAngleX() + 0.00075);
       setAxisAngleY(getAxisAngleY() + 0.00052);
 
-      const speed = 0.010;
+      const speed = 0.01;
       const ax = Math.sin(getAxisAngleX());
       const ay = Math.sin(getAxisAngleY());
       const az = Math.cos(getAxisAngleX()) * Math.cos(getAxisAngleY());
-      const len = Math.sqrt(ax*ax + ay*ay + az*az);
+      const len = Math.hypot(ax, ay, az);
       setAutoWx((ax / len) * speed);
       setAutoWy((ay / len) * speed);
       setAutoWz((az / len) * speed);
-
-      // Debug logging
-      if (getDebugLogPhysics()) {
-        console.log('[physics] wx,wy,wz',
-                    getWx().toFixed(3),
-                    getWy().toFixed(3),
-                    getWz().toFixed(3));
-        console.log('[physics] R row0',
-                    getRotation()[0].toFixed(3),
-                    getRotation()[1].toFixed(3),
-                    getRotation()[2].toFixed(3));
-      }
     }
   }
 

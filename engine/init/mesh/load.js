@@ -38,7 +38,6 @@ import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
 import { edgesFromFacesRuntime }from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { modelState, setActiveModel } from '@engine/state/render/model.js';
-import { trace } from '@engine/state/render/forensicLog.js';
 
 // Register globally so any consumer can invoke it without circular imports
 if (!globalThis.edgesFromFacesRuntime) {
@@ -176,8 +175,6 @@ export function load(mesh, name = 'Shape', options = {}) {
     meshType = 'OBJ',
   } = options || {};
 
-  const loadEnd = trace('meshLoad', 'mesh', { name, verts: mesh?.V?.length, faces: mesh?.F?.length });
-
   // Step 1: Validate mesh structure
   validationResult(mesh, name, meshFileName, meshType);
 
@@ -233,8 +230,7 @@ export function load(mesh, name = 'Shape', options = {}) {
   } catch (err) {
     console.warn('[load] setActiveModel failed', err);
   }
-
-  loadEnd({ verts: newModelCopy?.V?.length, tris: newModelCopy?.F?.length });
+  
   return newModelCopy;
 }
 

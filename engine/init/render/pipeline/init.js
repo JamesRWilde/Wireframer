@@ -73,13 +73,10 @@ import { initializeCpuPipeline } from '@engine/init/render/pipeline/cpu.js';
  * @returns {boolean} true if GPU mode was initialized, false if CPU mode
  */
 export function initRenderPipeline() {
-  console.log('[initRenderPipeline] Starting render pipeline initialization');
-  
   // Get the GPU canvas element
   const gpuCanvas = globalThis.gpuCanvas;
   
   if (!gpuCanvas) {
-    console.warn('[initRenderPipeline] No GPU canvas element, defaulting to CPU');
     initializeCpuPipeline();
     return false;
   }
@@ -90,7 +87,6 @@ export function initRenderPipeline() {
              gpuCanvas.getContext('experimental-webgl');
   
   if (!gl) {
-    console.warn('[initRenderPipeline] WebGL not supported, using CPU pipeline');
     initializeCpuPipeline();
     return false;
   }
@@ -99,17 +95,14 @@ export function initRenderPipeline() {
   globalThis.gpuGl = gl;
   
   // Try to initialize GPU renderer
-  console.log('[initRenderPipeline] WebGL available, initializing GPU pipeline');
   const renderer = sceneRenderer(gl);
   
   if (!renderer) {
-    console.warn('[initRenderPipeline] GPU renderer creation failed, falling back to CPU');
     initializeCpuPipeline();
     return false;
   }
   
   // GPU pipeline successfully initialized
-  console.log('[initRenderPipeline] GPU pipeline initialized successfully');
   
   // Set the render function pointer to GPU path
   setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {
@@ -129,12 +122,6 @@ export function initRenderPipeline() {
   
   // Reset LOD to full detail for GPU mode (GPU should not apply CPU LOD caps)
   modelState.currentLodPct = 1;
-  
-  // Debug: log canvas states
-  console.log('[initRenderPipeline] Canvas states:', {
-    gpuCanvas: gpuCanvas ? { exists: true, visibility: gpuCanvas.style.visibility, width: gpuCanvas.width, height: gpuCanvas.height } : null,
-    fgCanvas: globalThis.fgCanvas ? { exists: true, display: globalThis.fgCanvas.style.display, width: globalThis.fgCanvas.width, height: globalThis.fgCanvas.height } : null,
-  });
   
   return true;
 }

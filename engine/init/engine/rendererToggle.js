@@ -44,11 +44,8 @@ export function rendererToggle() {
   // Get the renderer stat DOM element
   const statRenderer = statsState.statRenderer;
   
-  // Added debugging logs to trace rendererToggle execution
-  console.log('[rendererToggle] Initializing renderer toggle');
   // Guard: if element doesn't exist, nothing to initialize
   if (!statRenderer) {
-    console.warn('[rendererToggle] statRenderer element not found');
     return;
   }
   

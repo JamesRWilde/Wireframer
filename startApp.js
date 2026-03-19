@@ -112,29 +112,20 @@ export function startApp() {
   ], lodSlider, detailLevel);
   
   // Step 9: Initialize render toggles from UI state
-  try {
-    syncRenderToggles();
-  } catch (e) {
-    console.warn('[startApp] syncRenderToggles failed', e);
-  }
+  syncRenderToggles();
   
   // Step 10: Initialize UI theme controls
   themeControls();
 
   // Step 11: Initialize the render pipeline (GPU or CPU based on WebGL availability)
   // This is a one-time initialization that sets the active renderer
-  console.log('[startApp] Initializing render pipeline');
   initRenderPipeline();
-  console.log('[startApp] Render pipeline initialized');
 
   // Step 12: Initialize renderer toggle functionality
-  console.log('[startApp] Initializing rendererToggle');
   rendererToggle();
-  console.log('[startApp] rendererToggle initialized successfully');
 
   // Step 13: Start the animation loop
   try {
-    console.log('[startApp] Starting animation loop');
     requestAnimationFrame(animationFrame);
   } catch (e) {
     console.error('[startApp] Failed to start animation loop', e);

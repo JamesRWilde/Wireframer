@@ -19,7 +19,6 @@ import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 // Import GPU renderer disabler for fallback on errors
 import { disableSceneRenderer }from '@engine/dispose/gpu/disableSceneRenderer.js';
-import { trace } from '@engine/state/render/forensicLog.js';
 
 /**
  * drawGpuSceneModel - Renders the 3D model using the GPU (WebGL) renderer
@@ -36,36 +35,13 @@ export function drawSceneModel(gl, model, params) {
   const renderer = sceneRenderer(gl);
   if (!renderer) return false;
 
-  // Log GPU rendering parameters for debugging
-  console.log('[drawGpuSceneModel] Rendering parameters:', {
-    verts: model?.V?.length,
-    tris: model?.F?.length,
-    fillAlpha: params.fillAlpha,
-    wireAlpha: params.wireAlpha,
-    zoom: params.zoom,
-    rotation: params.rotation,
-    theme: params.theme,
-  });
-
-  // Log the number of vertices and triangles being rendered
-  console.log('[drawGpuSceneModel] Vertices:', model?.V?.length, 'Triangles:', model?.F?.length);
-
-  const gpuEnd = trace('gpuDrawCall', 'gpu', { verts: model?.V?.length, tris: model?.F?.length });
   try {
-    // Log WebGL state changes for debugging
-    console.log('[drawGpuSceneModel] WebGL state before draw:', {
-      depthTest: gl.isEnabled(gl.DEPTH_TEST),
-      blend: gl.isEnabled(gl.BLEND),
-      cullFace: gl.isEnabled(gl.CULL_FACE),
-    });
 
     // Delegate to the renderer's model() method for actual GPU draw calls
     const result = renderer.model(model, params);
-    gpuEnd({ drawn: result });
     return result;
   } catch (err) {
     // On GPU error, disable the renderer and mark GPU as failed
-    gpuEnd({ error: err.message });
     disableSceneRenderer(err);
     return false;
   }

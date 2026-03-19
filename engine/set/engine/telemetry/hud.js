@@ -21,9 +21,6 @@
 // Import render loop state and telemetry update interval
 import { state, TELEMETRY_UI_INTERVAL_MS }from '@engine/state/engine/loop.js';
 
-// Import CPU perf telemetry
-import { getCpuLightMs, getCpuFillMs, getCpuStrokeMs }from '@engine/state/render/debugFlags.js';
-
 // Import stats DOM element references
 import {statsState} from '@ui/state/stats.js';
 
@@ -49,18 +46,7 @@ export function hud(nowMs) {
     { el: statsState.statBgMs, val: state.emaBgMs > 0 ? state.emaBgMs.toFixed(2) : '--' },
     { el: statsState.statFgMs, val: state.emaFgMs > 0 ? state.emaFgMs.toFixed(2) : '--' },
   ];
-
-  // Append detailed FG breakdown (CPU mode: lighting vs fill vs stroke)
-  if (getCpuLightMs() > 0) {
-    const light = getCpuLightMs().toFixed(2);
-    const fill = getCpuFillMs().toFixed(2);
-    const stroke = getCpuStrokeMs().toFixed(2);
-    stats.push({ el: statsState.statFgMs, val: `L:${light} F:${fill} S:${stroke}` });
-  }
-
-  // Add debug logging to verify FPS updates
-  console.log(`[HUD] Updating FPS: ${state.emaFpsFrameIntervalMs > 0.0001 ? Math.round(1000 / state.emaFpsFrameIntervalMs) : '--'}`);
-
+  
   // Write all stats to their DOM elements
   for (const {el, val} of stats) {
     writeStat(el, val);

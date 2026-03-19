@@ -21,7 +21,6 @@
 // Import the function that reads slider values and updates global render parameters
 // This syncs FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM to globals
 import { syncRenderToggles }from '@ui/set/syncRenderToggles.js';
-import { mark, trace } from '@engine/state/render/forensicLog.js';
 
 /**
  * attachSliderListeners - Binds input event handlers to all UI sliders
@@ -47,7 +46,6 @@ export function sliderListeners(sliders, lodSlider, detailLevel) {
           try {
             // Sync all slider values to global render parameters
             // This reads FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM
-            mark('slider', 'ui', { name, value: el.value });
             syncRenderToggles();
           } catch (e) {
             // Log but don't throw - allows other sliders to continue working
@@ -66,7 +64,6 @@ export function sliderListeners(sliders, lodSlider, detailLevel) {
       lodSlider.addEventListener('input', () => {
         try {
           const lodPct = Number(lodSlider.value) / 100;
-          mark('lod-slider', 'ui', { value: lodSlider.value, pct: lodPct });
           // First, sync the LOD value to global state (like other sliders)
           syncRenderToggles();
 

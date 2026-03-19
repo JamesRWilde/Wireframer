@@ -23,8 +23,6 @@ export function updateDebugOverlay({ fps, frameMs, renderer }) {
   const frameMsElement = document.querySelector('[ref=e64]');
   const rendererElement = document.querySelector('[ref=e60]');
 
-  console.log('[updateDebugOverlay] Updating telemetry metrics:', { fps, frameMs, renderer });
-
   if (fpsElement) fpsElement.innerText = fps.toFixed(1);
   if (frameMsElement) frameMsElement.innerText = frameMs.toFixed(1);
   if (rendererElement) rendererElement.innerText = renderer;

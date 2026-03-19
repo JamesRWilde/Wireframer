@@ -42,11 +42,7 @@ export function canvas() {
   globalThis.fgCanvas = document.getElementById('fg');
   globalThis.gpuCanvas = document.getElementById('gpu');
   
-  console.log('[canvas] Canvas elements:', {
-    fg: globalThis.fgCanvas,
-    gpu: globalThis.gpuCanvas,
-    bg: bgState.canvas,
-  });
+
 
   // Get the 2D context from the foreground canvas
   globalThis.ctx = globalThis.fgCanvas ? globalThis.fgCanvas.getContext('2d') : null;

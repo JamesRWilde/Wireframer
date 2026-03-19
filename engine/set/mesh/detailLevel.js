@@ -64,11 +64,6 @@ export function detailLevel(percent, name = 'Shape') {
   // ensure the active LOD model is the full base model (no intermediate copy).
   if (clampedPercent >= 0.999) {
     modelState.currentLodModel = base;
-
-    console.log(
-      `[detailLevel] pct=1.00 baseVerts=${base?.V?.length ?? 0} (full detail)
-`);
-
     setActiveModel(modelState.currentLodModel, name);
     return;
   }
@@ -76,11 +71,6 @@ export function detailLevel(percent, name = 'Shape') {
   // Decimate the base model to the target detail level
   // Always decimate from CPU_BASE_MODEL to avoid quality loss from repeated decimation
   modelState.currentLodModel = decimateByPercent(base, clampedPercent);
-
-  // Debug: log LOD changes for troubleshooting slider behavior
-  console.log(
-    `[detailLevel] pct=${clampedPercent.toFixed(2)} baseVerts=${base?.V?.length ?? 0} lodVerts=${modelState.currentLodModel?.V?.length ?? 0}`
-  );
 
   // Set the decimated model as active for rendering
   setActiveModel(modelState.currentLodModel, name);

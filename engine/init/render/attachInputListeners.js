@@ -25,7 +25,6 @@ import {
   setWx, setWy,
 } from '@engine/state/render/physicsState.js';
 import { getZoom, setZoom, getZoomMin, getZoomMax } from '@engine/state/render/zoomState.js';
-import { mark } from '@engine/state/render/forensicLog.js';
 
 /**
  * attachInputListeners - Attaches input event listeners to canvas.
@@ -46,7 +45,6 @@ export function attachInputListeners(canvas) {
 
   // Mouse down: start dragging
   canvas.addEventListener('mousedown', e => {
-    mark('mousedown', 'input', { x: e.clientX, y: e.clientY });
     setDragging(true);
     setLastPointerX(e.clientX);
     setLastPointerY(e.clientY);
@@ -56,7 +54,6 @@ export function attachInputListeners(canvas) {
 
   // Mouse up: stop dragging (on window to catch releases outside canvas)
   globalThis.addEventListener('mouseup', () => {
-    mark('mouseup', 'input');
     setDragging(false);
   });
 
@@ -65,7 +62,6 @@ export function attachInputListeners(canvas) {
 
   // Touch start: start dragging (mobile)
   canvas.addEventListener('touchstart', e => {
-    mark('touchstart', 'input', { x: e.touches[0].clientX, y: e.touches[0].clientY });
     setDragging(true);
     setLastPointerX(e.touches[0].clientX);
     setLastPointerY(e.touches[0].clientY);
@@ -75,7 +71,6 @@ export function attachInputListeners(canvas) {
 
   // Touch end: stop dragging (mobile)
   canvas.addEventListener('touchend', () => {
-    mark('touchend', 'input');
     setDragging(false);
   });
 
@@ -91,7 +86,6 @@ export function attachInputListeners(canvas) {
     e.preventDefault();
     const factor = Math.exp(-e.deltaY * 0.0012);
     const newZoom = Math.max(getZoomMin(), Math.min(getZoomMax(), getZoom() * factor));
-    mark('wheel', 'input', { zoom: newZoom.toFixed(2) });
     setZoom(newZoom);
   }, { passive: false });
 

@@ -19,9 +19,8 @@
 "use strict";
 
 import {objectList}from '@engine/get/render/objectList.js';
-import { state }from '@ui/get/read/state.js';
 import { state as persistState }from '@ui/set/persist/state.js';
-import { mark, trace } from '@engine/state/render/forensicLog.js';
+
 
 export async function initObjectSelector(restoredShapeName = null) {
   // Fetch the dynamic list of available meshes from the server
@@ -47,10 +46,8 @@ export async function initObjectSelector(restoredShapeName = null) {
       const foundIndex = OBJECTS.findIndex(obj => obj.name === restoredShapeName);
       if (foundIndex >= 0) {
         loadIndex = foundIndex;
-      } else {
-      }
-    } else {
-    }
+      } 
+    } 
     select.selectedIndex = loadIndex;
     globalThis.loadObjMesh(OBJECTS[loadIndex].obj, OBJECTS[loadIndex].name);
   }
@@ -59,8 +56,6 @@ export async function initObjectSelector(restoredShapeName = null) {
     const idx = Number(select.value);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       const name = OBJECTS[idx].name;
-      mark('shape-select', 'ui', { name });
-      const loadEnd = trace('loadObjMesh', 'ui', { name });
       await globalThis.loadObjMesh(OBJECTS[idx].obj, name);
       loadEnd({});
       persistState(OBJECTS);

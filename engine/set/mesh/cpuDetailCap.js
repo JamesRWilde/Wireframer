@@ -58,10 +58,6 @@ export function capModelForCpu(model) {
   // Clamp to reasonable range — don't decimate below 10%
   pct = Math.max(0.1, pct);
 
-  console.log(`[cpuCap] Mesh exceeds CPU caps (V:${verts} > ${CPU_MAX_VERTS}, E:${edges} > ${CPU_MAX_EDGES}). Decimating to ${(pct * 100).toFixed(0)}%`);
-
   const decimated = decimateByPercent(model, pct);
-
-  console.log(`[cpuCap] After cap: V=${decimated.V.length}, E=${decimated.E?.length ?? 0}`);
   return decimated;
 }

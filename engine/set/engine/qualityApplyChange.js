@@ -24,8 +24,6 @@ import { budgetState, DOWNGRADE_THRESHOLD, UPGRADE_THRESHOLD } from "@engine/set
 
 // Import quality priority comparison helper
 import { priority }from '@engine/get/engine/quality/priority.js';
-import { getDebugBudget } from '@engine/state/render/debugFlags.js';
-
 /**
  * qualityApplyChange - Evaluates and applies a quality level change with hysteresis
  *

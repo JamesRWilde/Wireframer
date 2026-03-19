@@ -87,6 +87,5 @@ export function telemetryState(nowMs, frameMs, physMs, bgMs, fgMs, frameInterval
     state.emaFgMs = state.emaFgMs + (fgMs - state.emaFgMs) * a;
   }
   
-  // Add debug logging to verify telemetry updates
-  console.log(`[Telemetry] Frame time: ${frameMs}ms, FPS interval: ${frameIntervalMs}ms`);
+
 }

@@ -40,10 +40,7 @@ import { sceneDraw }from '@engine/init/gpu/create/sceneDraw.js';
  *   or null if WebGL initialization fails
  */
 export function sceneRenderer(gl) {
-  // Added debugging logs to trace WebGL context initialization
-  console.log('[sceneRenderer-init] Initializing WebGL context:', gl);
   if (!gl) {
-    console.warn('[sceneRenderer-init] No WebGL context provided');
     return null;
   }
 

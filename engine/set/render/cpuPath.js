@@ -34,7 +34,6 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { state } from '@engine/state/engine/loop.js';
 import { getW, getH } from '@engine/state/render/viewportState.js';
-import { trace } from '@engine/state/render/forensicLog.js';
 
 // Import model state to ensure CPU mode uses capped model
 import { modelState } from '@engine/state/render/model.js';

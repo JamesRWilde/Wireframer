@@ -146,8 +146,7 @@ export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays
     // Draw wireframe edges with standard alpha blending so fill remains visible.
     // Keep depth testing enabled to avoid drawing wires through the mesh.
 
-    // Debug log for wire visibility
-    console.log('[sceneModel] wire pass', { wireAlpha, edgeCount: buffers.edgeCount });
+
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
