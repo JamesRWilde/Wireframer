@@ -11,7 +11,6 @@
  *     - locations: Object - Attribute and uniform locations, including the program.
  *     - buffer: WebGLBuffer - The buffer containing packed particle data.
  *     - params: Object - Render parameters (must include particles, width, height, time, velocityScale, opacityScale, color).
- *     - needsRebuild: function - Helper to check if buffer needs rebuild.
  *     - rebuildBuffer: function - Helper to rebuild buffer.
  *     - background: function - Helper to issue draw call.
  *     - particleCount: number - The previous particle count (will be updated).
@@ -20,14 +19,14 @@
  *   @returns {number} The updated particle count after rendering.
  *
  * USAGE:
- *   particleCount = backgroundRenderer({ gl, locations, buffer, params, needsRebuild, rebuildBuffer, background, particleCount });
+ *   particleCount = backgroundRenderer({ gl, locations, buffer, params, rebuildBuffer, background, particleCount });
  *
  * MAINTAINER GUIDELINES:
  *   - This file must only contain this function and its export.
  *   - Update comments if the render logic or parameter structure changes.
  */
 export function backgroundRenderer(opts) {
-  const { gl, locations, buffer, params, needsRebuild, rebuildBuffer, background, particleCount: prevCount } = opts;
+  const { gl, locations, buffer, params, rebuildBuffer, background, particleCount: prevCount } = opts;
   const { particles } = params;
   let particleCount = prevCount;
   if (!particles?.length) return particleCount;

@@ -139,15 +139,15 @@ export function createBackgroundRenderer(gl) {
         // Parse color to RGB (0-1 range)
         let r = 0, g = 0, b = 0;
         if (typeof colorStr === 'string' && colorStr.startsWith('#')) {
-          r = parseInt(colorStr.slice(1, 3), 16) / 255;
-          g = parseInt(colorStr.slice(3, 5), 16) / 255;
-          b = parseInt(colorStr.slice(5, 7), 16) / 255;
+          r = Number.parseInt(colorStr.slice(1, 3), 16) / 255;
+          g = Number.parseInt(colorStr.slice(3, 5), 16) / 255;
+          b = Number.parseInt(colorStr.slice(5, 7), 16) / 255;
         } else {
-          const match = colorStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+          const match = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(colorStr);
           if (match) {
-            r = parseInt(match[1]) / 255;
-            g = parseInt(match[2]) / 255;
-            b = parseInt(match[3]) / 255;
+            r = Number.parseInt(match[1]) / 255;
+            g = Number.parseInt(match[2]) / 255;
+            b = Number.parseInt(match[3]) / 255;
           }
         }
 
