@@ -30,7 +30,7 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { getModelCy, getZHalf, getW, getH } from '@engine/state/render/viewportState.js';
-import { getTheme, getEdgeColor, getFillOpacity, getWireOpacity, getShadeDarkRgb, getShadeBrightRgb } from '@engine/state/render/renderState.js';
+import { getTheme, getEdgeColor, getFillRgb, getFillOpacity, getWireOpacity, getShadeDarkRgb, getShadeBrightRgb } from '@engine/state/render/renderState.js';
 
 // Utility: convert '#RRGGBB' to [r,g,b]
 function hexToRgb(hex) {
@@ -70,11 +70,14 @@ export function gpuPath(gl, meshToRender, morphing) {
   // This ensures the fill color matches the HUD RGB-based theme palette.
   const shadeDark = getShadeDarkRgb();
   const shadeBright = getShadeBrightRgb();
+  const fillRgb = getFillRgb();
+  const baseTheme = getTheme() || {};
 
   const gpuDrawn = drawGpuSceneModel(gl, meshToRender, {
     // Theme colors for shading and wire
     theme: {
-      ...getTheme(),
+      ...baseTheme,
+      fill: baseTheme.fill || fillRgb,
       shadeDark,
       shadeBright,
       wireNear: edgeColor,
