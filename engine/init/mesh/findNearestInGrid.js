@@ -25,7 +25,8 @@ function evaluateCell(cell, verts, point, bestDistSqAndIdx) {
   return false;
 }
 
-function checkRadiusLayer(radius, cx, cy, cz, grid, verts, point, bestDistSqAndIdx) {
+function checkRadiusLayer(radius, cellContext) {
+  const { cx, cy, cz, grid, verts, point, bestDistSqAndIdx } = cellContext;
   let foundBetter = false;
 
   for (let dx = -radius; dx <= radius; dx++) {
@@ -56,8 +57,10 @@ export function findNearestInGrid(point, grid, verts, min, cellSize, maxRadius) 
     bestDistSq: Infinity,
   };
 
+  const cellContext = { cx, cy, cz, grid, verts, point, bestDistSqAndIdx };
+
   for (let radius = 0; radius <= maxRadius; radius++) {
-    const foundBetter = checkRadiusLayer(radius, cx, cy, cz, grid, verts, point, bestDistSqAndIdx);
+    const foundBetter = checkRadiusLayer(radius, cellContext);
     if (foundBetter && bestDistSqAndIdx.bestDistSq < (cellSize * radius * 2) ** 2) break;
   }
 
