@@ -25,6 +25,7 @@ import {
   setWx, setWy,
 } from '@engine/state/render/physicsState.js';
 import { getZoom, setZoom, getZoomMin, getZoomMax } from '@engine/state/render/zoomState.js';
+import { setInputCanvas } from '@engine/set/render/setInputCanvas.js';
 
 /**
  * attachInputListeners - Attaches input event listeners to canvas.
@@ -53,12 +54,14 @@ export function attachInputListeners(canvas) {
   });
 
   // Mouse up: stop dragging (on window to catch releases outside canvas)
-  globalThis.addEventListener('mouseup', () => {
-    setDragging(false);
-  });
+  if (globalThis.window?.addEventListener) {
+    globalThis.window.addEventListener('mouseup', () => {
+      setDragging(false);
+    });
 
-  // Mouse move: update rotation based on drag delta
-  globalThis.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    // Mouse move: update rotation based on drag delta
+    globalThis.window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+  }
 
   // Touch start: start dragging (mobile)
   canvas.addEventListener('touchstart', e => {
@@ -89,6 +92,6 @@ export function attachInputListeners(canvas) {
     setZoom(newZoom);
   }, { passive: false });
 
-  // Expose canvas reference for other modules if needed
-  globalThis._inputCanvas = canvas;
+  // Store input canvas in shared state for other modules (no globalThis)
+  setInputCanvas(canvas);
 }

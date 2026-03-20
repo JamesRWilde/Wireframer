@@ -30,10 +30,10 @@ import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';
  */
 export function syncCanvasSize(cpuCanvas) {
   // Read current viewport dimensions
-  const w = globalThis.innerWidth;
-  const h = globalThis.innerHeight;
+  const w = globalThis.window?.innerWidth ?? 0;
+  const h = globalThis.window?.innerHeight ?? 0;
 
-  // Store viewport dimensions globally
+  // Store viewport dimensions in shared state
   setW(w);
   setH(h);
 
