@@ -105,12 +105,3 @@ if (!fs.existsSync(path.join(__dirname, 'meshes'))) {
   console.error('[ERROR] Meshes directory does not exist. Please ensure the "meshes" folder is present in the project root.');
   process.exit(1);
 }
-
-// Check if log file is writable
-const logFile = path.join(__dirname, 'wireframer.log');
-try {
-  fs.appendFileSync(logFile, '[DEBUG] Log file is writable.\n');
-} catch (err) {
-  console.error('[ERROR] Unable to write to log file:', err.message);
-  process.exit(1);
-}
