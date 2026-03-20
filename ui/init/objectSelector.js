@@ -59,7 +59,6 @@ export async function initObjectSelector(restoredShapeName = null) {
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       const name = OBJECTS[idx].name;
       await loadObjMeshFn(OBJECTS[idx].obj, name);
-      loadEnd({});
       persistState(OBJECTS);
     }
   });
