@@ -8,7 +8,7 @@
  *
  * ARCHITECTURE ROLE:
  *   Called by the LOD slider handler and by finalizeModel when loading a new
- *   mesh. Exposed globally as globalThis.detailLevel for UI access.
+ *   mesh. Uses module state directly; no globalThis dependency.
  *
  * HOW LOD WORKS:
  *   1. The base model (full detail) is stored in modelState.baseModel

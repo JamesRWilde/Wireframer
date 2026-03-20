@@ -7,8 +7,8 @@
  *   complete pipeline from raw text to ready-to-use mesh object.
  * 
  * ARCHITECTURE ROLE:
- *   Called by loader.js when loading OBJ files. Exposed globally as
- *   globalThis.toRuntime for flexible access.
+ *   Called by loader.js when loading OBJ files. Consumers import the
+ *   function directly and parse OBJ text without relying on globals.
  * 
  * PIPELINE:
  *   1. Validate input (must be non-null string)

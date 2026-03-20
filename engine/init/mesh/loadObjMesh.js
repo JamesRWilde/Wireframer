@@ -7,8 +7,8 @@
  *
  * ARCHITECTURE ROLE:
  *   Called when loading external OBJ files by path. Wraps the fetch +
- *   parse + load sequence into a single async call. Exposed globally
- *   as globalThis.loadObjMesh for flexible access.
+ *   parse + load sequence into a single async call. Stores the loader
+ *   function in module state via setLoadObjMesh.
  */
 
 "use strict";

@@ -9,11 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called early in the engine initialization sequence. Establishes the
  *   rendering surface for both CPU and GPU render paths. Stores references
- *   on globalThis for cross-module access.
+ *   in module state via dedicated setters/getters.
  *
  * SIDE EFFECTS:
  *   - Creates a new fillLayerCanvas element
- *   - Stores canvas/context references on globalThis
+ *   - Stores canvas/context references in module state
  *   - Adds window resize event listeners
  */
 
@@ -73,14 +73,14 @@ export function canvas() {
   if (getFillLayerCtx()) getFillLayerCtx().imageSmoothingEnabled = false;
 
   // Sync canvas sizes and set up resize listeners
-  if (typeof window !== 'undefined' && window.addEventListener) {
+  if (globalThis.window?.addEventListener) {
     syncCanvasSize(cpuCanvas);
 
     // On resize, synchronize all canvas dimensions to viewport size
-    window.addEventListener('resize', () => syncCanvasSize(cpuCanvas));
-    window.addEventListener('resize', () => {
-      setW(window.innerWidth);
-      setH(window.innerHeight);
+    globalThis.window.addEventListener('resize', () => syncCanvasSize(cpuCanvas));
+    globalThis.window.addEventListener('resize', () => {
+      setW(globalThis.window?.innerWidth ?? 0);
+      setH(globalThis.window?.innerHeight ?? 0);
     });
   }
 

@@ -7,8 +7,8 @@
  *   when this model is active.
  * 
  * ARCHITECTURE ROLE:
- *   Called by load when a new model is loaded. Updates the global LOD
- *   range so the UI slider can be configured appropriately for the model.
+ *   Called by load when a new model is loaded. Updates the shared LOD range
+ *   state so the UI slider can be configured appropriately for the model.
  * 
  * WHY PER-MODEL RANGE:
  *   Different models have vastly different vertex counts. A small cube might

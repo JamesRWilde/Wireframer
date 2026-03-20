@@ -9,7 +9,7 @@
  * ARCHITECTURE ROLE:
  *   Primary entry point for loading new 3D objects. Called by loader.js
  *   for OBJ files and by other modules that need to process mesh data.
- *   Exposed globally as globalThis.load for flexible access.
+ *   Registers the loader function in module state via setInitMeshEngineLoad.
  *
  * PIPELINE STEPS:
  *   1. Validate mesh data structure

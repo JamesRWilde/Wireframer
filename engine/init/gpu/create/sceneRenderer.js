@@ -13,7 +13,7 @@
  *
  * DETAILS:
  *   - Tries WebGL2 first, falls back to WebGL1 and experimental-webgl
- *   - Stores the GL context globally as globalThis.gpuGl
+ *   - Uses module-level state for the GL context through set/get functions
  *   - Checks for 32-bit index support for large models
  *   - Creates shader programs, buffer store, and draw API
  */
