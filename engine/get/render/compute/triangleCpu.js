@@ -48,7 +48,7 @@ export function triangleCpu(normal, useSmoothShading) {
 
   // Specular: (N dot H)^shininess using precomputed half vector
   const nh = nx * Hx + ny * Hy + nz * Hz;
-  const nhClamped = nh > 0 ? nh : 0;
+  const nhClamped = Math.max(nh, 0);
   const spec = Math.pow(nhClamped, useSmoothShading ? 24 : 18);
 
   // Combine: ambient + diffuse + specular

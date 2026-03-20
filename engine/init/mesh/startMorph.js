@@ -67,6 +67,26 @@ const MORPH_DETAIL = 0.1;
  *
  * @returns {void}
  */
+
+function recenterToOrigin(mesh) {
+  let cx = 0, cy = 0, cz = 0;
+  const n = mesh.V.length;
+  for (let i = 0; i < n; i++) {
+    cx += mesh.V[i][0];
+    cy += mesh.V[i][1];
+    cz += mesh.V[i][2];
+  }
+  cx /= n;
+  cy /= n;
+  cz /= n;
+
+  for (let i = 0; i < n; i++) {
+    mesh.V[i][0] -= cx;
+    mesh.V[i][1] -= cy;
+    mesh.V[i][2] -= cz;
+  }
+}
+
 export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
   // Clone both meshes to avoid mutating the originals
   const fromClone = clone(fromMesh);
@@ -80,13 +100,6 @@ export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
   // which shifts centroids slightly — that causes the mesh to drift
   // toward a corner during Phase 2. Re-centering keeps the morph
   // anchored at screen centre throughout.
-  function recenterToOrigin(mesh) {
-    let cx = 0, cy = 0, cz = 0;
-    const n = mesh.V.length;
-    for (let i = 0; i < n; i++) { cx += mesh.V[i][0]; cy += mesh.V[i][1]; cz += mesh.V[i][2]; }
-    cx /= n; cy /= n; cz /= n;
-    for (let i = 0; i < n; i++) { mesh.V[i][0] -= cx; mesh.V[i][1] -= cy; mesh.V[i][2] -= cz; }
-  }
   recenterToOrigin(fromDec);
   recenterToOrigin(toDec);
 

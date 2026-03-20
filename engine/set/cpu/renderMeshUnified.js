@@ -151,7 +151,7 @@ export function renderMeshUnified(model, ctx) {
   performance.measure('cpu-sort', 'cpu-sort-start', 'cpu-sort-end');
 
   // ── Telemetry: per-phase timing ──
-  let tLight = 0, tFill = 0, tStroke = 0;
+  let tLight = 0;
 
   // Render each triangle in sorted order
   ctx.save();

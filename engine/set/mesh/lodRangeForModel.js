@@ -33,7 +33,7 @@ export function lodRangeForModel(model) {
   // Set LOD range based on model's vertex count
   // Minimum comes from LODManager config or defaults to 3 (smallest valid mesh)
   // Maximum is the model's full vertex count (100% detail)
-  const minVal = typeof window !== 'undefined' && window.LODManager?.MIN_VERTS ? window.LODManager.MIN_VERTS : 3;
+  const minVal = 'window' in globalThis && globalThis.window.LODManager?.MIN_VERTS ? globalThis.window.LODManager.MIN_VERTS : 3;
   setLodRange({
     min: minVal,
     max: model.V.length,

@@ -29,15 +29,8 @@ import { hud } from '@engine/set/engine/renderer/hud.js';
 // Import loop state for backward compatibility
 import { state } from '@engine/state/engine/loop.js';
 
-// Import model state for LOD management
-import { modelState } from '@engine/state/render/model.js';
-
-// Import LOD detail level setter
-import { detailLevel } from '@engine/set/mesh/detailLevel.js';
-import { getDetailLevelValue } from '@engine/get/render/getDetailLevelValue.js';
 
 // Import CPU detail cap for performance safety
-import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
 import { applyCpuLodCap } from '@engine/set/mesh/applyCpuLodCap.js';
 
 /**

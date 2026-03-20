@@ -20,8 +20,8 @@
 
 "use strict";
 
-import { bldCustomTheme }from '@ui/set/bldCustomTheme.js';
-import {CUSTOM_RGB, customBlue, customGreen, customRed, themeMode as themeModeEl } from '@ui/state/dom.js';
+import { bldCustomTheme } from '@ui/set/bldCustomTheme.js';
+import { CUSTOM_RGB, themeMode as themeModeEl } from '@ui/state/dom.js';
 import { setTheme } from '@engine/set/render/setTheme.js';
 
 /**

@@ -10,4 +10,4 @@
 "use strict";
 
 /** @type {number[]} Custom user RGB color (0-255 each). */
-export let customRgbState = [95, 188, 230];
+export const customRgbState = [95, 188, 230];

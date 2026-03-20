@@ -59,12 +59,6 @@ export function canvas() {
   // Get the 2D context from the foreground canvas
   setCanvasCtx(getFgCanvas() ? getFgCanvas().getContext('2d') : null);
 
-  // Fallback: use CPU canvas if foreground context is unavailable
-  if (!getCanvasCtx()) {
-    console.warn('[initCanvas] fg context not available, falling back to cpu');
-    setCanvasCtx(cpuCanvas ? cpuCanvas.getContext('2d') : null);
-  }
-
   // Create a dedicated fill layer canvas for triangle fill rendering
   // Uses alpha channel and desynchronized hint for performance
   setFillLayerCanvas(document.createElement('canvas'));
@@ -74,7 +68,7 @@ export function canvas() {
   if (getFillLayerCtx()) getFillLayerCtx().imageSmoothingEnabled = false;
 
   // Sync canvas sizes and set up resize listeners
-  const currentWindow = (typeof window !== 'undefined') ? window : undefined;
+  const currentWindow = ('window' in globalThis) ? globalThis.window : undefined;
   if (currentWindow?.addEventListener) {
     syncCanvasSize(cpuCanvas);
 
@@ -84,6 +78,13 @@ export function canvas() {
       setW(currentWindow.innerWidth);
       setH(currentWindow.innerHeight);
     });
+  }
+
+  // Fallback on missing context (explicit comparison to avoid negated condition)
+  const hasCanvasContext = Boolean(getCanvasCtx());
+  if (hasCanvasContext === false) {
+    console.warn('[initCanvas] fg context not available, falling back to cpu');
+    setCanvasCtx(cpuCanvas ? cpuCanvas.getContext('2d') : null);
   }
 
   // Locate and store the background canvas for particle rendering

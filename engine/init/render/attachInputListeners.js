@@ -58,13 +58,14 @@ export function attachInputListeners(canvas) {
   });
 
   // Mouse up: stop dragging (on window to catch releases outside canvas)
-  if (typeof window !== 'undefined' && window.addEventListener) {
-    window.addEventListener('mouseup', () => {
+  const appWindow = 'window' in globalThis ? globalThis.window : undefined;
+  if (appWindow?.addEventListener) {
+    appWindow.addEventListener('mouseup', () => {
       setDragging(false);
     });
 
     // Mouse move: update rotation based on drag delta
-    window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    appWindow.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
   }
 
   // Touch start: start dragging (mobile)

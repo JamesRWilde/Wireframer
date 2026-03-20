@@ -54,10 +54,6 @@ export function fitCameraToModel(model) {
     if (v[1] > maxY) maxY = v[1];
   }
 
-  // Calculate model dimensions
-  const sizeX = maxX - minX;
-  const sizeY = maxY - minY;
-  
   // Update frame parameters for projection
   setModelCy(0);  // Sphere is centred at origin — no offset needed
   setZHalf(1);    // Sphere radius is 1
