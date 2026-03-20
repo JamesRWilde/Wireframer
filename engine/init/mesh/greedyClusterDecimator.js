@@ -96,17 +96,17 @@ export function greedyClusterDecimator(model, targetFaces) {
   // Assign vertices to spatial grid cells
   // This groups nearby vertices for merging
   const cellMap = assignVerticesToCells(V, minX, minY, minZ, cellSize);
-  
+
   // Cluster vertices within each cell (merge nearby vertices)
   const { newVerts, oldToNew } = clusterVertices(V, cellMap);
-  
+
   // Rebuild faces using new vertex indices
   const newFaces = rebuildFaces(F, oldToNew);
 
   // Build edges for wireframe rendering
   const edgeBuilder = getMeshEdgesFromFacesRuntime();
   const newEdges = edgeBuilder ? edgeBuilder(newFaces) : [];
-  
+
   // Create decimated mesh object
   const decimated = {
     V: newVerts,
@@ -118,7 +118,6 @@ export function greedyClusterDecimator(model, targetFaces) {
   };
 
   // Store old-to-new vertex mapping for smooth decimation
-  // Convert Map to array: oldToNewArray[i] = new vertex index for original vertex i
   const oldToNewArray = new Array(V.length);
   for (let i = 0; i < V.length; i++) {
     oldToNewArray[i] = oldToNew.get(i) ?? 0;
@@ -127,7 +126,7 @@ export function greedyClusterDecimator(model, targetFaces) {
 
   // Cache the decimated mesh for future use
   model._lodCache.set(cacheKey, decimated);
-  
+
   // Prune cache to prevent memory bloat (keep max 12 entries)
   pruneLodCache(model._lodCache, 12);
 

@@ -35,6 +35,7 @@ import { validationResult }from '@engine/get/mesh/validate/validationResult.js';
 import { lodRangeForModel }from '@engine/set/mesh/lodRangeForModel.js';
 import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
 import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
+
 import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setEdgesFromFacesRuntime.js';
