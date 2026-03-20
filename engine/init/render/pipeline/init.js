@@ -41,6 +41,10 @@ import { setRenderForeground, setIsGpuMode } from '@engine/set/render/renderFore
 // Import GPU path function (for WebGL rendering)
 import { gpuPath } from '@engine/set/render/gpuPath.js';
 
+// Import GPU UI canvas and context state helpers
+import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
+import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
+
 // Import CPU path function (for Canvas 2D rendering)
 import { cpuPath } from '@engine/set/render/cpuPath.js';
 
@@ -74,7 +78,7 @@ import { initializeCpuPipeline } from '@engine/init/render/pipeline/cpu.js';
  */
 export function initRenderPipeline() {
   // Get the GPU canvas element
-  const gpuCanvas = globalThis.gpuCanvas;
+  const gpuCanvas = getGpuCanvas();
   
   if (!gpuCanvas) {
     initializeCpuPipeline();
@@ -91,8 +95,8 @@ export function initRenderPipeline() {
     return false;
   }
   
-  // Store the WebGL context globally
-  globalThis.gpuGl = gl;
+  // Store the WebGL context in shared state
+  setGpuGl(gl);
   
   // Try to initialize GPU renderer
   const renderer = sceneRenderer(gl);

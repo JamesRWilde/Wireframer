@@ -23,6 +23,10 @@
 // Import GPU state singleton for renderer caching
 import { gpuState } from '@engine/state/gpu/scene.js';
 
+// Import GPU context state helpers
+import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
+import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
+
 // Import renderer factory for initial creation
 import { sceneRenderer as createSceneRenderer } from '@engine/init/gpu/create/sceneRenderer.js';
 
@@ -38,7 +42,7 @@ export function sceneRenderer() {
   }
 
   // Get the GPU canvas element
-  const gpuCanvas = globalThis.gpuCanvas;
+  const gpuCanvas = getGpuCanvas();
   if (!gpuCanvas) {
     console.warn('[sceneRenderer-get] no gpuCanvas');
     gpuState.failed = true;
@@ -53,8 +57,8 @@ export function sceneRenderer() {
     return null;
   }
 
-  // Store the WebGL context globally for other modules to access
-  globalThis.gpuGl = gl;
+  // Store the WebGL context in state for other modules to access
+  setGpuGl(gl);
 
   // Create the renderer (compiles shaders, sets up buffers)
   try {

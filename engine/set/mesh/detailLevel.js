@@ -76,5 +76,4 @@ export function detailLevel(percent, name) {
   setActiveModel(modelState.currentLodModel, name);
 }
 
-// Expose globally for UI slider handler
-globalThis.detailLevel = detailLevel;
+

@@ -18,6 +18,9 @@
 "use strict";
 
 import { setW, setH } from '@engine/state/render/viewportState.js';
+import { getFgCanvas } from '@engine/get/render/getFgCanvas.js';
+import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
+import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';
 
 /**
  * syncCanvasSize - Synchronizes all canvas dimensions to viewport size
@@ -48,21 +51,24 @@ export function syncCanvasSize(cpuCanvas) {
   }
 
   // Resize the foreground (CPU) canvas
-  if (globalThis.fgCanvas) {
-    globalThis.fgCanvas.width = w;
-    globalThis.fgCanvas.height = h;
+  const fgCanvas = getFgCanvas();
+  if (fgCanvas) {
+    fgCanvas.width = w;
+    fgCanvas.height = h;
   }
 
   // Resize the GPU canvas
-  if (globalThis.gpuCanvas) {
-    globalThis.gpuCanvas.width = w;
-    globalThis.gpuCanvas.height = h;
+  const gpuCanvas = getGpuCanvas();
+  if (gpuCanvas) {
+    gpuCanvas.width = w;
+    gpuCanvas.height = h;
   }
 
   // Resize the fill layer canvas (used for triangle fill rendering)
-  if (globalThis.fillLayerCanvas) {
-    globalThis.fillLayerCanvas.width = w;
-    globalThis.fillLayerCanvas.height = h;
+  const fillLayerCanvas = getFillLayerCanvas();
+  if (fillLayerCanvas) {
+    fillLayerCanvas.width = w;
+    fillLayerCanvas.height = h;
   }
 
 }

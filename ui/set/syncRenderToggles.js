@@ -19,10 +19,11 @@ import {lodSlider, lodValue, bgDensity, bgDensityValue, bgVelocity, bgVelocityVa
 import { sliderDisplayPercent }from '@ui/get/sliderDisplayPercent.js';
 import { state as persistState }from '@ui/set/persist/state.js';
 import { setFillOpacity, setWireOpacity }from '@engine/state/render/renderState.js';
+import { setDetailLevelValue } from '@engine/set/render/setDetailLevelValue.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 
 export function syncRenderToggles() {
-  globalThis.DETAIL_LEVEL = Number(lodSlider.value) / 100;
+  setDetailLevelValue(Number(lodSlider.value) / 100);
   lodValue.textContent = `${sliderDisplayPercent(lodSlider)}%`;
 
   const rawDensity = Number(bgDensity.value);

@@ -26,6 +26,15 @@ import {bgState} from '@engine/state/render/background/backgroundState.js';
 import { setCanvasCtx } from '@engine/set/render/setCanvasCtx.js';
 import { getCanvasCtx } from '@engine/get/render/getCanvasCtx.js';
 
+// Canvas element getters/setters
+import { setFgCanvas } from '@engine/set/render/setFgCanvas.js';
+import { setGpuCanvas } from '@engine/set/render/setGpuCanvas.js';
+import { getFgCanvas } from '@engine/get/render/getFgCanvas.js';
+import { setFillLayerCanvas } from '@engine/set/render/setFillLayerCanvas.js';
+import { setFillLayerCtx } from '@engine/set/render/setFillLayerCtx.js';
+import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';
+import { getFillLayerCtx } from '@engine/get/render/getFillLayerCtx.js';
+
 // Import canvas size synchronization to keep all canvases in sync
 import { syncCanvasSize }from '@engine/set/render/syncCanvasSize.js';
 import { setW, setH } from '@engine/state/render/viewportState.js';
@@ -42,14 +51,12 @@ export function canvas() {
   // Get the CPU canvas (primary fallback rendering surface)
   const cpuCanvas = document.getElementById('c');
 
-  // Store canvas element references globally for cross-module access
-  globalThis.fgCanvas = document.getElementById('fg');
-  globalThis.gpuCanvas = document.getElementById('gpu');
-  
-
+  // Store canvas element references in shared state
+  setFgCanvas(document.getElementById('fg'));
+  setGpuCanvas(document.getElementById('gpu'));
 
   // Get the 2D context from the foreground canvas
-  setCanvasCtx(globalThis.fgCanvas ? globalThis.fgCanvas.getContext('2d') : null);
+  setCanvasCtx(getFgCanvas() ? getFgCanvas().getContext('2d') : null);
 
   // Fallback: use CPU canvas if foreground context is unavailable
   if (!getCanvasCtx()) {
@@ -59,11 +66,11 @@ export function canvas() {
 
   // Create a dedicated fill layer canvas for triangle fill rendering
   // Uses alpha channel and desynchronized hint for performance
-  globalThis.fillLayerCanvas = document.createElement('canvas');
-  globalThis.fillLayerCtx = globalThis.fillLayerCanvas.getContext('2d', { alpha: true, desynchronized: false });
+  setFillLayerCanvas(document.createElement('canvas'));
+  setFillLayerCtx(getFillLayerCanvas().getContext('2d', { alpha: true, desynchronized: false }));
 
   // Disable image smoothing for pixel-accurate triangle rendering
-  if (globalThis.fillLayerCtx) globalThis.fillLayerCtx.imageSmoothingEnabled = false;
+  if (getFillLayerCtx()) getFillLayerCtx().imageSmoothingEnabled = false;
 
   // Sync canvas sizes and set up resize listeners
   if (typeof globalThis !== 'undefined' && typeof globalThis.addEventListener === 'function') {

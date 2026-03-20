@@ -33,6 +33,7 @@ import { modelState } from '@engine/state/render/model.js';
 
 // Import LOD detail level setter
 import { detailLevel } from '@engine/set/mesh/detailLevel.js';
+import { getDetailLevelValue } from '@engine/get/render/getDetailLevelValue.js';
 
 // Import CPU detail cap for performance safety
 import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
@@ -75,9 +76,9 @@ export function applyCpuLodCap() {
   if (!baseModel) return;
 
   // Ensure the LOD percentage matches the UI slider/last user setting.
-  // globalThis.DETAIL_LEVEL is updated by syncRenderToggles() and slider callbacks.
-  if (typeof globalThis.DETAIL_LEVEL === 'number') {
-    modelState.currentLodPct = Math.max(0, Math.min(1, globalThis.DETAIL_LEVEL));
+  const detailLevelValue = getDetailLevelValue();
+  if (typeof detailLevelValue === 'number') {
+    modelState.currentLodPct = Math.max(0, Math.min(1, detailLevelValue));
   }
 
   // Recalculate the capped model (only decimates if over the cap)

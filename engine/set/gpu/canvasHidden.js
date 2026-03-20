@@ -19,13 +19,15 @@
 
 "use strict";
 
+import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
+
 /**
  * canvasHidden - Shows or hides the GPU canvas
  *
  * @param {boolean} hidden - Whether to hide the canvas (true) or show it (false)
  */
 export function canvasHidden(hidden) {
-  const gpuCanvas = globalThis.gpuCanvas;
+  const gpuCanvas = getGpuCanvas();
   if (!gpuCanvas) {
     console.warn('[canvasHidden] gpuCanvas is null');
     return;

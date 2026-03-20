@@ -48,6 +48,8 @@ import { state }from '@engine/state/engine/loop.js';
 import { getFillOpacity, getTheme }from '@engine/state/render/renderState.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getW, getH } from '@engine/state/render/viewportState.js';
+import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';
+import { getFillLayerCtx } from '@engine/get/render/getFillLayerCtx.js';
 import { DENSE_SEAM_EXPAND_PX } from '@ui/state/dom.js';
 
 // Track if worker has been initialized to avoid redundant setup
@@ -61,8 +63,8 @@ let workerInitialized = false;
  * @returns {void}
  */
 export function drawSolidFillModel(model, alphaScale = 1) {
-  const fillLayerCtx = globalThis.fillLayerCtx;
-  const fillLayerCanvas = globalThis.fillLayerCanvas;
+  const fillLayerCtx = getFillLayerCtx();
+  const fillLayerCanvas = getFillLayerCanvas();
   const W = getW();
   const H = getH();
 

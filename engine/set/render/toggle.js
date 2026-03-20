@@ -35,6 +35,8 @@ import { hud } from '@engine/set/engine/renderer/hud.js';
 // Import GPU renderer getter and shared GPU state
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 import { gpuState } from '@engine/state/gpu/scene.js';
+import { setGpuCanvas } from '@engine/set/render/setGpuCanvas.js';
+import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
 
 // Import loop state for backward compatibility
 import { state } from '@engine/state/engine/loop.js';
@@ -110,8 +112,8 @@ function switchToGpuMode() {
     return false;
   }
 
-  globalThis.gpuGl = gl;
-  globalThis.gpuCanvas = gpuCanvas;
+  setGpuGl(gl);
+  setGpuCanvas(gpuCanvas);
 
   // Ensure we attempt renderer creation even if a prior failure was recorded.
   gpuState.failed = false;

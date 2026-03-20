@@ -43,6 +43,7 @@ import { detailLevel } from '@engine/set/mesh/detailLevel.js';
 
 // Import shared canvas context getter (replacing globalThis.ctx usage)
 import { getCanvasCtx } from '@engine/get/render/getCanvasCtx.js';
+import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
 
 // Keep track of last vertex count and LOD percent to avoid flooding console
 let lastCpuMeshVertCount = -1;
@@ -84,10 +85,11 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing) {
   canvasHidden(true);
 
   // Clear the GPU canvas if it rendered last frame (prevent stale artifacts)
-  if (state.gpuSceneDrawnLastFrame && globalThis.gpuCanvas) {
+  const gpuCanvas = getGpuCanvas();
+  if (state.gpuSceneDrawnLastFrame && gpuCanvas) {
     const _r = sceneRenderer(); 
     if (_r?.gl) {
-      sceneCanvas(_r.gl, globalThis.gpuCanvas);
+      sceneCanvas(_r.gl, gpuCanvas);
     }
     state.gpuSceneDrawnLastFrame = false;
   }
