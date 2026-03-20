@@ -122,7 +122,5 @@ export function background(nowMs) {
   renderMainThreadParticles(ctx, particles, opacityScale, themeAlphaBoost, particleColor);
   ctx.restore();
 
-  if (particles.length === 0) console.debug('[drawBackground] no particles to draw');
-
   return true;
 }
