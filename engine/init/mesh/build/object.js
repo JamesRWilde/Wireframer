@@ -20,12 +20,14 @@
  *   - triangles/triangleNormals: Per-corner rendering data
  */
 
-// Import edge building utility
-import { edgesFromFacesRuntime }from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
+// Import edge building utility and state API
+import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
+import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setEdgesFromFacesRuntime.js';
 
-// Register helper globally so callers don't have to import it repeatedly
-if (!globalThis.edgesFromFacesRuntime) {
-  globalThis.edgesFromFacesRuntime = edgesFromFacesRuntime;
+// Ensure consumer path resolves through module state (no globalThis)
+if (!getMeshEdgesFromFacesRuntime()) {
+  setMeshEdgesFromFacesRuntime(edgesFromFacesRuntime);
 }
 
 /**
@@ -99,9 +101,8 @@ export function object(uniqueVerts, faces, rawEdges, rawLines, materialSections)
 
   // Build face-derived edges for topology
   const faceIndexArrays = faces.map(f => f.indices);
-  const derivedEdges = globalThis.edgesFromFacesRuntime
-    ? globalThis.edgesFromFacesRuntime(faceIndexArrays)
-    : [];
+  const edgeBuilder = getMeshEdgesFromFacesRuntime();
+  const derivedEdges = edgeBuilder ? edgeBuilder(faceIndexArrays) : [];
 
   // Merge: OBJ edges first, then fill gaps with face-derived
   const hasObjEdges = rawEdges.length > 0;

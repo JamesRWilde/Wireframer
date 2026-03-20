@@ -31,17 +31,16 @@
  * The function uses the global edgesFromFacesRuntime if available,
  * otherwise falls back to a simple filter that checks array structure.
  */
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
+
 export function filterValidEdges(E, V) {
-  // Check if the global edge builder is available
-  if (!globalThis.edgesFromFacesRuntime) {
-    // Fallback: simple filter for basic validity
-    // - Must be an array
-    // - Must have exactly 2 elements
-    // - Indices must be different (no self-loops)
+  const edgeBuilder = getMeshEdgesFromFacesRuntime();
+
+  // Fallback: simple filter for basic validity when no builder is defined
+  if (!edgeBuilder) {
     return E ? E.filter(e => Array.isArray(e) && e.length === 2 && e[0] !== e[1]) : [];
   }
   
-  // Use the global edge builder for comprehensive validation
-  // This includes bounds checking against vertex count
-  return globalThis.edgesFromFacesRuntime(E) || [];
+  // Use the configured edge builder for comprehensive validation
+  return edgeBuilder(E) || [];
 }

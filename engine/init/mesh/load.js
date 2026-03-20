@@ -35,13 +35,15 @@ import { validationResult }from '@engine/get/mesh/validate/validationResult.js';
 import { lodRangeForModel }from '@engine/set/mesh/lodRangeForModel.js';
 import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
 import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
-import { edgesFromFacesRuntime }from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
+import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
+import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setEdgesFromFacesRuntime.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { modelState, setActiveModel } from '@engine/state/render/model.js';
 
-// Register globally so any consumer can invoke it without circular imports
-if (!globalThis.edgesFromFacesRuntime) {
-  globalThis.edgesFromFacesRuntime = edgesFromFacesRuntime;
+// Register through module state so callers can retrieve the shared builder.
+if (!getMeshEdgesFromFacesRuntime()) {
+  setMeshEdgesFromFacesRuntime(edgesFromFacesRuntime);
 }
 
 /**
@@ -184,11 +186,12 @@ export function load(mesh, name = 'Shape', options = {}) {
   
   // Step 3: Use edges from mesh if already present (OBJ parser merges
   // explicit OBJ edges with face-derived edges), otherwise derive from faces.
+  const edgeBuilder = getMeshEdgesFromFacesRuntime();
   const E = (function() {
     if (mesh.E && mesh.E.length > 0) {
       return mesh.E;
     }
-    return globalThis.edgesFromFacesRuntime ? globalThis.edgesFromFacesRuntime(F) : [];
+    return edgeBuilder ? edgeBuilder(F) : [];
   })();
 
   // Step 4: Normalise to bounding sphere space.

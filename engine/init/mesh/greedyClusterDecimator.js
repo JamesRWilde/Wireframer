@@ -44,6 +44,9 @@ import { assignVerticesToCells }from '@engine/init/mesh/assignVerticesToCells.js
 // Import vertex clustering (merging nearby vertices)
 import { clusterVertices }from '@engine/init/mesh/clusterVertices.js';
 
+// Import mesh edge builder state accessor
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
+
 // Import face rebuilding (updating face indices after clustering)
 import { rebuildFaces }from '@engine/init/mesh/rebuildFaces.js';
 
@@ -101,7 +104,8 @@ export function greedyClusterDecimator(model, targetFaces) {
   const newFaces = rebuildFaces(F, oldToNew);
 
   // Build edges for wireframe rendering
-  const newEdges = globalThis.edgesFromFacesRuntime?.(newFaces) ?? [];
+  const edgeBuilder = getMeshEdgesFromFacesRuntime();
+  const newEdges = edgeBuilder ? edgeBuilder(newFaces) : [];
   
   // Create decimated mesh object
   const decimated = {
