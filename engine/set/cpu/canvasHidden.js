@@ -20,6 +20,8 @@
 
 "use strict";
 
+import { getCanvasCtx } from '@engine/get/render/getCanvasCtx.js';
+
 /**
  * canvasHidden - Shows or hides the CPU canvas
  * 
@@ -30,7 +32,7 @@
  */
 export function canvasHidden(hidden) {
   // Get the main rendering context (which is attached to the CPU canvas)
-  const ctx = globalThis.ctx;
+  const ctx = getCanvasCtx();
   
   // Guard: if context or canvas doesn't exist, nothing to do
   if (!ctx?.canvas) return;

@@ -14,6 +14,8 @@
 
 "use strict";
 
+import { getCanvasCtx } from '@engine/get/render/getCanvasCtx.js';
+
 /**
  * canvasCpuHidden - Shows or hides the CPU canvas
  *
@@ -23,7 +25,7 @@
  * value differs from the target value, avoiding unnecessary DOM mutations.
  */
 export function canvasCpuHidden(hidden) {
-  const ctx = globalThis.ctx;
+  const ctx = getCanvasCtx();
   
   if (!ctx?.canvas) return;
   

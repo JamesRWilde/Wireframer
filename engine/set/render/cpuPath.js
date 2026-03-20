@@ -41,6 +41,9 @@ import { modelState } from '@engine/state/render/model.js';
 // Import detail level to allow CPU path to react to slider changes
 import { detailLevel } from '@engine/set/mesh/detailLevel.js';
 
+// Import shared canvas context getter (replacing globalThis.ctx usage)
+import { getCanvasCtx } from '@engine/get/render/getCanvasCtx.js';
+
 // Keep track of last vertex count and LOD percent to avoid flooding console
 let lastCpuMeshVertCount = -1;
 let lastCpuLodPct = null;
@@ -53,7 +56,7 @@ let lastCpuLodPct = null;
  * @returns {boolean} true if the CPU path was executed
  */
 export function cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing) {
-  const ctx = globalThis.ctx;
+  const ctx = getCanvasCtx();
 
   // Ensure CPU rendering respects the current LOD slider value.
   // If the slider changed since last frame, re-run detailLevel to update currentLodModel.

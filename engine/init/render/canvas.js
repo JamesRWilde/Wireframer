@@ -22,6 +22,10 @@
 // Import background render state to locate the background canvas
 import {bgState} from '@engine/state/render/background/backgroundState.js';
 
+// Canvas context setter/getter for the primary 2D draw context
+import { setCanvasCtx } from '@engine/set/render/setCanvasCtx.js';
+import { getCanvasCtx } from '@engine/get/render/getCanvasCtx.js';
+
 // Import canvas size synchronization to keep all canvases in sync
 import { syncCanvasSize }from '@engine/set/render/syncCanvasSize.js';
 import { setW, setH } from '@engine/state/render/viewportState.js';
@@ -45,12 +49,12 @@ export function canvas() {
 
 
   // Get the 2D context from the foreground canvas
-  globalThis.ctx = globalThis.fgCanvas ? globalThis.fgCanvas.getContext('2d') : null;
+  setCanvasCtx(globalThis.fgCanvas ? globalThis.fgCanvas.getContext('2d') : null);
 
   // Fallback: use CPU canvas if foreground context is unavailable
-  if (!globalThis.ctx) {
+  if (!getCanvasCtx()) {
     console.warn('[initCanvas] fg context not available, falling back to cpu');
-    globalThis.ctx = cpuCanvas ? cpuCanvas.getContext('2d') : null;
+    setCanvasCtx(cpuCanvas ? cpuCanvas.getContext('2d') : null);
   }
 
   // Create a dedicated fill layer canvas for triangle fill rendering
