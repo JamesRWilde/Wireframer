@@ -14,8 +14,8 @@
 
 "use strict";
 
-let _renderForeground = null;
+import { renderForegroundState } from '@engine/set/render/renderForegroundState.js';
 
 export function getRenderForeground() {
-  return _renderForeground;
+  return renderForegroundState.fn;
 }

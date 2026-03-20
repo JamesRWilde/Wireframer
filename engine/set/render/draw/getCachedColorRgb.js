@@ -14,6 +14,8 @@
 
 "use strict";
 
+import { parseColorToRgb } from '@engine/set/render/draw/parseColorToRgb.js';
+
 const colorCache = new Map();
 
 export function getCachedColorRgb(color) {

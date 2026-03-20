@@ -14,8 +14,8 @@
 
 "use strict";
 
-let _isGpuMode = false;
+import { gpuModeState } from '@engine/set/render/gpuModeState.js';
 
 export function setIsGpuMode(value) {
-  _isGpuMode = value;
+  gpuModeState.value = value;
 }

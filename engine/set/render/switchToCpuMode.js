@@ -15,7 +15,8 @@
 
 import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
 import { setIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
-import { initializeCpuPipeline, applyCpuLodCap } from '@engine/init/render/pipeline/cpu.js';
+import { initializeCpuPipeline } from '@engine/init/render/pipeline/cpu.js';
+import { applyCpuLodCap } from '@engine/set/mesh/applyCpuLodCap.js';
 import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
 import { hud } from '@engine/set/engine/renderer/hud.js';
