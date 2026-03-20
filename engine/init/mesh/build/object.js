@@ -25,7 +25,7 @@ import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRun
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setEdgesFromFacesRuntime.js';
 
-// Ensure consumer path resolves through module state (no globalThis)
+// Ensure consumer path resolves through module state (no global object)
 if (!getMeshEdgesFromFacesRuntime()) {
   setMeshEdgesFromFacesRuntime(edgesFromFacesRuntime);
 }

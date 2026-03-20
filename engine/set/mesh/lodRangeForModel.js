@@ -21,7 +21,7 @@
  * 
  * @param {Object} model - The mesh model with V (vertices) array
  * 
- * Updates globalThis.LOD_RANGE with:
+ * Updates shared LOD range state with:
  * - min: Minimum vertex count (from LODManager or default 3)
  * - max: Maximum vertex count (model's full vertex count)
  * 

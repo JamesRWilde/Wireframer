@@ -4,7 +4,7 @@
  * PURPOSE:
  *   Centralized state for rotation physics (angular velocities, rotation matrix,
  *   auto-rotation targets) and pointer input tracking (dragging, pointer position).
- *   Provides getters and setters so consumers never touch globalThis directly.
+ *   Provides getters and setters so consumers use module state directly.
  *
  * ARCHITECTURE ROLE:
  *   Single source of truth for physics state. Writers (input handlers, physics

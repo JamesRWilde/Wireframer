@@ -40,7 +40,7 @@ export function customRgb(rgb, options = {}) {
     console.warn('[customRgb] failed to update module-held CUSTOM_RGB', e);
   }
 
-  // Set dedicated custom RGB state to avoid globalThis scoping.
+  // Set dedicated custom RGB state to avoid global variable scoping.
   setCustomRgb(newRgb);
 
   updateCustomColor();

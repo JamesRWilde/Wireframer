@@ -9,7 +9,7 @@
  *
  * ARCHITECTURE ROLE:
  *   Writers (UI controls) call setters; readers (render pipeline) call
- *   getters. No globalThis reads, no backdoor state access. The version
+ *   getters. No global reads, no backdoor state access. The version
  *   counter ensures derived caches only rebuild when theme actually changes.
  *
  * DERIVED CACHE STRATEGY:
@@ -216,7 +216,7 @@ function linear(v) {
 }
 
 // ══════════════════════════════════════════════
-// Public getters (read from state, not globalThis)
+// Public getters (read from state, not legacy global object)
 // ══════════════════════════════════════════════
 
 /**

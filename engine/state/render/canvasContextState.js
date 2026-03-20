@@ -3,11 +3,11 @@
  *
  * PURPOSE:
  *   Provide a focused getter/setter for the main 2D rendering context
- *   (`ctx`) so callers do not touch globalThis directly.
+ *   (`ctx`) so callers use module state directly.
  *
  * ARCHITECTURE:
  *   This is one global state variable / domain, the first full migration
- *   for the old `globalThis.ctx`. All new code should import from here.
+ *   for the old `window`-scoped ctx. All new code should import from here.
  */
 
 "use strict";

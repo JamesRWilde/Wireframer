@@ -2,7 +2,7 @@
  * cloneState.js - Mesh cloning state abstraction
  *
  * PURPOSE:
- *   Allows safe use of a configurable clone function in place of globalThis.clone.
+ *   Allows safe use of a configurable clone function in module state.
  */
 
 "use strict";

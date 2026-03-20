@@ -50,7 +50,7 @@ if (!getMeshEdgesFromFacesRuntime()) {
   setMeshEdgesFromFacesRuntime(edgesFromFacesRuntime);
 }
 
-// Register clone API in state for safe module-based access (no globalThis)
+// Register clone API in state for safe module-based access (no global object)
 if (!getMeshClone()) {
   configureMeshClone(cloneMesh);
 }
@@ -247,5 +247,5 @@ export function load(mesh, name = 'Shape', options = {}) {
   return newModelCopy;
 }
 
-// Register for modular engine access (replaces globalThis.load)
+// Register for modular engine access (replaces legacy load global function)
 setInitMeshEngineLoad(load);

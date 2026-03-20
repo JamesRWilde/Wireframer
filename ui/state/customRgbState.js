@@ -3,7 +3,7 @@
  *
  * PURPOSE:
  *   Centralizes custom RGB state for theme/palette/particle rendering.
- *   Replaces direct use of globalThis.CUSTOM_RGB adopted by legacy code.
+ *   Replaces direct use of legacy global external color state with module state.
  */
 
 "use strict";

@@ -92,6 +92,6 @@ export function attachInputListeners(canvas) {
     setZoom(newZoom);
   }, { passive: false });
 
-  // Store input canvas in shared state for other modules (no globalThis)
+  // Store input canvas in shared state for other modules (no global object state)
   setInputCanvas(canvas);
 }

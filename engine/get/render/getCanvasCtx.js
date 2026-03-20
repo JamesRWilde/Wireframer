@@ -2,7 +2,7 @@
  * get/render/canvasContext.js - Canvas context getter
  *
  * Exposes canonical UI state value for the active 2D rendering context.
- * This is the accessor side of the `globalThis.ctx` replacement.
+ * This is the accessor side of the legacy canvas ctx replacement.
  */
 
 "use strict";

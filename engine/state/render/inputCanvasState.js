@@ -3,7 +3,7 @@
  *
  * PURPOSE:
  *   Store and retrieve the current input canvas reference in a single state module.
- *   Avoids globalThis._inputCanvas usage and enables test-friendly access.
+ *   Avoids legacy global inputCanvas usage and enables test-friendly access.
  */
 
 "use strict";

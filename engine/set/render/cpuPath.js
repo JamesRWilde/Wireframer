@@ -41,7 +41,7 @@ import { modelState } from '@engine/state/render/model.js';
 // Import detail level to allow CPU path to react to slider changes
 import { detailLevel } from '@engine/set/mesh/detailLevel.js';
 
-// Import shared canvas context getter (replacing globalThis.ctx usage)
+// Import shared canvas context getter (replacing legacy ctx usage)
 import { getCanvasCtx } from '@engine/get/render/getCanvasCtx.js';
 import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
 

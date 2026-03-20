@@ -3,7 +3,7 @@
  *
  * PURPOSE:
  *   Holds the runtime morph API handlers and duration configuration.
- *   Replaces globalThis.morph and globalThis.MORPH_DURATION_MS usage.
+ *   Replaces legacy morph and MORPH_DURATION_MS usage with module state.
  */
 
 "use strict";

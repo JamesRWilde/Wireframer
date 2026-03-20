@@ -3,7 +3,7 @@
  *
  * PURPOSE:
  *   Store and expose a pluggable edge extraction function for mesh utils.
- *   Replaces the old `globalThis.edgesFromFacesRuntime` usage with module state.
+ *   Replaces the old edgesFromFacesRuntime usage with module state.
  */
 
 "use strict";

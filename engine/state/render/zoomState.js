@@ -3,7 +3,7 @@
  *
  * PURPOSE:
  *   Centralized state for camera zoom level and its clamping bounds.
- *   Provides getters and setters so consumers never touch globalThis directly.
+ *   Provides getters and setters so consumers use module state directly.
  *
  * ARCHITECTURE ROLE:
  *   Single source of truth for zoom state. The render pipeline reads the

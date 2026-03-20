@@ -57,7 +57,7 @@ export const state = {
   emaBgMs: 0,
   emaFgMs: 0,
 
-  // Render path tracking flags (previously globalThis.FRAME_LOOP_STATE)
+  // Render path tracking flags (module state replaces legacy global frame loop state)
   gpuSceneDrawnLastFrame: false,         // Was GPU path used last frame?
   cpuForegroundDrawnOnMainCanvas: false, // Is CPU foreground currently on main canvas?
 };

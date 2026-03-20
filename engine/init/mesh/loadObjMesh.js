@@ -36,6 +36,6 @@ export async function loadObjMesh(objPath, name = 'Shape') {
   return load(mesh, name, { animateMorph: true });
 }
 
-// Register for modular engine access (replaces globalThis.loadObjMesh)
+// Register for modular engine access (replaces legacy loadObjMesh global function)
 setLoadObjMesh(loadObjMesh);
 

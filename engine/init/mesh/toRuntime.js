@@ -87,4 +87,4 @@ export function toRuntime(text, overrides = {}) {
   return meshObj;
 }
 
-// No globalThis export; consumers should import toRuntime directly
+// No global export; consumers should import toRuntime directly
