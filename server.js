@@ -100,14 +100,6 @@ try {
   process.exit(1);
 }
 
-// Added debugging logs to trace server initialization
-console.log('[server.js] Initializing server...');
-console.log('[server.js] Project root directory:', __dirname);
-
-// Enhanced debugging logs for server startup
-console.log('[DEBUG] Initializing server...');
-console.log(`[DEBUG] Serving static files from: ${path.join(__dirname)}`);
-
 // Check if meshes directory exists
 if (!fs.existsSync(path.join(__dirname, 'meshes'))) {
   console.error('[ERROR] Meshes directory does not exist. Please ensure the "meshes" folder is present in the project root.');

@@ -70,9 +70,7 @@ export function sliderListeners(sliders, lodSlider, detailLevel) {
           // Then trigger model decimation if the callback is available
           // We divide by 100 because the slider range is 0-100 but the engine expects 0-1
           if (typeof detailLevel === 'function') {
-            const decEnd = trace('decimate', 'ui', { pct: lodPct });
             detailLevel(lodPct);
-            decEnd({});
           }
         } catch (e) {
           // Log but don't throw - the app can continue at the current LOD
