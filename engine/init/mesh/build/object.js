@@ -122,7 +122,7 @@ export function object(uniqueVerts, faces, rawEdges, rawLines, materialSections)
   }));
   // Close the last section
   if (finalSections.length > 0) {
-    finalSections[finalSections.length - 1].faceEnd = faces.length;
+    finalSections.at(-1).faceEnd = faces.length;
   }
 
   const meshObj = {

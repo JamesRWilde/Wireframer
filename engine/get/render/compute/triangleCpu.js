@@ -44,7 +44,7 @@ export function triangleCpu(normal, useSmoothShading) {
 
   // Diffuse: N dot L
   const ndotl = nx * Lx + ny * Ly + nz * Lz;
-  const diffuse = ndotl > 0 ? 0.72 * ndotl : 0;
+  const diffuse = Math.max(0, 0.72 * ndotl);
 
   // Specular: (N dot H)^shininess using precomputed half vector
   const nh = nx * Hx + ny * Hy + nz * Hz;
@@ -59,8 +59,8 @@ export function triangleCpu(normal, useSmoothShading) {
 
   // Lerp theme colors (inline, no array creation)
   return [
-    (dark[0] + (bright[0] - dark[0]) * lit) | 0,
-    (dark[1] + (bright[1] - dark[1]) * lit) | 0,
-    (dark[2] + (bright[2] - dark[2]) * lit) | 0,
+    Math.trunc(dark[0] + (bright[0] - dark[0]) * lit),
+    Math.trunc(dark[1] + (bright[1] - dark[1]) * lit),
+    Math.trunc(dark[2] + (bright[2] - dark[2]) * lit),
   ];
 }

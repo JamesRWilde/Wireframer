@@ -72,8 +72,8 @@ function interpolateInSphere(a, b, t) {
   if (t <= 0) return [a[0], a[1], a[2]];
   if (t >= 1) return [b[0], b[1], b[2]];
 
-  const rA = Math.sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
-  const rB = Math.sqrt(b[0]*b[0] + b[1]*b[1] + b[2]*b[2]);
+  const rA = Math.hypot(a[0], a[1], a[2]);
+  const rB = Math.hypot(b[0], b[1], b[2]);
 
   // Surface vertices: slerp along the sphere arc
   if (rA > 0.95 && rB > 0.95) {
@@ -84,7 +84,7 @@ function interpolateInSphere(a, b, t) {
 
     // Near-identical directions: use hemisphere-weighted average
     if (sinA < 1e-6) {
-      const r = Math.sqrt((a[0]+b[0])**2 + (a[1]+b[1])**2 + (a[2]+b[2])**2) || 1;
+      const r = Math.hypot(a[0]+b[0], a[1]+b[1], a[2]+b[2]) || 1;
       return [(a[0]+b[0])/r, (a[1]+b[1])/r, (a[2]+b[2])/r];
     }
 
@@ -94,7 +94,7 @@ function interpolateInSphere(a, b, t) {
     const x = wA*a[0] + wB*b[0];
     const y = wA*a[1] + wB*b[1];
     const z = wA*a[2] + wB*b[2];
-    const r = Math.sqrt(x*x + y*y + z*z) || 1;
+    const r = Math.hypot(x, y, z) || 1;
     return [x/r, y/r, z/r];
   }
 
