@@ -28,7 +28,6 @@ import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model
 import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/resolve/triangleNormalCpu.js';
 import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/compute/triangleCpu.js';
 import { getEdgeColor, getFillOpacity, getWireOpacity }from '@engine/state/render/renderState.js';
-import { setCpuSortMs, setCpuLightMs, setCpuFillMs, setCpuStrokeMs }from '@engine/state/render/debugFlags.js';
 
 let sortZ = null;    // Float32Array of z-depths per triangle
 let sortIdx = null;  // Uint32Array of triangle indices

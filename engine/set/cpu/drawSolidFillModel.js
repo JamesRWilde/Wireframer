@@ -155,20 +155,6 @@ export function drawSolidFillModel(model, alphaScale = 1) {
 
   fillLayerCtx.globalCompositeOperation = 'source-over';
 
-  // Debug logging for fill opacity values
-  if (getDebugLogFill()) {
-    console.debug(
-      '[drawSolidFillModel] FILL_OPACITY slider:',
-      getFillOpacity(),
-      'alphaScale:',
-      alphaScale,
-      'fillSlider:',
-      fillSlider,
-      'fillAlpha:',
-      fillAlpha,
-    );
-  }
-
   // Rasterize triangles on the CPU
   trianglesCpu({
     triOrder,
