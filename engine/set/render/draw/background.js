@@ -34,11 +34,8 @@ import { workersUpdateParticles }from '@workers/workersUpdateParticles.js';
 // Import background worker initialization
 import { backgroundWorker }from '@engine/init/render/backgroundWorker.js';
 
-// Import worker readiness check
-import { isBackgroundWorkerReady }from '@engine/get/render/isBackgroundWorkerReady.js';
-
-// Import pending worker particles getter
-import { pendingWorkerParticles }from '@engine/get/render/pendingWorkerParticles.js';
+// Import background worker state directly (avoid function wrapper)
+import { workerState }from '@engine/state/render/background/worker.js';
 
 // Import message sender for background worker
 import { postToBackgroundWorker }from '@engine/set/render/postToBackgroundWorker.js';
@@ -79,7 +76,7 @@ export function background(nowMs) {
   }
 
   // Worker path: send update command and render received particle data
-  if (isBackgroundWorkerReady()) {
+  if (workerState.workerReady) {
     const density = bgState.densityPct;
     const speed = bgState.velocityPct;
     const opacity = bgState.opacityPct;
@@ -97,7 +94,7 @@ export function background(nowMs) {
     ctx.fillRect(0, 0, w, h);
 
     // Render particles received from worker
-    const pending = pendingWorkerParticles();
+    const pending = workerState.pendingWorkerParticles;
     if (pending) {
       ctx.save();
       ctx.globalCompositeOperation = getThemeMode() === 'light' ? 'multiply' : 'screen';
