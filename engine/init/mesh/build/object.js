@@ -24,63 +24,11 @@
 import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setEdgesFromFacesRuntime.js';
+import { mergeEdges } from '@engine/init/mesh/build/mergeEdges.js';
 
 // Ensure consumer path resolves through module state (no global object)
 if (!getMeshEdgesFromFacesRuntime()) {
   setMeshEdgesFromFacesRuntime(edgesFromFacesRuntime);
-}
-
-/**
- * Deduplicates edges stored as [lo, hi] pairs.
- * Returns a new array with no duplicates.
- */
-function dedupEdges(edges) {
-  const seen = new Set();
-  const result = [];
-  for (const e of edges) {
-    const lo = e[0] < e[1] ? e[0] : e[1];
-    const hi = e[0] < e[1] ? e[1] : e[0];
-    const key = `${lo},${hi}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      result.push([lo, hi]);
-    }
-  }
-  return result;
-}
-
-/**
- * Merges two edge arrays (OBJ edges and face-derived edges),
- * keeping explicit OBJ edges where they exist and adding any
- * face-derived edges not already covered.
- */
-function mergeEdges(objEdges, faceEdges) {
-  const seen = new Set();
-  const result = [];
-
-  // Add OBJ edges first (author-defined, takes priority)
-  for (const e of objEdges) {
-    const lo = e[0] < e[1] ? e[0] : e[1];
-    const hi = e[0] < e[1] ? e[1] : e[0];
-    const key = `${lo},${hi}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      result.push([lo, hi]);
-    }
-  }
-
-  // Add face-derived edges not already present
-  for (const e of faceEdges) {
-    const lo = e[0] < e[1] ? e[0] : e[1];
-    const hi = e[0] < e[1] ? e[1] : e[0];
-    const key = `${lo},${hi}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      result.push([lo, hi]);
-    }
-  }
-
-  return result;
 }
 
 /**

@@ -22,65 +22,8 @@
 /** Grid cell size as a fraction of bounding box diagonal */
 const CELL_SIZE_FACTOR = 0.02;
 
-/**
- * buildSpatialGrid - Bucket 3D points into a spatial hash grid
- */
-function buildSpatialGrid(verts, min, cellSize) {
-  const grid = new Map();
-  const invCell = 1 / cellSize;
-
-  for (let i = 0; i < verts.length; i++) {
-    const v = verts[i];
-    const cx = Math.floor((v[0] - min[0]) * invCell);
-    const cy = Math.floor((v[1] - min[1]) * invCell);
-    const cz = Math.floor((v[2] - min[2]) * invCell);
-    const key = `${cx},${cy},${cz}`;
-    if (!grid.has(key)) grid.set(key, []);
-    grid.get(key).push(i);
-  }
-
-  return grid;
-}
-
-/**
- * probeGrid - Find the nearest vertex in a spatial grid
- */
-function probeGrid(point, grid, verts, min, cellSize, maxRadius = 3) {
-  const invCell = 1 / cellSize;
-  const cx = Math.floor((point[0] - min[0]) * invCell);
-  const cy = Math.floor((point[1] - min[1]) * invCell);
-  const cz = Math.floor((point[2] - min[2]) * invCell);
-
-  let bestIdx = 0;
-  let bestDistSq = Infinity;
-
-  for (let radius = 0; radius <= maxRadius; radius++) {
-    let foundBetter = false;
-    for (let dx = -radius; dx <= radius; dx++) {
-      for (let dy = -radius; dy <= radius; dy++) {
-        for (let dz = -radius; dz <= radius; dz++) {
-          if (radius > 0 && Math.max(Math.abs(dx), Math.abs(dy), Math.abs(dz)) !== radius) continue;
-          const key = `${cx+dx},${cy+dy},${cz+dz}`;
-          const cell = grid.get(key);
-          if (!cell) continue;
-          for (const idx of cell) {
-            const v = verts[idx];
-            const d = (v[0]-point[0])**2 + (v[1]-point[1])**2 + (v[2]-point[2])**2;
-            if (d < bestDistSq) {
-              bestDistSq = d;
-              bestIdx = idx;
-              foundBetter = true;
-            }
-          }
-        }
-      }
-    }
-    if (foundBetter && bestDistSq < (cellSize * radius * 2) ** 2) break;
-  }
-
-  return bestIdx;
-}
-
+import { buildSpatialGrid } from '@engine/init/mesh/buildSpatialGrid.js';
+import { probeGrid } from '@engine/init/mesh/probeGrid.js';
 
 /**
  * computeMorphMap - Precompute nearest-vertex mapping for morphing
@@ -112,7 +55,6 @@ export function computeMorphMap(fromMesh, toMesh, scaleFactor = 1) {
     return { indices, tx, ty, tz };
   }
 
-  // Bounding box of target (for centering the scaled positions)
   let minX = Infinity, minY = Infinity, minZ = Infinity;
   let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
   for (const v of toV) {
@@ -121,7 +63,6 @@ export function computeMorphMap(fromMesh, toMesh, scaleFactor = 1) {
     if (v[2] < minZ) minZ = v[2]; if (v[2] > maxZ) maxZ = v[2];
   }
 
-  // Center of target bounding box (pivot point for scaling)
   const cx = (minX + maxX) * 0.5;
   const cy = (minY + maxY) * 0.5;
   const cz = (minZ + maxZ) * 0.5;
@@ -137,7 +78,6 @@ export function computeMorphMap(fromMesh, toMesh, scaleFactor = 1) {
     indices[i] = idx;
 
     if (scaleFactor !== 1) {
-      // Scale target position around its center to match source extent
       const v = toV[idx];
       tx[i] = cx + (v[0] - cx) * scaleFactor;
       ty[i] = cy + (v[1] - cy) * scaleFactor;

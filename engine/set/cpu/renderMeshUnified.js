@@ -30,87 +30,8 @@ import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/comp
 import { getEdgeColor } from '@engine/get/render/edgeColor.js';
 import { getFillOpacity } from '@engine/get/render/fillOpacity.js';
 import { getWireOpacity } from '@engine/get/render/wireOpacity.js';
-
-let sortZ = null;    // Float32Array of z-depths per triangle
-let sortIdx = null;  // Uint32Array of triangle indices
-
-/**
- * sortTrianglesByDepth - Sorts triangle indices by average z-depth (back-to-front)
- *
- * @param {Array<Array<number>>} triFaces - Array of triangle face index arrays [a, b, c]
- * @param {Array<Array<number>>} T - Transformed vertex positions
- * @param {number} triCount - Number of triangles
- */
-function sortTrianglesByDepth(triFaces, T, triCount) {
-  // Re-allocate sort scratch arrays only if model grew
-  if (!sortZ || sortZ.length < triCount) {
-    sortZ = new Float32Array(triCount);
-    sortIdx = new Uint32Array(triCount);
-  }
-
-  // Compute z-depths and fill index array
-  for (let i = 0; i < triCount; i++) {
-    const tri = triFaces[i];
-    sortZ[i] = (T[tri[0]][2] + T[tri[1]][2] + T[tri[2]][2]) / 3;
-    sortIdx[i] = i;
-  }
-
-  // Sort indices by z-depth (back-to-front)
-  sortIdx.subarray(0, triCount).sort((a, b) => sortZ[b] - sortZ[a]);
-
-  return sortIdx;
-}
-
-/**
- * renderTriangle - Renders a single triangle with fill and stroke
- *
- * @param {CanvasRenderingContext2D} ctx - Canvas context
- * @param {Array<number>} tri - Triangle vertex indices [a, b, c]
- * @param {Array<Array<number>>} P2 - 2D projected vertex positions
- * @param {Object} renderOpts - Render options { fillAlpha, edgeColor, wireAlpha }
- * @param {Object} lightingData - Normal and shade color data { shadeColor }
- * @param {string} lastFillStyle - Previous fillStyle (for caching)
- * @returns {string} Updated lastFillStyle
- */
-function renderTriangle(ctx, tri, P2, renderOpts, lightingData, lastFillStyle) {
-  const { fillAlpha, edgeColor, wireAlpha } = renderOpts;
-  const [a, b, c] = tri;
-  const ax = P2[a][0], ay = P2[a][1];
-  const bx = P2[b][0], by = P2[b][1];
-  const cx = P2[c][0], cy = P2[c][1];
-
-  // Skip degenerate triangles
-  const area2 = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
-  if (Math.abs(area2) < 0.2) return lastFillStyle;
-
-  const { shadeColor } = lightingData;
-
-  ctx.beginPath();
-  ctx.moveTo(ax, ay);
-  ctx.lineTo(bx, by);
-  ctx.lineTo(cx, cy);
-  ctx.closePath();
-
-  // Fill phase
-  if (fillAlpha > 0.001) {
-    ctx.globalAlpha = fillAlpha;
-    const fillStyle = `rgb(${shadeColor[0]}, ${shadeColor[1]}, ${shadeColor[2]})`;
-    if (fillStyle !== lastFillStyle) {
-      ctx.fillStyle = fillStyle;
-      lastFillStyle = fillStyle;
-    }
-    ctx.fill();
-  }
-
-  // Stroke phase
-  if (wireAlpha > 0.001) {
-    ctx.globalAlpha = wireAlpha;
-    ctx.strokeStyle = edgeColor;
-    ctx.stroke();
-  }
-
-  return lastFillStyle;
-}
+import { sortTrianglesByDepth } from '@engine/set/cpu/sortTrianglesByDepth.js';
+import { renderTriangle } from '@engine/set/cpu/renderTriangle.js';
 
 /**
  * renderMeshUnified - Renders mesh with per-triangle fill and edges
