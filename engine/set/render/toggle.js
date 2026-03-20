@@ -43,7 +43,7 @@ import { state } from '@engine/state/engine/loop.js';
 
 // Import model state
 import { modelState } from '@engine/state/render/model.js';
-import { setActiveModel } from '@engine/set/render/model.js';
+import { setActiveModel } from '@engine/set/render/physics/model.js';
 
 // Import CPU model capping
 import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';

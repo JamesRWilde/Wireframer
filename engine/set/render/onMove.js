@@ -18,13 +18,13 @@
 
 "use strict";
 
-import { isDragging } from '@engine/get/render/isDragging.js';
-import { getLastPointerX } from '@engine/get/render/getLastPointerX.js';
-import { getLastPointerY } from '@engine/get/render/getLastPointerY.js';
-import { setWx } from '@engine/set/render/setWx.js';
-import { setWy } from '@engine/set/render/setWy.js';
-import { setLastPointerX } from '@engine/set/render/setLastPointerX.js';
-import { setLastPointerY } from '@engine/set/render/setLastPointerY.js';
+import { isDragging } from '@engine/get/render/physics/isDragging.js';
+import { getLastPointerX } from '@engine/get/render/physics/getLastPointerX.js';
+import { getLastPointerY } from '@engine/get/render/physics/getLastPointerY.js';
+import { setWx } from '@engine/set/render/physics/setWx.js';
+import { setWy } from '@engine/set/render/physics/setWy.js';
+import { setLastPointerX } from '@engine/set/render/physics/setLastPointerX.js';
+import { setLastPointerY } from '@engine/set/render/physics/setLastPointerY.js';
 
 /**
  * onMove - Handles pointer movement for model rotation.

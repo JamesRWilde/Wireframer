@@ -22,7 +22,7 @@
 
 import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
 import { modelState } from '@engine/state/render/model.js';
-import { setActiveModel } from '@engine/set/render/model.js';
+import { setActiveModel } from '@engine/set/render/physics/model.js';
 import { isGpuMode } from '@engine/set/render/renderForeground.js';
 
 /**

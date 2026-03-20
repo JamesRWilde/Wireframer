@@ -23,7 +23,7 @@
 import { objectList } from '@engine/get/render/objectList.js';
 import { toRuntime } from '@engine/init/mesh/toRuntime.js';
 import { getInitMeshEngineLoad } from '@engine/get/mesh/getInitMeshEngineLoad.js';
-import { setActiveModel } from '@engine/set/render/model.js';
+import { setActiveModel } from '@engine/set/render/physics/model.js';
 
 /**
  * loadObjMesh - Asynchronously loads and parses an OBJ file

@@ -20,11 +20,11 @@
 "use strict";
 
 import { onMove } from '@engine/set/render/onMove.js';
-import { setDragging } from '@engine/set/render/setDragging.js';
-import { setLastPointerX } from '@engine/set/render/setLastPointerX.js';
-import { setLastPointerY } from '@engine/set/render/setLastPointerY.js';
-import { setWx } from '@engine/set/render/setWx.js';
-import { setWy } from '@engine/set/render/setWy.js';
+import { setDragging } from '@engine/set/render/physics/setDragging.js';
+import { setLastPointerX } from '@engine/set/render/physics/setLastPointerX.js';
+import { setLastPointerY } from '@engine/set/render/physics/setLastPointerY.js';
+import { setWx } from '@engine/set/render/physics/setWx.js';
+import { setWy } from '@engine/set/render/physics/setWy.js';
 import { getZoom } from '@engine/get/render/zoom.js';
 import { getZoomMin } from '@engine/get/render/zoomMin.js';
 import { getZoomMax } from '@engine/get/render/zoomMax.js';
