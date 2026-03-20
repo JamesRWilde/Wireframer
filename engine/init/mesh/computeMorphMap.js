@@ -24,6 +24,7 @@ const CELL_SIZE_FACTOR = 0.02;
 
 import { buildSpatialGrid } from '@engine/init/mesh/buildSpatialGrid.js';
 import { probeGrid } from '@engine/init/mesh/probeGrid.js';
+import { computeBoundingBox } from '@engine/get/mesh/computeBoundingBox.js';
 
 /**
  * computeMorphMap - Precompute nearest-vertex mapping for morphing
@@ -55,37 +56,33 @@ export function computeMorphMap(fromMesh, toMesh, scaleFactor = 1) {
     return { indices, tx, ty, tz };
   }
 
-  let minX = Infinity, minY = Infinity, minZ = Infinity;
-  let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
-  for (const v of toV) {
-    if (v[0] < minX) minX = v[0]; if (v[0] > maxX) maxX = v[0];
-    if (v[1] < minY) minY = v[1]; if (v[1] > maxY) maxY = v[1];
-    if (v[2] < minZ) minZ = v[2]; if (v[2] > maxZ) maxZ = v[2];
-  }
+  const { minX, maxX, minY, maxY, minZ, maxZ } = computeBoundingBox(toV);
 
   const cx = (minX + maxX) * 0.5;
   const cy = (minY + maxY) * 0.5;
   const cz = (minZ + maxZ) * 0.5;
 
-  const diag = Math.sqrt((maxX-minX)**2 + (maxY-minY)**2 + (maxZ-minZ)**2);
+  const diag = Math.hypot(maxX - minX, maxY - minY, maxZ - minZ);
   const cellSize = Math.max(diag * CELL_SIZE_FACTOR, 1e-6);
   const min = [minX, minY, minZ];
 
   const grid = buildSpatialGrid(toV, min, cellSize);
 
+  const scale = scaleFactor === 1 ? null : scaleFactor;
+
   for (let i = 0; i < n; i++) {
     const idx = probeGrid(fromV[i], grid, toV, min, cellSize);
     indices[i] = idx;
 
-    if (scaleFactor !== 1) {
-      const v = toV[idx];
-      tx[i] = cx + (v[0] - cx) * scaleFactor;
-      ty[i] = cy + (v[1] - cy) * scaleFactor;
-      tz[i] = cz + (v[2] - cz) * scaleFactor;
+    const v = toV[idx];
+    if (scale === null) {
+      tx[i] = v[0];
+      ty[i] = v[1];
+      tz[i] = v[2];
     } else {
-      tx[i] = toV[idx][0];
-      ty[i] = toV[idx][1];
-      tz[i] = toV[idx][2];
+      tx[i] = cx + (v[0] - cx) * scale;
+      ty[i] = cy + (v[1] - cy) * scale;
+      tz[i] = cz + (v[2] - cz) * scale;
     }
   }
 

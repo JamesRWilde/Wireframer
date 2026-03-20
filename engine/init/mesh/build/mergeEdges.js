@@ -17,8 +17,8 @@ export function mergeEdges(objEdges, faceEdges) {
 
   // Add OBJ edges first (author-defined priority)
   for (const e of objEdges) {
-    const lo = e[0] < e[1] ? e[0] : e[1];
-    const hi = e[0] < e[1] ? e[1] : e[0];
+    const lo = Math.min(e[0], e[1]);
+    const hi = Math.max(e[0], e[1]);
     const key = `${lo},${hi}`;
     if (!seen.has(key)) {
       seen.add(key);
@@ -28,8 +28,8 @@ export function mergeEdges(objEdges, faceEdges) {
 
   // Add face-derived edges not already present
   for (const e of faceEdges) {
-    const lo = e[0] < e[1] ? e[0] : e[1];
-    const hi = e[0] < e[1] ? e[1] : e[0];
+    const lo = Math.min(e[0], e[1]);
+    const hi = Math.max(e[0], e[1]);
     const key = `${lo},${hi}`;
     if (!seen.has(key)) {
       seen.add(key);
