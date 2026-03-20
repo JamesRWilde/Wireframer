@@ -38,7 +38,7 @@ import { isGpuMode } from '@engine/set/render/renderForeground.js';
  * 3. Decimates the base model to the target vertex count
  * 4. Sets the decimated model as active for rendering
  */
-export function detailLevel(percent, name = 'Shape') {
+export function detailLevel(percent, name) {
   // Choose the appropriate base model based on render mode:
   // - GPU mode: use baseModel (full detail, no CPU cap)
   // - CPU mode: use cpuBaseModel (capped for performance)

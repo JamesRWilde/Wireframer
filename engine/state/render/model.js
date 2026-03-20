@@ -62,9 +62,13 @@ export const modelState = {
  */
 export function setActiveModel(model, name = '') {
 
-  // Step 1: Update the active model and name
+  // Step 1: Update the active model
   modelState.model = model;
-  modelState.name = name || modelState.name || '';
+
+  // Update name only when explicitly provided to avoid accidental "Shape" reset
+  if (typeof name === 'string' && name.trim() !== '') {
+    modelState.name = name;
+  }
 
   // Step 2: Update vertex and edge count displays in the HUD
   const statV = statsState.statV;
