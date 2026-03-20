@@ -81,9 +81,6 @@ export function getDebugP2Points() { return debug.P2_POINTS; }
 /** @returns {boolean} Clear canvas each frame */
 export function getDebugClear() { return debug.CLEAR; }
 
-/** @returns {boolean} Log quality budget */
-export function getDebugBudget() { return debug.BUDGET; }
-
 /** @returns {boolean} Log render toggle changes */
 export function getDebugLogToggles() { return debug.LOG_TOGGLES; }
 

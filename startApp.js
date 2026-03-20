@@ -121,18 +121,13 @@ export function startApp() {
 
   // Step 11: Initialize the render pipeline (GPU or CPU based on WebGL availability)
   // This is a one-time initialization that sets the active renderer
-  console.log('[startApp] Initializing render pipeline');
   initRenderPipeline();
-  console.log('[startApp] Render pipeline initialized');
 
   // Step 12: Initialize renderer toggle functionality
-  console.log('[startApp] Initializing rendererToggle');
   rendererToggle();
-  console.log('[startApp] rendererToggle initialized successfully');
 
   // Step 13: Start the animation loop
   try {
-    console.log('[startApp] Starting animation loop');
     requestAnimationFrame(animationFrame);
   } catch (e) {
     console.error('[startApp] Failed to start animation loop', e);

@@ -45,9 +45,6 @@ export function qualityApplyChange(targetQuality, avgFrameTime) {
     if (budgetState.downgradeCounter >= DOWNGRADE_THRESHOLD) {
       budgetState.currentQuality = targetQuality;
       budgetState.downgradeCounter = 0;
-      if (getDebugBudget()) {
-        console.log('[frameBudget] Downgraded to', targetQuality.toUpperCase(), 'quality (avg:', avgFrameTime.toFixed(2), 'ms)');
-      }
     }
   } else if (isUpgrade) {
     // Increment upgrade counter, reset downgrade counter
@@ -58,9 +55,6 @@ export function qualityApplyChange(targetQuality, avgFrameTime) {
     if (budgetState.upgradeCounter >= UPGRADE_THRESHOLD) {
       budgetState.currentQuality = targetQuality;
       budgetState.upgradeCounter = 0;
-      if (getDebugBudget()) {
-        console.log('[frameBudget] Upgraded to', targetQuality.toUpperCase(), 'quality (avg:', avgFrameTime.toFixed(2), 'ms)');
-      }
     }
   } else {
     // No change needed, reset both counters
