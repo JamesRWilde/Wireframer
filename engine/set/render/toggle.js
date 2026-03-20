@@ -133,12 +133,12 @@ function switchToGpuMode() {
   canvasHidden(false);
   canvasCpuHidden(true);
 
-  // Update modelState.model and HUD telemetry to reflect what GPU will render
+  // Update modelState.model and HUD label to reflect what GPU will render
   if (modelState.baseModel) {
     const modelToShow = modelState.currentLodPct < 1
       ? decimateByPercent(modelState.baseModel, modelState.currentLodPct)
       : modelState.baseModel;
-    setActiveModel(modelToShow);
+    setActiveModel(modelToShow, modelState.name);
   }
 
   console.log('[toggleRenderMode] Switched to GPU mode');

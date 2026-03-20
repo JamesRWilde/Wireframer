@@ -36,6 +36,7 @@ export const modelState = {
   cpuBaseModel: null,
   currentLodModel: null,
   currentLodPct: 1,
+  name: '',
 };
 
 /**
@@ -61,8 +62,9 @@ export const modelState = {
  */
 export function setActiveModel(model, name = '') {
 
-  // Step 1: Update the active model
+  // Step 1: Update the active model and name
   modelState.model = model;
+  modelState.name = name || modelState.name || '';
 
   // Step 2: Update vertex and edge count displays in the HUD
   const statV = statsState.statV;
@@ -79,5 +81,5 @@ export function setActiveModel(model, name = '') {
 
   // Step 5: Update the object label in the UI
   const labelEl = document.getElementById('obj-label');
-  if (labelEl) labelEl.textContent = name || '';
+  if (labelEl) labelEl.textContent = modelState.name || name || '';
 }
