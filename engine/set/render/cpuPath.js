@@ -64,7 +64,6 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing) {
   const lodPct = modelState.currentLodPct ?? 1;
   if (lodPct !== lastCpuLodPct) {
     lastCpuLodPct = lodPct;
-    console.log(`[cpuPath] lodPct changed to ${lodPct.toFixed(2)} - recalculating LOD`);
     detailLevel(lodPct);
   }
 
@@ -76,7 +75,6 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing) {
 
   const vertCount = cpuMesh?.V?.length ?? 0;
   if (vertCount !== lastCpuMeshVertCount) {
-    console.log(`[cpuPath] rendering mesh verts=${vertCount} (cpuBase=${modelState.cpuBaseModel?.V?.length ?? 0}, currentLod=${modelState.currentLodModel?.V?.length ?? 0})`);
     lastCpuMeshVertCount = vertCount;
   }
 

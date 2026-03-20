@@ -60,8 +60,6 @@ export function toggleRenderMode() {
 }
 
 function switchToCpuMode() {
-  console.log('[toggleRenderMode] Switching from GPU to CPU');
-
   // Dispose previous GPU pipeline (if any) so we can reinitialize cleanly later
   const renderer = sceneRenderer();
   if (renderer?.dispose) renderer.dispose();
@@ -91,13 +89,10 @@ function switchToCpuMode() {
     modelState.cpuBaseModel = capModelForCpu(modelState.baseModel);
   }
 
-  console.log('[toggleRenderMode] Switched to CPU mode');
   return true;
 }
 
 function switchToGpuMode() {
-  console.log('[toggleRenderMode] Switching from CPU to GPU');
-
   const gpuCanvas = document.getElementById('gpu');
   if (!gpuCanvas) {
     console.warn('[toggleRenderMode] GPU canvas not found, cannot switch');
@@ -143,6 +138,5 @@ function switchToGpuMode() {
     setActiveModel(modelToShow, modelState.name);
   }
 
-  console.log('[toggleRenderMode] Switched to GPU mode');
   return true;
 }

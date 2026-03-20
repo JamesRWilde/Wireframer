@@ -45,8 +45,6 @@ import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
  * updates the HUD and canvas visibility accordingly.
  */
 export function initializeCpuPipeline() {
-  console.log('[initializeCpuPipeline] Setting up CPU pipeline');
-  
   // Set the render function pointer to CPU path
   setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {
     return cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing);
@@ -83,10 +81,6 @@ export function applyCpuLodCap() {
 
   // Recalculate the capped model (only decimates if over the cap)
   modelState.cpuBaseModel = capModelForCpu(baseModel);
-
-  // Debug logging for tracing CPU cap behavior
-  console.log('[applyCpuLodCap] Base model verts/edges:', modelState.baseModel?.V?.length, modelState.baseModel?.E?.length);
-  console.log('[applyCpuLodCap] Capped model verts/edges:', modelState.cpuBaseModel?.V?.length, modelState.cpuBaseModel?.E?.length);
 
   // Recompute current LOD model from capped base
   detailLevel(modelState.currentLodPct);
