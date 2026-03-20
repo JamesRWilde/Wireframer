@@ -43,6 +43,7 @@ import { getMeshClone } from '@engine/get/mesh/getClone.js';
 import { setMeshClone as configureMeshClone } from '@engine/set/mesh/setClone.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { modelState, setActiveModel } from '@engine/state/render/model.js';
+import { setInitMeshEngineLoad } from '@engine/set/mesh/setInitMeshEngineLoad.js';
 
 // Register through module state so callers can retrieve the shared builder.
 if (!getMeshEdgesFromFacesRuntime()) {
@@ -246,5 +247,5 @@ export function load(mesh, name = 'Shape', options = {}) {
   return newModelCopy;
 }
 
-// Expose for engine modules
-globalThis.load = load;
+// Register for modular engine access (replaces globalThis.load)
+setInitMeshEngineLoad(load);

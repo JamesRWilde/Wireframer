@@ -16,16 +16,14 @@
 // Canvas init
 import { canvas } from '@engine/init/render/canvas.js';
 
-// Loader side-effects (sets up globalThis.load)
+// Mesh loader side-effects (registers load APIs in state modules)
 import '@engine/init/mesh/load.js';
-
-// OBJ loader side-effects (sets up globalThis.loadObjMesh)
 import '@engine/init/mesh/loadObjMesh.js';
 
 // Model state side-effect
 import '@engine/state/render/model.js';
 
-// Morph API side-effect (exposes globalThis.morph)
+// Morph API side-effect (registers morph API in state modules)
 import '@engine/init/mesh/morphApi.js';
 
 // UI init functions

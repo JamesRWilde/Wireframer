@@ -22,6 +22,7 @@
 
 import { objectList } from '@engine/get/render/objectList.js';
 import { toRuntime } from '@engine/init/mesh/toRuntime.js';
+import { getInitMeshEngineLoad } from '@engine/get/mesh/getInitMeshEngineLoad.js';
 import { setActiveModel } from '@engine/state/render/model.js';
 
 /**
@@ -32,16 +33,17 @@ import { setActiveModel } from '@engine/state/render/model.js';
  * @param {string} [name] - Optional display name for the mesh
  * @returns {Promise<Object>} The parsed mesh in engine format { V, F, E }
  */
-globalThis.loadObjMesh = async function(objPath, name) {
+export async function loadObjMesh(objPath, name) {
   const resp = await fetch(objPath);
   if (!resp.ok) throw new Error('Failed to fetch OBJ: ' + objPath);
   const objText = await resp.text();
 
   const mesh = toRuntime(objText, { meshFileName: objPath, meshType: 'OBJ' });
 
-  if (globalThis.InitMeshEngineLoad) {
+  const engineLoad = getInitMeshEngineLoad();
+  if (engineLoad) {
     try {
-      const result = globalThis.InitMeshEngineLoad(mesh, name || objPath, { animateMorph: true });
+      const result = engineLoad(mesh, name || objPath, { animateMorph: true });
       if (result) {
         setActiveModel(result, name || objPath);
       }
@@ -51,12 +53,14 @@ globalThis.loadObjMesh = async function(objPath, name) {
   }
 
   return mesh;
-};
-
-// Load the dynamic object list and expose it globally
-try {
-  globalThis.OBJECTS = await objectList();
-} catch (err) {
-  console.error('[loader] Failed to load object list:', err);
-  globalThis.OBJECTS = [];
 }
+
+export async function loadObjects() {
+  try {
+    return await objectList();
+  } catch (err) {
+    console.error('[loader] Failed to load object list:', err);
+    return [];
+  }
+}
+

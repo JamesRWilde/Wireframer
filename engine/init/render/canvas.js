@@ -73,14 +73,14 @@ export function canvas() {
   if (getFillLayerCtx()) getFillLayerCtx().imageSmoothingEnabled = false;
 
   // Sync canvas sizes and set up resize listeners
-  if (globalThis.window?.addEventListener) {
+  if (typeof window !== 'undefined' && window.addEventListener) {
     syncCanvasSize(cpuCanvas);
 
     // On resize, synchronize all canvas dimensions to viewport size
-    globalThis.window.addEventListener('resize', () => syncCanvasSize(cpuCanvas));
-    globalThis.window.addEventListener('resize', () => {
-      setW(globalThis.window.innerWidth);
-      setH(globalThis.window.innerHeight);
+    window.addEventListener('resize', () => syncCanvasSize(cpuCanvas));
+    window.addEventListener('resize', () => {
+      setW(window.innerWidth);
+      setH(window.innerHeight);
     });
   }
 

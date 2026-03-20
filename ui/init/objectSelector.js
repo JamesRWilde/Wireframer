@@ -19,6 +19,7 @@
 "use strict";
 
 import {objectList}from '@engine/get/render/objectList.js';
+import { getLoadObjMesh } from '@engine/get/mesh/getLoadObjMesh.js';
 import { state as persistState }from '@ui/set/persist/state.js';
 
 
@@ -40,7 +41,8 @@ export async function initObjectSelector(restoredShapeName = null) {
   });
 
   // Load the restored shape if provided, otherwise load the first object
-  if (OBJECTS.length > 0 && typeof globalThis.loadObjMesh === 'function') {
+  const loadObjMeshFn = getLoadObjMesh();
+  if (OBJECTS.length > 0 && typeof loadObjMeshFn === 'function') {
     let loadIndex = 0;
     if (restoredShapeName) {
       const foundIndex = OBJECTS.findIndex(obj => obj.name === restoredShapeName);
@@ -49,14 +51,14 @@ export async function initObjectSelector(restoredShapeName = null) {
       } 
     } 
     select.selectedIndex = loadIndex;
-    globalThis.loadObjMesh(OBJECTS[loadIndex].obj, OBJECTS[loadIndex].name);
+    await loadObjMeshFn(OBJECTS[loadIndex].obj, OBJECTS[loadIndex].name);
   }
 
   select.addEventListener('change', async () => {
     const idx = Number(select.value);
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       const name = OBJECTS[idx].name;
-      await globalThis.loadObjMesh(OBJECTS[idx].obj, name);
+      await loadObjMeshFn(OBJECTS[idx].obj, name);
       loadEnd({});
       persistState(OBJECTS);
     }

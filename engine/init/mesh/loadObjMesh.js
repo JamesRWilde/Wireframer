@@ -15,6 +15,7 @@
 
 import { toRuntime } from '@engine/init/mesh/toRuntime.js';
 import { load } from '@engine/init/mesh/load.js';
+import { setLoadObjMesh } from '@engine/set/mesh/setLoadObjMesh.js';
 
 /**
  * loadObjMesh - Fetches an OBJ file and loads it through the pipeline.
@@ -35,5 +36,6 @@ export async function loadObjMesh(objPath, name = 'Shape') {
   return load(mesh, name, { animateMorph: true });
 }
 
-// Expose for engine modules
-globalThis.loadObjMesh = loadObjMesh;
+// Register for modular engine access (replaces globalThis.loadObjMesh)
+setLoadObjMesh(loadObjMesh);
+

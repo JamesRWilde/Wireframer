@@ -33,6 +33,7 @@ import { object }from '@engine/init/mesh/build/object.js';
 
 // Import winding correction
 import { fixWinding }from '@engine/get/mesh/fixWinding.js';
+import { setMeshParseErrors } from '@engine/set/mesh/setMeshParseErrors.js';
 
 /**
  * toRuntime - Converts OBJ text to engine mesh format
@@ -64,8 +65,8 @@ export function toRuntime(text, overrides = {}) {
   // Step 2: Parse lines into raw mesh data
   const {uniqueVerts, faces, rawEdges, rawLines, materialSections, failingLines} = objLines(lines, overrides);
 
-  // Store parse errors globally for debugging
-  globalThis.lastMeshParseErrors = failingLines;
+  // Store parse errors in shared state for debugging
+  setMeshParseErrors(failingLines);
 
   // Step 3: Check for parse errors
   parseCheckResults(uniqueVerts, faces, failingLines, overrides);
@@ -86,5 +87,4 @@ export function toRuntime(text, overrides = {}) {
   return meshObj;
 }
 
-// Expose to global scope for loader.js (legacy global path)
-globalThis.toRuntime = toRuntime;
+// No globalThis export; consumers should import toRuntime directly
