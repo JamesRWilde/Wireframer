@@ -24,7 +24,10 @@ import {
   setDragging, setLastPointerX, setLastPointerY,
   setWx, setWy,
 } from '@engine/state/render/physicsState.js';
-import { getZoom, setZoom, getZoomMin, getZoomMax } from '@engine/state/render/zoomState.js';
+import { getZoom } from '@engine/get/render/zoom.js';
+import { getZoomMin } from '@engine/get/render/zoomMin.js';
+import { getZoomMax } from '@engine/get/render/zoomMax.js';
+import { setZoom } from '@engine/set/render/zoom.js';
 import { setInputCanvas } from '@engine/set/render/setInputCanvas.js';
 
 /**

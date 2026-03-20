@@ -15,8 +15,8 @@
  *   The +3 offset prevents division by zero and provides reasonable depth scaling.
  */
 
-import { getZoom } from '@engine/state/render/zoomState.js';
-import { getModelCy } from '@engine/state/render/viewportState.js';
+import { getZoom } from '@engine/get/render/zoom.js';
+import { getModelCy } from '@engine/get/render/modelCy.js';
 
 /**
  * projectVerticesVertices - Projects a 3D point to 2D screen coordinates

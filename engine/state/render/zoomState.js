@@ -18,37 +18,10 @@
 
 "use strict";
 
-/** @type {number} Current zoom level */
-let _zoom = 1;
-
-/** @type {number} Minimum allowed zoom */
-let _zoomMin = 0.45;
-
-/** @type {number} Maximum allowed zoom */
-let _zoomMax = 2.75;
-
-// ══════════════════════════════════════════════
-// Getters
-// ══════════════════════════════════════════════
-
-/** @returns {number} Current zoom level */
-export function getZoom() { return _zoom; }
-
-/** @returns {number} Minimum allowed zoom */
-export function getZoomMin() { return _zoomMin; }
-
-/** @returns {number} Maximum allowed zoom */
-export function getZoomMax() { return _zoomMax; }
-
-// ══════════════════════════════════════════════
-// Setters
-// ══════════════════════════════════════════════
-
-/** @param {number} v - Current zoom level */
-export function setZoom(v) { _zoom = v; }
-
-/** @param {number} v - Minimum allowed zoom */
-export function setZoomMin(v) { _zoomMin = v; }
-
-/** @param {number} v - Maximum allowed zoom */
-export function setZoomMax(v) { _zoomMax = v; }
+// Central zoom state storage.
+// This file contains ONLY mutable state variables (no functions).
+export const zoomState = {
+  zoom: 1,
+  zoomMin: 0.45,
+  zoomMax: 2.75,
+};

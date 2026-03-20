@@ -28,8 +28,11 @@ import { drawSceneModel as drawGpuSceneModel }from '@engine/set/gpu/drawSceneMod
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
-import { getZoom } from '@engine/state/render/zoomState.js';
-import { getModelCy, getZHalf, getW, getH } from '@engine/state/render/viewportState.js';
+import { getZoom } from '@engine/get/render/zoom.js';
+import { getModelCy } from '@engine/get/render/modelCy.js';
+import { getZHalf } from '@engine/get/render/zHalf.js';
+import { getW } from '@engine/get/render/width.js';
+import { getH } from '@engine/get/render/height.js';
 import { getTheme, getEdgeColor, getFillRgb, getFillOpacity, getWireOpacity, getShadeDarkRgb, getShadeBrightRgb } from '@engine/state/render/renderState.js';
 
 // Utility: convert '#RRGGBB' to [r,g,b]
