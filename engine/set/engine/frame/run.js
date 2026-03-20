@@ -44,12 +44,7 @@ import { telemetryState }from '@engine/set/engine/telemetry/telemetryState.js';
 import { time }from '@engine/set/engine/frame/time.js';
 import { budget }from '@engine/get/engine/frame/budget.js';
 
-// Import debug overlay for sphere/centre visualisation
-import {renderDebugOverlay}from '@engine/get/render/debugOverlay.js';
-import {updateDebugOverlay}from '@engine/render/debugOverlay.js';
-
-// Import render mode flag (for telemetry display)
-import { isGpuMode } from '@engine/set/render/renderForeground.js';
+// No debug overlay needed; render mode use by telemetry HUD is internal.
 
 /**
  * runFrame - Executes all operations for a single animation frame
@@ -86,9 +81,6 @@ export function run(nowMs = 0) {
   // Step 3: Render the scene (background + foreground)
   const { bgMs, fgMs, drewCpuForeground, backgroundOnSeparateCanvas } = scene(nowMs);
 
-  // Render debug overlay (sphere outline + centre cross) if enabled
-  renderDebugOverlay();
-
   // Calculate total frame time
   const frameMs = performance.now() - frameStartMs;
 
@@ -101,12 +93,6 @@ export function run(nowMs = 0) {
   // Step 6: Update the telemetry HUD display
   hud(nowMs);
 
-  // Update the debug overlay with telemetry metrics
-  updateDebugOverlay({
-    fps: 1000 / frameMs, // Calculate FPS from frame time
-    frameMs,
-    renderer: isGpuMode ? 'gpu' : 'cpu', // Use the current render mode
-  });
 
   // Update frame loop state for next frame's canvas management
   state.cpuForegroundDrawnOnMainCanvas = drewCpuForeground && backgroundOnSeparateCanvas;

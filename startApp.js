@@ -58,10 +58,8 @@ import { rendererToggle } from '@engine/init/engine/rendererToggle.js';
 // Render pipeline initialization (GPU/CPU selection)
 import { initRenderPipeline } from '@engine/init/render/pipeline/init.js';
 
-// Debug overlay (sphere outline + centre cross)
-import { initDebugOverlay, toggleDebugOverlay } from '@engine/get/render/debugOverlay.js';
-initDebugOverlay();
-globalThis.toggleDebugOverlay = toggleDebugOverlay;
+// Debug overlay removed for production build
+// (no longer supported)
 
 // Detail level
 import { detailLevel } from '@engine/set/mesh/detailLevel.js';
