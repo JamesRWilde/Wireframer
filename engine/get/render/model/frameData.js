@@ -34,7 +34,7 @@ import { convertFlatToNested }from '@engine/get/render/convertFlatToNested.js';
 
 // Import synchronous transform fallback
 import { transformSync }from '@engine/get/render/worker/transformSync.js';
-import { getRotation }from '@engine/state/render/physicsState.js';
+import { getRotation } from '@engine/get/render/getRotation.js';
 import { getZoom } from '@engine/get/render/zoom.js';
 import { getModelCy } from '@engine/get/render/modelCy.js';
 import { getW } from '@engine/get/render/width.js';

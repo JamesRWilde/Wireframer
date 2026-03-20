@@ -47,7 +47,7 @@ import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
 import { state }from '@engine/state/engine/loop.js';
 import { getFillOpacity } from '@engine/get/render/fillOpacity.js';
 import { getTheme } from '@engine/get/render/theme.js';
-import { getRotation }from '@engine/state/render/physicsState.js';
+import { getRotation } from '@engine/get/render/getRotation.js';
 import { getW } from '@engine/get/render/width.js';
 import { getH } from '@engine/get/render/height.js';
 import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';

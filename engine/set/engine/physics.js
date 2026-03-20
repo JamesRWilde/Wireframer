@@ -23,15 +23,26 @@
 import { applyEulerIncrement } from '@engine/get/render/applyEulerIncrement.js';
 import { reorthogonalize } from '@engine/get/render/reorthogonalize.js';
 import { state } from '@engine/state/engine/loop.js';
-import {
-  getRotation, setRotation,
-  getWx, getWy, getWz, 
-  setAutoWx, setAutoWy, setAutoWz,
-  isDragging, 
-  getHoldRotationFrames, decrementHoldRotationFrames,
-  getAxisAngleX, setAxisAngleX, getAxisAngleY, setAxisAngleY,
-  applyFriction, easeTowardAuto,
-} from '@engine/state/render/physicsState.js';
+import { getRotation } from '@engine/get/render/getRotation.js';
+import { getWx } from '@engine/get/render/getWx.js';
+import { getWy } from '@engine/get/render/getWy.js';
+import { getWz } from '@engine/get/render/getWz.js';
+import { getAutoWx } from '@engine/get/render/getAutoWx.js';
+import { getAutoWy } from '@engine/get/render/getAutoWy.js';
+import { getAutoWz } from '@engine/get/render/getAutoWz.js';
+import { isDragging } from '@engine/get/render/isDragging.js';
+import { getHoldRotationFrames } from '@engine/get/render/getHoldRotationFrames.js';
+import { getAxisAngleX } from '@engine/get/render/getAxisAngleX.js';
+import { getAxisAngleY } from '@engine/get/render/getAxisAngleY.js';
+import { setRotation } from '@engine/set/render/setRotation.js';
+import { setAutoWx } from '@engine/set/render/setAutoWx.js';
+import { setAutoWy } from '@engine/set/render/setAutoWy.js';
+import { setAutoWz } from '@engine/set/render/setAutoWz.js';
+import { setAxisAngleX } from '@engine/set/render/setAxisAngleX.js';
+import { setAxisAngleY } from '@engine/set/render/setAxisAngleY.js';
+import { decrementHoldRotationFrames } from '@engine/set/render/decrementHoldRotationFrames.js';
+import { applyFriction } from '@engine/set/render/applyFriction.js';
+import { easeTowardAuto } from '@engine/set/render/easeTowardAuto.js';
 
 /**
  * physics - Updates rotation physics for the current frame.

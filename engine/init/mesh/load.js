@@ -42,7 +42,8 @@ import { clone as cloneMesh } from '@engine/init/mesh/clone.js';
 import { getMeshClone } from '@engine/get/mesh/getClone.js';
 import { setMeshClone as configureMeshClone } from '@engine/set/mesh/setClone.js';
 import { getZoom } from '@engine/get/render/zoom.js';
-import { modelState, setActiveModel } from '@engine/state/render/model.js';
+import { modelState } from '@engine/state/render/model.js';
+import { setActiveModel } from '@engine/set/render/model.js';
 import { setInitMeshEngineLoad } from '@engine/set/mesh/setInitMeshEngineLoad.js';
 
 // Register through module state so callers can retrieve the shared builder.

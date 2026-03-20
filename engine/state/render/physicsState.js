@@ -24,51 +24,26 @@
 
 "use strict";
 
-/** @type {Float32Array|null} Rotation matrix (3x3, column-major) */
-let _R = null;
-
-/** @type {number} Angular velocity around X axis (pitch), radians per frame */
-let _wx = 0;
-
-/** @type {number} Angular velocity around Y axis (yaw), radians per frame */
-let _wy = 0;
-
-/** @type {number} Angular velocity around Z axis (roll), radians per frame */
-let _wz = 0;
-
-/** @type {number} Target auto-rotation velocity around X */
-let _AUTO_WX = 0.01;
-
-/** @type {number} Target auto-rotation velocity around Y */
-let _AUTO_WY = 0.015;
-
-/** @type {number} Target auto-rotation velocity around Z */
-let _AUTO_WZ = 0.0025;
-
-/** @type {boolean} Whether user is currently dragging (mouse/touch down) */
-let _dragging = false;
-
-/** @type {number|null} Last pointer X position (client coords) */
-let _lastPointerX = null;
-
-/** @type {number|null} Last pointer Y position (client coords) */
-let _lastPointerY = null;
-
-/** @type {number} Frames to pause rotation (decremented each frame) */
-let _HOLD_ROTATION_FRAMES = 0;
-
-/** @type {number} Internal auto-rotation wander state (X oscillator) */
-let _axisAngleX = 0;
-
-/** @type {number} Internal auto-rotation wander state (Y oscillator) */
-let _axisAngleY = 0;
-
-// ══════════════════════════════════════════════
-// Getters
-// ══════════════════════════════════════════════
-
-/** @returns {Float32Array|null} Current rotation matrix */
-export function getRotation() { return _R; }
+/**
+ * physicsState - Centralized mutable rotation physics state.
+ * This module may only define state values. Getters and setters are
+ * implemented in engine/get/render/physicsState.js and engine/set/render/physicsState.js.
+ */
+export const physicsState = {
+  R: null,
+  wx: 0,
+  wy: 0,
+  wz: 0,
+  AUTO_WX: 0.01,
+  AUTO_WY: 0.015,
+  AUTO_WZ: 0.0025,
+  dragging: false,
+  lastPointerX: null,
+  lastPointerY: null,
+  HOLD_ROTATION_FRAMES: 0,
+  axisAngleX: 0,
+  axisAngleY: 0,
+};
 
 /** @returns {number} Angular velocity around X */
 export function getWx() { return _wx; }

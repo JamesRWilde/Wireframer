@@ -42,7 +42,8 @@ import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
 import { state } from '@engine/state/engine/loop.js';
 
 // Import model state
-import { modelState, setActiveModel } from '@engine/state/render/model.js';
+import { modelState } from '@engine/state/render/model.js';
+import { setActiveModel } from '@engine/set/render/model.js';
 
 // Import CPU model capping
 import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';

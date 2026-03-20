@@ -35,7 +35,7 @@ import { animationFrame } from '@engine/set/engine/frame/animationFrame.js';
 // Rotation
 import { initialize as rotationInitialize } from '@engine/get/render/rotation/initialize.js';
 import { R } from '@engine/state/render/rotationMatrixRef.js';
-import { setRotation } from '@engine/state/render/physicsState.js';
+import { setRotation } from '@engine/set/render/setRotation.js';
 
 // Render toggles
 import { syncRenderToggles } from '@ui/set/syncRenderToggles.js';
