@@ -101,9 +101,7 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing) {
   }
 
   // Render the mesh using the unified CPU pipeline
-  const meshEnd = trace('renderMeshUnified', 'render', { verts: cpuMesh?.V?.length, tris: cpuMesh?.F?.length });
   renderMeshUnified(cpuMesh, ctx);
-  meshEnd({});
 
   return true;
 }

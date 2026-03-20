@@ -13,7 +13,6 @@
  *
  * DETAILS:
  *   Also reports per-frame CPU phase breakdown (lighting, fill, stroke)
- *   read from the debugFlags state module.
  */
 
 "use strict";

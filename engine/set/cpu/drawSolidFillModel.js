@@ -48,7 +48,6 @@ import { state }from '@engine/state/engine/loop.js';
 import { getFillOpacity, getTheme }from '@engine/state/render/renderState.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getW, getH } from '@engine/state/render/viewportState.js';
-import { getDebugLogFill } from '@engine/state/render/debugFlags.js';
 import { DENSE_SEAM_EXPAND_PX } from '@ui/state/dom.js';
 
 // Track if worker has been initialized to avoid redundant setup
