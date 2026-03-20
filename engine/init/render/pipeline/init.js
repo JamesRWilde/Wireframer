@@ -36,7 +36,8 @@
 "use strict";
 
 // Import the render function pointer module
-import { setRenderForeground, setIsGpuMode } from '@engine/set/render/renderForeground.js';
+import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
+import { setIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 
 // Import GPU path function (for WebGL rendering)
 import { gpuPath } from '@engine/set/render/gpuPath.js';

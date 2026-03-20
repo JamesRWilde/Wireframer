@@ -28,7 +28,8 @@ import { currentMorph }from '@engine/get/mesh/currentMorph.js';
 import { isMorphing }from '@engine/get/mesh/isMorphing.js';
 
 // Set default morph duration and API through state modules
-import { setMorph, setMorphDuration } from '@engine/set/mesh/setMorphApi.js';
+import { setMorph } from '@engine/set/mesh/setMorph.js';
+import { setMorphDuration } from '@engine/set/mesh/setMorphDuration.js';
 
 setMorphDuration(1600);
 setMorph({

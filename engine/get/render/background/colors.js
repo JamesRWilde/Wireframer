@@ -16,7 +16,7 @@
 
 import { getBgColor } from '@engine/get/render/bgColor.js';
 import { getParticleColor } from '@engine/get/render/particleColor.js';
-import { getCustomRgb } from '@ui/get/customRgbState.js';
+import { getCustomRgbState } from '@ui/state/customRgbState.js';
 
 /**
  * getBackgroundColors - Gets background and particle colors from theme
@@ -28,7 +28,7 @@ export function colors() {
   const themeParticleColor = getParticleColor();
 
   // Fall back to custom RGB color if theme has no particle color
-  const custom = getCustomRgb();
+  const custom = getCustomRgbState();
   if (custom?.length === 3) {
     return { bgColor, particleColor: `rgba(${custom[0]},${custom[1]},${custom[2]},1)` };
   }

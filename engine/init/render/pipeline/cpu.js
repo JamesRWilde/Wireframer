@@ -13,7 +13,8 @@
 "use strict";
 
 // Import the render function pointer module
-import { setRenderForeground, setIsGpuMode } from '@engine/set/render/renderForeground.js';
+import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
+import { setIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 
 // Import CPU path function
 import { cpuPath } from '@engine/set/render/cpuPath.js';
@@ -37,6 +38,7 @@ import { getDetailLevelValue } from '@engine/get/render/getDetailLevelValue.js';
 
 // Import CPU detail cap for performance safety
 import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
+import { applyCpuLodCap } from '@engine/set/mesh/applyCpuLodCap.js';
 
 /**
  * initializeCpuPipeline - Sets up CPU (Canvas 2D) rendering path
@@ -63,25 +65,4 @@ export function initializeCpuPipeline() {
 
   // Apply CPU LOD cap
   applyCpuLodCap();
-}
-
-// Refactored function to apply CPU LOD cap
-export function applyCpuLodCap() {
-  // Use the base model if set, otherwise fall back to the active model.
-  // This protects against cases where setActiveModel() is called directly
-  // and baseModel was not updated (e.g. legacy load paths).
-  const baseModel = modelState.baseModel || modelState.model;
-  if (!baseModel) return;
-
-  // Ensure the LOD percentage matches the UI slider/last user setting.
-  const detailLevelValue = getDetailLevelValue();
-  if (typeof detailLevelValue === 'number') {
-    modelState.currentLodPct = Math.max(0, Math.min(1, detailLevelValue));
-  }
-
-  // Recalculate the capped model (only decimates if over the cap)
-  modelState.cpuBaseModel = capModelForCpu(baseModel);
-
-  // Recompute current LOD model from capped base
-  detailLevel(modelState.currentLodPct);
 }

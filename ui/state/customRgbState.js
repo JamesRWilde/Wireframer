@@ -3,19 +3,11 @@
  *
  * PURPOSE:
  *   Centralizes custom RGB state for theme/palette/particle rendering.
- *   Replaces direct use of legacy global external color state with module state.
+ *   This module ONLY contains the mutable state variable.
+ *   Getters and setters are in ui/get/customRgbState.js and ui/set/customRgbState.js.
  */
 
 "use strict";
 
 /** @type {number[]} Custom user RGB color (0-255 each). */
-let _customRgb = [95, 188, 230];
-
-export function getCustomRgbState() {
-  return _customRgb.slice();
-}
-
-export function setCustomRgbState(rgb) {
-  if (!Array.isArray(rgb) || rgb.length !== 3) return;
-  _customRgb = [rgb[0], rgb[1], rgb[2]];
-}
+export let customRgbState = [95, 188, 230];

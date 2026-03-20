@@ -22,7 +22,8 @@ import { detailLevel }from '@engine/set/mesh/detailLevel.js';
 // Import CPU detail cap for performance safety
 import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
 import { modelState } from '@engine/state/render/model.js';
-import { getMorph, getMorphDuration } from '@engine/get/mesh/getMorphApi.js';
+import { getMorph } from '@engine/get/mesh/getMorph.js';
+import { getMorphDuration } from '@engine/get/mesh/getMorphDuration.js';
 
 /**
  * finalizeModel - Finalizes and activates a mesh model

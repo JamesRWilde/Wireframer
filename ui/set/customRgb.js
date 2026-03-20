@@ -21,7 +21,7 @@
 "use strict";
 
 import { CUSTOM_RGB } from '@ui/state/dom.js';
-import { setCustomRgb } from '@ui/set/customRgbState.js';
+import { setCustomRgbState } from '@ui/state/customRgbState.js';
 
 import { clampByte } from '@ui/get/color/clampByte.js';
 import { updateCustomColor }from '@ui/set/updateCustomColor.js';
@@ -41,7 +41,7 @@ export function customRgb(rgb, options = {}) {
   }
 
   // Set dedicated custom RGB state to avoid global variable scoping.
-  setCustomRgb(newRgb);
+  setCustomRgbState(newRgb);
 
   updateCustomColor();
   if (persist) readCustomRgb();

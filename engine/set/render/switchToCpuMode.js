@@ -1,0 +1,54 @@
+/**
+ * switchToCpuMode.js - Switch to CPU Rendering Mode
+ *
+ * PURPOSE:
+ *   Disposes GPU pipeline and initializes CPU pipeline.
+ *
+ * ARCHITECTURE ROLE:
+ *   Internal helper for toggleRenderMode. Not exported publicly.
+ *
+ * USAGE:
+ *   Called by toggleRenderMode when switching from GPU to CPU.
+ */
+
+"use strict";
+
+import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
+import { setIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
+import { initializeCpuPipeline, applyCpuLodCap } from '@engine/init/render/pipeline/cpu.js';
+import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
+import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
+import { hud } from '@engine/set/engine/renderer/hud.js';
+import { state } from '@engine/state/engine/loop.js';
+import { modelState } from '@engine/state/render/model.js';
+import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
+import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
+import { gpuState } from '@engine/state/gpu/scene.js';
+
+export function switchToCpuMode() {
+  // Dispose previous GPU pipeline (if any)
+  const renderer = sceneRenderer();
+  if (renderer?.dispose) renderer.dispose();
+
+  // Clear cached GPU renderer
+  gpuState.renderer = null;
+  gpuState.failed = false;
+
+  // Initialize CPU pipeline and apply LOD cap
+  initializeCpuPipeline();
+  applyCpuLodCap();
+
+  // Ensure correct canvas visibility
+  canvasHidden(true);
+  canvasCpuHidden(false);
+
+  // Set backward compatible state
+  state.foregroundRenderMode = 'cpu';
+
+  // Ensure model state is capped for CPU
+  if (modelState.baseModel) {
+    modelState.cpuBaseModel = capModelForCpu(modelState.baseModel);
+  }
+
+  return true;
+}

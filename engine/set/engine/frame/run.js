@@ -97,31 +97,3 @@ export function run(nowMs = 0) {
   // Update frame loop state for next frame's canvas management
   state.cpuForegroundDrawnOnMainCanvas = drewCpuForeground && backgroundOnSeparateCanvas;
 }
-
-/**
- * runFrame - Executes all operations for a single animation frame
- *
- * @param {number} [nowMs=0] - Current timestamp from requestAnimationFrame
- *   Used for timing calculations and animation interpolation
- */
-export function runFrame(nowMs = 0) {
-
-  // Step 1: Check if frame should run (FPS limiting)
-  const frameIntervalMs = shouldRunFrame(nowMs);
-  if (!frameIntervalMs) return;
-
-  // Step 2: Update rotation physics
-  physics(state);
-
-  // Step 3: Check frame budget and adjust quality
-  budget(state);
-
-  // Step 4: Render scene (background + foreground)
-  scene(state);
-
-  // Step 5: Collect and update telemetry
-  telemetryState(state);
-
-  // Step 6: Update the telemetry HUD display
-  hud(state);
-}

@@ -30,7 +30,8 @@ import { background as drawBackground } from '@engine/set/render/draw/background
 
 // Import the active foreground renderer function pointer
 // This is set to either gpuPath or cpuPath during initialization
-import { getRenderForeground, isGpuMode } from '@engine/set/render/renderForeground.js';
+import { getRenderForeground } from '@engine/set/render/getRenderForeground.js';
+import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 
 // Import decimation for GPU LOD matching
 import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
@@ -41,7 +42,7 @@ import { mixedRenderFlags } from '@engine/set/engine/mixedRenderFlags.js';
 
 // Import model state to access the current mesh
 import { modelState } from '@engine/state/render/model.js';
-import { getMorph } from '@engine/get/mesh/getMorphApi.js';
+import { getMorph } from '@engine/get/mesh/getMorph.js';
 
 /**
  * renderScene - Renders the complete scene (background + foreground)
