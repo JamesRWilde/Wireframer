@@ -33,7 +33,13 @@ import { getModelCy } from '@engine/get/render/modelCy.js';
 import { getZHalf } from '@engine/get/render/zHalf.js';
 import { getW } from '@engine/get/render/width.js';
 import { getH } from '@engine/get/render/height.js';
-import { getTheme, getEdgeColor, getFillRgb, getFillOpacity, getWireOpacity, getShadeDarkRgb, getShadeBrightRgb } from '@engine/state/render/renderState.js';
+import { getTheme } from '@engine/get/render/theme.js';
+import { getEdgeColor } from '@engine/get/render/edgeColor.js';
+import { getFillRgb } from '@engine/get/render/fillRgb.js';
+import { getFillOpacity } from '@engine/get/render/fillOpacity.js';
+import { getWireOpacity } from '@engine/get/render/wireOpacity.js';
+import { getShadeDarkRgb } from '@engine/get/render/shadeDarkRgb.js';
+import { getShadeBrightRgb } from '@engine/get/render/shadeBrightRgb.js';
 
 // Utility: convert '#RRGGBB' to [r,g,b]
 function hexToRgb(hex) {

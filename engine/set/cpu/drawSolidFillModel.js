@@ -45,7 +45,8 @@ import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
 
 // Import render loop state for frame ID tracking
 import { state }from '@engine/state/engine/loop.js';
-import { getFillOpacity, getTheme }from '@engine/state/render/renderState.js';
+import { getFillOpacity } from '@engine/get/render/fillOpacity.js';
+import { getTheme } from '@engine/get/render/theme.js';
 import { getRotation }from '@engine/state/render/physicsState.js';
 import { getW } from '@engine/get/render/width.js';
 import { getH } from '@engine/get/render/height.js';

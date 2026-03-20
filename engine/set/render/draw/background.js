@@ -44,7 +44,7 @@ import { pendingWorkerParticles }from '@engine/get/render/pendingWorkerParticles
 import { postToBackgroundWorker }from '@engine/set/render/postToBackgroundWorker.js';
 
 // Import centralized render state
-import { getThemeMode } from '@engine/state/render/renderState.js';
+import { getThemeMode } from '@engine/get/render/themeMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 
 // Main-thread particle array (used as fallback when worker is unavailable)

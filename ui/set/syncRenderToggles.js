@@ -18,7 +18,8 @@
 import {lodSlider, lodValue, bgDensity, bgDensityValue, bgVelocity, bgVelocityValue, bgOpacity, bgOpacityValue, fillOpacity, fillOpacityValue, wireOpacity, wireOpacityValue}from '@ui/state/dom.js';
 import { sliderDisplayPercent }from '@ui/get/sliderDisplayPercent.js';
 import { state as persistState }from '@ui/set/persist/state.js';
-import { setFillOpacity, setWireOpacity }from '@engine/state/render/renderState.js';
+import { setFillOpacity } from '@engine/set/render/setFillOpacity.js';
+import { setWireOpacity } from '@engine/set/render/setWireOpacity.js';
 import { setDetailLevelValue } from '@engine/set/render/setDetailLevelValue.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 

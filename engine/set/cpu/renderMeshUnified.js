@@ -27,7 +27,9 @@ import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.
 import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
 import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/resolve/triangleNormalCpu.js';
 import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/compute/triangleCpu.js';
-import { getEdgeColor, getFillOpacity, getWireOpacity }from '@engine/state/render/renderState.js';
+import { getEdgeColor } from '@engine/get/render/edgeColor.js';
+import { getFillOpacity } from '@engine/get/render/fillOpacity.js';
+import { getWireOpacity } from '@engine/get/render/wireOpacity.js';
 
 let sortZ = null;    // Float32Array of z-depths per triangle
 let sortIdx = null;  // Uint32Array of triangle indices
@@ -180,18 +182,4 @@ export function renderMeshUnified(model, ctx) {
 
   ctx.globalAlpha = 1;
   ctx.restore();
-
-  // Store telemetry for HUD
-  const sortEntry = performance.getEntriesByName('cpu-sort').at(-1);
-  setCpuSortMs(sortEntry?.duration ?? 0);
-  setCpuLightMs(tLight);
-  setCpuFillMs(tFill);
-  setCpuStrokeMs(tStroke);
-
-  // Keep perf entries tidy
-  if (performance.getEntriesByName('cpu-sort').length > 30) {
-    performance.clearMarks('cpu-sort-start');
-    performance.clearMarks('cpu-sort-end');
-    performance.clearMeasures('cpu-sort');
-  }
 }
