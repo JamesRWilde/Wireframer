@@ -13,11 +13,12 @@
 
 "use strict";
 
-import {customRed,customGreen,customBlue, CUSTOM_RGB_KEY, CUSTOM_RGB }from '@ui/state/dom.js';
+import {CUSTOM_RGB_KEY}from '@ui/state/dom.js';
+import { getCustomRgb } from '@ui/get/customRgbState.js';
 
 export function customRgb() {
   try {
-    localStorage.setItem(CUSTOM_RGB_KEY, JSON.stringify(CUSTOM_RGB));
+    localStorage.setItem(CUSTOM_RGB_KEY, JSON.stringify(getCustomRgb()));
   } catch {
     // Ignore localStorage failures (private mode/quota).
   }
