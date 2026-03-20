@@ -8,15 +8,6 @@
 
 "use strict";
 
-/** @type {function|null} Runtime edge extraction function */
-let _edgesFromFacesRuntime = null;
-
-/** @returns {function|null} Current runtime edge extraction function */
-export function getEdgesFromFacesRuntime() {
-  return _edgesFromFacesRuntime;
-}
-
-/** @param {function|null} fn - New edge extraction function */
-export function setEdgesFromFacesRuntime(fn) {
-  _edgesFromFacesRuntime = fn;
-}
+export const edgesFromFacesRuntimeState = {
+  value: /** @type {function|null} */ (null),
+};

@@ -1,3 +1,5 @@
-import { setClone } from '@engine/state/mesh/cloneState.js';
+import { cloneState } from '@engine/state/mesh/cloneState.js';
 
-export function setMeshClone(fn) { setClone(fn); }
+export function setMeshClone(fn) {
+  cloneState.value = fn;
+}

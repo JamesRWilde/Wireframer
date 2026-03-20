@@ -7,8 +7,6 @@
 
 "use strict";
 
-/** @type {function|null} */
-let _cloneFn = null;
-
-export function getClone() { return _cloneFn; }
-export function setClone(fn) { _cloneFn = fn; }
+export const cloneState = {
+  value: /** @type {function|null} */ (null),
+};

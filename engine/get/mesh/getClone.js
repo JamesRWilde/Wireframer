@@ -1,3 +1,5 @@
-import { getClone } from '@engine/state/mesh/cloneState.js';
+import { cloneState } from '@engine/state/mesh/cloneState.js';
 
-export function getMeshClone() { return getClone(); }
+export function getMeshClone() {
+  return cloneState.value;
+}

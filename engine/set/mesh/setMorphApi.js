@@ -1,9 +1,9 @@
-import { setMorphApi, setMorphDurationMs } from '@engine/state/mesh/morphState.js';
+import { morphState } from '@engine/state/mesh/morphState.js';
 
 export function setMorph(api) {
-  setMorphApi(api);
+  morphState.api = api;
 }
 
 export function setMorphDuration(ms) {
-  setMorphDurationMs(ms);
+  morphState.durationMs = ms;
 }

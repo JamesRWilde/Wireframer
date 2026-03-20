@@ -8,13 +8,14 @@
 
 "use strict";
 
-/** @type {?HTMLCanvasElement} */
-let _inputCanvas = null;
+/**
+ * inputCanvasState.js - Input canvas reference state
+ *
+ * PURPOSE:
+ *   Keep only the state container in this module.
+ *   Get/set behavior is implemented in get/set folders.
+ */
 
-export function getInputCanvas() {
-  return _inputCanvas;
-}
-
-export function setInputCanvas(canvas) {
-  _inputCanvas = canvas;
-}
+export const inputCanvasState = {
+  value: /** @type {?HTMLCanvasElement} */ (null),
+};
