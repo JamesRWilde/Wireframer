@@ -22,6 +22,7 @@ import { detailLevel }from '@engine/set/mesh/detailLevel.js';
 // Import CPU detail cap for performance safety
 import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
 import { modelState } from '@engine/state/render/model.js';
+import { getMorph, getMorphDuration } from '@engine/get/mesh/getMorphApi.js';
 
 /**
  * finalizeModel - Finalizes and activates a mesh model
@@ -50,10 +51,13 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct, 
   modelState.currentLodPct = 1;
   
   // Decide between morph animation and instant transition
-  if (animateMorph && oldModel?.V?.length && globalThis.morph?.startMorph) {
+  const morphApi = getMorph();
+  const morphDuration = getMorphDuration();
+
+  if (animateMorph && oldModel?.V?.length && morphApi?.startMorph) {
     // Morph animation: smooth transition from old to new model
     // Pass targetZoom so the morph interpolates zoom as well as vertices
-    globalThis.morph.startMorph(oldModel, newModelCopy, globalThis.MORPH_DURATION_MS, () => {
+    morphApi.startMorph(oldModel, newModelCopy, morphDuration, () => {
       detailLevel(detailLevelPct, name);
     }, targetZoom);
   } else {

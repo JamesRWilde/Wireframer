@@ -27,15 +27,13 @@ import { advanceMorphFrame }from '@engine/init/mesh/advanceMorphFrame.js';
 import { currentMorph }from '@engine/get/mesh/currentMorph.js';
 import { isMorphing }from '@engine/get/mesh/isMorphing.js';
 
-// Set default morph duration (1.6 seconds)
-// This provides a smooth transition that's not too fast or too slow
-globalThis.MORPH_DURATION_MS = 1600;
+// Set default morph duration and API through state modules
+import { setMorph, setMorphDuration } from '@engine/set/mesh/setMorphApi.js';
 
-// Expose morph API globally so finalizeModel and renderScene can use it
-// This avoids circular imports while providing a clean API
-globalThis.morph = {
+setMorphDuration(1600);
+setMorph({
   startMorph,
   advanceMorphFrame,
   currentMorph,
   isMorphing,
-};
+});

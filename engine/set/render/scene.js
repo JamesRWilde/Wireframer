@@ -41,6 +41,7 @@ import { mixedRenderFlags } from '@engine/set/engine/mixedRenderFlags.js';
 
 // Import model state to access the current mesh
 import { modelState } from '@engine/state/render/model.js';
+import { getMorph } from '@engine/get/mesh/getMorphApi.js';
 
 /**
  * renderScene - Renders the complete scene (background + foreground)
@@ -73,11 +74,12 @@ export function scene(nowMs) {
   const fgStartMs = performance.now();
 
   // Step 3: Advance morph animation
-  if (globalThis.morph?.advanceMorphFrame) globalThis.morph.advanceMorphFrame();
+  const morphApi = getMorph();
+  if (morphApi?.advanceMorphFrame) morphApi.advanceMorphFrame();
 
   // Step 4: Determine which mesh to render
-  const morphing = globalThis.morph?.isMorphing?.() ?? false;
-  const baseMesh = morphing ? globalThis.morph?.currentMorph?.() ?? currentModel : currentModel;
+  const morphing = morphApi?.isMorphing?.() ?? false;
+  const baseMesh = morphing ? morphApi?.currentMorph?.() ?? currentModel : currentModel;
 
   // Select mesh based on LOD and morph state
   // GPU mode uses baseModel with optional LOD decimation

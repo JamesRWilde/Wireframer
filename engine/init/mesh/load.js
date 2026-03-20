@@ -38,12 +38,20 @@ import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
 import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setEdgesFromFacesRuntime.js';
+import { clone as cloneMesh } from '@engine/init/mesh/clone.js';
+import { getMeshClone } from '@engine/get/mesh/getClone.js';
+import { setMeshClone as configureMeshClone } from '@engine/set/mesh/setClone.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { modelState, setActiveModel } from '@engine/state/render/model.js';
 
 // Register through module state so callers can retrieve the shared builder.
 if (!getMeshEdgesFromFacesRuntime()) {
   setMeshEdgesFromFacesRuntime(edgesFromFacesRuntime);
+}
+
+// Register clone API in state for safe module-based access (no globalThis)
+if (!getMeshClone()) {
+  configureMeshClone(cloneMesh);
 }
 
 /**
@@ -215,7 +223,8 @@ export function load(mesh, name = 'Shape', options = {}) {
   const clampedDetail = Math.max(0, Math.min(1, Number(detailPercent) || 1));
 
   // Step 8: Clone the mesh for caching
-  const newModelCopy = globalThis.clone ? globalThis.clone(newModel) : newModel;
+  const meshCloneFn = getMeshClone();
+  const newModelCopy = meshCloneFn ? meshCloneFn(newModel) : newModel;
 
   // Step 9: Fit camera to model bounds (first load only, not morphs)
   // Zoom is constant for all meshes — only set it on first load
