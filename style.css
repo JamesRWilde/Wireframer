@@ -560,21 +560,18 @@ canvas:active { cursor: grabbing; }
   #panel-toggle { display: none; }
 
   #controls {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 21;
-    width: 18.5rem;
-    height: 100vh;
-    overflow-y: scroll;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    width: 18.5rem !important;
+    height: 100vh !important;
+    overflow-y: scroll !important;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     padding: 1.4rem 0.6rem 0.6rem 0.6rem;
-    display: grid;
-    gap: 0.5rem;
     background: var(--ui-panel-bg);
-    pointer-events: auto;
+    z-index: 999 !important;
   }
 
   #controls-scroll {
