@@ -13,6 +13,7 @@
 
 "use strict";
 
+import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { canvas } from '@engine/get/render/background/canvas.js';
 import { colors } from '@engine/get/render/background/colors.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
@@ -29,6 +30,10 @@ import { backgroundWorker } from '@engine/init/render/backgroundWorker.js';
  * @returns {boolean}
  */
 export function backgroundCpu(nowMs) {
+  if (isGpuMode()) {
+    throw new Error('backgroundCpu executed while GPU mode active');
+  }
+
   const canvasState = canvas();
   if (!canvasState) return false;
   const { ctx, w, h } = canvasState;
@@ -69,7 +74,7 @@ export function backgroundCpu(nowMs) {
     ctx.shadowBlur = 0;
     ctx.shadowColor = 'transparent';
     ctx.globalCompositeOperation = 'source-over';
-    renderWorkerParticles(ctx, pending.data, pending.count, opacity, particleColor, getThemeMode());
+    renderWorkerParticles(ctx, pending.data, pending.count, opacity, particleColor, getThemeMode(), false);
     ctx.restore();
   }
 

@@ -56,6 +56,12 @@ export function initializeCpuPipeline() {
   canvasHidden(true);
   canvasCpuHidden(false);
 
+  // CPU background canvas appears; GPU background is hidden.
+  const cpuBg = document.getElementById('bg');
+  const gpuBg = document.getElementById('bg-gpu');
+  if (cpuBg) cpuBg.style.visibility = 'visible';
+  if (gpuBg) gpuBg.style.visibility = 'hidden';
+
   // Apply CPU LOD cap
   applyCpuLodCap();
 }

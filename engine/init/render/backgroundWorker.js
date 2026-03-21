@@ -20,6 +20,7 @@
 
 // Import background worker state to track worker lifecycle
 import { workerState as state } from '@engine/state/render/background/worker.js';
+import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { getThemeMode } from '@engine/get/render/themeMode.js';
 
 // Import background canvas getter to read current dimensions
@@ -32,6 +33,15 @@ import { bgState } from '@engine/state/render/background/backgroundState.js';
  * @returns {boolean} Whether the worker is ready or initialization succeeded
  */
 export function backgroundWorker(mode = 'cpu') {
+  // This worker is CPU background-specific. GPU background is handled in a separate WebGL pipeline.
+  if (mode !== 'cpu') {
+    throw new Error('backgroundWorker called with non-cpu mode');
+  }
+
+  if (isGpuMode()) {
+    throw new Error('backgroundWorker called while GPU mode is active');
+  }
+
   // Update desired running mode in worker state
   state.workerMode = mode;
 
@@ -52,17 +62,35 @@ export function backgroundWorker(mode = 'cpu') {
     );
 
     // Handle messages from the background worker
+    function handleWorkerReady() {
+      state.workerReady = true;
+      state.workerAvailable = true;
+    }
+
+    function handleWorkerParticles(data, count) {
+      state.pendingWorkerParticles = { data, count };
+    }
+
+    function handleWorkerError(message) {
+      console.error('[BackgroundWorker]', message);
+      state.workerReady = false;
+      state.workerAvailable = false;
+    }
+
     state.worker.onmessage = (event) => {
-      const { type, data, count } = event.data;
+      const { type, data, count, message } = event.data;
       if (type === 'ready') {
-        state.workerReady = true;
-        state.workerAvailable = true;
-      } else if (type === 'particles') {
-        state.pendingWorkerParticles = { data, count };
-      } else if (type === 'error') {
-        console.error('[BackgroundWorker]', event.data.message);
-        state.workerReady = false;
-        state.workerAvailable = false;
+        handleWorkerReady();
+        return;
+      }
+
+      if (type === 'particles') {
+        handleWorkerParticles(data, count);
+        return;
+      }
+
+      if (type === 'error') {
+        handleWorkerError(message || event.data.message);
       }
     };
 

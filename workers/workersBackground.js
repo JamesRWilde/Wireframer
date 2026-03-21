@@ -47,71 +47,81 @@ import { workersPackParticles }from './workersPackParticles.js';
  *
  * @param {MessageEvent} event - The message event
  */
+function initializeWorker(eventData) {
+  const { width, height, density, speed, themeMode, mode } = eventData;
+  state.width = width;
+  state.height = height;
+  state.density = (typeof density === 'number') ? density : 1;
+  state.speed = (typeof speed === 'number') ? speed : 1;
+  state.themeMode = themeMode || 'dark';
+  state.mode = mode || state.mode || 'cpu';
+  workersParticles(state, particles);
+  postMessage({ type: 'ready' });
+}
+
+function updateWorker(eventData) {
+  const { mode, density, speed, themeMode, timestamp, opacity } = eventData;
+
+  if (mode && mode !== state.mode) {
+    state.mode = mode;
+    workersParticles(state, particles);
+  }
+
+  if (typeof density === 'number' && density !== state.density) {
+    state.density = density;
+    workersParticles(state, particles);
+  }
+
+  if (speed !== undefined) {
+    state.speed = speed;
+  }
+  if (themeMode) {
+    state.themeMode = themeMode;
+  }
+
+  const velScale = state.speed;
+  const opacityScale = opacity || 1;
+  const themeAlphaBoost = state.themeMode === 'light' ? 1.75 : 1;
+
+  workersUpdateParticles(
+    particles,
+    state.width,
+    state.height,
+    timestamp || 0,
+    velScale,
+    opacityScale,
+    { themeAlphaBoost, mode: state.mode }
+  );
+
+  const data = workersPackParticles(particles);
+  postMessage({ type: 'particles', data, count: particles.length }, [data.buffer]);
+}
+
+function resizeWorker(eventData) {
+  const { width, height } = eventData;
+  state.width = width;
+  state.height = height;
+  workersParticles(state, particles);
+}
+
 onmessage = (event) => {
-  const { type, width, height, density, speed, timestamp, themeMode, mode } = event.data;
+  const { type } = event.data;
 
   try {
-    switch (type) {
-      case 'init':
-        // Initialize particle state and create particles
-        state.width = width;
-        state.height = height;
-        state.density = (typeof density === 'number') ? density : 1;
-        state.speed = (typeof speed === 'number') ? speed : 1;
-        state.themeMode = themeMode || 'dark';
-        state.mode = mode || state.mode || 'cpu';
-        workersParticles(state, particles);
-        postMessage({ type: 'ready' });
-        break;
+    if (type === 'init') {
+      initializeWorker(event.data);
+      return;
+    }
 
-      case 'update': {
-        // Update mode if changed and reseed particles so that mode-specific size config is applied.
-        if (mode && mode !== state.mode) {
-          state.mode = mode;
-          workersParticles(state, particles);
-        }
+    if (type === 'update') {
+      updateWorker(event.data);
+      return;
+    }
 
-        // Reseed particles if density changed (allow 0 density)
-        if (typeof density === 'number' && density !== state.density) {
-          state.density = density;
-          workersParticles(state, particles);
-        }
-
-        // Update speed and theme settings
-        if (speed !== undefined) {
-          state.speed = speed;
-        }
-        if (themeMode) {
-          state.themeMode = themeMode;
-        }
-
-        // Compute scaling factors for this update
-        const velScale = state.speed;
-        const opacityScale = event.data.opacity || 1;
-        // Light theme needs higher alpha boost for visibility
-        const themeAlphaBoost = state.themeMode === 'light' ? 1.75 : 1;
-
-        // Update particle positions and compute alpha values
-        workersUpdateParticles(particles, state.width, state.height, timestamp || 0, velScale, opacityScale, themeAlphaBoost);
-
-        // Pack particle data into a transferable Float32Array
-        const data = workersPackParticles(particles);
-
-        // Send packed data back to main thread with zero-copy transfer
-        postMessage({ type: 'particles', data, count: particles.length }, [data.buffer]);
-        break;
-      }
-
-      case 'resize': {
-        // Reinitialize particles for new canvas dimensions
-        state.width = width;
-        state.height = height;
-        workersParticles(state, particles);
-        break;
-      }
+    if (type === 'resize') {
+      resizeWorker(event.data);
     }
   } catch (error) {
-    // Report errors back to the main thread
     postMessage({ type: 'error', message: error.message, stack: error.stack });
   }
 };

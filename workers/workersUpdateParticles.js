@@ -31,7 +31,8 @@
  * @param {number} themeAlphaBoost - Alpha boost factor for light theme visibility
  * @returns {void}
  */
-export function workersUpdateParticles(particles, w, h, now, velScale, opacityScale, themeAlphaBoost) {
+export function workersUpdateParticles(particles, w, h, now, velScale, opacityScale, options = {}) {
+  const { themeAlphaBoost = 1, mode = 'cpu' } = options;
   for (const p of particles) {
     // Integrate position by velocity
     p.x += p.vx * velScale;
@@ -46,7 +47,11 @@ export function workersUpdateParticles(particles, w, h, now, velScale, opacitySc
     // Compute pulsing alpha based on time and particle phase
     const pulse = 0.5 + 0.5 * Math.sin(now * 0.001 * p.speed + p.phase);
 
-    // Combine base alpha, pulse, and scaling factors
-    p.alpha = (p.alphaBase + pulse * 0.14) * opacityScale * themeAlphaBoost;
+    // Apply GPU mode boost for better visibility while still respecting opacity control.
+    const modeAlphaBoost = (mode === 'gpu') ? 1.2 : 1;
+    const pulseScale = (mode === 'gpu') ? 0.2 : 0.14;
+
+    // Combine base alpha, pulse, and scaling factors (clamped to [0,1]).
+    p.alpha = Math.min(1, (p.alphaBase + pulse * pulseScale * modeAlphaBoost) * opacityScale * themeAlphaBoost);
   }
 }

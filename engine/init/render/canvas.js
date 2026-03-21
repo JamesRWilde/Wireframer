@@ -96,7 +96,20 @@ export function canvas() {
   } catch (err) {
     console.warn('[initCanvas] failed to locate bg canvas', err);
   }
+
+  // Locate and store a dedicated GPU background canvas for WebGL background pipeline
+  try {
+    const bgGpuCanvas = document.getElementById('bg-gpu');
+    if (bgGpuCanvas) {
+      bgState.gpuBackgroundCanvas = bgGpuCanvas;
+      // Keep hidden by default until GPU background mode engages
+      bgGpuCanvas.style.visibility = 'hidden';
+    }
+  } catch (err) {
+    console.warn('[initCanvas] failed to locate bg-gpu canvas', err);
+  }
 }
+
 
 // Export as default for flexible import styles
 export default canvas;

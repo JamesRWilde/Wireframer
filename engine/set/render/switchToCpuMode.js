@@ -21,7 +21,7 @@ import { state } from '@engine/state/engine/loop.js';
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 import { gpuState } from '@engine/state/gpu/scene.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
-import { getGpuGl } from '@engine/get/gpu/getGpuGl.js';
+import { backgroundWorker } from '@engine/init/render/backgroundWorker.js';
 
 export function switchToCpuMode() {
   // Dispose previous GPU pipeline (if any)
@@ -34,14 +34,21 @@ export function switchToCpuMode() {
 
   // Dispose GPU background renderer if initialized (GPU background pipeline)
   if (bgState.gpuBackgroundRenderer?.dispose) {
-    const gl = getGpuGl();
-    if (gl) bgState.gpuBackgroundRenderer.dispose(gl);
+    const bgGl = bgState.gpuBackgroundGl;
+    if (bgGl) bgState.gpuBackgroundRenderer.dispose(bgGl);
     bgState.gpuBackgroundRenderer = null;
+    bgState.gpuBackgroundGl = null;
   }
+
+  // Reset GPU background pipeline context to avoid stale references
+  bgState.gpuBackgroundGl = null;
 
   // Initialize CPU pipeline and apply LOD cap
   initializeCpuPipeline();
   applyCpuLodCap();
+
+  // Initialize CPU background worker pipeline now that GPU has been disabled.
+  backgroundWorker('cpu');
 
   // Ensure correct canvas visibility
   canvasHidden(true);

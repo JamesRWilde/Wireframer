@@ -13,14 +13,28 @@
 
 "use strict";
 
-import { canvas } from '@engine/get/render/background/canvas.js';
+import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
-import { workerState } from '@engine/state/render/background/worker.js';
-import { postToBackgroundWorker } from '@engine/set/render/postToBackgroundWorker.js';
-import { getThemeMode } from '@engine/get/render/themeMode.js';
 import { colors } from '@engine/get/render/background/colors.js';
-import { backgroundWorker } from '@engine/init/render/backgroundWorker.js';
-import { renderWorkerParticles } from '@engine/set/render/draw/renderWorkerParticles.js';
+import { getCustomRgbState } from '@ui/get/customRgbState.js';
+import { createBackgroundRenderer } from '@engine/init/gpu/background/renderer.js';
+
+function getGpuBackgroundCanvas() {
+  return bgState.gpuBackgroundCanvas;
+}
+
+function getGpuBackgroundGl() {
+  if (bgState.gpuBackgroundGl) return bgState.gpuBackgroundGl;
+
+  const canvas = getGpuBackgroundCanvas();
+  if (!canvas) return null;
+
+  const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return null;
+
+  bgState.gpuBackgroundGl = gl;
+  return gl;
+}
 
 function parseCssColor(cssColor) {
   const ctx = document.createElement('canvas').getContext('2d');
@@ -39,55 +53,56 @@ function parseCssColor(cssColor) {
  * @returns {boolean}
  */
 export function backgroundGpu(nowMs) {
-  const canvasState = canvas();
-  if (!canvasState) return false;
+  if (!isGpuMode()) {
+    throw new Error('backgroundGpu executed while CPU mode active');
+  }
 
-  const { ctx, w, h } = canvasState;
+  const bgCanvas = getGpuBackgroundCanvas();
+  if (!bgCanvas) return false;
+
+  const w = bgCanvas.clientWidth || bgCanvas.width;
+  const h = bgCanvas.clientHeight || bgCanvas.height;
+
+  const gl = getGpuBackgroundGl();
+  if (!gl) return false;
+
+  // Show GPU background canvas and hide CPU background canvas
+  const cpuBgCanvas = document.getElementById('bg');
+  if (cpuBgCanvas) cpuBgCanvas.style.visibility = 'hidden';
+  bgCanvas.style.visibility = 'visible';
+
+  // Clear background in WebGL before particle draw
   const { bgColor, particleColor } = colors();
 
-  if (!workerState.workerReady) {
-    if (!workerState.workerInitialized || !workerState.workerAvailable) {
-      backgroundWorker('gpu');
-    }
+  // Enforce custom RGB particle color for GPU path to match UI state exactly.
+  const customRgb = getCustomRgbState();
+  const activeParticleColor = Array.isArray(customRgb) && customRgb.length === 3
+    ? `rgba(${customRgb[0]},${customRgb[1]},${customRgb[2]},1)`
+    : particleColor;
 
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, w, h);
-    return false;
+  const parsedColor = parseCssColor(bgColor);
+  gl.viewport(0, 0, w, h);
+  gl.clearColor(parsedColor[0], parsedColor[1], parsedColor[2], 1);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  let renderer = bgState.gpuBackgroundRenderer;
+  if (!renderer) {
+    renderer = createBackgroundRenderer(gl);
+    bgState.gpuBackgroundRenderer = renderer;
   }
 
-  const density = bgState.densityPct;
-  const speed = bgState.velocityPct;
-  const opacity = bgState.opacityPct;
+  if (!renderer?.draw) return false;
 
-  postToBackgroundWorker({
-    type: 'update',
-    mode: 'gpu',
-    timestamp: nowMs ?? performance.now(),
-    density,
-    speed,
-    opacity,
-    themeMode: getThemeMode(),
+  renderer.draw(gl, {
+    width: w,
+    height: h,
+    color: activeParticleColor,
+    opacity: bgState.opacityPct,
+    time: nowMs ?? performance.now(),
+    velocityScale: bgState.velocityPct,
+    density: bgState.densityPct,
   });
-
-  ctx.fillStyle = bgColor;
-  ctx.fillRect(0, 0, w, h);
-
-  const pending = workerState.pendingWorkerParticles;
-  if (pending) {
-    ctx.save();
-
-    // GPU path uses a subtle glow effect to keep CPU/GPU performance reasonable.
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 0;
-    ctx.shadowBlur = 5;
-    ctx.shadowColor = particleColor;
-    ctx.globalCompositeOperation = getThemeMode() === 'light' ? 'multiply' : 'screen';
-
-    renderWorkerParticles(ctx, pending.data, pending.count, opacity, particleColor, getThemeMode());
-
-    // Single pass with softer opacity means less overhead and no harsh bloom.
-    ctx.restore();
-  }
 
   return true;
 }
+

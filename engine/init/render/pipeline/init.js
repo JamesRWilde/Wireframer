@@ -111,8 +111,8 @@ export function initRenderPipeline() {
   
   // GPU pipeline successfully initialized
 
-  // Initialize GPU background renderer for the GPU mode background pipeline
-  bgState.gpuBackgroundRenderer = createBackgroundRenderer(gl);
+  // NOTE: do not create GPU background renderer using the foreground WebGL context.
+  // GPU background is rendered on a separate canvas/context (#bg-gpu) for strict isolation.
 
   // Set the render function pointer to GPU path
   setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {

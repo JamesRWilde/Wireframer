@@ -34,29 +34,42 @@
 
 import { compileShader } from '@engine/init/gpu/compileShader.js';
 
-// Vertex shader source
 const VERTEX_SHADER = `
 precision highp float;
 
-attribute vec4 aParticle; // x, y, size, alpha
+attribute vec2 aSeedPos;
+attribute vec2 aVelocity;
+attribute float aSize;
+attribute float aAlphaBase;
+attribute float aSpeed;
+attribute float aPhase;
+
 uniform vec2 uResolution;
 uniform vec3 uColor;
 uniform float uOpacity;
+uniform float uTime;
+uniform float uVelocityScale;
 
 varying float vAlpha;
 varying vec3 vColor;
 
 void main() {
-  vec2 clipPos = (aParticle.xy / uResolution) * 2.0 - 1.0;
+  float t = uTime * 0.001 * uVelocityScale;
+  vec2 pos = aSeedPos + aVelocity * aSpeed * t;
+  pos = mod(pos, uResolution);
+
+  vec2 clipPos = (pos / uResolution) * 2.0 - 1.0;
   clipPos.y = -clipPos.y;
+
   gl_Position = vec4(clipPos, 0.0, 1.0);
-  gl_PointSize = aParticle.z; // Use point size for gl.POINTS
+  gl_PointSize = max(1.0, aSize);
+
+  float pulse = 0.5 + 0.5 * sin(t * 1.7 + aPhase);
   vColor = uColor;
-  vAlpha = aParticle.w * uOpacity;
+  vAlpha = clamp((aAlphaBase + pulse * 0.35) * uOpacity, 0.0, 1.0);
 }
 `;
 
-// Fragment shader source
 const FRAGMENT_SHADER = `
 precision highp float;
 
@@ -64,30 +77,62 @@ varying float vAlpha;
 varying vec3 vColor;
 
 void main() {
-  // For gl.POINTS, gl_PointCoord gives coordinate within the point (0-1)
   vec2 coord = gl_PointCoord - vec2(0.5);
   float dist = length(coord);
-  if (dist > 0.5) discard; // Circle shape
+  if (dist > 0.5) discard;
 
-  // Soft edge anti-aliasing
-  float alpha = vAlpha * (1.0 - smoothstep(0.35, 0.5, dist));
+  float alpha = vAlpha * (1.0 - smoothstep(0.4, 0.5, dist));
   gl_FragColor = vec4(vColor, alpha);
 }
 `;
 
-/**
- * createBackgroundRenderer - Creates the GPU background particle renderer
- *
- * @param {WebGLRenderingContext} gl - The WebGL context
- * @returns {Object|null} Renderer object with draw() and dispose() methods, or null on failure
- */
+function randomFloat(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+function parseCssColor(cssColor) {
+  const ctx = document.createElement('canvas').getContext('2d');
+  ctx.fillStyle = cssColor || '#ffffff';
+  const computed = ctx.fillStyle;
+  const m = computed.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)/);
+  if (!m) return { r: 1, g: 1, b: 1, a: 1 };
+  return {
+    r: Number(m[1]) / 255,
+    g: Number(m[2]) / 255,
+    b: Number(m[3]) / 255,
+    a: Number(m[4] ?? 1),
+  };
+}
+
+function createParticleBufferData(width, height, density, baseSpeed) {
+  const baseCount = Math.max(32, Math.round((width * height) / 90000));
+  const count = Math.max(8, Math.round(baseCount * Math.min(2.5, 1 + density)));
+  const data = new Float32Array(count * 8);
+
+  for (let i = 0; i < count; i++) {
+    const valueOffset = i * 8;
+    const angle = Math.random() * Math.PI * 2;
+    const velocityMag = 0.03 + Math.random() * 0.08;
+    const spatialVelocityScale = 0.12; // Match CPU-style particle movement speed in GLSL
+
+    data[valueOffset] = Math.random() * width;
+    data[valueOffset + 1] = Math.random() * height;
+    data[valueOffset + 2] = Math.cos(angle) * velocityMag * width * spatialVelocityScale;
+    data[valueOffset + 3] = Math.sin(angle) * velocityMag * height * spatialVelocityScale;
+    data[valueOffset + 4] = randomFloat(1.2, 3.8);
+    data[valueOffset + 5] = randomFloat(0.35, 0.95);
+    data[valueOffset + 6] = randomFloat(0.9, 1.3) * baseSpeed;
+    data[valueOffset + 7] = Math.random() * Math.PI * 2;
+  }
+
+  return { count, data };
+}
+
 export function createBackgroundRenderer(gl) {
   try {
-    // Compile shaders
     const vertShader = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
     const fragShader = compileShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
 
-    // Link program
     const program = gl.createProgram();
     gl.attachShader(program, vertShader);
     gl.attachShader(program, fragShader);
@@ -102,83 +147,101 @@ export function createBackgroundRenderer(gl) {
       return null;
     }
 
-    // Clean up shaders (they're now part of the program)
     gl.deleteShader(vertShader);
     gl.deleteShader(fragShader);
 
-    // Get attribute and uniform locations
-    const aParticle = gl.getAttribLocation(program, 'aParticle');
-    const uResolution = gl.getUniformLocation(program, 'uResolution');
-    const uColor = gl.getUniformLocation(program, 'uColor');
-    const uOpacity = gl.getUniformLocation(program, 'uOpacity');
+    const locations = {
+      aSeedPos: gl.getAttribLocation(program, 'aSeedPos'),
+      aVelocity: gl.getAttribLocation(program, 'aVelocity'),
+      aSize: gl.getAttribLocation(program, 'aSize'),
+      aAlphaBase: gl.getAttribLocation(program, 'aAlphaBase'),
+      aSpeed: gl.getAttribLocation(program, 'aSpeed'),
+      aPhase: gl.getAttribLocation(program, 'aPhase'),
+      uResolution: gl.getUniformLocation(program, 'uResolution'),
+      uColor: gl.getUniformLocation(program, 'uColor'),
+      uOpacity: gl.getUniformLocation(program, 'uOpacity'),
+      uTime: gl.getUniformLocation(program, 'uTime'),
+      uVelocityScale: gl.getUniformLocation(program, 'uVelocityScale'),
+    };
 
-    // Create particle buffer (dynamic, updated each frame)
     const particleBuffer = gl.createBuffer();
+    let particleCount = 0;
+    let currentSettings = {};
+
+    function updateParticleData(settings) {
+      const needsRebuild = !currentSettings.width ||
+        currentSettings.width !== settings.width ||
+        currentSettings.height !== settings.height ||
+        currentSettings.density !== settings.density ||
+        currentSettings.baseSpeed !== settings.baseSpeed;
+
+      if (needsRebuild) {
+        currentSettings = { ...settings };
+        const packed = createParticleBufferData(settings.width, settings.height, settings.density, settings.baseSpeed);
+        particleCount = packed.count;
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, particleBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, packed.data, gl.STATIC_DRAW);
+      }
+    }
 
     return {
-      program,
-      aParticle,
-      uResolution,
-      uColor,
-      uOpacity,
-      particleBuffer,
+      draw(gl, opts) {
+        updateParticleData({
+          width: opts.width,
+          height: opts.height,
+          density: opts.density,
+          baseSpeed: opts.velocityScale,
+        });
 
-      /**
-       * draw - Renders particles for this frame
-       *
-       * @param {Float32Array} data - Packed particle data [x, y, size, alpha, ...]
-       * @param {number} count - Number of particles
-       * @param {number} width - Canvas width
-       * @param {number} height - Canvas height
-       * @param {string} colorStr - Particle color as hex #RRGGBB or rgba()
-       * @param {number} opacity - Global opacity multiplier (0-1)
-       */
-      draw(gl, data, count, width, height, colorStr, opacity) {
-        if (!data || count === 0) return;
+        if (!particleCount || !particleBuffer) return;
 
-        // Parse color to RGB (0-1 range)
-        let r = 0, g = 0, b = 0;
-        if (typeof colorStr === 'string' && colorStr.startsWith('#')) {
-          r = Number.parseInt(colorStr.slice(1, 3), 16) / 255;
-          g = Number.parseInt(colorStr.slice(3, 5), 16) / 255;
-          b = Number.parseInt(colorStr.slice(5, 7), 16) / 255;
-        } else {
-          const match = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(colorStr);
-          if (match) {
-            r = Number.parseInt(match[1]) / 255;
-            g = Number.parseInt(match[2]) / 255;
-            b = Number.parseInt(match[3]) / 255;
-          }
-        }
+        const parsed = parseCssColor(opts.color || '#ffffff');
 
+        gl.viewport(0, 0, opts.width, opts.height);
         gl.useProgram(program);
+        gl.uniform2f(locations.uResolution, opts.width, opts.height);
+        gl.uniform3f(locations.uColor, parsed.r, parsed.g, parsed.b);
+        gl.uniform1f(locations.uOpacity, opts.opacity * parsed.a);
+        gl.uniform1f(locations.uTime, opts.time);
+        gl.uniform1f(locations.uVelocityScale, opts.velocityScale);
 
-        // Set uniforms
-        gl.uniform2f(uResolution, width, height);
-        gl.uniform3f(uColor, r, g, b);
-        gl.uniform1f(uOpacity, opacity);
-
-        // Bind particle buffer and upload data
         gl.bindBuffer(gl.ARRAY_BUFFER, particleBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW);
 
-        // Enable and set attribute pointer (4 floats per particle)
-        gl.enableVertexAttribArray(aParticle);
-        gl.vertexAttribPointer(aParticle, 4, gl.FLOAT, false, 16, 0);
+        const stride = 8 * Float32Array.BYTES_PER_ELEMENT;
 
-        // Enable blending for transparency
+        gl.enableVertexAttribArray(locations.aSeedPos);
+        gl.vertexAttribPointer(locations.aSeedPos, 2, gl.FLOAT, false, stride, 0);
+
+        gl.enableVertexAttribArray(locations.aVelocity);
+        gl.vertexAttribPointer(locations.aVelocity, 2, gl.FLOAT, false, stride, 8);
+
+        gl.enableVertexAttribArray(locations.aSize);
+        gl.vertexAttribPointer(locations.aSize, 1, gl.FLOAT, false, stride, 16);
+
+        gl.enableVertexAttribArray(locations.aAlphaBase);
+        gl.vertexAttribPointer(locations.aAlphaBase, 1, gl.FLOAT, false, stride, 20);
+
+        gl.enableVertexAttribArray(locations.aSpeed);
+        gl.vertexAttribPointer(locations.aSpeed, 1, gl.FLOAT, false, stride, 24);
+
+        gl.enableVertexAttribArray(locations.aPhase);
+        gl.vertexAttribPointer(locations.aPhase, 1, gl.FLOAT, false, stride, 28);
+
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-        // Draw particles as points
-        gl.drawArrays(gl.POINTS, 0, count);
+        gl.drawArrays(gl.POINTS, 0, particleCount);
+
+        // Disable attribute arrays to avoid interfering with the scene renderer.
+        gl.disableVertexAttribArray(locations.aSeedPos);
+        gl.disableVertexAttribArray(locations.aVelocity);
+        gl.disableVertexAttribArray(locations.aSize);
+        gl.disableVertexAttribArray(locations.aAlphaBase);
+        gl.disableVertexAttribArray(locations.aSpeed);
+        gl.disableVertexAttribArray(locations.aPhase);
       },
 
-      /**
-       * dispose - Releases GPU resources
-       *
-       * @param {WebGLRenderingContext} gl - The WebGL context
-       */
       dispose(gl) {
         if (program) gl.deleteProgram(program);
         if (particleBuffer) gl.deleteBuffer(particleBuffer);
@@ -189,3 +252,8 @@ export function createBackgroundRenderer(gl) {
     return null;
   }
 }
+
+
+
+
+

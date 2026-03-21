@@ -27,13 +27,15 @@ export function workersParticles(state, particles) {
   const densityMult = state.density * 1.6;
   const count = Math.max(0, Math.round(baseCount * densityMult));
 
-  // Scale based on mode: GPU gets moderate size and subtle glow, CPU is still visible.
+  // Scale based on mode: GPU gets stronger visibility and more particles by default.
   const isGpuMode = state.mode === 'gpu';
-  const baseSize = isGpuMode ? 1.4 : 1.2;
-  const sizeVariance = isGpuMode ? 1.8 : 2;
+  const baseSize = isGpuMode ? 2.6 : 1.6;
+  const sizeVariance = isGpuMode ? 2.1 : 1.8;
+  const opacityBaseMin = isGpuMode ? 0.5 : 0.28;
+  const opacityBaseMax = isGpuMode ? 0.95 : 0.85;
 
   for (let i = 0; i < count; i++) {
-    // Random angle and speed (velocity approximation)
+    // Random angle and speed for motion
     const angle = Math.random() * Math.PI * 2;
     const spd = (0.2 + Math.random() * 0.8) * state.speed;
     particles.push({
@@ -42,9 +44,9 @@ export function workersParticles(state, particles) {
       vx: Math.cos(angle) * spd,
       vy: Math.sin(angle) * spd,
       size: baseSize + Math.random() * sizeVariance,
-      alphaBase: 0.2 + Math.random() * 0.8,
+      alphaBase: opacityBaseMin + Math.random() * (opacityBaseMax - opacityBaseMin),
       phase: Math.random() * Math.PI * 2,
-      speed: 0.2 + Math.random() * 0.8
+      speed: 0.15 + Math.random() * 0.7
     });
   }
 }

@@ -48,6 +48,12 @@ body {
   pointer-events: none;
 }
 
+#bg-gpu {
+  z-index: 1;
+  pointer-events: none;
+  visibility: hidden;
+}
+
 #gpu {
   z-index: 2;
   pointer-events: none;

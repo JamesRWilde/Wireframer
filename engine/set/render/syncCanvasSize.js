@@ -44,11 +44,18 @@ export function syncCanvasSize(cpuCanvas) {
     cpuCanvas.height = h;
   }
 
-  // Resize the background canvas
+  // Resize the background canvas (CPU background)
   const bgCanvas = document.getElementById('bg');
   if (bgCanvas) {
     bgCanvas.width = w;
     bgCanvas.height = h;
+  }
+
+  // Resize the GPU background canvas (separate pipeline)
+  const bgGpuCanvas = document.getElementById('bg-gpu');
+  if (bgGpuCanvas) {
+    bgGpuCanvas.width = w;
+    bgGpuCanvas.height = h;
   }
 
   // Resize the foreground (CPU) canvas

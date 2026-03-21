@@ -123,9 +123,11 @@ export function startApp() {
   // This is a one-time initialization that sets the active renderer
   initRenderPipeline();
 
-  // Step 12: Initialize the background worker pipeline for particle updates
-  // Worker will choose CPU or GPU mode based on which foreground pipeline is active.
-  backgroundWorker(isGpuMode() ? 'gpu' : 'cpu');
+  // Step 12: Initialize the background worker pipeline for CPU particle updates only.
+  // GPU background is handled through dedicated WebGL pipeline in bgState.gpuBackgroundRenderer.
+  if (!isGpuMode()) {
+    backgroundWorker('cpu');
+  }
 
   // Step 13: Initialize renderer toggle functionality
   rendererToggle();

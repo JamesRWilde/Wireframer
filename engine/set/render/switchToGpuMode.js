@@ -58,6 +58,12 @@ export function switchToGpuMode() {
   canvasHidden(false);
   canvasCpuHidden(true);
 
+  // GPU background canvas appears; CPU background is hidden.
+  const cpuBg = document.getElementById('bg');
+  const gpuBg = document.getElementById('bg-gpu');
+  if (cpuBg) cpuBg.style.visibility = 'hidden';
+  if (gpuBg) gpuBg.style.visibility = 'visible';
+
   // Update modelState.model and HUD label to reflect what GPU will render
   if (modelState.baseModel) {
     const modelToShow = modelState.currentLodPct < 1
