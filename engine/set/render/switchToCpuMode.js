@@ -21,8 +21,6 @@ import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
 import { hud } from '@engine/set/engine/renderer/hud.js';
 import { state } from '@engine/state/engine/loop.js';
-import { modelState } from '@engine/state/render/model.js';
-import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 import { gpuState } from '@engine/state/gpu/scene.js';
 
@@ -46,10 +44,8 @@ export function switchToCpuMode() {
   // Set backward compatible state
   state.foregroundRenderMode = 'cpu';
 
-  // Ensure model state is capped for CPU
-  if (modelState.baseModel) {
-    modelState.cpuBaseModel = capModelForCpu(modelState.baseModel);
-  }
+  // applyCpuLodCap already sets cpuBaseModel and currentLodModel
+  // No need to recap here - that would double-decimate
 
   return true;
 }

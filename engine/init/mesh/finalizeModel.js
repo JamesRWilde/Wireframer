@@ -19,11 +19,12 @@
 // Import the detail level setter for LOD control
 import { detailLevel }from '@engine/set/mesh/detailLevel.js';
 
-// Import CPU detail cap for performance safety
-import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
 import { modelState } from '@engine/state/render/model.js';
 import { getMorph } from '@engine/get/mesh/getMorph.js';
 import { getMorphDuration } from '@engine/get/mesh/getMorphDuration.js';
+import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
+import { isGpuMode } from '@engine/set/render/isGpuMode.js';
+import { lodRangeForModel } from '@engine/set/mesh/lodRangeForModel.js';
 
 /**
  * finalizeModel - Finalizes and activates a mesh model
@@ -45,8 +46,17 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct, 
   // Always set BASE_MODEL so LOD slider works after morph completes
   modelState.baseModel = newModelCopy;
 
-  // Create CPU_BASE_MODEL: capped version for CPU mode only
-  modelState.cpuBaseModel = capModelForCpu(newModelCopy);
+  // In CPU mode, create CPU_BASE_MODEL by applying the cap
+  // GPU mode uses the full base model directly
+  if (!isGpuMode()) {
+    modelState.cpuBaseModel = capModelForCpu(newModelCopy);
+    // Update LOD range to reflect the capped model's vertex count
+    // This ensures the slider's 100% corresponds to the actual maximum available in CPU mode
+    lodRangeForModel(modelState.cpuBaseModel);
+  } else {
+    // In GPU mode, LOD range uses the full model's vertex count
+    lodRangeForModel(newModelCopy);
+  }
 
   // Reset LOD to full detail on new model load
   modelState.currentLodPct = 1;

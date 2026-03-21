@@ -19,8 +19,9 @@
 
 import { modelState } from '@engine/state/render/model.js';
 import { getDetailLevelValue } from '@engine/get/render/getDetailLevelValue.js';
-import { capModelForCpu, CPU_MAX_VERTS } from '@engine/set/mesh/cpuDetailCap.js';
 import { detailLevel } from '@engine/set/mesh/detailLevel.js';
+import { lodRangeForModel } from '@engine/set/mesh/lodRangeForModel.js';
+import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
 
 /**
  * applyCpuLodCap - Applies the CPU LOD cap to the current model
@@ -29,7 +30,7 @@ import { detailLevel } from '@engine/set/mesh/detailLevel.js';
  * the UI detail level slider.
  */
 export function applyCpuLodCap() {
-  // Use the base model if set, otherwise fall back to the active model.
+  // Use the base model as the source for capping
   const baseModel = modelState.baseModel || modelState.model;
   if (!baseModel) return;
 
@@ -39,15 +40,14 @@ export function applyCpuLodCap() {
     modelState.currentLodPct = Math.max(0, Math.min(1, detailLevelValue));
   }
 
-  // Recalculate the capped model (only decimates if over the cap)
+  // Apply the CPU cap to create a CPU-safe base model
+  // This ensures the model respects CPU_MAX_VERTS limit
   modelState.cpuBaseModel = capModelForCpu(baseModel);
 
-  // If user is requesting 100% LOD and the original base model is already under
-  // CPU vertex cap, always use the uncapped base model to avoid quality loss.
-  if (modelState.currentLodPct >= 0.999 && modelState.baseModel?.V?.length <= CPU_MAX_VERTS) {
-    modelState.currentLodModel = modelState.baseModel;
-  } else {
-    // Recompute current LOD model from capped base
-    detailLevel(modelState.currentLodPct);
-  }
+  // Update LOD range to reflect the capped model's vertex count in CPU mode
+  // This ensures the slider's 100% corresponds to the actual maximum available
+  lodRangeForModel(modelState.cpuBaseModel);
+
+  // Recompute current LOD model from capped base
+  detailLevel(modelState.currentLodPct);
 }
