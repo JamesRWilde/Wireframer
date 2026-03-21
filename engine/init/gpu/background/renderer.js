@@ -33,6 +33,7 @@
 "use strict";
 
 import { compileShader } from '@engine/init/gpu/compileShader.js';
+import { parseColorToRgb } from '@engine/set/render/draw/parseColorToRgb.js';
 
 const VERTEX_SHADER = `
 precision highp float;
@@ -91,17 +92,8 @@ function randomFloat(min, max) {
 }
 
 function parseCssColor(cssColor) {
-  const ctx = document.createElement('canvas').getContext('2d');
-  ctx.fillStyle = cssColor || '#ffffff';
-  const computed = ctx.fillStyle;
-  const m = computed.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)/);
-  if (!m) return { r: 1, g: 1, b: 1, a: 1 };
-  return {
-    r: Number(m[1]) / 255,
-    g: Number(m[2]) / 255,
-    b: Number(m[3]) / 255,
-    a: Number(m[4] ?? 1),
-  };
+  const [r, g, b] = parseColorToRgb(cssColor || '#ffffff');
+  return { r: r / 255, g: g / 255, b: b / 255, a: 1 };
 }
 
 function createParticleBufferData(width, height, density, baseSpeed) {
@@ -196,13 +188,18 @@ export function createBackgroundRenderer(gl) {
 
         if (!particleCount || !particleBuffer) return;
 
-        const parsed = parseCssColor(opts.color || '#ffffff');
+        let color;
+        if (Array.isArray(opts.colorRgb) && opts.colorRgb.length === 3) {
+          color = { r: opts.colorRgb[0], g: opts.colorRgb[1], b: opts.colorRgb[2], a: 1 };
+        } else {
+          color = parseCssColor(opts.color || '#ffffff');
+        }
 
         gl.viewport(0, 0, opts.width, opts.height);
         gl.useProgram(program);
         gl.uniform2f(locations.uResolution, opts.width, opts.height);
-        gl.uniform3f(locations.uColor, parsed.r, parsed.g, parsed.b);
-        gl.uniform1f(locations.uOpacity, opts.opacity * parsed.a);
+        gl.uniform3f(locations.uColor, color.r, color.g, color.b);
+        gl.uniform1f(locations.uOpacity, opts.opacity * color.a);
         gl.uniform1f(locations.uTime, opts.time);
         gl.uniform1f(locations.uVelocityScale, opts.velocityScale);
 

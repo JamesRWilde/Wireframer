@@ -16,8 +16,8 @@
 import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { colors } from '@engine/get/render/background/colors.js';
-import { getCustomRgbState } from '@ui/get/customRgbState.js';
 import { createBackgroundRenderer } from '@engine/init/gpu/background/renderer.js';
+import { parseColorToRgb } from '@engine/set/render/draw/parseColorToRgb.js';
 
 function getGpuBackgroundCanvas() {
   return bgState.gpuBackgroundCanvas;
@@ -37,13 +37,8 @@ function getGpuBackgroundGl() {
 }
 
 function parseCssColor(cssColor) {
-  const ctx = document.createElement('canvas').getContext('2d');
-  ctx.fillStyle = cssColor || '#000000';
-  const computed = ctx.fillStyle;
-
-  const m = computed.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)/);
-  if (!m) return [0, 0, 0, 1];
-  return [Number(m[1]) / 255, Number(m[2]) / 255, Number(m[3]) / 255, Number(m[4] ?? 1)];
+  const [r, g, b] = parseColorToRgb(cssColor || '#000000');
+  return [r / 255, g / 255, b / 255, 1];
 }
 
 /**
@@ -74,11 +69,9 @@ export function backgroundGpu(nowMs) {
   // Clear background in WebGL before particle draw
   const { bgColor, particleColor } = colors();
 
-  // Enforce custom RGB particle color for GPU path to match UI state exactly.
-  const customRgb = getCustomRgbState();
-  const activeParticleColor = Array.isArray(customRgb) && customRgb.length === 3
-    ? `rgba(${customRgb[0]},${customRgb[1]},${customRgb[2]},1)`
-    : particleColor;
+  // Decode particle color into numeric RGB directly to avoid parser edge cases.
+  const decodedParticleColor = parseCssColor(particleColor || '#ffffff');
+  const activeParticleColor = [decodedParticleColor[0], decodedParticleColor[1], decodedParticleColor[2]];
 
   const parsedColor = parseCssColor(bgColor);
   gl.viewport(0, 0, w, h);
@@ -96,7 +89,7 @@ export function backgroundGpu(nowMs) {
   renderer.draw(gl, {
     width: w,
     height: h,
-    color: activeParticleColor,
+    colorRgb: activeParticleColor,
     opacity: bgState.opacityPct,
     time: nowMs ?? performance.now(),
     velocityScale: bgState.velocityPct,
