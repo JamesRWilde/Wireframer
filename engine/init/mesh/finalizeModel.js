@@ -22,7 +22,7 @@ import { detailLevel }from '@engine/set/mesh/detailLevel.js';
 import { modelState } from '@engine/state/render/model.js';
 import { getMorph } from '@engine/get/mesh/getMorph.js';
 import { getMorphDuration } from '@engine/get/mesh/getMorphDuration.js';
-import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
+import { capModelForCpu } from '@engine/set/mesh/capModelForCpu.js';
 import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { lodRangeForModel } from '@engine/set/mesh/lodRangeForModel.js';
 

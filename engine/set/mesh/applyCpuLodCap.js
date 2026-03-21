@@ -21,7 +21,7 @@ import { modelState } from '@engine/state/render/model.js';
 import { getDetailLevelValue } from '@engine/get/render/getDetailLevelValue.js';
 import { detailLevel } from '@engine/set/mesh/detailLevel.js';
 import { lodRangeForModel } from '@engine/set/mesh/lodRangeForModel.js';
-import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
+import { capModelForCpu } from '@engine/set/mesh/capModelForCpu.js';
 
 /**
  * applyCpuLodCap - Applies the CPU LOD cap to the current model
