@@ -33,10 +33,10 @@ import { customRgb as writeCustomRgb }from '@ui/set/customRgb.js';
 // Import the function to set dark/light theme mode
 // Adjusts background brightness, contrast enforcement, etc.
 import { themeMode }from '@ui/set/themeMode.js';
+import { customRed, customGreen, customBlue } from '@ui/state/dom.js';
 
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences
-import { state }from '@ui/get/read/state.js';
 import { state as persistState }from '@ui/set/persist/state.js';
 
 /**
@@ -67,7 +67,27 @@ export function themeControls() {
       writeCustomRgb(saved, { persist: false, apply: true });
     }
 
-    // Step 3: Set up theme mode selector (dark/light)
+    // Step 3: Wire RGB sliders to custom color updates
+    // This allows users to drag the R/G/B sliders to change theme color live.
+    if (customRed && customGreen && customBlue) {
+      const applySliderRgb = () => {
+        const r = Number(customRed.value || '0');
+        const g = Number(customGreen.value || '0');
+        const b = Number(customBlue.value || '0');
+        writeCustomRgb([r, g, b], { persist: true, apply: true });
+      };
+
+      customRed.addEventListener('input', applySliderRgb);
+      customGreen.addEventListener('input', applySliderRgb);
+      customBlue.addEventListener('input', applySliderRgb);
+
+      // Persist final color on mouse/keyboard release too (safer for all browsers)
+      customRed.addEventListener('change', applySliderRgb);
+      customGreen.addEventListener('change', applySliderRgb);
+      customBlue.addEventListener('change', applySliderRgb);
+    }
+
+    // Step 4: Set up theme mode selector (dark/light)
     // Check if the theme-mode select element exists in the DOM
     if (typeof document !== 'undefined' && document.getElementById('theme-mode')) {
       const tm = document.getElementById('theme-mode');
