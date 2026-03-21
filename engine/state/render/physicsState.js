@@ -18,7 +18,6 @@
  *   - AUTO_WX, AUTO_WY, AUTO_WZ: Target auto-rotation velocities
  *   - dragging: Whether user is currently dragging
  *   - lastPointerX, lastPointerY: Last pointer position for delta calculation
- *   - HOLD_ROTATION_FRAMES: Frames to pause rotation
  *   - _axisAngleX, _axisAngleY: Internal auto-rotation wander state
  */
 
@@ -40,7 +39,6 @@ export const physicsState = {
   dragging: false,
   lastPointerX: null,
   lastPointerY: null,
-  HOLD_ROTATION_FRAMES: 0,
   axisAngleX: 0,
   axisAngleY: 0,
 };
