@@ -119,10 +119,13 @@ export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays
   if (wireAlpha > 0.001) {
     gl.useProgram(wireProgram);
 
-    // Enforce minimum GPU line width according to explicit wireWidth config
-    // WebGL lineWidth is mostly implementation-dependent; 1 is guaranteed minimum.
-    const width = Number((params.wireWidth || 1));
-    gl.lineWidth(Math.max(1, width));
+    // WebGL line width support is limited, with 1 as the guaranteed minimum.
+    // GPU effect tries to use configured wireWidth (from renderState), but most
+    // WebGL implementations cannot go below 1.0 for gl.LINE width.
+    const requestedWidth = Number(params.wireWidth);
+    const normalizedWireWidth = Number.isFinite(requestedWidth) && requestedWidth > 0 ? requestedWidth : 1;
+    const effectiveWireWidth = Math.max(1, normalizedWireWidth);
+    gl.lineWidth(effectiveWireWidth);
 
     // Set projection uniforms
     projectionUniforms(gl, wireLoc, params);
@@ -151,10 +154,7 @@ export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays
     // Draw wireframe edges with standard alpha blending so fill remains visible.
     // Keep depth testing enabled to avoid drawing wires through the mesh.
 
-    // Force minimum line thickness for consistent cross-platform appearance
-    // WebGL may default to >1 on some drivers; 1 is the thinnest guaranteed value.
-    gl.lineWidth(1);
-
+    // Use effective line width already configured above.
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.drawElements(gl.LINES, buffers.edgeCount, buffers.indexType, 0);
