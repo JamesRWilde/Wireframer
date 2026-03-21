@@ -50,38 +50,54 @@ export function backgroundWorker() {
     state.worker.onmessage = (event) => {
       const { type, data, count } = event.data;
       if (type === 'ready') {
-        // Worker has completed initialization
         state.workerReady = true;
+        state.workerAvailable = true;
       } else if (type === 'particles') {
-        // New particle data received; store for main-thread rendering
         state.pendingWorkerParticles = { data, count };
       } else if (type === 'error') {
         console.error('[BackgroundWorker]', event.data.message);
         state.workerReady = false;
+        state.workerAvailable = false;
       }
     };
 
     // Handle fatal worker errors (e.g., script crash)
-    state.worker.onerror = () => {
+    state.worker.onerror = (event) => {
       state.workerReady = false;
+      state.workerAvailable = false;
+      console.error('[BackgroundWorker] worker error occurred', {
+        message: event.message,
+        filename: event.filename,
+        lineno: event.lineno,
+        colno: event.colno,
+        error: event.error,
+      });
+
+      // Retry with a new worker on next frame
+      state.workerInitialized = false;
+      if (state.worker) {
+        state.worker.terminate();
+        state.worker = null;
+      }
     };
 
     // Get current canvas dimensions for worker initialization
     const canvasState = canvas();
     if (canvasState) {
-      // Send init message with dimensions, density, speed, and theme
       state.worker.postMessage({
         type: 'init',
         width: canvasState.w,
         height: canvasState.h,
         density: bgState.densityPct,
         speed: bgState.velocityPct,
-        themeMode: getThemeMode()
+        themeMode: getThemeMode(),
       });
     }
 
     return true;
   } catch (error) {
+    state.workerReady = false;
+    state.workerAvailable = false;
     console.warn('[BackgroundWorker] Failed to initialize:', error);
     return false;
   }

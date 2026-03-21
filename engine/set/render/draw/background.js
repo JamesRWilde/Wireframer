@@ -26,6 +26,9 @@ import {colors}from '@engine/get/render/background/colors.js';
 // Import background worker state directly (avoid function wrapper)
 import { workerState }from '@engine/state/render/background/worker.js';
 
+// Import background worker initialization helper
+import { backgroundWorker }from '@engine/init/render/backgroundWorker.js';
+
 // Import message sender for background worker
 import { postToBackgroundWorker }from '@engine/set/render/postToBackgroundWorker.js';
 
@@ -33,11 +36,15 @@ import { postToBackgroundWorker }from '@engine/set/render/postToBackgroundWorker
 import { getThemeMode } from '@engine/get/render/themeMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 
-// IMPORTANT: backgroundWorker is initialized at startup (startApp/initRenderPipeline)
-// and non-worker fallback code has been removed to enforce worker-first behavior.
+// IMPORTANT: This function attempts worker initialization when necessary and
+// does not run main-thread particle updates for fallback. It preserves the
+// static background color while the worker warms up.
 
 // Import helper function for worker-particle rendering
 import { renderWorkerParticles } from '@engine/set/render/draw/renderWorkerParticles.js';
+
+// Debug helper (avoid console spam)
+let backgroundWorkerNotReadyLogged = false;
 
 /**
  * background - Renders the animated particle background
@@ -52,9 +59,22 @@ export function background(nowMs) {
 
   const { bgColor, particleColor } = colors();
 
-  // If background worker is not ready, draw only static background color.
-  // No main-thread fallback mode is allowed to keep behavior deterministic.
+  // If the worker is not yet ready, attempt initialization on each frame.
+  // Render at least static background color (no CPU particle fallbacks).
   if (!workerState.workerReady) {
+    if (!workerState.workerInitialized || !workerState.workerAvailable) {
+      backgroundWorker();
+    }
+
+    if (!backgroundWorkerNotReadyLogged) {
+      console.warn('[Background] worker not ready; static background only', {
+        workerInitialized: workerState.workerInitialized,
+        workerAvailable: workerState.workerAvailable,
+        workerReady: workerState.workerReady,
+      });
+      backgroundWorkerNotReadyLogged = true;
+    }
+
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, w, h);
     return false;
