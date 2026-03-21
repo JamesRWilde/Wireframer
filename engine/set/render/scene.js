@@ -110,7 +110,8 @@ export function scene(nowMs) {
   
   // For GPU mode, the return value indicates success (true) or failure (false)
   // For CPU mode, the return value is always true
-  const gpuDrawn = isGpuMode && drewCpuForeground;
+  // (Fix: isGpuMode is a function and must be invoked)
+  const gpuDrawn = isGpuMode() && drewCpuForeground;
 
   mixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn);
 

@@ -70,7 +70,9 @@ export const state = {
  * 
  * Currently set to 0 (uncapped) for maximum smoothness.
  */
-export const MAX_FPS = 60; // Cap rendering to 60 FPS to reduce GPU/CPU load (background particles, etc.)
+// Set to 0 to disable internal FPS cap and use full requestAnimationFrame throughput.
+// This ensures we are not accidentally throttling around 37 FPS in any path.
+export const MAX_FPS = 0; // 0 = uncapped
 
 /**
  * MIN_FRAME_INTERVAL_MS - Minimum time between frames in milliseconds
@@ -78,7 +80,7 @@ export const MAX_FPS = 60; // Cap rendering to 60 FPS to reduce GPU/CPU load (ba
  * Calculated from MAX_FPS. When MAX_FPS is 0, this is also 0 (no throttling).
  * Used by shouldRunFrame() to skip frames when running too fast.
  */
-export const MIN_FRAME_INTERVAL_MS = MAX_FPS > 0 ? (1000 / MAX_FPS) : 0;
+export const MIN_FRAME_INTERVAL_MS = 0;
 
 /**
  * TELEMETRY_UI_INTERVAL_MS - Minimum time between telemetry DOM updates
