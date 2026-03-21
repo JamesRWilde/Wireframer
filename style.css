@@ -563,11 +563,9 @@ canvas:active { cursor: grabbing; }
 /* Small height (landscape phones): concertina + scroll, no slide-out */
 @media (max-height: 520px) {
   #controls {
-    position: absolute;
     top: 0;
     right: 0;
-    width: auto;
-    left: 0;
+    width: 18.5rem;
     max-height: 100vh;
     height: 100vh;
     overflow-y: scroll;
