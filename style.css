@@ -580,6 +580,10 @@ canvas:active { cursor: grabbing; }
 
   .control-panel {
     margin-bottom: 0;
+    padding: 0.4rem 0.6rem;
+  }
+  .concertina-title {
+    padding-bottom: 0;
   }
 }
 #obj-label {
