@@ -8,8 +8,8 @@
 
 "use strict";
 
-import { getShadeDarkRgb } from '@engine/get/render/shadeDarkRgb.js';
-import { getShadeBrightRgb } from '@engine/get/render/shadeBrightRgb.js';
+import { getShadeDarkRgb } from '@engine/get/render/getShadeDarkRgb.js';
+import { getShadeBrightRgb } from '@engine/get/render/getShadeBrightRgb.js';
 
 /**
  * View-space light direction: top-left ceiling light

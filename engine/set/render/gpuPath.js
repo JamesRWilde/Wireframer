@@ -28,18 +28,18 @@ import { drawSceneModel as drawGpuSceneModel }from '@engine/set/gpu/drawSceneMod
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 import { getRotation } from '@engine/get/render/physics/getRotation.js';
-import { getZoom } from '@engine/get/render/zoom.js';
-import { getModelCy } from '@engine/get/render/modelCy.js';
-import { getZHalf } from '@engine/get/render/zHalf.js';
+import { getZoom } from '@engine/get/render/getZoom.js';
+import { getModelCy } from '@engine/get/render/getModelCy.js';
+import { getZHalf } from '@engine/get/render/getZHalf.js';
 import { getW } from '@engine/get/render/width.js';
-import { getH } from '@engine/get/render/height.js';
-import { getTheme } from '@engine/get/render/theme.js';
-import { getEdgeColor } from '@engine/get/render/edgeColor.js';
-import { getFillRgb } from '@engine/get/render/fillRgb.js';
-import { getFillOpacity } from '@engine/get/render/fillOpacity.js';
-import { getWireOpacity } from '@engine/get/render/wireOpacity.js';
-import { getShadeDarkRgb } from '@engine/get/render/shadeDarkRgb.js';
-import { getShadeBrightRgb } from '@engine/get/render/shadeBrightRgb.js';
+import { getH } from '@engine/get/render/getH.js';
+import { getTheme } from '@engine/get/render/getTheme.js';
+import { getEdgeColor } from '@engine/get/render/getEdgeColor.js';
+import { getFillRgb } from '@engine/get/render/getFillRgb.js';
+import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
+import { getWireOpacity } from '@engine/get/render/getWireOpacity.js';
+import { getShadeDarkRgb } from '@engine/get/render/getShadeDarkRgb.js';
+import { getShadeBrightRgb } from '@engine/get/render/getShadeBrightRgb.js';
 import { renderState } from '@engine/state/render/renderState.js';
 
 // Utility: convert '#RRGGBB' to [r,g,b]

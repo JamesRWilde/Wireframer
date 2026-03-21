@@ -27,9 +27,9 @@ import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.
 import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
 import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/resolve/triangleNormalCpu.js';
 import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/compute/triangleCpu.js';
-import { getEdgeColor } from '@engine/get/render/edgeColor.js';
-import { getFillOpacity } from '@engine/get/render/fillOpacity.js';
-import { getWireOpacity } from '@engine/get/render/wireOpacity.js';
+import { getEdgeColor } from '@engine/get/render/getEdgeColor.js';
+import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
+import { getWireOpacity } from '@engine/get/render/getWireOpacity.js';
 import { renderState } from '@engine/state/render/renderState.js';
 import { sortTrianglesByDepth } from '@engine/set/cpu/sortTrianglesByDepth.js';
 import { renderTriangle } from '@engine/set/cpu/renderTriangle.js';

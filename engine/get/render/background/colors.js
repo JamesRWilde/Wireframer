@@ -14,8 +14,8 @@
  *   3. Default light blue fallback
  */
 
-import { getBgColor } from '@engine/get/render/bgColor.js';
-import { getParticleColor } from '@engine/get/render/particleColor.js';
+import { getBgColor } from '@engine/get/render/getBgColor.js';
+import { getParticleColor } from '@engine/get/render/getParticleColor.js';
 import { getCustomRgbState } from '@ui/get/customRgbState.js';
 
 /**

@@ -22,7 +22,7 @@
 import { createParticle }from '@engine/init/render/createParticle.js';
 
 // Import centralized render state
-import { getThemeMode } from '@engine/get/render/themeMode.js';
+import { getThemeMode } from '@engine/get/render/getThemeMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 
 /** Maximum density multiplier to cap particle count */

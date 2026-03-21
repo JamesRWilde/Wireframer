@@ -19,7 +19,7 @@ import { colors } from '@engine/get/render/background/colors.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { workerState } from '@engine/state/render/background/worker.js';
 import { postToBackgroundWorker } from '@engine/set/render/postToBackgroundWorker.js';
-import { getThemeMode } from '@engine/get/render/themeMode.js';
+import { getThemeMode } from '@engine/get/render/getThemeMode.js';
 import { renderWorkerParticles } from '@engine/set/render/draw/renderWorkerParticles.js';
 import { backgroundWorker } from '@engine/init/render/backgroundWorker.js';
 
