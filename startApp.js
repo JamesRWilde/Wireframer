@@ -27,7 +27,7 @@ import '@engine/state/render/model.js';
 import '@engine/init/mesh/morphApi.js';
 
 // UI init functions
-import { initObjectSelector } from '@ui/init/objectSelector.js';
+import { initObjectSelector } from '@ui/init/initObjectSelector.js';
 
 // Frame loop
 import { animationFrame } from '@engine/set/engine/frame/animationFrame.js';
@@ -54,7 +54,7 @@ import { themeControls } from '@engine/init/engine/themeControls.js';
 import { rendererToggle } from '@engine/init/engine/rendererToggle.js';
 
 // Render pipeline initialization (GPU/CPU selection)
-import { initRenderPipeline } from '@engine/init/render/pipeline/init.js';
+import { initRenderPipeline } from '@engine/init/render/pipeline/initRenderPipeline.js';
 
 // Background worker initialization (dedicated background pipeline)
 import { backgroundWorker } from '@engine/init/render/backgroundWorker.js';
