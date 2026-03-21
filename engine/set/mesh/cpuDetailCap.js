@@ -95,45 +95,75 @@ function decimateModelToVertexTarget(model, targetVerts) {
   const currentVerts = model.V.length;
   if (currentVerts <= targetVerts) return model;
 
-  const minPct = 0.1;
-  let low = minPct;
-  let high = 1;
+  const {bestModel, bestPercent} = findBestPercentCandidate(model, targetVerts);
+  if (!bestModel) return model;
+
+  return refineBestModel(model, targetVerts, bestModel, bestPercent);
+}
+
+function findBestPercentCandidate(model, targetVerts) {
+  const samplePercents = [1, 0.95, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
 
   let bestModel = model;
-  let bestDiff = Math.abs(currentVerts - targetVerts);
+  let bestPercent = 1;
+  let bestDiff = Math.abs(model.V.length - targetVerts);
 
-  const maxIterations = 10;
-  const targetTolerance = 0.05; // 5%
+  for (const pct of samplePercents) {
+    const candidate = decimateByPercent(model, pct);
+    if (!candidate?.V?.length) continue;
 
-  for (let i = 0; i < maxIterations; i++) {
-    const trialPct = (low + high) / 2;
-    const candidate = decimateByPercent(model, trialPct);
+    const candidateVerts = candidate.V.length;
+    const diff = Math.abs(candidateVerts - targetVerts);
+    console.log(`[capModelForCpu] Search candidate pct=${pct.toFixed(3)} => ${candidateVerts} verts (target ${targetVerts})`);
+
+    if (diff < bestDiff) {
+      bestDiff = diff;
+      bestModel = candidate;
+      bestPercent = pct;
+    }
+
+    if (diff === 0) break;
+  }
+
+  return {bestModel, bestPercent};
+}
+
+function refineBestModel(model, targetVerts, bestModel, bestPercent) {
+  const tolerance = 0.03;
+  const maxRefine = 10;
+  let low = Math.max(0.1, bestPercent - 0.2);
+  let high = Math.min(1, bestPercent + 0.2);
+
+  let winner = bestModel;
+  let bestDiff = Math.abs(bestModel.V.length - targetVerts);
+
+  for (let i = 0; i < maxRefine; i++) {
+    const pct = (low + high) / 2;
+    const candidate = decimateByPercent(model, pct);
     if (!candidate?.V?.length) break;
 
     const candidateVerts = candidate.V.length;
     const diff = Math.abs(candidateVerts - targetVerts);
 
+    console.log(`[capModelForCpu] Refine pct=${pct.toFixed(3)} => ${candidateVerts} verts (diff ${diff})`);
+
     if (diff < bestDiff) {
       bestDiff = diff;
-      bestModel = candidate;
+      winner = candidate;
     }
 
-    if (diff / targetVerts <= targetTolerance) {
-      // Close enough; return immediately
+    if (diff / targetVerts <= tolerance) {
       return candidate;
     }
 
     if (candidateVerts > targetVerts) {
-      // Too many verts -> need stronger decimation (lower percent)
-      high = trialPct;
+      high = pct;
     } else {
-      // Too few verts -> we under-decimated, increase percent
-      low = trialPct;
+      low = pct;
     }
 
-    // Stop if window is very narrow; we won't improve more
     if (Math.abs(high - low) < 0.005) break;
   }
 
-  return bestModel;
+  return winner;
 }
