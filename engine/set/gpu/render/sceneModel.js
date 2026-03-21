@@ -66,7 +66,7 @@ export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays
 
   // Clamp alpha values to [0, 1]
   const fillAlpha = Math.max(0, Math.min(1, Number(params.fillAlpha) || 0));
-  const wireAlpha = Math.max(0, Math.min(1, Number(params.wireAlpha) || 0));
+  const wireAlpha = Math.max(0, Math.min(1, Number(params.wireAlpha) || 0)) * 0.25;
 
   // --- Fill Pass (Blinn-Phong lit triangles) ---
   if (fillAlpha > 0.001) {
