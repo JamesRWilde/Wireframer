@@ -536,6 +536,29 @@ canvas:active { cursor: grabbing; }
   #footer { bottom: 18px; }
   #obj-label { font-size: 1rem; letter-spacing: 0.2rem; }
   #hint { font-size: 0.8rem; margin-top: 6px; }
+
+  /* Concertina: collapsible panels on small screens */
+  .control-panel .panel-title {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+    padding-bottom: 0.35rem;
+  }
+  .control-panel .panel-title::after {
+    content: '\25BC';
+    font-size: 0.6rem;
+    transition: transform 0.2s ease;
+    color: var(--ui-control-fg);
+  }
+  .control-panel.collapsed .panel-title::after {
+    transform: rotate(-90deg);
+  }
+  .control-panel.collapsed > *:not(.panel-title) {
+    display: none;
+  }
 }
 #obj-label {
   font-size: 1.3rem;

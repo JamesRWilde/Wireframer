@@ -152,6 +152,17 @@
     if (controls.contains(e.target) || btn.contains(e.target)) return;
     controls.classList.remove('open');
   });
+
+  // Concertina: collapse/expand panels on small screens
+  var panels = controls.querySelectorAll('.control-panel');
+  panels.forEach(function(panel) {
+    var title = panel.querySelector('.panel-title');
+    if (!title) return;
+    title.addEventListener('click', function() {
+      if (window.innerWidth > 600) return;
+      panel.classList.toggle('collapsed');
+    });
+  });
 })();
 </script>
 
