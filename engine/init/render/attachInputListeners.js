@@ -68,24 +68,47 @@ export function attachInputListeners(canvas) {
     appWindow.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
   }
 
-  // Touch start: start dragging (mobile)
+  // Pinch zoom state (two-finger gesture)
+  let pinchStartDist = 0;
+  let pinchStartZoom = 1;
+
+  function getTouchDist(t1, t2) {
+    return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+  }
+
+  // Touch start: single-finger drag or two-finger pinch
   canvas.addEventListener('touchstart', e => {
-    setDragging(true);
-    setLastPointerX(e.touches[0].clientX);
-    setLastPointerY(e.touches[0].clientY);
-    setWx(0);
-    setWy(0);
+    if (e.touches.length === 2) {
+      // Two fingers: start pinch zoom, stop dragging
+      setDragging(false);
+      pinchStartDist = getTouchDist(e.touches[0], e.touches[1]);
+      pinchStartZoom = getZoom();
+    } else if (e.touches.length === 1) {
+      // One finger: start dragging
+      setDragging(true);
+      setLastPointerX(e.touches[0].clientX);
+      setLastPointerY(e.touches[0].clientY);
+      setWx(0);
+      setWy(0);
+    }
   }, { passive: true });
 
-  // Touch end: stop dragging (mobile)
+  // Touch end: stop dragging
   canvas.addEventListener('touchend', () => {
     setDragging(false);
   });
 
-  // Touch move: update rotation based on drag delta (mobile)
+  // Touch move: rotate (one finger) or pinch zoom (two fingers)
   canvas.addEventListener('touchmove', e => {
     e.preventDefault();
-    onMove(e.touches[0].clientX, e.touches[0].clientY);
+    if (e.touches.length === 2 && pinchStartDist > 0) {
+      const currentDist = getTouchDist(e.touches[0], e.touches[1]);
+      const scale = currentDist / pinchStartDist;
+      const newZoom = Math.max(getZoomMin(), Math.min(getZoomMax(), pinchStartZoom * scale));
+      setZoom(newZoom);
+    } else if (e.touches.length === 1) {
+      onMove(e.touches[0].clientX, e.touches[0].clientY);
+    }
   }, { passive: false });
 
   // Wheel: zoom in/out
