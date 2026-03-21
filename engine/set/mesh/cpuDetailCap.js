@@ -22,6 +22,11 @@
 "use strict";
 
 import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
+import { computeBoundingBox } from '@engine/get/mesh/computeBoundingBox.js';
+import { assignVerticesToCells } from '@engine/init/mesh/assignVerticesToCells.js';
+import { clusterVertices } from '@engine/init/mesh/clusterVertices.js';
+import { rebuildFaces } from '@engine/init/mesh/rebuildFaces.js';
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
 
 /** @type {number} Maximum vertices for CPU mode before auto-decimation */
 export const CPU_MAX_VERTS = 2000;
@@ -44,126 +49,85 @@ export function capModelForCpu(model) {
 
   const verts = model.V.length;
   const edges = model.E?.length ?? 0;
-  const overVerts = verts > CPU_MAX_VERTS;
-  const overEdges = edges > CPU_MAX_EDGES;
 
-  console.log(`[capModelForCpu] Model analysis: ${verts} vertices, ${edges} edges, CPU_MAX_VERTS: ${CPU_MAX_VERTS}`);
+  console.log(`[capModelForCpu] Model analysis: ${verts} vertices, ${edges} edges, CPU_MAX_VERTS: ${CPU_MAX_VERTS}, CPU_MAX_EDGES: ${CPU_MAX_EDGES}`);
 
-  // If below the vertex cap we keep the model exactly, regardless of edge count.
-  if (!overVerts) {
-    console.log(`[capModelForCpu] Model under vertex cap, no decimation needed`);
+  // If already under both caps, keep model as-is
+  if (verts <= CPU_MAX_VERTS && edges <= CPU_MAX_EDGES) {
+    console.log('[capModelForCpu] Model within caps, no decimation needed');
     return model;
   }
 
-  // Calculate the exact ratio needed to reach the vertex cap
-  // e.g., 10,000 vertex model with 2,000 cap = 0.2 ratio
-  // e.g., 4,000 vertex model with 2,000 cap = 0.5 ratio
-  let pct = CPU_MAX_VERTS / verts;
-  console.log(`[capModelForCpu] Calculated decimation ratio: ${pct} (${(pct * 100).toFixed(1)}%)`);
+  // If completely over, find the best cell-cluster decimation result under caps.
+  const best = decimateToCap(model, CPU_MAX_VERTS, CPU_MAX_EDGES);
 
-  // Edge count is a soft suggestion only
-  if (overEdges) {
-    console.warn(`Model exceeds edge cap (${edges} > ${CPU_MAX_EDGES}), but vertex-based LOD cap is used for performance.`);
-  }
-
-  // Clamp to reasonable range — don't decimate below 10% to prevent over-decimation
-  const minPct = 0.1;
-  pct = Math.max(minPct, Math.min(1, pct));
-  console.log(`[capModelForCpu] Final decimation ratio after clamping: ${pct} (${(pct * 100).toFixed(1)}%)`);
-
-  // Decimate with a vertex-targeted, adaptive search so we land close to CPU_MAX_VERTS.
-  const decimated = decimateModelToVertexTarget(model, CPU_MAX_VERTS);
-
-  // Log the result
-  if (decimated?.V?.length) {
-    console.log(`[capModelForCpu] Decimation result: ${decimated.V.length} vertices, ${decimated.E?.length || 0} edges`);
-    console.log(`[capModelForCpu] Expected target vertices: ${CPU_MAX_VERTS}, got ${decimated.V.length}`);
+  if (best?.V?.length) {
+    console.log(`[capModelForCpu] Decimation result: ${best.V.length} vertices, ${best.E?.length || 0} edges`);
+    console.log(`[capModelForCpu] Target caps: ${CPU_MAX_VERTS} verts, ${CPU_MAX_EDGES} edges`);
   } else {
-    console.error(`[capModelForCpu] Decimation failed - no valid result returned`);
+    console.error('[capModelForCpu] No valid decimated model found under caps, returning original model');
   }
 
-  return decimated;
+  return best || model;
 }
 
-/**
- * Decimate model to an approximate vertex target by binary searching on percent.
- * Returns best match within the given tolerance.
- */
-function decimateModelToVertexTarget(model, targetVerts) {
+function decimateToCap(model, maxVerts, maxEdges) {
   if (!model?.V?.length) return model;
 
-  const currentVerts = model.V.length;
-  if (currentVerts <= targetVerts) return model;
+  const { minX, minY, minZ, extent } = computeBoundingBox(model.V);
+  const best = { model: null, verts: 0 };
 
-  const {bestModel, bestPercent} = findBestPercentCandidate(model, targetVerts);
-  if (!bestModel) return model;
+  let low = extent * 0.0005;
+  let high = extent * 0.5;
 
-  return refineBestModel(model, targetVerts, bestModel, bestPercent);
-}
+  for (let iter = 0; iter < 20; iter++) {
+    const mid = (low + high) / 2;
+    const candidate = clusterDecimate(model, minX, minY, minZ, extent, mid);
+    if (!candidate) break;
 
-function findBestPercentCandidate(model, targetVerts) {
-  const samplePercents = [1, 0.95, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
+    const v = candidate.V.length;
+    const e = candidate.E.length;
 
-  let bestModel = model;
-  let bestPercent = 1;
-  let bestDiff = Math.abs(model.V.length - targetVerts);
-
-  for (const pct of samplePercents) {
-    const candidate = decimateByPercent(model, pct);
-    if (!candidate?.V?.length) continue;
-
-    const candidateVerts = candidate.V.length;
-    const diff = Math.abs(candidateVerts - targetVerts);
-    console.log(`[capModelForCpu] Search candidate pct=${pct.toFixed(3)} => ${candidateVerts} verts (target ${targetVerts})`);
-
-    if (diff < bestDiff) {
-      bestDiff = diff;
-      bestModel = candidate;
-      bestPercent = pct;
-    }
-
-    if (diff === 0) break;
-  }
-
-  return {bestModel, bestPercent};
-}
-
-function refineBestModel(model, targetVerts, bestModel, bestPercent) {
-  const tolerance = 0.03;
-  const maxRefine = 10;
-  let low = Math.max(0.1, bestPercent - 0.2);
-  let high = Math.min(1, bestPercent + 0.2);
-
-  let winner = bestModel;
-  let bestDiff = Math.abs(bestModel.V.length - targetVerts);
-
-  for (let i = 0; i < maxRefine; i++) {
-    const pct = (low + high) / 2;
-    const candidate = decimateByPercent(model, pct);
-    if (!candidate?.V?.length) break;
-
-    const candidateVerts = candidate.V.length;
-    const diff = Math.abs(candidateVerts - targetVerts);
-
-    console.log(`[capModelForCpu] Refine pct=${pct.toFixed(3)} => ${candidateVerts} verts (diff ${diff})`);
-
-    if (diff < bestDiff) {
-      bestDiff = diff;
-      winner = candidate;
-    }
-
-    if (diff / targetVerts <= tolerance) {
-      return candidate;
-    }
-
-    if (candidateVerts > targetVerts) {
-      high = pct;
+    // If under both caps, attempt finer detail (smaller cells) to maximize verts.
+    if (v <= maxVerts && e <= maxEdges) {
+      if (v > best.verts) {
+        best.model = candidate;
+        best.verts = v;
+      }
+      high = mid;
     } else {
-      low = pct;
+      low = mid;
     }
 
-    if (Math.abs(high - low) < 0.005) break;
+    console.log(`[capModelForCpu] decimateToCap mid=${mid.toFixed(4)} -> ${v} verts, ${e} edges, best=${best.verts}`);
+
+    if (Math.abs(high - low) < 1e-5) break;
   }
 
-  return winner;
+  if (best.model) return best.model;
+
+  // fallback to 0.1 if nothing found.
+  return decimateByPercent(model, 0.1);
 }
+
+function clusterDecimate(model, minX, minY, minZ, extent, cellSize) {
+  const cellMap = assignVerticesToCells(model.V, minX, minY, minZ, cellSize);
+  const { newVerts, oldToNew } = clusterVertices(model.V, cellMap);
+  if (!newVerts?.length) return null;
+
+  const newFaces = model.F?.length ? rebuildFaces(model.F, oldToNew) : [];
+  const edgeBuilder = getMeshEdgesFromFacesRuntime();
+  const newEdges = edgeBuilder ? edgeBuilder(newFaces) : [];
+
+  return {
+    ...model,
+    V: newVerts,
+    F: newFaces,
+    E: newEdges,
+    _meshFormat: model._meshFormat,
+    _shadingMode: model._shadingMode,
+    _creaseAngleDeg: model._creaseAngleDeg,
+    _oldToNew: Array.from({ length: model.V.length }, (_, i) => oldToNew.get(i) ?? 0),
+  };
+}
+

@@ -24,6 +24,8 @@
 
 "use strict";
 
+import { normalizeFaces } from '@engine/init/mesh/normalizeFaces.js';
+
 /**
  * rebuildFaces - Rebuilds faces after vertex clustering
  * 
@@ -35,19 +37,24 @@
  */
 export function rebuildFaces(F, oldToNew) {
   const newFaces = [];
-  
+  const normalizedF = normalizeFaces(F);
+  if (!Array.isArray(normalizedF) || normalizedF.length === 0) return newFaces;
+
   // Process each face
-  for (const face of F) {
+  for (const face of normalizedF) {
+    // Support face entries as arrays only
+    if (!Array.isArray(face)) continue;
+
     // Map old vertex indices to new indices
     const tri = face.map(idx => oldToNew.get(idx));
-    
+
     // Skip faces with undefined mappings (vertex was removed)
     if (tri.includes(undefined)) continue;
-    
+
     // Skip degenerate faces (duplicate vertices)
     // A valid triangle needs 3 unique vertices
     if (new Set(tri).size === 3) newFaces.push(tri);
   }
-  
+
   return newFaces;
 }
