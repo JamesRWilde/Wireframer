@@ -51,49 +51,7 @@ app.use(express.json());
 // Express automatically sets correct Content-Type headers based on file extensions
 app.use(express.static(path.join(__dirname)));
 
-// Reintroducing /api/meshes endpoint
-const fs = require('node:fs');
-
-app.get('/api/meshes', (req, res) => {
-  const meshesDir = path.join(__dirname, 'meshes');
-
-  try {
-    const files = fs.readdirSync(meshesDir)
-      .filter(f => f.toLowerCase().endsWith('.obj'))
-      .sort()
-      .map(filename => {
-        const key = filename.replace(/\.obj$/i, '');
-        const name = key.replaceAll('-', ' ').replaceAll(/\b\w/g, c => c.toUpperCase());
-        return { key, name, obj: `meshes/${filename}` };
-      });
-
-    res.json(files);
-  } catch (err) {
-    console.error('[api/meshes] Failed to read meshes directory:', err.message);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Forensic log endpoint - receives log entries from the client and writes to wireframer.log
-app.post('/api/log', (req, res) => {
-  try {
-    const entries = req.body;
-    const logFile = path.join(__dirname, 'wireframer.log');
-    
-    // Format each entry as a line in the log file
-    const lines = entries.map(entry => {
-      const { t, cat, fn, phase, data } = entry;
-      const dataStr = data ? ` ${JSON.stringify(data)}` : '';
-      return `[${new Date(t).toISOString()}] ${cat}/${fn} ${phase}${dataStr}`;
-    });
-    
-    fs.appendFileSync(logFile, lines.join('\n') + '\n', 'utf8');
-    res.json({ ok: true, written: entries.length });
-  } catch (err) {
-    console.error('[api/log] Failed to write log:', err.message);
-    res.status(500).json({ error: err.message });
-  }
-});
+// No API endpoints - static files only
 
 // Start listening for incoming HTTP requests
 // The callback logs the URL so developers know where to open the app
@@ -107,8 +65,4 @@ try {
   process.exit(1);
 }
 
-// Check if meshes directory exists
-if (!fs.existsSync(path.join(__dirname, 'meshes'))) {
-  console.error('[ERROR] Meshes directory does not exist. Please ensure the "meshes" folder is present in the project root.');
-  process.exit(1);
-}
+// Server is now static-only, no API endpoints
