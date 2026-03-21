@@ -33,7 +33,8 @@
 "use strict";
 
 import { compileShader } from '@engine/init/gpu/compileShader.js';
-import { parseColorToRgb } from '@engine/set/render/draw/parseColorToRgb.js';
+import { parseCssColor } from '@engine/get/render/background/parseCssColor.js';
+import { createParticleBufferData } from '@engine/init/gpu/background/createParticleBufferData.js';
 
 const VERTEX_SHADER = `
 precision highp float;
@@ -86,39 +87,6 @@ void main() {
   gl_FragColor = vec4(vColor, alpha);
 }
 `;
-
-function randomFloat(min, max) {
-  return min + Math.random() * (max - min);
-}
-
-function parseCssColor(cssColor) {
-  const [r, g, b] = parseColorToRgb(cssColor || '#ffffff');
-  return { r: r / 255, g: g / 255, b: b / 255, a: 1 };
-}
-
-function createParticleBufferData(width, height, density, baseSpeed) {
-  const baseCount = Math.max(32, Math.round((width * height) / 90000));
-  const count = Math.max(8, Math.round(baseCount * Math.min(2.5, 1 + density)));
-  const data = new Float32Array(count * 8);
-
-  for (let i = 0; i < count; i++) {
-    const valueOffset = i * 8;
-    const angle = Math.random() * Math.PI * 2;
-    const velocityMag = 0.03 + Math.random() * 0.08;
-    const spatialVelocityScale = 0.12; // Match CPU-style particle movement speed in GLSL
-
-    data[valueOffset] = Math.random() * width;
-    data[valueOffset + 1] = Math.random() * height;
-    data[valueOffset + 2] = Math.cos(angle) * velocityMag * width * spatialVelocityScale;
-    data[valueOffset + 3] = Math.sin(angle) * velocityMag * height * spatialVelocityScale;
-    data[valueOffset + 4] = randomFloat(1.2, 3.8);
-    data[valueOffset + 5] = randomFloat(0.35, 0.95);
-    data[valueOffset + 6] = randomFloat(0.9, 1.3) * baseSpeed;
-    data[valueOffset + 7] = Math.random() * Math.PI * 2;
-  }
-
-  return { count, data };
-}
 
 export function createBackgroundRenderer(gl) {
   try {

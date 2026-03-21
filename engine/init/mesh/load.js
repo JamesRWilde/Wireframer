@@ -35,6 +35,7 @@ import { validationResult }from '@engine/get/mesh/validate/validationResult.js';
 import { lodRangeForModel }from '@engine/set/mesh/lodRangeForModel.js';
 import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
 import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
+import { normalizeToBoundingSphere } from '@engine/init/mesh/normalizeToBoundingSphere.js';
 
 import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
@@ -55,112 +56,6 @@ if (!getMeshEdgesFromFacesRuntime()) {
 // Register clone API in state for safe module-based access (no global object)
 if (!getMeshClone()) {
   configureMeshClone(cloneMesh);
-}
-
-/**
- * computeBoundingBox - Computes axis-aligned bounding box for vertices
- *
- * @param {Array<Array<number>>} V - Vertex array where each vertex is [x, y, z]
- * @returns {{min: Array<number>, max: Array<number>}} Bounding box min and max corners
- */
-function computeBoundingBox(V) {
-  let bx = Infinity, by = Infinity, bz = Infinity;
-  let Bx = -Infinity, By = -Infinity, Bz = -Infinity;
-  for (const v of V) {
-    if (v[0] < bx) bx = v[0];
-    if (v[0] > Bx) Bx = v[0];
-    if (v[1] < by) by = v[1];
-    if (v[1] > By) By = v[1];
-    if (v[2] < bz) bz = v[2];
-    if (v[2] > Bz) Bz = v[2];
-  }
-  return { min: [bx, by, bz], max: [Bx, By, Bz] };
-}
-
-/**
- * computeSphereCenter - Computes sphere center from bounding box
- *
- * @param {Array<number>} bboxMin - Minimum corner of bounding box
- * @param {Array<number>} bboxMax - Maximum corner of bounding box
- * @returns {Array<number>} Sphere center coordinates [cx, cy, cz]
- */
-function computeSphereCenter(bboxMin, bboxMax) {
-  return [
-    (bboxMin[0] + bboxMax[0]) * 0.5,
-    (bboxMin[1] + bboxMax[1]) * 0.5,
-    (bboxMin[2] + bboxMax[2]) * 0.5
-  ];
-}
-
-/**
- * computeMaxRadius - Finds maximum distance from center to any vertex
- *
- * @param {Array<Array<number>>} V - Vertex array
- * @param {Array<number>} center - Sphere center [cx, cy, cz]
- * @returns {number} Maximum radius
- */
-function computeMaxRadius(V, center) {
-  let maxR = 0;
-  const [cx, cy, cz] = center;
-  for (const v of V) {
-    const r = Math.hypot(v[0] - cx, v[1] - cy, v[2] - cz);
-    if (r > maxR) maxR = r;
-  }
-  return maxR < 1e-10 ? 1 : maxR;
-}
-
-/**
- * transformToUnitSphere - Transforms vertices to unit sphere centered at origin
- *
- * @param {Array<Array<number>>} V - Vertex array
- * @param {Array<number>} center - Sphere center
- * @param {number} maxR - Sphere radius
- */
-function transformToUnitSphere(V, center, maxR) {
-  const [cx, cy, cz] = center;
-  for (const v of V) {
-    v[0] = (v[0] - cx) / maxR;
-    v[1] = (v[1] - cy) / maxR;
-    v[2] = (v[2] - cz) / maxR;
-  }
-}
-
-/**
- * clampToUnitSphere - Clamps vertices to unit sphere surface if they exceed radius 1
- *
- * @param {Array<Array<number>>} V - Vertex array
- */
-function clampToUnitSphere(V) {
-  for (const v of V) {
-    const r2 = v[0]*v[0] + v[1]*v[1] + v[2]*v[2];
-    if (r2 > 1) {
-      const r = Math.hypot(v[0], v[1], v[2]);
-      v[0] /= r;
-      v[1] /= r;
-      v[2] /= r;
-    }
-  }
-}
-
-/**
- * normalizeToBoundingSphere - Normalizes vertices to a unit bounding sphere
- *
- * Transforms the vertex array so that:
- * - The bounding sphere is centered at the origin (0,0,0)
- * - The sphere radius is exactly 1
- * - All vertices are clamped to the sphere surface if they exceed radius 1
- *
- * @param {Array<Array<number>>} V - Vertex array where each vertex is [x, y, z]
- */
-function normalizeToBoundingSphere(V) {
-  if (V.length === 0) return;
-
-  const bbox = computeBoundingBox(V);
-  const center = computeSphereCenter(bbox.min, bbox.max);
-  const maxR = computeMaxRadius(V, center);
-
-  transformToUnitSphere(V, center, maxR);
-  clampToUnitSphere(V);
 }
 
 /**

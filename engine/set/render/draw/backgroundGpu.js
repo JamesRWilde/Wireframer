@@ -17,29 +17,9 @@ import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { colors } from '@engine/get/render/background/colors.js';
 import { createBackgroundRenderer } from '@engine/init/gpu/background/renderer.js';
-import { parseColorToRgb } from '@engine/set/render/draw/parseColorToRgb.js';
-
-function getGpuBackgroundCanvas() {
-  return bgState.gpuBackgroundCanvas;
-}
-
-function getGpuBackgroundGl() {
-  if (bgState.gpuBackgroundGl) return bgState.gpuBackgroundGl;
-
-  const canvas = getGpuBackgroundCanvas();
-  if (!canvas) return null;
-
-  const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-  if (!gl) return null;
-
-  bgState.gpuBackgroundGl = gl;
-  return gl;
-}
-
-function parseCssColor(cssColor) {
-  const [r, g, b] = parseColorToRgb(cssColor || '#000000');
-  return [r / 255, g / 255, b / 255, 1];
-}
+import { parseCssColor } from '@engine/get/render/background/parseCssColor.js';
+import { gpuBackgroundCanvas } from '@engine/get/render/background/gpuBackgroundCanvas.js';
+import { gpuBackgroundGl } from '@engine/get/render/background/gpuBackgroundGl.js';
 
 /**
  * backgroundGpu - GPU background pipeline
@@ -52,13 +32,13 @@ export function backgroundGpu(nowMs) {
     throw new Error('backgroundGpu executed while CPU mode active');
   }
 
-  const bgCanvas = getGpuBackgroundCanvas();
+  const bgCanvas = gpuBackgroundCanvas();
   if (!bgCanvas) return false;
 
   const w = bgCanvas.clientWidth || bgCanvas.width;
   const h = bgCanvas.clientHeight || bgCanvas.height;
 
-  const gl = getGpuBackgroundGl();
+  const gl = gpuBackgroundGl();
   if (!gl) return false;
 
   // Show GPU background canvas and hide CPU background canvas
@@ -71,11 +51,11 @@ export function backgroundGpu(nowMs) {
 
   // Decode particle color into numeric RGB directly to avoid parser edge cases.
   const decodedParticleColor = parseCssColor(particleColor || '#ffffff');
-  const activeParticleColor = [decodedParticleColor[0], decodedParticleColor[1], decodedParticleColor[2]];
+  const activeParticleColor = [decodedParticleColor.r, decodedParticleColor.g, decodedParticleColor.b];
 
   const parsedColor = parseCssColor(bgColor);
   gl.viewport(0, 0, w, h);
-  gl.clearColor(parsedColor[0], parsedColor[1], parsedColor[2], 1);
+  gl.clearColor(parsedColor.r, parsedColor.g, parsedColor.b, 1);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   let renderer = bgState.gpuBackgroundRenderer;
