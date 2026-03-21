@@ -64,7 +64,13 @@ export function detailLevel(percent, name) {
   // If the user requests full detail, avoid unnecessary decimation and
   // ensure the active LOD model is the full base model (no intermediate copy).
   if (clampedPercent >= 0.999) {
-    modelState.currentLodModel = base;
+    if (!isGpuMode() && modelState.baseModel?.V?.length <= CPU_MAX_VERTS) {
+      // For small models in CPU mode, use the uncapped base model to prevent
+      // undesired downsampling due to prior cap state.
+      modelState.currentLodModel = modelState.baseModel;
+    } else {
+      modelState.currentLodModel = base;
+    }
     setActiveModel(modelState.currentLodModel, name);
     return;
   }
