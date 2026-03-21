@@ -137,25 +137,34 @@
 }
 </script>
 
-<!-- Panel toggle for small screens -->
+<!-- Panel toggle and concertina for small screens -->
 <script>
 (function() {
   var btn = document.getElementById('panel-toggle');
   var controls = document.getElementById('controls');
-  if (!btn || !controls) return;
+  if (!controls) return;
   var lastExpanded = null;
 
-  btn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    controls.classList.toggle('open');
-    // Restore last expanded panel when re-opening
-    if (controls.classList.contains('open') && lastExpanded) {
-      expandPanel(lastExpanded);
-    }
-  });
+  function isConcertinaMode() {
+    return window.innerWidth <= 600 || window.innerHeight <= 520;
+  }
+
+  function isPortraitMode() {
+    return window.innerWidth <= 600;
+  }
+
+  if (btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      controls.classList.toggle('open');
+      if (controls.classList.contains('open') && lastExpanded) {
+        expandPanel(lastExpanded);
+      }
+    });
+  }
   document.addEventListener('touchstart', function(e) {
     if (!controls.classList.contains('open')) return;
-    if (controls.contains(e.target) || btn.contains(e.target)) return;
+    if (controls.contains(e.target) || (btn && btn.contains(e.target))) return;
     controls.classList.remove('open');
   });
 
@@ -176,8 +185,8 @@
     lastExpanded = panel;
   }
 
-  // Collapse all by default on small screens
-  if (window.innerWidth <= 600) collapseAll();
+  // Collapse all by default when concertina mode applies
+  if (isConcertinaMode()) collapseAll();
 
   // Concertina: expand one collapses the others
   var panels = controls.querySelectorAll('.control-panel');
@@ -185,7 +194,7 @@
     var title = panel.querySelector('.panel-title');
     if (!title) return;
     title.addEventListener('click', function() {
-      if (window.innerWidth > 600) return;
+      if (!isConcertinaMode()) return;
       if (panel.classList.contains('collapsed')) {
         expandPanel(panel);
       } else {

@@ -559,6 +559,40 @@ canvas:active { cursor: grabbing; }
     transform: rotate(-90deg);
   }
 }
+
+/* Small height (landscape phones): concertina + scroll, no slide-out */
+@media (max-height: 520px) {
+  #controls {
+    top: 0;
+    right: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    pointer-events: auto;
+  }
+
+  #panel-toggle { display: none; }
+
+  /* Concertina styles also apply here */
+  .control-panel .panel-title {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+    padding-bottom: 0.35rem;
+  }
+  .control-panel .panel-title::after {
+    content: '\25BC';
+    font-size: 0.6rem;
+    transition: transform 0.2s ease;
+    color: var(--ui-control-fg);
+  }
+  .control-panel.collapsed .panel-title::after {
+    transform: rotate(-90deg);
+  }
+}
 #obj-label {
   font-size: 1.3rem;
   letter-spacing: 0.42rem;
