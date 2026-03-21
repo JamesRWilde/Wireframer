@@ -563,13 +563,10 @@ canvas:active { cursor: grabbing; }
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 20;
-  }
-
-  #controls-scroll {
+    z-index: 21;
     width: 18.5rem;
-    max-height: 100vh;
-    overflow-y: auto;
+    height: 100vh;
+    overflow-y: scroll;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
@@ -577,15 +574,11 @@ canvas:active { cursor: grabbing; }
     display: grid;
     gap: 0.5rem;
     background: var(--ui-panel-bg);
-    touch-action: pan-y;
+    pointer-events: auto;
   }
 
-  #controls-scroll::-webkit-scrollbar {
-    width: 4px;
-  }
-  #controls-scroll::-webkit-scrollbar-thumb {
-    background: rgba(80, 160, 200, 0.3);
-    border-radius: 2px;
+  #controls-scroll {
+    display: contents;
   }
 }
 #obj-label {
