@@ -24,6 +24,7 @@ import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
 import { modelState } from '@engine/state/render/model.js';
 import { setActiveModel } from '@engine/set/render/physics/model.js';
 import { isGpuMode } from '@engine/set/render/isGpuMode.js';
+import { CPU_MAX_VERTS } from '@engine/set/mesh/cpuDetailCap.js';
 
 /**
  * detailLevel - Sets the LOD detail level for the active model
