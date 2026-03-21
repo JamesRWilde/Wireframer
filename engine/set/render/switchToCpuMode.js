@@ -13,7 +13,7 @@
 
 "use strict";
 
-import { initializeCpuPipeline } from '@engine/init/render/pipeline/cpu.js';
+import { initializeCpuPipeline } from '@engine/init/render/pipeline/initializeCpuPipeline.js';
 import { applyCpuLodCap } from '@engine/set/mesh/applyCpuLodCap.js';
 import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';

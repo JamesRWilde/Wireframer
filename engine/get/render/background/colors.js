@@ -16,7 +16,7 @@
 
 import { getBgColor } from '@engine/get/render/getBgColor.js';
 import { getParticleColor } from '@engine/get/render/getParticleColor.js';
-import { getCustomRgbState } from '@ui/get/customRgbState.js';
+import { getCustomRgbState } from '@ui/get/getCustomRgbState.js';
 
 /**
  * getBackgroundColors - Gets background and particle colors from theme

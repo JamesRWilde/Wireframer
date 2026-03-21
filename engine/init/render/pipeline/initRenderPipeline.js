@@ -68,7 +68,7 @@ import { state } from '@engine/state/engine/loop.js';
 import { modelState } from '@engine/state/render/model.js';
 
 // Import CPU pipeline initialization helper
-import { initializeCpuPipeline } from '@engine/init/render/pipeline/cpu.js';
+import { initializeCpuPipeline } from '@engine/init/render/pipeline/initializeCpuPipeline.js';
 
 /**
  * initRenderPipeline - Detects WebGL and initializes the appropriate pipeline
