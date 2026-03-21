@@ -108,6 +108,7 @@ canvas:active { cursor: grabbing; }
   display: grid;
   gap: 0.62rem;
   pointer-events: auto;
+  z-index: 22;
 }
 
 .control-panel {
@@ -523,7 +524,7 @@ canvas:active { cursor: grabbing; }
 @media (max-width: 560px) {
   #panel-toggle {
     display: flex;
-    z-index: 1000;
+    z-index: 21;
   }
 
   #controls {
@@ -544,7 +545,6 @@ canvas:active { cursor: grabbing; }
     transform: translateX(100%);
     transition: transform 0.25s ease;
     pointer-events: auto;
-    z-index: 999;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -587,7 +587,6 @@ canvas:active { cursor: grabbing; }
     overscroll-behavior: contain;
     padding: 0.8rem;
     background: var(--ui-panel-bg);
-    z-index: 999 !important;
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
