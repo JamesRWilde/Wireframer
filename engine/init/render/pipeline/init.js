@@ -58,6 +58,8 @@ import { hud } from '@engine/set/engine/renderer/hud.js';
 
 // Import GPU renderer getter (for WebGL context creation)
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
+import { bgState } from '@engine/state/render/background/backgroundState.js';
+import { createBackgroundRenderer } from '@engine/init/gpu/background/renderer.js';
 
 // Import loop state to maintain backward compatibility
 import { state } from '@engine/state/engine/loop.js';
@@ -108,7 +110,10 @@ export function initRenderPipeline() {
   }
   
   // GPU pipeline successfully initialized
-  
+
+  // Initialize GPU background renderer for the GPU mode background pipeline
+  bgState.gpuBackgroundRenderer = createBackgroundRenderer(gl);
+
   // Set the render function pointer to GPU path
   setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {
     return gpuPath(gl, meshToRender, morphing);

@@ -20,6 +20,8 @@ import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
 import { state } from '@engine/state/engine/loop.js';
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 import { gpuState } from '@engine/state/gpu/scene.js';
+import { bgState } from '@engine/state/render/background/backgroundState.js';
+import { getGpuGl } from '@engine/get/gpu/getGpuGl.js';
 
 export function switchToCpuMode() {
   // Dispose previous GPU pipeline (if any)
@@ -29,6 +31,13 @@ export function switchToCpuMode() {
   // Clear cached GPU renderer
   gpuState.renderer = null;
   gpuState.failed = false;
+
+  // Dispose GPU background renderer if initialized (GPU background pipeline)
+  if (bgState.gpuBackgroundRenderer?.dispose) {
+    const gl = getGpuGl();
+    if (gl) bgState.gpuBackgroundRenderer.dispose(gl);
+    bgState.gpuBackgroundRenderer = null;
+  }
 
   // Initialize CPU pipeline and apply LOD cap
   initializeCpuPipeline();

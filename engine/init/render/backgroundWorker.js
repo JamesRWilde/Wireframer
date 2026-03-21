@@ -31,9 +31,14 @@ import { bgState } from '@engine/state/render/background/backgroundState.js';
  *
  * @returns {boolean} Whether the worker is ready or initialization succeeded
  */
-export function backgroundWorker() {
+export function backgroundWorker(mode = 'cpu') {
+  // Update desired running mode in worker state
+  state.workerMode = mode;
+
   // Return current readiness if already initialized (idempotent)
-  if (state.workerInitialized) return state.workerReady;
+  if (state.workerInitialized) {
+    return state.workerReady;
+  }
   state.workerInitialized = true;
 
   // Guard against environments without Worker support
@@ -93,6 +98,7 @@ export function backgroundWorker() {
         density: bgState.densityPct,
         speed: bgState.velocityPct,
         themeMode: getThemeMode(),
+        mode,
       });
     }
 

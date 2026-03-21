@@ -58,6 +58,7 @@ import { initRenderPipeline } from '@engine/init/render/pipeline/init.js';
 
 // Background worker initialization (dedicated background pipeline)
 import { backgroundWorker } from '@engine/init/render/backgroundWorker.js';
+import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 
 // Debug overlay removed for production build
 // (no longer supported)
@@ -123,7 +124,8 @@ export function startApp() {
   initRenderPipeline();
 
   // Step 12: Initialize the background worker pipeline for particle updates
-  backgroundWorker();
+  // Worker will choose CPU or GPU mode based on which foreground pipeline is active.
+  backgroundWorker(isGpuMode() ? 'gpu' : 'cpu');
 
   // Step 13: Initialize renderer toggle functionality
   rendererToggle();

@@ -32,4 +32,5 @@ export const workerState = {
   workerInitialized: false,
   pendingWorkerParticles: null,
   workerAvailable: false,
+  workerMode: 'cpu',
 };

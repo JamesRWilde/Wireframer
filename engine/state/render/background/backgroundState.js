@@ -44,6 +44,7 @@ export const BG_GPU_MIN_INTERVAL_MS = 1000 / BG_GPU_MAX_FPS;
  */
 export const bgState = {
 	renderer: null,
+	gpuBackgroundRenderer: null,
 	rendererFailed: false,
 	gpuLastRenderMs: -1,
 	canvas: null,

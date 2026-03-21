@@ -48,7 +48,7 @@ import { workersPackParticles }from './workersPackParticles.js';
  * @param {MessageEvent} event - The message event
  */
 onmessage = (event) => {
-  const { type, width, height, density, speed, timestamp, themeMode } = event.data;
+  const { type, width, height, density, speed, timestamp, themeMode, mode } = event.data;
 
   try {
     switch (type) {
@@ -56,16 +56,22 @@ onmessage = (event) => {
         // Initialize particle state and create particles
         state.width = width;
         state.height = height;
-        state.density = density || 1;
-        state.speed = speed || 1;
+        state.density = (typeof density === 'number') ? density : 1;
+        state.speed = (typeof speed === 'number') ? speed : 1;
         state.themeMode = themeMode || 'dark';
+        state.mode = mode || state.mode || 'cpu';
         workersParticles(state, particles);
         postMessage({ type: 'ready' });
         break;
 
       case 'update': {
-        // Reseed particles if density changed
-        if (density && density !== state.density) {
+        // Update mode if changed
+        if (mode && mode !== state.mode) {
+          state.mode = mode;
+        }
+
+        // Reseed particles if density changed (allow 0 density)
+        if (typeof density === 'number' && density !== state.density) {
           state.density = density;
           workersParticles(state, particles);
         }
