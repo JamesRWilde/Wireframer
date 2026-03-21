@@ -205,6 +205,11 @@
       }
     });
   });
+
+  // Prevent touch events on controls from reaching the canvas behind
+  controls.addEventListener('touchmove', function(e) {
+    e.stopPropagation();
+  }, { passive: true });
 })();
 </script>
 

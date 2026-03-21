@@ -559,16 +559,21 @@ canvas:active { cursor: grabbing; }
 @media (max-height: 550px) {
   #panel-toggle { display: none; }
 
+  #ui {
+    pointer-events: auto;
+    overflow: visible;
+  }
+
   #controls {
     position: fixed;
     top: 0;
     right: 0;
     width: 18.5rem;
     height: 100vh;
-    pointer-events: auto;
     background: var(--ui-panel-bg);
     z-index: 20;
     overflow: hidden;
+    pointer-events: auto;
   }
 
   #controls-scroll {
@@ -580,6 +585,14 @@ canvas:active { cursor: grabbing; }
     padding: 1.6rem 0.8rem 1.2rem 0.8rem;
     display: grid;
     gap: 0.62rem;
+  }
+
+  #controls-scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+  #controls-scroll::-webkit-scrollbar-thumb {
+    background: rgba(80, 160, 200, 0.3);
+    border-radius: 2px;
   }
 }
 #obj-label {
