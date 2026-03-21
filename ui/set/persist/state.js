@@ -23,14 +23,18 @@ import {bgDensity,bgOpacity,bgVelocity,fillOpacity,lodSlider,select,themeMode as
  * @param {Array<{key: string, name: string, obj: string}>} objects - The mesh object list
  */
 export function state(objects = []) {
-  const select = document.getElementById('obj-select');
-  const selectedIndex = Number(select ? select.value : Number.NaN);
+  const selectEl = document.getElementById('obj-select');
+  const selectedIndex = Number(selectEl ? selectEl.value : Number.NaN);
   const selectedObject = Number.isInteger(selectedIndex) && selectedIndex >= 0 && selectedIndex < objects.length
     ? objects[selectedIndex]
     : null;
 
   const payload = {
-    selectedShapeName: selectedObject ? selectedObject.name : null,
+    selectedShapeName: selectedObject
+      ? selectedObject.name
+      : (selectEl && selectEl.options[selectEl.selectedIndex]
+          ? selectEl.options[selectEl.selectedIndex].textContent
+          : null),
     themeMode: themeModeEl ? themeModeEl.value : 'dark',
     lod: Number(lodSlider.value),
     fillOpacity: Number(fillOpacity.value),
