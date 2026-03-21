@@ -36,5 +36,7 @@ import { state } from '@engine/state/engine/loop.js';
  */
 export function mixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn) {
   // Mark that GPU scene was drawn (for next frame's clearing logic)
-  state.gpuSceneDrawnLastFrame = true;
+  // or not, based on the actual foreground renderer used.
+  state.gpuSceneDrawnLastFrame = Boolean(gpuDrawn);
+  state.cpuForegroundDrawnOnMainCanvas = !gpuDrawn;
 }

@@ -19,6 +19,7 @@ import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
 
 // Import GPU renderer disabler for fallback on errors
 import { disableSceneRenderer }from '@engine/dispose/gpu/disableSceneRenderer.js';
+import { switchToCpuMode } from '@engine/set/render/switchToCpuMode.js';
 
 /**
  * drawGpuSceneModel - Renders the 3D model using the GPU (WebGL) renderer
@@ -43,6 +44,11 @@ export function drawSceneModel(gl, model, params) {
   } catch (err) {
     // On GPU error, disable the renderer and mark GPU as failed
     disableSceneRenderer(err);
+
+    // Fall back to CPU mode to avoid continual GPU retries and ensure only
+    // one pipeline is active at a time.
+    switchToCpuMode();
+
     return false;
   }
 }

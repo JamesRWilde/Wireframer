@@ -20,7 +20,6 @@ import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
 import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
 import { hud } from '@engine/set/engine/renderer/hud.js';
-import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 import { setGpuCanvas } from '@engine/set/render/setGpuCanvas.js';
 import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
 import { state } from '@engine/state/engine/loop.js';
@@ -51,6 +50,10 @@ export function switchToGpuMode() {
 
   state.foregroundRenderMode = 'gpu';
   hud('gpu');
+
+  // Confirm we are in GPU mode and CPU mode is inactive
+  state.gpuSceneDrawnLastFrame = false;
+  state.cpuForegroundDrawnOnMainCanvas = false;
 
   canvasHidden(false);
   canvasCpuHidden(true);

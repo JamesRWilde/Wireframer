@@ -13,13 +13,10 @@
 
 "use strict";
 
-import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
-import { setIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 import { initializeCpuPipeline } from '@engine/init/render/pipeline/cpu.js';
 import { applyCpuLodCap } from '@engine/set/mesh/applyCpuLodCap.js';
 import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
-import { hud } from '@engine/set/engine/renderer/hud.js';
 import { state } from '@engine/state/engine/loop.js';
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 import { gpuState } from '@engine/state/gpu/scene.js';
@@ -43,6 +40,10 @@ export function switchToCpuMode() {
 
   // Set backward compatible state
   state.foregroundRenderMode = 'cpu';
+
+  // Confirm CPU mode for next frame and GPU mode turned off
+  state.gpuSceneDrawnLastFrame = false;
+  state.cpuForegroundDrawnOnMainCanvas = true;
 
   // applyCpuLodCap already sets cpuBaseModel and currentLodModel
   // No need to recap here - that would double-decimate

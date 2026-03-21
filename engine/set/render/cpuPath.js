@@ -18,8 +18,8 @@
 
 "use strict";
 
-// Import GPU renderer getter for GPU canvas cleanup
-import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
+// Import shared GPU state for cleanup without forcing renderer initialization
+import { gpuState } from '@engine/state/gpu/scene.js';
 
 // Import GPU canvas clearer
 import { sceneCanvas }from '@engine/set/gpu/clear/sceneCanvas.js';
@@ -83,12 +83,13 @@ export function cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing) {
   canvasCpuHidden(false);
   canvasHidden(true);
 
-  // Clear the GPU canvas if it rendered last frame (prevent stale artifacts)
+  // Clear the GPU canvas if it was used on the previous frame (prevent stale artifacts).
+  // Do not re-create GPU renderer here; use cached renderer if present.
   const gpuCanvas = getGpuCanvas();
   if (state.gpuSceneDrawnLastFrame && gpuCanvas) {
-    const _r = sceneRenderer(); 
-    if (_r?.gl) {
-      sceneCanvas(_r.gl, gpuCanvas);
+    const renderer = gpuState.renderer;
+    if (renderer?.gl) {
+      sceneCanvas(renderer.gl, gpuCanvas);
     }
     state.gpuSceneDrawnLastFrame = false;
   }
