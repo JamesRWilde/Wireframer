@@ -66,15 +66,6 @@ export function background(nowMs) {
       backgroundWorker();
     }
 
-    if (!backgroundWorkerNotReadyLogged) {
-      console.warn('[Background] worker not ready; static background only', {
-        workerInitialized: workerState.workerInitialized,
-        workerAvailable: workerState.workerAvailable,
-        workerReady: workerState.workerReady,
-      });
-      backgroundWorkerNotReadyLogged = true;
-    }
-
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, w, h);
     return false;

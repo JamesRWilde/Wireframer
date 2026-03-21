@@ -36,10 +36,11 @@ let state = {
   themeMode: 'dark'
 };
 
-// Import particle management utilities
-import { workersParticles }from '@workers/workersParticles.js';
-import { workersUpdateParticles }from '@workers/workersUpdateParticles.js';
-import { workersPackParticles }from '@workers/workersPackParticles.js';
+// Import particle management utilities using relative worker path
+// (import.map may not be available in worker module context in some browsers)
+import { workersParticles }from './workersParticles.js';
+import { workersUpdateParticles }from './workersUpdateParticles.js';
+import { workersPackParticles }from './workersPackParticles.js';
 
 /**
  * Handles incoming messages from the main thread

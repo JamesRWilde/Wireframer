@@ -65,12 +65,14 @@ export function backgroundWorker() {
     state.worker.onerror = (event) => {
       state.workerReady = false;
       state.workerAvailable = false;
-      console.error('[BackgroundWorker] worker error occurred', {
-        message: event.message,
-        filename: event.filename,
-        lineno: event.lineno,
-        colno: event.colno,
-        error: event.error,
+      console.error('[BackgroundWorker] worker error occurred', event);
+      console.error('[BackgroundWorker] worker event info', {
+        message: event?.message,
+        filename: event?.filename,
+        lineno: event?.lineno,
+        colno: event?.colno,
+        error: event?.error,
+        type: event?.type,
       });
 
       // Retry with a new worker on next frame
