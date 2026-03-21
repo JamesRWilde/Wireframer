@@ -556,9 +556,6 @@ canvas:active { cursor: grabbing; }
   .control-panel.collapsed .panel-title::after {
     transform: rotate(-90deg);
   }
-  .control-panel.collapsed > *:not(.panel-title) {
-    display: none;
-  }
 }
 #obj-label {
   font-size: 1.3rem;
