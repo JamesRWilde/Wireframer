@@ -477,18 +477,19 @@ canvas:active { cursor: grabbing; }
   position: absolute;
   top: 26px;
   right: 0;
-  width: 2.2rem;
   height: 2.2rem;
+  padding: 0 0.7rem;
   background: var(--ui-panel-bg);
   border: 1px solid var(--ui-control-border);
   border-right: none;
   border-radius: 0.4rem 0 0 0.4rem;
   color: var(--ui-control-fg);
-  font-size: 1.2rem;
+  font-size: 0.85rem;
+  font-family: inherit;
   cursor: pointer;
   z-index: 21;
   align-items: center;
-  justify-content: center;
+  gap: 0.4rem;
   outline: none;
   transition: background 0.2s, border-color 0.2s;
 }
