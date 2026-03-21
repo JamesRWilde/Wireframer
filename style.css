@@ -579,7 +579,7 @@ canvas:active { cursor: grabbing; }
   }
 
   .control-panel {
-    margin-bottom: 1rem;
+    margin-bottom: 0;
   }
 }
 #obj-label {
