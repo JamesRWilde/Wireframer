@@ -50,23 +50,13 @@ export function capModelForCpu(model) {
   const verts = model.V.length;
   const edges = model.E?.length ?? 0;
 
-  console.log(`[capModelForCpu] Model analysis: ${verts} vertices, ${edges} edges, CPU_MAX_VERTS: ${CPU_MAX_VERTS}, CPU_MAX_EDGES: ${CPU_MAX_EDGES}`);
-
   // If already under both caps, keep model as-is
   if (verts <= CPU_MAX_VERTS && edges <= CPU_MAX_EDGES) {
-    console.log('[capModelForCpu] Model within caps, no decimation needed');
     return model;
   }
 
   // If completely over, find the best cell-cluster decimation result under caps.
   const best = decimateToCap(model, CPU_MAX_VERTS, CPU_MAX_EDGES);
-
-  if (best?.V?.length) {
-    console.log(`[capModelForCpu] Decimation result: ${best.V.length} vertices, ${best.E?.length || 0} edges`);
-    console.log(`[capModelForCpu] Target caps: ${CPU_MAX_VERTS} verts, ${CPU_MAX_EDGES} edges`);
-  } else {
-    console.error('[capModelForCpu] No valid decimated model found under caps, returning original model');
-  }
 
   return best || model;
 }
@@ -99,7 +89,6 @@ function decimateToCap(model, maxVerts, maxEdges) {
       low = mid;
     }
 
-    console.log(`[capModelForCpu] decimateToCap mid=${mid.toFixed(4)} -> ${v} verts, ${e} edges, best=${best.verts}`);
 
     if (Math.abs(high - low) < 1e-5) break;
   }
