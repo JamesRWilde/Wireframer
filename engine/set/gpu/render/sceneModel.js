@@ -45,9 +45,6 @@ export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays
   const buffers = bufferStore.modelBuffers(model);
   if (!buffers) return false;
 
-  // Handle dynamic buffer updates if requested
-  if (params.dynamic === true && !bufferStore.dynamicBuffers(model, buffers)) return false;
-
   // Extract rotation matrix in row-major format
   const rot = toRowMajorRotation(params.rotation);
 
