@@ -533,7 +533,7 @@ canvas:active { cursor: grabbing; }
     max-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 3.2rem 0.8rem 1.2rem 0.8rem;
+    padding: 4.2rem 0.8rem 1.2rem 0.8rem;
     background: var(--ui-panel-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
