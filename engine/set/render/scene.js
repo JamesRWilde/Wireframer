@@ -88,7 +88,7 @@ export function scene(nowMs) {
   let meshToRender;
   if (morphing) {
     meshToRender = baseMesh;
-  } else if (isGpuMode && modelState.baseModel?.V?.length) {
+  } else if (isGpuMode() && modelState.baseModel?.V?.length) {
     // GPU path: use base model with optional LOD decimation
     const lodChanged = modelState.currentLodPct !== 1;
     if (lodChanged) {
