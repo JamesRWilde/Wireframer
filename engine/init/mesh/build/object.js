@@ -22,7 +22,7 @@
 
 // Import edge building utility and state API
 import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
-import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setMeshEdgesFromFacesRuntime.js';
 import { mergeEdges } from '@engine/init/mesh/build/mergeEdges.js';
 

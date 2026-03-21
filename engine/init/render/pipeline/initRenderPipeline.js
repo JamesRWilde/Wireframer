@@ -59,7 +59,7 @@ import { hud } from '@engine/set/engine/renderer/hud.js';
 // Import GPU renderer getter (for WebGL context creation)
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
-import { createBackgroundRenderer } from '@engine/init/gpu/background/renderer.js';
+import { createBackgroundRenderer } from '@engine/init/gpu/background/createBackgroundRenderer.js';
 
 // Import loop state to maintain backward compatibility
 import { state } from '@engine/state/engine/loop.js';

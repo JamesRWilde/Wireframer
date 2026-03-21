@@ -48,7 +48,7 @@ import { state }from '@engine/state/engine/loop.js';
 import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
 import { getTheme } from '@engine/get/render/getTheme.js';
 import { getRotation } from '@engine/get/render/physics/getRotation.js';
-import { getW } from '@engine/get/render/width.js';
+import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';
 import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';
 import { getFillLayerCtx } from '@engine/get/render/getFillLayerCtx.js';

@@ -45,7 +45,7 @@ import { assignVerticesToCells }from '@engine/init/mesh/assignVerticesToCells.js
 import { clusterVertices }from '@engine/init/mesh/clusterVertices.js';
 
 // Import mesh edge builder state accessor
-import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 
 // Import face rebuilding (updating face indices after clustering)
 import { rebuildFaces }from '@engine/init/mesh/rebuildFaces.js';

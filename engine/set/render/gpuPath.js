@@ -31,7 +31,7 @@ import { getRotation } from '@engine/get/render/physics/getRotation.js';
 import { getZoom } from '@engine/get/render/getZoom.js';
 import { getModelCy } from '@engine/get/render/getModelCy.js';
 import { getZHalf } from '@engine/get/render/getZHalf.js';
-import { getW } from '@engine/get/render/width.js';
+import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';
 import { getTheme } from '@engine/get/render/getTheme.js';
 import { getEdgeColor } from '@engine/get/render/getEdgeColor.js';

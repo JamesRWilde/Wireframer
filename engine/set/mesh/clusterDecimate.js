@@ -9,7 +9,7 @@
 import { assignVerticesToCells } from '@engine/init/mesh/assignVerticesToCells.js';
 import { clusterVertices } from '@engine/init/mesh/clusterVertices.js';
 import { rebuildFaces } from '@engine/init/mesh/rebuildFaces.js';
-import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 
 /**
  * clusterDecimate - Decimates a model by clustering vertices into a spatial grid

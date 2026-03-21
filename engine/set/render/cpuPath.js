@@ -33,7 +33,7 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 // Import GPU canvas visibility toggle
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
 import { state } from '@engine/state/engine/loop.js';
-import { getW } from '@engine/get/render/width.js';
+import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';
 
 // Import model state to ensure CPU mode uses capped model

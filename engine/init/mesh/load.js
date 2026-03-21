@@ -38,7 +38,7 @@ import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
 import { normalizeToBoundingSphere } from '@engine/init/mesh/normalizeToBoundingSphere.js';
 
 import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
-import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setMeshEdgesFromFacesRuntime.js';
 import { clone as cloneMesh } from '@engine/init/mesh/clone.js';
 import { getMeshClone } from '@engine/get/mesh/getMeshClone.js';

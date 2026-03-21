@@ -16,7 +16,7 @@
 import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { colors } from '@engine/get/render/background/colors.js';
-import { createBackgroundRenderer } from '@engine/init/gpu/background/renderer.js';
+import { createBackgroundRenderer } from '@engine/init/gpu/background/createBackgroundRenderer.js';
 import { parseCssColor } from '@engine/get/render/background/parseCssColor.js';
 import { gpuBackgroundCanvas } from '@engine/get/render/background/gpuBackgroundCanvas.js';
 import { gpuBackgroundGl } from '@engine/get/render/background/gpuBackgroundGl.js';

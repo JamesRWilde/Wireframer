@@ -31,7 +31,7 @@
  * The function uses the global edgesFromFacesRuntime if available,
  * otherwise falls back to a simple filter that checks array structure.
  */
-import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getEdgesFromFacesRuntime.js';
+import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 
 export function filterValidEdges(E, V) {
   const edgeBuilder = getMeshEdgesFromFacesRuntime();
