@@ -74,7 +74,7 @@ export function backgroundCpu(nowMs) {
     ctx.shadowBlur = 0;
     ctx.shadowColor = 'transparent';
     ctx.globalCompositeOperation = 'source-over';
-    renderWorkerParticles(ctx, pending.data, pending.count, opacity, particleColor, getThemeMode(), false);
+    renderWorkerParticles(ctx, pending.data, pending.count, opacity, particleColor, getThemeMode());
     ctx.restore();
   }
 
