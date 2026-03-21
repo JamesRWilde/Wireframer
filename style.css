@@ -561,19 +561,20 @@ canvas:active { cursor: grabbing; }
 }
 
 /* Small height (landscape phones): concertina + scroll, no slide-out */
-@media (max-height: 520px) {
+@media (max-height: 600px) {
   #controls {
     top: 0;
     right: 0;
     width: 18.5rem;
-    max-height: 100vh;
     height: 100vh;
-    overflow-y: scroll;
+    max-height: 100vh;
+    overflow-y: auto;
     overflow-x: hidden;
     pointer-events: auto;
     padding: 1.6rem 0.8rem 1.2rem 0.8rem;
     background: var(--ui-panel-bg);
     -webkit-overflow-scrolling: touch;
+    display: block;
   }
 
   #panel-toggle { display: none; }
