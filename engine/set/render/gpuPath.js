@@ -41,16 +41,7 @@ import { getWireOpacity } from '@engine/get/render/getWireOpacity.js';
 import { getShadeDarkRgb } from '@engine/get/render/getShadeDarkRgb.js';
 import { getShadeBrightRgb } from '@engine/get/render/getShadeBrightRgb.js';
 import { renderState } from '@engine/state/render/renderState.js';
-
-// Utility: convert '#RRGGBB' to [r,g,b]
-function hexToRgb(hex) {
-  const h = (hex || '#000000').replace('#', '');
-  return [
-    Number.parseInt(h.slice(0, 2), 16),
-    Number.parseInt(h.slice(2, 4), 16),
-    Number.parseInt(h.slice(4, 6), 16),
-  ];
-}
+import { hexToRgb } from '@engine/set/render/hexToRgb.js';
 
 /**
  * renderGpuPath - Renders the 3D model using the GPU (WebGL) rendering path

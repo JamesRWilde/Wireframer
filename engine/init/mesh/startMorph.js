@@ -40,6 +40,7 @@ import { clone } from '@engine/init/mesh/clone.js';
 import { computeMorphMap } from '@engine/init/mesh/computeMorphMap.js';
 import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
 import { getZoom } from '@engine/get/render/getZoom.js';
+import { recenterToOrigin } from '@engine/init/mesh/recenterToOrigin.js';
 
 /**
  * Target detail level for decimated meshes (10% of original vertex count).
@@ -67,25 +68,6 @@ const MORPH_DETAIL = 0.1;
  *
  * @returns {void}
  */
-
-function recenterToOrigin(mesh) {
-  let cx = 0, cy = 0, cz = 0;
-  const n = mesh.V.length;
-  for (let i = 0; i < n; i++) {
-    cx += mesh.V[i][0];
-    cy += mesh.V[i][1];
-    cz += mesh.V[i][2];
-  }
-  cx /= n;
-  cy /= n;
-  cz /= n;
-
-  for (let i = 0; i < n; i++) {
-    mesh.V[i][0] -= cx;
-    mesh.V[i][1] -= cy;
-    mesh.V[i][2] -= cz;
-  }
-}
 
 export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
   // Clone both meshes to avoid mutating the originals
