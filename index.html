@@ -24,6 +24,7 @@
 <button id="panel-toggle" aria-label="Toggle controls" title="Toggle controls">&#9776; MENU</button>
 
 <div id="controls">
+<div id="controls-scroll">
 <section class="control-panel" id="shape-panel">
 <div class="panel-title concertina-title">Shape</div>
 <select id="obj-select" aria-label="Object selector" title="Object selector"></select>
@@ -189,7 +190,8 @@
   if (isConcertina()) collapseAll();
 
   // Concertina click handler (portrait AND landscape)
-  var panels = controls.querySelectorAll('.control-panel');
+  var scrollArea = document.getElementById('controls-scroll') || controls;
+  var panels = scrollArea.querySelectorAll('.control-panel');
   panels.forEach(function(panel) {
     var title = panel.querySelector('.panel-title');
     if (!title) return;

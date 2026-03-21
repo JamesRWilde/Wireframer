@@ -565,16 +565,21 @@ canvas:active { cursor: grabbing; }
     right: 0;
     width: 18.5rem;
     height: 100vh;
+    pointer-events: auto;
+    background: var(--ui-panel-bg);
+    z-index: 20;
+    overflow: hidden;
+  }
+
+  #controls-scroll {
+    height: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
-    pointer-events: auto;
-    padding: 1.6rem 0.8rem 1.2rem 0.8rem;
-    background: var(--ui-panel-bg);
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    padding: 1.6rem 0.8rem 1.2rem 0.8rem;
     display: grid;
     gap: 0.62rem;
-    z-index: 20;
   }
 }
 #obj-label {
