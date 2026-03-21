@@ -59,12 +59,12 @@ export function fitCameraToModel(model) {
   setZHalf(1);    // Sphere radius is 1
   
   // Set zoom bounds — sphere is law (unit sphere, radius 1, diameter 2)
-  // Min: sphere = 2% of screen (zoomed out)
-  // Max: sphere fills 2x screen (room to zoom past without clipping)
-  const minFraction = 0.02;
-  const maxFraction = 2.0;
+  // Min: sphere = 8% of screen (small but visible)
+  // Max: zoom right up to the surface without clipping inside
+  const minFraction = 0.08;
+  const maxFraction = 5.0;
   const targetFraction = 0.5;
-  setZoomMin(minFraction / (0.9 * 2));    // 0.011
-  setZoomMax(maxFraction / (0.9 * 2));    // 1.111
+  setZoomMin(minFraction / (0.9 * 2));    // 0.044
+  setZoomMax(maxFraction / (0.9 * 2));    // 2.78
   setZoom(targetFraction / (0.9 * 2));    // 0.278
 }
