@@ -71,15 +71,13 @@ export function capModelForCpu(model) {
   pct = Math.max(minPct, Math.min(1, pct));
   console.log(`[capModelForCpu] Final decimation ratio after clamping: ${pct} (${(pct * 100).toFixed(1)}%)`);
 
-  const expectedVerts = Math.round(verts * pct);
-
-  // Decimate with an adaptive vertex-targeted approach to avoid over-shooting
-  const decimated = decimateModelToVertexTarget(model, CPU_MAX_VERTS, pct);
+  // Decimate with a vertex-targeted, adaptive search so we land close to CPU_MAX_VERTS.
+  const decimated = decimateModelToVertexTarget(model, CPU_MAX_VERTS);
 
   // Log the result
   if (decimated?.V?.length) {
     console.log(`[capModelForCpu] Decimation result: ${decimated.V.length} vertices, ${decimated.E?.length || 0} edges`);
-    console.log(`[capModelForCpu] Expected ~${expectedVerts} vertices, got ${decimated.V.length}`);
+    console.log(`[capModelForCpu] Expected target vertices: ${CPU_MAX_VERTS}, got ${decimated.V.length}`);
   } else {
     console.error(`[capModelForCpu] Decimation failed - no valid result returned`);
   }
@@ -88,51 +86,54 @@ export function capModelForCpu(model) {
 }
 
 /**
- * Decimate model to an approximate vertex target by binary-searching on face percentage.
- * This is needed because decimateByPercent is face-driven and we aim for a vertex cap.
+ * Decimate model to an approximate vertex target by binary searching on percent.
+ * Returns best match within the given tolerance.
  */
-function decimateModelToVertexTarget(model, targetVerts, initialPct) {
-  // If model is already under target, return original.
-  if (model.V.length <= targetVerts) return model;
+function decimateModelToVertexTarget(model, targetVerts) {
+  if (!model?.V?.length) return model;
 
-  const maxAttempts = 6;
-  let lowerPct = initialPct;
-  let upperPct = 1;
-  let best = model;
-  let bestDiff = Math.abs(model.V.length - targetVerts);
+  const currentVerts = model.V.length;
+  if (currentVerts <= targetVerts) return model;
 
-  // Start with initial candidate.
-  let candidate = decimateByPercent(model, initialPct);
-  if (candidate?.V?.length) {
-    best = candidate;
-    bestDiff = Math.abs(candidate.V.length - targetVerts);
-  }
+  const minPct = 0.1;
+  let low = minPct;
+  let high = 1;
 
-  // Refine ratio by binary-search-like adjustment until we get close to target verts.
-  for (let i = 0; i < maxAttempts; i++) {
-    const curPct = (lowerPct + upperPct) / 2;
-    candidate = decimateByPercent(model, curPct);
+  let bestModel = model;
+  let bestDiff = Math.abs(currentVerts - targetVerts);
+
+  const maxIterations = 10;
+  const targetTolerance = 0.05; // 5%
+
+  for (let i = 0; i < maxIterations; i++) {
+    const trialPct = (low + high) / 2;
+    const candidate = decimateByPercent(model, trialPct);
     if (!candidate?.V?.length) break;
 
-    const diff = Math.abs(candidate.V.length - targetVerts);
+    const candidateVerts = candidate.V.length;
+    const diff = Math.abs(candidateVerts - targetVerts);
+
     if (diff < bestDiff) {
       bestDiff = diff;
-      best = candidate;
+      bestModel = candidate;
     }
 
-    // If candidate has too many vertices, reduce detail (lower percent)
-    if (candidate.V.length > targetVerts) {
-      upperPct = curPct;
+    if (diff / targetVerts <= targetTolerance) {
+      // Close enough; return immediately
+      return candidate;
+    }
+
+    if (candidateVerts > targetVerts) {
+      // Too many verts -> need stronger decimation (lower percent)
+      high = trialPct;
     } else {
-      lowerPct = curPct;
+      // Too few verts -> we under-decimated, increase percent
+      low = trialPct;
     }
 
-    // Keep a tight tolerance and short-circuit when within 5% of target.
-    if (Math.abs(candidate.V.length - targetVerts) / targetVerts < 0.05) {
-      best = candidate;
-      break;
-    }
+    // Stop if window is very narrow; we won't improve more
+    if (Math.abs(high - low) < 0.005) break;
   }
 
-  return best;
+  return bestModel;
 }
