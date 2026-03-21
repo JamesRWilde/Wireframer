@@ -119,6 +119,11 @@ export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays
   if (wireAlpha > 0.001) {
     gl.useProgram(wireProgram);
 
+    // Enforce minimum GPU line width according to explicit wireWidth config
+    // WebGL lineWidth is mostly implementation-dependent; 1 is guaranteed minimum.
+    const width = Number((params.wireWidth || 1));
+    gl.lineWidth(Math.max(1, width));
+
     // Set projection uniforms
     projectionUniforms(gl, wireLoc, params);
 

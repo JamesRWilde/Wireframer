@@ -5,6 +5,7 @@ export const renderState = {
   themeMode: 'dark',
   fillOpacity: 1,
   wireOpacity: 1,
+  wireWidth: 0.2,
   themeVer: 0,
   cacheVer: -1,
   shadeDarkRgb: [0, 0, 0],

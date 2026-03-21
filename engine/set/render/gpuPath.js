@@ -40,6 +40,7 @@ import { getFillOpacity } from '@engine/get/render/fillOpacity.js';
 import { getWireOpacity } from '@engine/get/render/wireOpacity.js';
 import { getShadeDarkRgb } from '@engine/get/render/shadeDarkRgb.js';
 import { getShadeBrightRgb } from '@engine/get/render/shadeBrightRgb.js';
+import { renderState } from '@engine/state/render/renderState.js';
 
 // Utility: convert '#RRGGBB' to [r,g,b]
 function hexToRgb(hex) {
@@ -96,6 +97,7 @@ export function gpuPath(gl, meshToRender, morphing) {
     // Opacity controls - modulate fill and wire visibility
     fillAlpha: getFillOpacity(),
     wireAlpha: getWireOpacity(),
+    wireWidth: Number(renderState.wireWidth || 1),
 
     // Camera parameters - control view and projection
     zoom: getZoom(),

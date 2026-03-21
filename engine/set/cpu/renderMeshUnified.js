@@ -30,6 +30,7 @@ import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/comp
 import { getEdgeColor } from '@engine/get/render/edgeColor.js';
 import { getFillOpacity } from '@engine/get/render/fillOpacity.js';
 import { getWireOpacity } from '@engine/get/render/wireOpacity.js';
+import { renderState } from '@engine/state/render/renderState.js';
 import { sortTrianglesByDepth } from '@engine/set/cpu/sortTrianglesByDepth.js';
 import { renderTriangle } from '@engine/set/cpu/renderTriangle.js';
 
@@ -76,7 +77,7 @@ export function renderMeshUnified(model, ctx) {
 
   // Render each triangle in sorted order
   ctx.save();
-  ctx.lineWidth = 0.2;
+  ctx.lineWidth = Number(renderState.wireWidth || 0.2);
   let lastFillStyle = '';
 
   for (let si = 0; si < triCount; si++) {
