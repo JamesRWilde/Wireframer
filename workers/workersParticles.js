@@ -27,10 +27,10 @@ export function workersParticles(state, particles) {
   const densityMult = state.density * 1.6;
   const count = Math.max(0, Math.round(baseCount * densityMult));
 
-  // Scale based on mode: GPU gets slightly larger particles with glow-worthy range.
+  // Scale based on mode: GPU gets moderate size and subtle glow, CPU is still visible.
   const isGpuMode = state.mode === 'gpu';
-  const baseSize = isGpuMode ? 2.4 : 1.2;
-  const sizeVariance = isGpuMode ? 2.6 : 2;
+  const baseSize = isGpuMode ? 1.4 : 1.2;
+  const sizeVariance = isGpuMode ? 1.8 : 2;
 
   for (let i = 0; i < count; i++) {
     // Random angle and speed (velocity approximation)

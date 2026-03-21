@@ -76,20 +76,16 @@ export function backgroundGpu(nowMs) {
   if (pending) {
     ctx.save();
 
-    // GPU path can afford more advanced blending/glow effects.
+    // GPU path uses a subtle glow effect to keep CPU/GPU performance reasonable.
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
-    ctx.shadowBlur = 14;
+    ctx.shadowBlur = 5;
     ctx.shadowColor = particleColor;
     ctx.globalCompositeOperation = getThemeMode() === 'light' ? 'multiply' : 'screen';
 
     renderWorkerParticles(ctx, pending.data, pending.count, opacity, particleColor, getThemeMode());
 
-    // Optional second drawing pass for stronger core + glow contrast.
-    ctx.shadowBlur = 0;
-    ctx.globalCompositeOperation = 'source-over';
-    renderWorkerParticles(ctx, pending.data, pending.count, opacity * 0.55, particleColor, getThemeMode());
-
+    // Single pass with softer opacity means less overhead and no harsh bloom.
     ctx.restore();
   }
 
