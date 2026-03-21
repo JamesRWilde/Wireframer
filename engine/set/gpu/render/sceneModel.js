@@ -146,7 +146,9 @@ export function sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays
     // Draw wireframe edges with standard alpha blending so fill remains visible.
     // Keep depth testing enabled to avoid drawing wires through the mesh.
 
-
+    // Force minimum line thickness for consistent cross-platform appearance
+    // WebGL may default to >1 on some drivers; 1 is the thinnest guaranteed value.
+    gl.lineWidth(1);
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
