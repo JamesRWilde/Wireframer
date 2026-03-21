@@ -569,13 +569,17 @@ canvas:active { cursor: grabbing; }
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    padding: 1.4rem 0.6rem 0.6rem 0.6rem;
+    padding: 1.4rem 0.6rem 4rem 0.6rem;
     background: var(--ui-panel-bg);
     z-index: 999 !important;
   }
 
   #controls-scroll {
     display: contents;
+  }
+
+  .control-panel {
+    margin-bottom: 1rem;
   }
 }
 #obj-label {
