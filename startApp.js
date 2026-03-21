@@ -56,6 +56,9 @@ import { rendererToggle } from '@engine/init/engine/rendererToggle.js';
 // Render pipeline initialization (GPU/CPU selection)
 import { initRenderPipeline } from '@engine/init/render/pipeline/init.js';
 
+// Background worker initialization (dedicated background pipeline)
+import { backgroundWorker } from '@engine/init/render/backgroundWorker.js';
+
 // Debug overlay removed for production build
 // (no longer supported)
 
@@ -119,7 +122,10 @@ export function startApp() {
   // This is a one-time initialization that sets the active renderer
   initRenderPipeline();
 
-  // Step 12: Initialize renderer toggle functionality
+  // Step 12: Initialize the background worker pipeline for particle updates
+  backgroundWorker();
+
+  // Step 13: Initialize renderer toggle functionality
   rendererToggle();
 
   // Step 13: Start the animation loop
