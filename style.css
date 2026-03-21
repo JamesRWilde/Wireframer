@@ -569,9 +569,12 @@ canvas:active { cursor: grabbing; }
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    padding: 1.4rem 0.6rem 4rem 0.6rem;
+    padding: 0.8rem;
     background: var(--ui-panel-bg);
     z-index: 999 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
   }
 
   #controls-scroll {
@@ -579,11 +582,13 @@ canvas:active { cursor: grabbing; }
   }
 
   .control-panel {
-    margin-bottom: 0;
+    flex: 0 0 auto;
     padding: 0.4rem 0.6rem;
+    margin-bottom: 0;
   }
   .concertina-title {
     padding-bottom: 0;
+    margin-bottom: 0;
   }
 }
 #obj-label {
