@@ -23,6 +23,7 @@
 "use strict";
 
 // Express.js - lightweight web framework for serving static files
+// 2026-03-21: test commit on develop branch - verifying push workflow
 const express = require('express');
 
 // node:path - built-in Node.js module for cross-platform path handling
