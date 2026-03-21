@@ -18,11 +18,11 @@
  */
 
 // Import frame parameter computation for projection setup
-import { setZoom } from '@engine/set/render/zoom.js';
-import { setZoomMin } from '@engine/set/render/zoomMin.js';
-import { setZoomMax } from '@engine/set/render/zoomMax.js';
-import { setModelCy } from '@engine/set/render/modelCy.js';
-import { setZHalf } from '@engine/set/render/zHalf.js';
+import { setZoom } from '@engine/set/render/setZoom.js';
+import { setZoomMin } from '@engine/set/render/setZoomMin.js';
+import { setZoomMax } from '@engine/set/render/setZoomMax.js';
+import { setModelCy } from '@engine/set/render/setModelCy.js';
+import { setZHalf } from '@engine/set/render/setZHalf.js';
 
 /**
  * fitCameraToModel - Adjusts camera to frame the model

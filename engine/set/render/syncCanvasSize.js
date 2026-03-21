@@ -17,8 +17,8 @@
 
 "use strict";
 
-import { setW } from '@engine/set/render/width.js';
-import { setH } from '@engine/set/render/height.js';
+import { setW } from '@engine/set/render/setW.js';
+import { setH } from '@engine/set/render/setH.js';
 import { getFgCanvas } from '@engine/get/render/getFgCanvas.js';
 import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
 import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';
