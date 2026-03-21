@@ -47,13 +47,19 @@ export function capModelForCpu(model) {
   const overVerts = verts > CPU_MAX_VERTS;
   const overEdges = edges > CPU_MAX_EDGES;
 
-  if (!overVerts && !overEdges) return model;
+  // If below the vertex cap we keep the model exactly, regardless of edge count.
+  // This avoids unexpected LOD reduction for low-vertex models that happen to have
+  // large edge arrays due to mesh topology nuance.
+  if (!overVerts) return model;
 
-  // Calculate a target percent that brings both verts and edges under caps
-  // Use the tighter constraint
-  let pct = 1;
-  if (overVerts) pct = Math.min(pct, CPU_MAX_VERTS / verts);
-  if (overEdges) pct = Math.min(pct, CPU_MAX_EDGES / edges);
+  // If vertex limit is exceeded, calculate a scaled fraction.
+  // We use vertices as the primary cap for CPU rendering quality.
+  let pct = CPU_MAX_VERTS / verts;
+
+  // Use edge cap only as soft suggestion; vertices are the dominant performance factor.
+  if (overEdges) {
+    pct = Math.min(pct, CPU_MAX_EDGES / edges);
+  }
 
   // Clamp to reasonable range — don't decimate below 10%
   pct = Math.max(0.1, pct);
