@@ -469,6 +469,74 @@ canvas:active { cursor: grabbing; }
   width: 100%;
   text-align: center;
 }
+
+/* ── Slide-out panel toggle (small screens) ─────────────────────────── */
+#panel-toggle {
+  display: none;
+  pointer-events: auto;
+  position: absolute;
+  top: 26px;
+  right: 0;
+  width: 2.2rem;
+  height: 2.2rem;
+  background: var(--ui-panel-bg);
+  border: 1px solid var(--ui-control-border);
+  border-right: none;
+  border-radius: 0.4rem 0 0 0.4rem;
+  color: var(--ui-control-fg);
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 21;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+#panel-toggle:hover {
+  background: var(--ui-control-bg);
+  border-color: var(--ui-control-hover-border);
+}
+
+@media (max-width: 600px) {
+  #panel-toggle {
+    display: flex;
+  }
+
+  #controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(85vw, 19rem);
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 3.2rem 0.8rem 1.2rem 0.8rem;
+    background: var(--ui-panel-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-left: 1px solid var(--ui-control-border);
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    pointer-events: auto;
+    z-index: 20;
+  }
+
+  #controls.open {
+    transform: translateX(0);
+  }
+
+  #title {
+    top: 36px;
+    left: 16px;
+    font-size: 0.85rem;
+  }
+  #title h1 { font-size: 1.1rem; }
+  #title p { font-size: 0.75rem; }
+
+  #footer { bottom: 18px; }
+  #obj-label { font-size: 1rem; letter-spacing: 0.2rem; }
+  #hint { font-size: 0.8rem; margin-top: 6px; }
+}
 #obj-label {
   font-size: 1.3rem;
   letter-spacing: 0.42rem;

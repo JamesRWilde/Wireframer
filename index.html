@@ -21,6 +21,8 @@
 <p>3D Object Viewer</p>
 </div>
 
+<button id="panel-toggle" aria-label="Toggle controls" title="Toggle controls">&#9776;</button>
+
 <div id="controls">
 <section class="control-panel" id="shape-panel">
 <div class="panel-title">Shape</div>
@@ -133,6 +135,24 @@
     "@workers/": "./workers/"
   }
 }
+</script>
+
+<!-- Panel toggle for small screens -->
+<script>
+(function() {
+  var btn = document.getElementById('panel-toggle');
+  var controls = document.getElementById('controls');
+  if (!btn || !controls) return;
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    controls.classList.toggle('open');
+  });
+  document.addEventListener('touchstart', function(e) {
+    if (!controls.classList.contains('open')) return;
+    if (controls.contains(e.target) || btn.contains(e.target)) return;
+    controls.classList.remove('open');
+  });
+})();
 </script>
 
 <!-- App entry: import the startApp module which initializes and boots on load -->
