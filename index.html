@@ -143,9 +143,15 @@
   var btn = document.getElementById('panel-toggle');
   var controls = document.getElementById('controls');
   if (!btn || !controls) return;
+  var lastExpanded = null;
+
   btn.addEventListener('click', function(e) {
     e.stopPropagation();
     controls.classList.toggle('open');
+    // Restore last expanded panel when re-opening
+    if (controls.classList.contains('open') && lastExpanded) {
+      expandPanel(lastExpanded);
+    }
   });
   document.addEventListener('touchstart', function(e) {
     if (!controls.classList.contains('open')) return;
@@ -153,17 +159,38 @@
     controls.classList.remove('open');
   });
 
-  // Concertina: collapse/expand panels on small screens
+  function collapseAll() {
+    var panels = controls.querySelectorAll('.control-panel');
+    for (var i = 0; i < panels.length; i++) {
+      panels[i].classList.add('collapsed');
+      var kids = panels[i].querySelectorAll(':scope > *:not(.panel-title)');
+      for (var j = 0; j < kids.length; j++) kids[j].style.display = 'none';
+    }
+  }
+
+  function expandPanel(panel) {
+    collapseAll();
+    panel.classList.remove('collapsed');
+    var kids = panel.querySelectorAll(':scope > *:not(.panel-title)');
+    for (var j = 0; j < kids.length; j++) kids[j].style.display = '';
+    lastExpanded = panel;
+  }
+
+  // Collapse all by default on small screens
+  if (window.innerWidth <= 600) collapseAll();
+
+  // Concertina: expand one collapses the others
   var panels = controls.querySelectorAll('.control-panel');
   panels.forEach(function(panel) {
     var title = panel.querySelector('.panel-title');
     if (!title) return;
-    var children = panel.querySelectorAll(':scope > *:not(.panel-title)');
     title.addEventListener('click', function() {
       if (window.innerWidth > 600) return;
-      var collapsed = panel.classList.toggle('collapsed');
-      for (var i = 0; i < children.length; i++) {
-        children[i].style.display = collapsed ? 'none' : '';
+      if (panel.classList.contains('collapsed')) {
+        expandPanel(panel);
+      } else {
+        collapseAll();
+        lastExpanded = null;
       }
     });
   });
