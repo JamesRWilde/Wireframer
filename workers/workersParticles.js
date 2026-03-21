@@ -26,8 +26,14 @@ export function workersParticles(state, particles) {
   // Apply density multiplier (user-controlled 0-1 value) to scale particle count.
   const densityMult = state.density * 1.6;
   const count = Math.max(0, Math.round(baseCount * densityMult));
+
+  // Scale based on mode: GPU gets slightly larger particles with glow-worthy range.
+  const isGpuMode = state.mode === 'gpu';
+  const baseSize = isGpuMode ? 2.4 : 1.2;
+  const sizeVariance = isGpuMode ? 2.6 : 2;
+
   for (let i = 0; i < count; i++) {
-    // Random angle and speed (velocity is 0-1 percentage, MAX_VELOCITY_MULT = 1)
+    // Random angle and speed (velocity approximation)
     const angle = Math.random() * Math.PI * 2;
     const spd = (0.2 + Math.random() * 0.8) * state.speed;
     particles.push({
@@ -35,7 +41,7 @@ export function workersParticles(state, particles) {
       y: Math.random() * state.height,
       vx: Math.cos(angle) * spd,
       vy: Math.sin(angle) * spd,
-      size: 0.5 + Math.random() * 1.6,
+      size: baseSize + Math.random() * sizeVariance,
       alphaBase: 0.2 + Math.random() * 0.8,
       phase: Math.random() * Math.PI * 2,
       speed: 0.2 + Math.random() * 0.8

@@ -65,7 +65,10 @@ export function backgroundCpu(nowMs) {
   const pending = workerState.pendingWorkerParticles;
   if (pending) {
     ctx.save();
-    ctx.globalCompositeOperation = getThemeMode() === 'light' ? 'multiply' : 'screen';
+    // CPU path uses straightforward fillRect rendering; no additional shadow/glow.
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+    ctx.globalCompositeOperation = 'source-over';
     renderWorkerParticles(ctx, pending.data, pending.count, opacity, particleColor, getThemeMode());
     ctx.restore();
   }

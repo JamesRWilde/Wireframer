@@ -75,8 +75,21 @@ export function backgroundGpu(nowMs) {
   const pending = workerState.pendingWorkerParticles;
   if (pending) {
     ctx.save();
+
+    // GPU path can afford more advanced blending/glow effects.
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.shadowBlur = 14;
+    ctx.shadowColor = particleColor;
     ctx.globalCompositeOperation = getThemeMode() === 'light' ? 'multiply' : 'screen';
+
     renderWorkerParticles(ctx, pending.data, pending.count, opacity, particleColor, getThemeMode());
+
+    // Optional second drawing pass for stronger core + glow contrast.
+    ctx.shadowBlur = 0;
+    ctx.globalCompositeOperation = 'source-over';
+    renderWorkerParticles(ctx, pending.data, pending.count, opacity * 0.55, particleColor, getThemeMode());
+
     ctx.restore();
   }
 

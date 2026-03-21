@@ -65,9 +65,10 @@ onmessage = (event) => {
         break;
 
       case 'update': {
-        // Update mode if changed
+        // Update mode if changed and reseed particles so that mode-specific size config is applied.
         if (mode && mode !== state.mode) {
           state.mode = mode;
+          workersParticles(state, particles);
         }
 
         // Reseed particles if density changed (allow 0 density)
