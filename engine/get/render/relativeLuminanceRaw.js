@@ -1,5 +1,5 @@
 'use strict';
-import { linear } from './linear.js';
+import { linear } from '@engine/get/render/linear.js';
 
 /**
  * relativeLuminanceRaw - Compute relative luminance from RGB in linear gamma space.
