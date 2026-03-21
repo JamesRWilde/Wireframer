@@ -562,21 +562,19 @@ canvas:active { cursor: grabbing; }
 
 /* Small height (landscape phones): concertina + scroll, no slide-out */
 @media (max-height: 600px) {
-  #ui {
-    overflow: hidden;
-  }
   #controls {
     position: fixed;
     top: 0;
     right: 0;
     width: 18.5rem;
     height: 100vh;
-    overflow-y: scroll;
+    overflow-y: scroll !important;
     overflow-x: hidden;
     pointer-events: auto;
     padding: 1.6rem 0.8rem 1.2rem 0.8rem;
     background: var(--ui-panel-bg);
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     display: block;
   }
 
