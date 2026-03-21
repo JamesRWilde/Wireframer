@@ -527,7 +527,6 @@ canvas:active { cursor: grabbing; }
     top: 0;
     right: 0;
     width: 100vw;
-    height: 100vh;
     max-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
@@ -537,6 +536,7 @@ canvas:active { cursor: grabbing; }
     -webkit-backdrop-filter: blur(12px);
     border-left: 1px solid var(--ui-control-border);
     border-bottom: 1px solid var(--ui-control-border);
+    border-radius: 0 0 0 0.5rem;
     transform: translateX(100%);
     transition: transform 0.25s ease;
     pointer-events: auto;
