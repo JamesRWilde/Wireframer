@@ -207,14 +207,25 @@
     });
   });
 
+  // Portrait: close slide-out when tapping outside
+  document.addEventListener('touchstart', function(e) {
+    if (!isPortrait()) return;
+    if (!controls.classList.contains('open')) return;
+    if (controls.contains(e.target) || (btn && btn.contains(e.target))) return;
+    controls.classList.remove('open');
+  });
+  document.addEventListener('click', function(e) {
+    if (!isPortrait()) return;
+    if (!controls.classList.contains('open')) return;
+    if (controls.contains(e.target) || (btn && btn.contains(e.target))) return;
+    controls.classList.remove('open');
+  });
+
   // Landscape: stop touch events on controls from propagating to canvas
   controls.addEventListener('touchstart', function(e) {
     e.stopPropagation();
   }, { passive: true });
   controls.addEventListener('touchmove', function(e) {
-    e.stopPropagation();
-  }, { passive: true });
-  controls.addEventListener('touchend', function(e) {
     e.stopPropagation();
   }, { passive: true });
 })();
