@@ -58,13 +58,13 @@ export function fitCameraToModel(model) {
   setModelCy(0);  // Sphere is centred at origin — no offset needed
   setZHalf(1);    // Sphere radius is 1
   
-  // Set zoom bounds
-  setZoomMin(0.001);
-  setZoomMax(10);
-
-  // Sphere is law — all meshes are unit sphere (radius 1, diameter 2).
-  // The sphere, not the mesh, defines the visual extent.
-  // Zoom is constant for all meshes.
-  const targetFraction = 0.5;
-  setZoom(targetFraction / (0.9 * 2));  // 0.278
+  // Set zoom bounds — sphere is law (unit sphere, radius 1, diameter 2)
+  // Min: sphere = 10% of screen (zoomed out)
+  // Max: sphere fills screen, no clipping inside geometry
+  const minFraction = 0.1;   // 10% of screen
+  const maxFraction = 1.0;   // fills screen
+  const targetFraction = 0.5; // default fill on load
+  setZoomMin(minFraction / (0.9 * 2));    // 0.056
+  setZoomMax(maxFraction / (0.9 * 2));    // 0.556
+  setZoom(targetFraction / (0.9 * 2));    // 0.278
 }
