@@ -30,11 +30,17 @@ const express = require('express');
 // Using node: prefix to explicitly indicate built-in module (Node 16+)
 const path = require('node:path');
 
+// gzip compression for responses (OBJ files compress very well)
+const compression = require('compression');
+
 // Create the Express application instance
 const app = express();
 
 // Server port - hardcoded to 3000 for development consistency
 const port = 3000;
+
+// Enable gzip compression for all responses
+app.use(compression());
 
 // Middleware to parse JSON bodies for POST requests
 app.use(express.json());
