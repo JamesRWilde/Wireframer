@@ -25,7 +25,7 @@
 
 <div id="controls">
 <section class="control-panel" id="shape-panel">
-<div class="panel-title">Shape</div>
+<div class="panel-title concertina-title">Shape</div>
 <select id="obj-select" aria-label="Object selector" title="Object selector"></select>
 <label id="lod-control" for="lod-slider">
 <span>Detail</span>
@@ -47,7 +47,7 @@
 </section>
 
 <section class="control-panel" id="custom-color-control">
-<div id="custom-color-title" class="panel-title">Color</div>
+<div id="custom-color-title" class="panel-title concertina-title">Color</div>
 <label id="theme-control" for="theme-mode">
 <span>Theme</span>
 <select id="theme-mode" aria-label="Theme mode" title="Theme mode">
@@ -84,7 +84,7 @@
 
 
 <section class="control-panel" id="background-panel">
-<div class="panel-title">Background</div>
+<div class="panel-title concertina-title">Background</div>
 <label id="bg-density-control" for="bg-density">
 <span>Density</span>
 <input id="bg-density" type="range" min="0" max="220" step="1" value="100" />
@@ -105,7 +105,7 @@
 </section>
 
 <section class="control-panel" id="info-panel">
-<div class="panel-title">Info</div>
+<div class="panel-title concertina-title">Info</div>
 <div id="stats">
 <span>Vertices <span id="stat-v">--</span></span>
 <span>Edges <span id="stat-e">--</span></span>
@@ -145,14 +145,11 @@
   if (!controls) return;
   var lastExpanded = null;
 
-  function isConcertinaMode() {
-    return window.innerWidth <= 600 || window.innerHeight <= 600;
-  }
+  function isPortrait() { return window.innerWidth <= 560; }
+  function isLandscape() { return !isPortrait() && window.innerHeight <= 550; }
+  function isConcertina() { return isPortrait() || isLandscape(); }
 
-  function isPortraitMode() {
-    return window.innerWidth <= 600;
-  }
-
+  // Slide-out panel toggle (portrait only)
   if (btn) {
     btn.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -162,7 +159,10 @@
       }
     });
   }
+
+  // Close slide-out by tapping outside (portrait only)
   document.addEventListener('touchstart', function(e) {
+    if (!isPortrait()) return;
     if (!controls.classList.contains('open')) return;
     if (controls.contains(e.target) || (btn && btn.contains(e.target))) return;
     controls.classList.remove('open');
@@ -186,15 +186,15 @@
   }
 
   // Collapse all by default when concertina mode applies
-  if (isConcertinaMode()) collapseAll();
+  if (isConcertina()) collapseAll();
 
-  // Concertina: expand one collapses the others
+  // Concertina click handler (portrait AND landscape)
   var panels = controls.querySelectorAll('.control-panel');
   panels.forEach(function(panel) {
     var title = panel.querySelector('.panel-title');
     if (!title) return;
     title.addEventListener('click', function() {
-      if (!isConcertinaMode()) return;
+      if (!isConcertina()) return;
       if (panel.classList.contains('collapsed')) {
         expandPanel(panel);
       } else {

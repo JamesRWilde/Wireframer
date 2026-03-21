@@ -470,7 +470,7 @@ canvas:active { cursor: grabbing; }
   text-align: center;
 }
 
-/* ── Slide-out panel toggle (small screens) ─────────────────────────── */
+/* ── Slide-out panel toggle (portrait) ──────────────────────────────── */
 #panel-toggle {
   display: none;
   pointer-events: auto;
@@ -498,10 +498,29 @@ canvas:active { cursor: grabbing; }
   border-color: var(--ui-control-hover-border);
 }
 
-@media (max-width: 600px) {
-  #panel-toggle {
-    display: flex;
-  }
+/* ── Concertina title shared styles ─────────────────────────────────── */
+.concertina-title {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0;
+  padding-bottom: 0.35rem;
+}
+.concertina-title::after {
+  content: '\25BC';
+  font-size: 0.6rem;
+  transition: transform 0.2s ease;
+  color: var(--ui-control-fg);
+}
+.control-panel.collapsed .concertina-title::after {
+  transform: rotate(-90deg);
+}
+
+/* ── Portrait (width ≤ 560px): slide-out full-width panel ──────────── */
+@media (max-width: 560px) {
+  #panel-toggle { display: flex; }
 
   #controls {
     position: absolute;
@@ -521,83 +540,41 @@ canvas:active { cursor: grabbing; }
     transition: transform 0.25s ease;
     pointer-events: auto;
     z-index: 20;
+    display: grid;
+    gap: 0.62rem;
   }
 
-  #controls.open {
-    transform: translateX(0);
-  }
+  #controls.open { transform: translateX(0); }
 
-  #title {
-    top: 36px;
-    left: 16px;
-    font-size: 0.85rem;
-  }
+  #title { top: 36px; left: 16px; font-size: 0.85rem; }
   #title h1 { font-size: 1.1rem; }
   #title p { font-size: 0.75rem; }
-
   #footer { bottom: 18px; }
   #obj-label { font-size: 1rem; letter-spacing: 0.2rem; }
   #hint { font-size: 0.8rem; margin-top: 6px; }
 
-  /* Concertina: collapsible panels on small screens */
-  .control-panel .panel-title {
-    cursor: pointer;
-    user-select: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0;
-    padding-bottom: 0.35rem;
-  }
-  .control-panel .panel-title::after {
-    content: '\25BC';
-    font-size: 0.6rem;
-    transition: transform 0.2s ease;
-    color: var(--ui-control-fg);
-  }
-  .control-panel.collapsed .panel-title::after {
-    transform: rotate(-90deg);
-  }
 }
 
-/* Small height (landscape phones): concertina + scroll, no slide-out */
-@media (max-height: 600px) {
+/* ── Landscape (height ≤ 550px): normal width, concertina + scroll ─── */
+@media (max-height: 550px) {
+  #panel-toggle { display: none; }
+
   #controls {
     position: fixed;
     top: 0;
     right: 0;
     width: 18.5rem;
     height: 100vh;
-    overflow-y: scroll !important;
+    overflow-y: scroll;
     overflow-x: hidden;
     pointer-events: auto;
     padding: 1.6rem 0.8rem 1.2rem 0.8rem;
     background: var(--ui-panel-bg);
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-    display: block;
-  }
-
-  #panel-toggle { display: none; }
-
-  /* Concertina styles also apply here */
-  .control-panel .panel-title {
-    cursor: pointer;
-    user-select: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0;
-    padding-bottom: 0.35rem;
-  }
-  .control-panel .panel-title::after {
-    content: '\25BC';
-    font-size: 0.6rem;
-    transition: transform 0.2s ease;
-    color: var(--ui-control-fg);
-  }
-  .control-panel.collapsed .panel-title::after {
-    transform: rotate(-90deg);
+    display: grid;
+    gap: 0.62rem;
+    z-index: 20;
   }
 }
 #obj-label {
