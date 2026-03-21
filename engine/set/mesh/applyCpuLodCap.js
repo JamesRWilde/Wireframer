@@ -19,7 +19,7 @@
 
 import { modelState } from '@engine/state/render/model.js';
 import { getDetailLevelValue } from '@engine/get/render/getDetailLevelValue.js';
-import { capModelForCpu } from '@engine/set/mesh/cpuDetailCap.js';
+import { capModelForCpu, CPU_MAX_VERTS } from '@engine/set/mesh/cpuDetailCap.js';
 import { detailLevel } from '@engine/set/mesh/detailLevel.js';
 
 /**
@@ -42,6 +42,12 @@ export function applyCpuLodCap() {
   // Recalculate the capped model (only decimates if over the cap)
   modelState.cpuBaseModel = capModelForCpu(baseModel);
 
-  // Recompute current LOD model from capped base
-  detailLevel(modelState.currentLodPct);
+  // If user is requesting 100% LOD and the original base model is already under
+  // CPU vertex cap, always use the uncapped base model to avoid quality loss.
+  if (modelState.currentLodPct >= 0.999 && modelState.baseModel?.V?.length <= CPU_MAX_VERTS) {
+    modelState.currentLodModel = modelState.baseModel;
+  } else {
+    // Recompute current LOD model from capped base
+    detailLevel(modelState.currentLodPct);
+  }
 }
