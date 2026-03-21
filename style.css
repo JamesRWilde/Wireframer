@@ -520,7 +520,10 @@ canvas:active { cursor: grabbing; }
 
 /* ── Portrait (width ≤ 560px): slide-out full-width panel ──────────── */
 @media (max-width: 560px) {
-  #panel-toggle { display: flex; }
+  #panel-toggle {
+    display: flex;
+    z-index: 1000;
+  }
 
   #controls {
     position: fixed;
