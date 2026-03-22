@@ -157,7 +157,8 @@
       e.stopPropagation();
       controls.classList.toggle('open');
       if (controls.classList.contains('open') && lastExpanded) {
-        expandPanel(lastExpanded);
+        lastExpanded.classList.remove('collapsed');
+        lastExpanded.classList.add('expanded');
       }
     });
   }
@@ -170,42 +171,32 @@
     controls.classList.remove('open');
   });
 
-  function collapseAll() {
-    var panels = controls.querySelectorAll('.control-panel');
-    for (var i = 0; i < panels.length; i++) {
-      panels[i].classList.add('collapsed');
-      var kids = panels[i].querySelectorAll(':scope > *:not(.panel-title)');
-      for (var j = 0; j < kids.length; j++) kids[j].style.display = 'none';
-    }
+
+
+
+
+  // Collapse all panels by default for concertina
+  var concertinaPanels = controls.querySelectorAll('.control-panel');
+  for (var i = 0; i < concertinaPanels.length; i++) {
+    concertinaPanels[i].classList.add('collapsed');
   }
 
-  function expandPanel(panel) {
-    collapseAll();
-    panel.classList.remove('collapsed');
-    var kids = panel.querySelectorAll(':scope > *:not(.panel-title)');
-    for (var j = 0; j < kids.length; j++) kids[j].style.display = '';
-    lastExpanded = panel;
-  }
-
-  // Collapse all by default when concertina mode applies
-  if (isConcertina()) collapseAll();
-
-  // Concertina click handler (portrait AND landscape)
-  var scrollArea = document.getElementById('controls-scroll') || controls;
-  var panels = scrollArea.querySelectorAll('.control-panel');
-  panels.forEach(function(panel) {
-    var title = panel.querySelector('.panel-title');
-    if (!title) return;
-    title.addEventListener('click', function() {
-      if (!isConcertina()) return;
-      if (panel.classList.contains('collapsed')) {
-        expandPanel(panel);
-      } else {
-        collapseAll();
-        lastExpanded = null;
+  // Concertina click handler - class based
+  var concertinaTitles = controls.querySelectorAll('.concertina-title');
+  for (var t = 0; t < concertinaTitles.length; t++) {
+    concertinaTitles[t].addEventListener('click', function() {
+      var panel = this.closest('.control-panel');
+      if (!panel) return;
+      var allPanels = controls.querySelectorAll('.control-panel');
+      for (var i = 0; i < allPanels.length; i++) {
+        allPanels[i].classList.add('collapsed');
+        allPanels[i].classList.remove('expanded');
       }
+      panel.classList.remove('collapsed');
+      panel.classList.add('expanded');
+      lastExpanded = panel;
     });
-  });
+  }
 
   // Portrait: close slide-out when tapping outside
   document.addEventListener('touchstart', function(e) {

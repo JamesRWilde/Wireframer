@@ -131,7 +131,6 @@ canvas:active { cursor: grabbing; }
 
 #obj-select,
 #theme-mode {
-  display: block;
   background: var(--ui-control-bg);
   border: 1px solid var(--ui-control-border);
   color: var(--ui-control-fg);
@@ -513,14 +512,23 @@ canvas:active { cursor: grabbing; }
   margin-bottom: 0;
   padding-bottom: 0.35rem;
 }
-.concertina-title::after {
-  content: '\25BC';
-  font-size: 0.6rem;
-  transition: transform 0.2s ease;
-  color: var(--ui-control-fg);
-}
-.control-panel.collapsed .concertina-title::after {
-  transform: rotate(-90deg);
+/* Concertina: arrows + collapse only in concertina mode (portrait or landscape) */
+@media (max-width: 560px), (max-height: 550px) {
+  .concertina-title::after {
+    content: '\25BC';
+    font-size: 0.6rem;
+    transition: transform 0.2s ease;
+    color: var(--ui-control-fg);
+  }
+  .collapsed .concertina-title ~ * {
+    display: none !important;
+  }
+  .expanded .concertina-title ~ * {
+    display: block;
+  }
+  .control-panel.collapsed .concertina-title::after {
+    transform: rotate(-90deg);
+  }
 }
 
 /* ── Portrait (width ≤ 560px): slide-out full-width panel ──────────── */
@@ -624,3 +632,4 @@ canvas:active { cursor: grabbing; }
   margin-top: 12px;
   font-family: 'Share Tech Mono', 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
 }
+.test-collapse { display: none !important; }
