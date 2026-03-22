@@ -18,10 +18,38 @@
 
 "use strict";
 
-// Central zoom state storage.
-// This file contains ONLY mutable state variables (no functions).
+/** Centralized zoom state storage. */
 export const zoomState = {
   zoom: 1,
+  zHalf: 0,
   zoomMin: 0.45,
   zoomMax: 2.75,
 };
+
+// --- Getters ---
+
+/** Returns zHalf. */
+export function getZHalf() { return zoomState.zHalf; }
+
+/** Returns camera zoom level. */
+export function getZoom() { return zoomState.zoom; }
+
+/** Returns minimum zoom level. */
+export function getZoomMax() { return zoomState.zoomMax; }
+
+/** Returns maximum zoom level. */
+export function getZoomMin() { return zoomState.zoomMin; }
+
+// --- Setters ---
+
+/** Sets zHalf. */
+export function setZHalf(value) { zoomState.zHalf = value; }
+
+/** Sets camera zoom level. */
+export function setZoom(value) { zoomState.zoom = value; }
+
+/** Sets minimum zoom level. */
+export function setZoomMax(value) { zoomState.zoomMax = value; }
+
+/** Sets maximum zoom level. */
+export function setZoomMin(value) { zoomState.zoomMin = value; }

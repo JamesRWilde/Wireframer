@@ -15,7 +15,7 @@
  *   The +3 offset prevents division by zero and provides reasonable depth scaling.
  */
 
-import { getZoom } from '@engine/get/render/getZoom.js';
+import { getZoom } from '@engine/state/render/zoomState.js';
 import { getModelCy } from '@engine/get/render/getModelCy.js';
 
 /**
