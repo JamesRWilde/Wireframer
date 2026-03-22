@@ -45,6 +45,14 @@ app.use(compression());
 // Middleware to parse JSON bodies for POST requests
 app.use(express.json());
 
+// Long-term cache for immutable mesh assets (OBJ files rarely change)
+app.use((req, res, next) => {
+  if (req.url.endsWith('.obj')) {
+    res.set('Cache-Control', 'public, max-age=31536000, immutable');
+  }
+  next();
+});
+
 // Configure static file serving from the project root directory
 // __dirname is the directory containing this file (project root)
 // This serves all files: index.html, JS modules, CSS, mesh OBJ files, etc.
