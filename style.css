@@ -106,9 +106,12 @@ canvas:active { cursor: grabbing; }
   right: 30px;
   width: 18.5rem;
   display: grid;
-  gap: 0.62rem;
+  gap: 1.25rem;
   pointer-events: auto;
   z-index: 22;
+}
+#controls-scroll {
+  display: contents;
 }
 
 .control-panel {
@@ -524,7 +527,7 @@ canvas:active { cursor: grabbing; }
 @media (max-width: 560px) {
   #panel-toggle {
     display: flex;
-    z-index: 21;
+    z-index: 23;
   }
 
   #controls {
