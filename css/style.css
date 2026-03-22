@@ -33,6 +33,8 @@ body {
 #gpu {
   position: fixed;
   inset: 0;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 #bg {
@@ -42,6 +44,8 @@ body {
 
 #c {
   z-index: 1;
+  width: 100%;
+  height: 100%;
 }
 
 #fg {
@@ -53,6 +57,8 @@ body {
   z-index: 1;
   pointer-events: none;
   visibility: hidden;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 #gpu {
