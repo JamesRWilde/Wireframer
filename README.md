@@ -1,44 +1,42 @@
 # Wireframer
 
-Wireframer is an interactive 3D wireframe viewer that renders solid-shaded and depth-aware wireframe models simultaneously in the browser. Built with vanilla JavaScript and a modular engine-first architecture, it provides real-time rotation, morphing between objects, and extensive visual customization.
+A real-time 3D wireframe and solid-fill viewer running entirely in the browser. Built with vanilla JavaScript, zero build step, and a radical one-function-per-file architecture. Load any OBJ mesh, rotate and zoom it with mouse or touch, morph smoothly between shapes, and fine-tune every visual parameter through a live control panel.
 
-## Features
+Wireframer is not a wrapper around Three.js. It is a from-scratch rendering engine with its own WebGL pipeline, its own mesh decimation algorithm, its own OBJ parser, and its own background particle system running on a Web Worker. Every line of code is visible, auditable, and replaceable.
 
-- **Dual Rendering**: Solid shading and wireframe overlays rendered together with depth-aware line bucketing
-- **20 Parametric Objects**: Including fractal-inspired shapes (Menger sponge, Sierpinski pyramid, Jerusalem cube)
-- **Real-time Morphing**: Smooth transitions between objects using sampled point correspondences
-- **GPU/CPU Fallback**: Automatic selection of WebGL GPU path with graceful CPU fallback
-- **LOD Control**: Live detail scaling with model regeneration and caching
-- **Custom Theming**: RGB color controls with preset swatches, persistence, and contrast enforcement
-- **Background Particles**: Animated ambient particles with density, velocity, and opacity controls
-- **Performance Telemetry**: Live FPS, frame time, physics, and rendering stats
+---
 
-## Quick Start
+## What You Get
 
-### Prerequisites
+- **Dual Rendering Pipeline** — Solid shading and wireframe overlay composed together with depth-aware color interpolation, running on GPU (WebGL) when available with automatic CPU fallback
+- **20+ Parametric Objects** — Fractal-inspired and classic shapes including Menger sponge, Sierpinski pyramid, Jerusalem cube, Klein bottle, Moebius strip, and more
+- **Smooth Morphing** — Real-time vertex interpolation between any two objects with configurable duration
+- **LOD Slider** — Live mesh decimation using a greedy cluster algorithm with per-level caching
+- **Background Particles** — Animated ambient particles computed on a Web Worker to keep the main thread free
+- **Theme Engine** — Dark and light modes, custom RGB color control, preset swatches, contrast enforcement, and localStorage persistence
+- **Full Control Panel** — Fill opacity, wire opacity, particle density, particle velocity, background opacity, edge color, and wire far-color all adjustable live
+- **Performance Telemetry** — Live FPS, frame time, physics update time, and render time display
 
-- Node.js (for the development server)
-- Modern browser with WebGL support
+---
 
-### Running the App
+## Running
 
-```powershell
-# Install dependencies
+```bash
 npm install
-
-# Start the development server
 npm start
 ```
 
-Open `http://localhost:3000` in your browser.
+Open `http://localhost:3000` in a modern browser. The dev server uses nodemon and auto-restarts on file changes.
 
-### Alternative: Static File Server
+### Alternative
 
-```powershell
-python -m http.server 5500
-# or
-npx serve . -l 5500
+Any static file server works. The app is pure ES modules — no build step.
+
+```bash
+npx serve . -l 3000
 ```
+
+---
 
 ## Controls
 
@@ -46,132 +44,314 @@ npx serve . -l 5500
 |-------|--------|
 | Mouse drag / Touch | Rotate model |
 | Scroll wheel | Zoom in/out |
-| Shape selector | Choose 3D object |
+| Shape selector dropdown | Choose 3D object |
 | LOD slider | Adjust model detail level |
-| Fill opacity | Control solid shading visibility |
-| Wire opacity | Control wireframe visibility |
+| Fill opacity | Solid shading visibility |
+| Wire opacity | Wireframe visibility |
 | Background controls | Particle density, velocity, opacity |
-| RGB sliders | Custom color theming |
-| Theme mode | Dark / Light |
+| RGB sliders | Custom theme color |
+| Theme mode | Dark / Light toggle |
+
+---
 
 ## Architecture
 
-Wireframer uses an **engine-first architecture** where the engine is the sole authority for mesh structure and processing. All mesh, face, and edge generation is performed internally by the engine.
+Wireframer is built on two fundamental principles:
 
-### Directory Structure
+1. **One function per file** — Every module exports exactly one function. No barrel exports, no multi-function files, no exceptions.
+2. **Three-layer separation** — Every operation is split across `get/` (read), `set/` (write), and `state/` (hold).
+
+This is not convention. It is enforced architecture. You can trace any value from its definition in a `state/` file through every getter that reads it and every setter that writes it.
+
+### Directory Layout
 
 ```
 Wireframer/
-├── index.html              # Entry point, loads scripts in order
-├── server.js               # Express development server
-├── registry.js             # Object registry (engine-defined schema only)
-├── loader.js               # OBJ mesh loader and object list
-├── style.css               # Application styles
-├── engine/                 # Core rendering engine
-│   ├── core/               # Model state, canvas init, main loop
-│   │   ├── loop/           # Frame loop, rendering paths, physics
-│   │   ├── modelState.js   # Active model management
-│   │   └── initCanvas.js   # Canvas setup
-│   ├── fill/               # CPU solid-fill rendering
-│   │   ├── triangulation.js
-│   │   ├── getModelTriangles.js
-│   │   └── pointInTriangle.js
-│   ├── math/               # 3D math utilities
-│   │   └── math3d/         # Rotation matrices, projections
-│   ├── mesh/               # Mesh processing
-│   │   ├── loader/         # Mesh loading utilities
-│   │   ├── parsing/        # OBJ parsing
-│   │   ├── lod/            # Level-of-detail
-│   │   └── utils/          # Mesh utilities
-│   ├── morph/              # Object morphing system
-│   │   ├── morphing/       # Morph algorithms
-│   │   ├── morphState.js   # Morph state management
-│   │   └── utils/          # Morph utilities
-│   ├── physics/            # Input and rotation physics
-│   │   ├── input/          # Mouse/touch input handling
-│   │   └── physicsState.js # Rotation velocity state
-│   ├── render/             # Rendering subsystems
-│   │   ├── background/     # Particle background
-│   │   ├── camera/         # Camera/projection
-│   │   ├── fill/           # Fill rendering
-│   │   ├── gpu/            # WebGL GPU path
-│   │   └── wireframe/      # Wireframe rendering
-│   └── utils/              # Shared utilities
-├── meshes/                 # OBJ mesh files (*.obj)
-├── loader/                 # Mesh loading helpers
-│   ├── loadObjMesh.js      # OBJ file loader
-│   └── objectList.js       # Available objects list
-└── ui/                     # User interface
-    ├── controls/           # UI controls (sliders, selectors)
-    ├── theme/              # Color theming system
-    ├── color-utils/        # Color math utilities
-    ├── stat-setters/       # Performance stat display
-    ├── dom-state.js        # DOM element references
-    └── statsState.js       # Stats state management
+├── index.html                    # Entry point — loads modules via importmap
+├── server.js                     # Express dev server (port 3000)
+├── js/
+│   └── startApp.js               # Bootstrap: canvas, pipeline, controls, frame loop
+├── engine/
+│   ├── init/                     # One-time initialization
+│   │   ├── mesh/                 # OBJ parsing, mesh pipeline, LOD, morphing
+│   │   ├── render/               # Canvas, input, render pipeline, background worker
+│   │   └── gpu/                  # WebGL context, shaders, buffer setup
+│   ├── get/                      # Pure getters — no side effects, return state
+│   │   ├── mesh/                 # Mesh queries (morph state, raw text, validation)
+│   │   ├── render/               # Render state queries (colors, dimensions, theme)
+│   │   └── gpu/                  # GPU state queries (renderer, GL context)
+│   ├── set/                      # Mutators and actions — change state, render, compute
+│   │   ├── mesh/                 # Mesh operations (detail level, morph triggers)
+│   │   ├── render/               # Render operations (paths, scenes, backgrounds, toggles)
+│   │   ├── engine/               # Engine operations (frame loop)
+│   │   └── gpu/                  # GPU operations (draw, canvas visibility)
+│   ├── state/                    # Plain state objects — no logic, just data
+│   │   ├── mesh/                 # Morph state, mesh parse errors
+│   │   ├── render/               # Render params, zoom, physics, background, colors
+│   │   └── gpu/                  # GPU scene state
+│   └── dispose/                  # Cleanup and teardown
+├── ui/
+│   ├── get/                      # UI getters (DOM state reads)
+│   ├── set/                      # UI actions (slider sync, theme mode, stat display)
+│   ├── state/                    # UI state (persisted settings)
+│   └── init/                     # Control binding and initialization
+├── workers/
+│   └── workersBackground.js      # Web Worker for background particle animation
+├── meshes/                       # OBJ mesh files (*.obj)
+└── css/                          # Styles
 ```
 
-### Key Architectural Principles
+### The Three-Layer Pattern
 
-1. **Engine-First Processing**: All mesh operations (polygonization, LOD, normals) are owned by the engine
-2. **Point Cloud Input**: Shapes are defined as point clouds; the engine generates all mesh structure
-3. **Module Isolation**: Each file contains a single function or focused responsibility
-4. **No Build Step**: Runtime JavaScript with ES modules, no bundler required
-5. **Contract Boundaries**: Clear interfaces between subsystems (mesh contract, render contract)
+Every piece of data in Wireframer exists in exactly one `state/` file as a plain object. It is read through a `get/` function and written through a `set/` function. There is no mixing.
 
-### Runtime Flow
+```javascript
+// state/render/renderState.js — the source of truth
+export const renderState = {
+  theme: null,
+  bgColor: null,
+  fillRgb: null,
+  edgeRgb: null,
+  wireFarRgb: null,
+  wireOpacity: null,
+  fillOpacity: null,
+  detailLevel: null,
+  modelCy: null
+};
 
-1. `index.html` loads scripts in order: `registry.js` → `loader.js` → engine modules
-2. `registry.js` initializes the object registry with engine-defined schema
-3. `loader.js` loads OBJ meshes and registers them with the engine
-4. `engine/core/loop/startApp.js` initializes controls and starts the animation loop
-5. Each frame: update physics → render background particles → render foreground (GPU or CPU) → update telemetry
+// get/render/getTheme.js — read access
+export function getTheme() {
+  return renderState.theme;
+}
 
-### Rendering Pipeline
+// set/render/setTheme.js — write access
+export function setTheme(theme) {
+  renderState.theme = theme;
+}
+```
 
-**GPU Path** (WebGL):
-- Compiled shader programs for fill and wire rendering
-- Dynamic buffer updates for morphing
-- Automatic fallback on context/program failure
+This separation means:
+- You can always find where a value lives (it's in exactly one `state/` file)
+- You can always find who reads it (grep the `get/` import)
+- You can always find who writes it (grep the `set/` import)
+- No circular dependencies — `state/` files import nothing from `get/` or `set/`, and `get/` files only import from `state/`
 
-**CPU Path** (Canvas 2D):
-- Back-to-front triangle sorting
-- Blinn-Phong lighting (ambient + diffuse + specular)
-- Depth-bucketed wireframe with color interpolation
-- Offscreen fill layer compositing to reduce artifacts
+### Import Map
 
-### Mesh Contract
+Wireframer uses a browser-native import map in `index.html` to provide clean module paths:
 
-All meshes conform to the engine's internal format:
-- `V`: Vertex positions array `[[x, y, z], ...]`
-- `F`: Face index arrays `[[i, j, k, ...], ...]`
-- `E`: Edge index pairs `[[i, j], ...]`
+```json
+{
+  "imports": {
+    "@engine/": "./engine/",
+    "@ui/": "./ui/"
+  }
+}
+```
 
-### Adding New Objects
+This means imports read like `import { getTheme } from '@engine/get/render/getTheme.js'` rather than fragile relative paths like `../../../get/render/getTheme.js`.
 
-1. Create an OBJ file in `meshes/`
-2. Add the filename to `loader/objectList.js`
-3. The object automatically appears in the shape selector
+---
+
+## Key Systems
+
+### Mesh Pipeline
+
+All meshes — whether built-in parametric or loaded from OBJ files — go through the same normalization pipeline.
+
+**OBJ Loading Flow:**
+```
+OBJ text → toRuntime() → { V, F, E } → load() → normalizeToBoundingSphere() → finalizeModel()
+```
+
+**The Sphere Law:** Every mesh is normalized to a unit bounding sphere (radius 1, centre at origin). This is the contract that makes the rendering pipeline work:
+
+- **Size = zoom** — All meshes are the same size, so zoom controls scale uniformly across all objects
+- **Centre = origin** — Always centred on screen, no offset calculations needed
+- **Rotation pivots around sphere centre** — Natural-looking rotation for every shape
+
+The normalization pipeline: compute bounding box → find sphere centre → compute max radius → scale all vertices to unit sphere → clamp any floating-point overflow.
+
+### Mesh Format
+
+Every mesh conforms to the same contract:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `V` | `[[x, y, z], ...]` | Vertex positions |
+| `F` | `[[i, j, k], ...]` | Face indices (triangles) |
+| `E` | `[[i, j], ...]` | Edge index pairs (wireframe) |
+
+### LOD (Level of Detail)
+
+Wireframer includes a custom greedy cluster decimation algorithm that reduces mesh complexity on-the-fly:
+
+1. Assign vertices to spatial grid cells
+2. Merge nearby vertices within each cell
+3. Rebuild face and edge indices for the reduced vertex set
+4. Cache the result for instant retrieval at the same detail level
+
+The LOD slider goes from full detail (100%) down to a minimum of 4 faces (a tetrahedron). Each level is cached after first computation, so dragging the slider back to a previously visited level is instant.
+
+### Dual Rendering Pipeline
+
+The frame loop calls exactly one render path per frame — determined at startup, not per-frame:
+
+```javascript
+// At init time: pick one pipeline, never switch per-frame
+renderForeground = gpuPath;   // or cpuPath
+```
+
+**GPU Path (WebGL):**
+- Two shader programs: fill (Blinn-Phong lighting) and wire (depth-based color interpolation)
+- Orthographic projection — no perspective distortion, true to engineering drawing aesthetics
+- Fill normals are per-face, computed at load time and uploaded as vertex attributes
+- Wire color fades from `wireNear` to `wireFar` based on depth, giving a subtle parallax effect
+- Falls back to CPU automatically if WebGL context or shader compilation fails
+
+**CPU Path (Canvas 2D):**
+- Triangle-by-triangle fill with back-to-front painter's compositing
+- Depth-bucketed wireframe rendering with color interpolation
+- Offscreen fill layer compositing to reduce edge artifacts
+
+**Switching modes** is a dispose-and-reinit operation: tear down the active pipeline, swap the function pointer, initialize the other. This is a one-time cost, not per-frame.
+
+### Background Particles
+
+Background particles run on a **Web Worker** to keep the main thread free for rendering:
+
+```
+Main thread → posts { init | update | resize } → Worker
+Worker → posts { ready | particles } → Main thread
+```
+
+Particle data is transferred as `Float32Array` with zero-copy semantics. The worker computes positions, the main thread renders them on the background canvas.
+
+Particle behaviour:
+- Drift with configurable velocity
+- Fade in and out with sinusoidal alpha cycling
+- Scale with size variance for depth effect
+- Density is user-controllable via slider (0–1, mapped to particle count)
+- GPU mode gets larger, more opaque particles for visual balance
+
+### Morphing System
+
+The morph system provides smooth vertex interpolation between any two meshes:
+
+1. `startMorph(from, to, duration)` — Sets up the morph: clones source and target meshes, records start time
+2. `advanceMorphFrame()` — Called each frame, interpolates vertex positions by a lerp factor based on elapsed time
+3. `currentMorph()` — Returns the interpolated mesh for rendering
+4. `isMorphing()` — Returns whether a morph is in progress
+
+The morph API is initialized in `morphApi.js` and exposed globally via `window.morph`. Duration defaults to 1600ms.
+
+### Theme System
+
+Themes control the entire visual appearance. Each theme is a complete color palette:
+
+```javascript
+{
+  name: 'dark',
+  bg: '#191919',
+  fill: '#2a363b',
+  edge: '#e8e6e3',
+  wireFar: '#6b6b6b',
+  shadeDark: [0.10, 0.10, 0.10],
+  shadeBright: [0.78, 0.78, 0.78],
+  particleColour: [230, 230, 230],
+  particleAlpha: 0.35,
+  particleAlphaMin: 0.12
+}
+```
+
+Themes enforce **contrast rules**: background brightness determines whether wire color is light or dark. Custom RGB values are validated against the background to prevent invisible wireframes.
+
+All theme changes persist to `localStorage` and are restored on next visit.
+
+### UI Control System
+
+The control panel is organized into three sections:
+- **Scene Controls** — Shape selector, LOD slider, fill and wire opacity
+- **Background Controls** — Density, velocity, and background opacity
+- **Theme Controls** — RGB sliders, color picker, preset swatches, theme mode toggle
+
+All controls bind to state through `set/` functions. State changes trigger `syncRenderToggles()` which reads every slider value and writes to the corresponding state module. There are no direct DOM reads in the render loop — everything flows through state.
+
+---
+
+## Frame Loop
+
+The animation frame loop is the heartbeat of the application:
+
+```
+animationFrame
+├── advanceMorphFrame()        — Update morph interpolation
+├── physicsStep()              — Update rotation velocity
+├── background()               — Render background particles
+│   ├── CPU: draw background on bgCanvas via worker data
+│   └── GPU: draw background particles in GPU pipeline
+├── renderForeground()         — Render 3D model (one path only)
+│   ├── GPU: gpuPath → shader uniforms → buffer bind → draw calls
+│   └── CPU: cpuPath → triangle fill → wireframe overlay
+├── renderHud()                — Overlay HUD if active
+└── syncFrameTelemetry()       — Update FPS, frame time, physics time, render time
+```
+
+Each frame tracks physics time and render time separately. The telemetry panel shows live FPS, last frame time, physics update time, and render time.
+
+---
+
+## Adding Objects
+
+### Built-in Shapes
+
+Shapes are defined as OBJ files in the `meshes/` directory. The object list is served from the server. Add an OBJ file and it appears in the shape selector.
+
+### From Code
+
+```javascript
+import { loadObjMesh } from '@engine/init/mesh/loadObjMesh.js';
+
+await loadObjMesh('/meshes/myShape.obj', 'My Shape');
+```
+
+The mesh goes through the full normalization pipeline automatically: parsed, edges built, normalised to bounding sphere, LOD range set, and finalised for rendering with an optional morph transition.
+
+---
 
 ## Development
 
 ### Code Conventions
 
-- One function per file
-- ES modules with explicit imports
-- No global state except for engine-managed globals (`MODEL`, `PHYSICS_STATE`, etc.)
-- Descriptive function names over comments
+- **One function per file** — No exceptions
+- **No barrel exports** — Each file is imported directly
+- **get/set/state separation** — Every value has a getter, a setter, and exactly one state home
+- **No build step** — ES modules in the browser, served directly
+- **Import map over relative paths** — `@engine/` prefix, no `../../../` chains
+- **JSDoc on every function** — PURPOSE, ARCHITECTURE ROLE, and parameter documentation
 
-### Key Globals
+### What Not To Do
 
-| Global | Purpose |
-|--------|---------|
-| `MODEL` | Currently active mesh object |
-| `PHYSICS_STATE` | Rotation velocities and auto-rotation settings |
-| `ZOOM` | Current zoom level |
-| `R` | Rotation matrix |
-| `OBJECTS` | Registered mesh objects array |
+- Do not put two functions in one file
+- Do not import a `get/` function from a `set/` file (breaks the layer boundary)
+- Do not read `state/` objects directly outside of `get/` files (use the getter)
+- Do not use relative paths when an `@engine/` or `@ui/` alias exists
+
+### Key Files for New Contributors
+
+| File | What It Does |
+|------|--------------|
+| `js/startApp.js` | Bootstrap and orchestration — read this first to see the full init flow |
+| `engine/init/mesh/load.js` | Mesh loading pipeline — the core data flow |
+| `engine/init/render/pipeline/initRenderPipeline.js` | GPU/CPU detection and pipeline init |
+| `engine/set/engine/frame/animationFrame.js` | The frame loop — everything that happens each frame |
+| `engine/init/gpu/create/scenePrograms.js` | WebGL shaders — fill and wire programs |
+| `engine/init/mesh/greedyClusterDecimator.js` | LOD algorithm |
+| `workers/workersBackground.js` | Background particle worker |
+| `ui/init/attach/sliderListeners.js` | UI control binding |
+
+---
 
 ## License
 
-This project is provided as-is for educational and personal use.
-
+Provided as-is for educational and personal use.
