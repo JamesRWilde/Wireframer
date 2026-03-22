@@ -51,7 +51,7 @@ import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromF
 import { rebuildFaces }from '@engine/init/mesh/rebuildFaces.js';
 
 // Import LOD cache pruning (removes old cache entries)
-import { pruneLodCache }from '@engine/dispose/mesh/pruneLodCache.js';
+import { pruneLodCache }from '@engine/dispose/pruneLodCache.js';
 
 /**
  * greedyClusterDecimator - Decimates a mesh using greedy cluster merging
