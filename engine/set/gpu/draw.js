@@ -13,7 +13,7 @@
 "use strict";
 
 // Import the GPU canvas clear implementation
-import { sceneCanvas } from '@engine/set/gpu/clear/sceneCanvas.js';
+import { sceneCanvas } from '@engine/set/gpu/sceneCanvas.js';
 
 /**
  * draw - Clears the WebGL canvas (viewport + buffers)

@@ -26,13 +26,13 @@ import { frameData }from '@engine/get/render/model/frameData.js';
 import { triangles as modelTriangles }from '@engine/get/render/model/triangles.js';
 
 // Import shading mode detection for flat vs smooth shading
-import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.js';
+import { shadingMode as getShadingMode }from '@engine/get/cpu/shadingMode.js';
 
 // Import per-corner normal computation for smooth shading
 import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
 
 // Import CPU triangle rasterizer for main-thread fallback
-import { trianglesCpu }from '@engine/set/render/fill/trianglesCpu.js';
+import { trianglesCpu }from '@engine/set/render/trianglesCpu.js';
 
 // Import worker command sender for async fill rendering
 import { sendRenderCommand }from '@engine/set/cpu/fill/sendRenderCommand.js';
@@ -44,7 +44,7 @@ import { fillCachedFrame }from '@engine/get/cpu/fillCachedFrame.js';
 import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
 
 // Import render loop state for frame ID tracking
-import { state }from '@engine/state/engine/loop.js';
+import { state }from '@engine/state/loop.js';
 import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
 import { getTheme } from '@engine/get/render/getTheme.js';
 import { getRotation } from '@engine/state/render/physicsState.js';

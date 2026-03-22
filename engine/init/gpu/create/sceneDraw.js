@@ -18,7 +18,7 @@
 import { model as modelFn } from '@engine/set/gpu/render/model.js';
 
 // Import the clear/draw function to clear the WebGL canvas
-import { draw } from '@engine/set/gpu/clear/draw.js';
+import { draw } from '@engine/set/gpu/draw.js';
 
 /**
  * sceneDraw - Creates the GPU scene draw API

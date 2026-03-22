@@ -22,7 +22,7 @@
 
 import { applyEulerIncrement } from '@engine/get/render/applyEulerIncrement.js';
 import { reorthogonalize } from '@engine/get/render/reorthogonalize.js';
-import { state } from '@engine/state/engine/loop.js';
+import { state } from '@engine/state/loop.js';
 import {
   getRotation, getWx, getWy, getWz, isDragging, getAxisAngleX, getAxisAngleY,
   setRotation, setAutoWx, setAutoWy, setAutoWz, setAxisAngleX, setAxisAngleY,

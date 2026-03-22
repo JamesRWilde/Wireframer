@@ -22,7 +22,7 @@
 import { gpuState } from '@engine/state/gpu/scene.js';
 
 // Import GPU canvas clearer
-import { sceneCanvas }from '@engine/set/gpu/clear/sceneCanvas.js';
+import { sceneCanvas }from '@engine/set/gpu/sceneCanvas.js';
 
 // Import unified CPU mesh renderer
 import { renderMeshUnified }from '@engine/set/cpu/renderMeshUnified.js';
@@ -32,7 +32,7 @@ import { canvasCpuHidden }from '@engine/set/cpu/canvasCpuHidden.js';
 
 // Import GPU canvas visibility toggle
 import { canvasHidden }from '@engine/set/gpu/canvasHidden.js';
-import { state } from '@engine/state/engine/loop.js';
+import { state } from '@engine/state/loop.js';
 import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';
 

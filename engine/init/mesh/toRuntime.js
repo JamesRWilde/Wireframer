@@ -23,7 +23,7 @@
 import { objLines }from '@engine/init/mesh/parse/objLines.js';
 
 // Import raw text validator
-import { rawObjText }from '@engine/get/mesh/validate/rawObjText.js';
+import { rawObjText }from '@engine/get/mesh/rawObjText.js';
 
 // Import parse result checker
 import { parseCheckResults }from '@engine/get/mesh/parseCheckResults.js';

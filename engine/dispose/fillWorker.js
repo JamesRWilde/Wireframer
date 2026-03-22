@@ -13,7 +13,7 @@
 "use strict";
 
 // Import shared fill state to access and clean up worker resources
-import { fillState } from "@engine/state/cpu/fillRenderBridge.js";
+import { fillState } from "@engine/state/fillRenderBridge.js";
 
 /**
  * fillWorker - Terminates the fill render worker and releases resources

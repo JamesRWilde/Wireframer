@@ -21,7 +21,7 @@
 "use strict";
 
 // Import render loop state for frame ID tracking
-import { state }from '@engine/state/engine/loop.js';
+import { state }from '@engine/state/loop.js';
 
 // Import worker command sender for async transforms
 import { workerSend }from '@engine/set/render/workerSend.js';
@@ -33,7 +33,7 @@ import { cachedTransformResult }from '@engine/get/render/cachedTransformResult.j
 import { convertFlatToNested }from '@engine/get/render/convertFlatToNested.js';
 
 // Import synchronous transform fallback
-import { transformSync }from '@engine/get/render/worker/transformSync.js';
+import { transformSync }from '@engine/get/render/transformSync.js';
 import { getRotation } from '@engine/state/render/physicsState.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { getModelCy } from '@engine/get/render/getModelCy.js';

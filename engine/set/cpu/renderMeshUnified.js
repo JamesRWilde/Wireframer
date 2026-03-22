@@ -23,10 +23,10 @@
 
 import { frameData }from '@engine/get/render/model/frameData.js';
 import { triangles as modelTriangles }from '@engine/get/render/model/triangles.js';
-import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.js';
+import { shadingMode as getShadingMode }from '@engine/get/cpu/shadingMode.js';
 import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
-import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/resolve/triangleNormalCpu.js';
-import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/compute/triangleCpu.js';
+import { triangleNormalCpu as resolveTriangleNormal }from '@engine/get/render/triangleNormalCpu.js';
+import { triangleCpu as computeTriangleShadeColor }from '@engine/get/render/triangleCpu.js';
 import { getEdgeColor } from '@engine/get/render/getEdgeColor.js';
 import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
 import { getWireOpacity } from '@engine/get/render/getWireOpacity.js';

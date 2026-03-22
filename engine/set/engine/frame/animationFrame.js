@@ -27,7 +27,7 @@
 import {run}from '@engine/set/engine/frame/run.js';
 
 // Frame state flags (gpuSceneDrawnLastFrame, cpuForegroundDrawnOnMainCanvas)
-// are now on the shared loop state object imported from engine/state/engine/loop.js
+// are now on the shared loop state object imported from engine/state/loop.js
 
 // Track the timestamp of the previous frame for interval calculation
 // Used for debug logging of rAF timing (helps diagnose jank)

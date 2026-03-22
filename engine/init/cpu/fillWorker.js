@@ -19,7 +19,7 @@
 "use strict";
 
 // Import shared fill render state to track worker lifecycle
-import { fillState as state } from "@engine/state/cpu/fillRenderBridge.js";
+import { fillState as state } from "@engine/state/fillRenderBridge.js";
 
 /**
  * fillWorker - Creates and initializes the CPU fill render worker

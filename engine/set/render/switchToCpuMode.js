@@ -17,7 +17,7 @@ import { initializeCpuPipeline } from '@engine/init/render/pipeline/initializeCp
 import { applyCpuLodCap } from '@engine/set/mesh/applyCpuLodCap.js';
 import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
-import { state } from '@engine/state/engine/loop.js';
+import { state } from '@engine/state/loop.js';
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
 import { gpuState } from '@engine/state/gpu/scene.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';

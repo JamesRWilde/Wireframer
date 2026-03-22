@@ -24,10 +24,10 @@ import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
 
 // Import HUD updater
-import { hud } from '@engine/set/engine/renderer/hud.js';
+import { hud } from '@engine/set/engine/hud.js';
 
 // Import loop state for backward compatibility
-import { state } from '@engine/state/engine/loop.js';
+import { state } from '@engine/state/loop.js';
 
 
 // Import CPU detail cap for performance safety

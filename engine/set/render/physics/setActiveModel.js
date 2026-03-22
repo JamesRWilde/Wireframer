@@ -1,7 +1,7 @@
 'use strict';
 
 import { statsState } from '@ui/state/stats.js';
-import { state } from '@engine/state/engine/loop.js';
+import { state } from '@engine/state/loop.js';
 import { modelState } from '@engine/state/render/model.js';
 
 /**

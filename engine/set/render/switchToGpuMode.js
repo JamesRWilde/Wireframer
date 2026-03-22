@@ -19,10 +19,10 @@ import { gpuPath } from '@engine/set/render/gpuPath.js';
 import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
 import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
-import { hud } from '@engine/set/engine/renderer/hud.js';
+import { hud } from '@engine/set/engine/hud.js';
 import { setGpuCanvas } from '@engine/set/render/setGpuCanvas.js';
 import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
-import { state } from '@engine/state/engine/loop.js';
+import { state } from '@engine/state/loop.js';
 import { modelState } from '@engine/state/render/model.js';
 import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
 

@@ -20,10 +20,10 @@
 "use strict";
 
 // Import shading mode detector
-import { shadingMode as getShadingMode }from '@engine/get/cpu/model/shadingMode.js';
+import { shadingMode as getShadingMode }from '@engine/get/cpu/shadingMode.js';
 
 // Import face normal computation
-import { faceNormals as computeFaceNormals }from '@engine/get/cpu/model/faceNormals.js';
+import { faceNormals as computeFaceNormals }from '@engine/get/cpu/faceNormals.js';
 
 // Import normal summing helper for adjacent face blending
 import {sumNormals}from '@engine/get/cpu/geometry/sumNormals.js';

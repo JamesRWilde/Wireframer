@@ -19,7 +19,7 @@
 "use strict";
 
 // Import shared fill state to check worker readiness
-import { fillState } from "@engine/state/cpu/fillRenderBridge.js";
+import { fillState } from "@engine/state/fillRenderBridge.js";
 
 /**
  * sendRenderCommand - Posts a render command to the fill worker

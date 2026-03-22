@@ -23,7 +23,7 @@
 "use strict";
 
 // Import loop state for frame tracking and timing
-import { state }from '@engine/state/engine/loop.js';
+import { state }from '@engine/state/loop.js';
 
 // Import physics update function - handles rotation and input
 import { physics }from '@engine/set/engine/physics.js';
@@ -42,7 +42,7 @@ import { telemetryState }from '@engine/set/engine/telemetry/telemetryState.js';
 
 // Import frame budget manager for adaptive quality
 import { time }from '@engine/set/engine/frame/time.js';
-import { budget }from '@engine/get/engine/frame/budget.js';
+import { budget }from '@engine/get/engine/budget.js';
 
 // No debug overlay needed; render mode use by telemetry HUD is internal.
 

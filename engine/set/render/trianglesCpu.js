@@ -15,13 +15,13 @@
 "use strict";
 
 // Import per-triangle computation helper
-import {triangleCpu}from '@engine/get/render/compute/triangleCpu.js';
+import {triangleCpu}from '@engine/get/render/triangleCpu.js';
 
 // Import triangle normal resolution helper
-import {triangleNormalCpu}from '@engine/get/render/resolve/triangleNormalCpu.js';
+import {triangleNormalCpu}from '@engine/get/render/triangleNormalCpu.js';
 
 // Import seam expansion helper for gap prevention
-import {seamCpu}from '@engine/get/render/expand/seamCpu.js';
+import {seamCpu}from '@engine/get/render/seamCpu.js';
 
 // Import single triangle rasterizer
 import {triangleOnLayer}from '@engine/set/cpu/fill/triangleOnLayer.js';

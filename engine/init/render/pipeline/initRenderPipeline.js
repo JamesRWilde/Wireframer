@@ -54,7 +54,7 @@ import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
 import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
 
 // Import HUD updater to display the current render mode
-import { hud } from '@engine/set/engine/renderer/hud.js';
+import { hud } from '@engine/set/engine/hud.js';
 
 // Import GPU renderer getter (for WebGL context creation)
 import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
@@ -62,7 +62,7 @@ import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { createBackgroundRenderer } from '@engine/init/gpu/background/createBackgroundRenderer.js';
 
 // Import loop state to maintain backward compatibility
-import { state } from '@engine/state/engine/loop.js';
+import { state } from '@engine/state/loop.js';
 
 // Import model state for LOD management
 import { modelState } from '@engine/state/render/model.js';

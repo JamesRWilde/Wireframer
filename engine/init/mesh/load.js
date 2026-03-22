@@ -31,7 +31,7 @@
 "use strict";
 
 import { filterValidEdges }from '@engine/get/mesh/filterValidEdges.js';
-import { validationResult }from '@engine/get/mesh/validate/validationResult.js';
+import { validationResult }from '@engine/get/mesh/validationResult.js';
 import { lodRangeForModel }from '@engine/set/mesh/lodRangeForModel.js';
 import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
 import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
