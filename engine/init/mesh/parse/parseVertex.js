@@ -21,7 +21,7 @@
  * @param {Array<string>} parts - Line parts (e.g., ["v", "1.0", "2.0", "3.0"])
  * @param {Object} state - Parse state with vertices array and failingLines
  */
-export function vertex(parts, state) {
+export function parseVertex(parts, state) {
   // Validate: vertex line must have at least 3 components
   if (parts.length < 4) {
     state.failingLines.push(`[${state.lineNumber}] Invalid vertex (too few fields): '${parts.join(' ')}`);

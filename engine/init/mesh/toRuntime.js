@@ -20,7 +20,7 @@
  */
 
 // Import OBJ line parser
-import { objLines }from '@engine/init/mesh/parse/objLines.js';
+import { parseObjLines }from '@engine/init/mesh/parse/parseObjLines.js';
 
 // Import raw text validator
 import { utilRawObjText }from '@engine/get/mesh/utilRawObjText.js';
@@ -63,7 +63,7 @@ export function toRuntime(text, overrides = {}) {
   const lines = utilRawObjText(text, overrides);
 
   // Step 2: Parse lines into raw mesh data
-  const {uniqueVerts, faces, rawEdges, rawLines, materialSections, failingLines} = objLines(lines, overrides);
+  const {uniqueVerts, faces, rawEdges, rawLines, materialSections, failingLines} = parseObjLines(lines, overrides);
 
   // Store parse errors in shared state for debugging
   setMeshParseErrors(failingLines);

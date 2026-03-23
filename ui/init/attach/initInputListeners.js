@@ -8,13 +8,13 @@
 
 "use strict";
 
-import { attachInputListeners }from '@engine/init/render/attachInputListeners.js';
+import { initAttachInputListeners }from '@engine/init/render/initAttachInputListeners.js';
 
-export function inputListeners() {
+export function initInputListeners() {
   try {
     const cpuCanvas = document.getElementById('c');
-    attachInputListeners(cpuCanvas);
+    initAttachInputListeners(cpuCanvas);
   } catch (e) {
-    console.warn('[startApp] attachInputListeners failed', e);
+    console.warn('[startApp] initAttachInputListeners failed', e);
   }
 }

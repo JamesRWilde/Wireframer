@@ -9,7 +9,7 @@
 import { computeBoundingBox } from '@engine/init/mesh/computeBoundingBox.js';
 import { computeSphereCenter } from '@engine/init/mesh/computeSphereCenter.js';
 import { computeMaxRadius } from '@engine/init/mesh/computeMaxRadius.js';
-import { transformToUnitSphere } from '@engine/init/mesh/transformToUnitSphere.js';
+import { initTransformToUnitSphere } from '@engine/init/mesh/initTransformToUnitSphere.js';
 import { clampToUnitSphere } from '@engine/init/mesh/clampToUnitSphere.js';
 
 export function normalizeToBoundingSphere(V) {
@@ -19,6 +19,6 @@ export function normalizeToBoundingSphere(V) {
   const center = computeSphereCenter(bbox.min, bbox.max);
   const maxR = computeMaxRadius(V, center);
 
-  transformToUnitSphere(V, center, maxR);
+  initTransformToUnitSphere(V, center, maxR);
   clampToUnitSphere(V);
 }

@@ -27,7 +27,7 @@
 "use strict";
 
 // Import mesh deep copy utility
-import { deepCopy }from '@engine/init/mesh/deepCopy.js';
+import { initDeepCopy }from '@engine/init/mesh/initDeepCopy.js';
 
 // Import face normalization (ensures consistent face format)
 import { normalizeFaces }from '@engine/init/mesh/normalizeFaces.js';
@@ -39,7 +39,7 @@ import { getBoundingBox }from '@engine/get/mesh/getBoundingBox.js';
 import { computeClusterParams }from '@engine/init/mesh/computeClusterParams.js';
 
 // Import vertex-to-cell assignment
-import { assignVerticesToCells }from '@engine/init/mesh/assignVerticesToCells.js';
+import { initAssignVerticesToCells }from '@engine/init/mesh/initAssignVerticesToCells.js';
 
 // Import vertex clustering (merging nearby vertices)
 import { clusterVertices }from '@engine/init/mesh/clusterVertices.js';
@@ -51,7 +51,7 @@ import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromF
 import { rebuildFaces }from '@engine/init/mesh/rebuildFaces.js';
 
 // Import LOD cache pruning (removes old cache entries)
-import { pruneLodCache }from '@engine/dispose/pruneLodCache.js';
+import { disposeLodCache }from '@engine/dispose/disposeLodCache.js';
 
 /**
  * greedyClusterDecimator - Decimates a mesh using greedy cluster merging
@@ -69,7 +69,7 @@ import { pruneLodCache }from '@engine/dispose/pruneLodCache.js';
  * 5. Rebuilds faces with new vertex indices
  * 6. Caches result and returns deep copy
  */
-export function greedyClusterDecimator(model, targetFaces) {
+export function initGreedyClusterDecimator(model, targetFaces) {
   // Create cache key from vertex count and target faces
   // This allows reusing LOD results for the same model at the same detail level
   const cacheKey = `${model.V.length}:${targetFaces}`;
@@ -80,7 +80,7 @@ export function greedyClusterDecimator(model, targetFaces) {
   // Check cache for existing LOD at this detail level
   if (model._lodCache.has(cacheKey)) {
     // Return deep copy to prevent cache pollution
-    return deepCopy(model._lodCache.get(cacheKey));
+    return initDeepCopy(model._lodCache.get(cacheKey));
   }
 
   // Extract vertices and normalize faces
@@ -95,7 +95,7 @@ export function greedyClusterDecimator(model, targetFaces) {
 
   // Assign vertices to spatial grid cells
   // This groups nearby vertices for merging
-  const cellMap = assignVerticesToCells(V, minX, minY, minZ, cellSize);
+  const cellMap = initAssignVerticesToCells(V, minX, minY, minZ, cellSize);
 
   // Cluster vertices within each cell (merge nearby vertices)
   const { newVerts, oldToNew } = clusterVertices(V, cellMap);
@@ -128,8 +128,8 @@ export function greedyClusterDecimator(model, targetFaces) {
   model._lodCache.set(cacheKey, decimated);
 
   // Prune cache to prevent memory bloat (keep max 12 entries)
-  pruneLodCache(model._lodCache, 12);
+  disposeLodCache(model._lodCache, 12);
 
   // Return deep copy to prevent cache pollution
-  return deepCopy(decimated);
+  return initDeepCopy(decimated);
 }

@@ -44,8 +44,8 @@ import { setSyncRenderToggles } from '@ui/set/setSyncRenderToggles.js';
 import { setRestoredState } from '@engine/set/engine/setRestoredState.js';
 
 // Input/slider listeners
-import { inputListeners } from '@ui/init/attach/inputListeners.js';
-import { attachSliderListeners } from '@ui/init/attach/attachSliderListeners.js';
+import { initInputListeners } from '@ui/init/attach/initInputListeners.js';
+import { initAttachSliderListeners } from '@ui/init/attach/initAttachSliderListeners.js';
 
 // Theme controls
 import { initThemeControls } from '@engine/init/engine/initThemeControls.js';
@@ -95,13 +95,13 @@ export function startApp() {
 
   // Step 6: Restore UI state and attach input listeners
   const shapeName = setRestoredState();
-  inputListeners();
+  initInputListeners();
   
   // Step 7: Initialize the object selector with the restored shape
   initObjectSelector(shapeName);
 
   // Step 8: Attach slider listeners
-  attachSliderListeners([
+  initAttachSliderListeners([
     { name: 'bgDensity', el: bgDensity },
     { name: 'bgVelocity', el: bgVelocity },
     { name: 'bgOpacity', el: bgOpacity },

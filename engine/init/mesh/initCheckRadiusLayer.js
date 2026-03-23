@@ -7,7 +7,7 @@
 
 "use strict";
 
-import { processLayer } from '@engine/init/mesh/processLayer.js';
+import { initProcessLayer } from '@engine/init/mesh/initProcessLayer.js';
 
 /**
  * checkRadiusLayer - Search a one-cell-thick shell of the grid around center.
@@ -19,14 +19,14 @@ import { processLayer } from '@engine/init/mesh/processLayer.js';
  * @param {object} cellContext - Shared context containing grid coordinates, verts, point and best distance index.
  * @returns {boolean} True when a closer vertex is found at this radius.
  */
-export function checkRadiusLayer(radius, cellContext) {
+export function initCheckRadiusLayer(radius, cellContext) {
   let foundBetter = false;
 
   // Outer spiral in X/Y plane at current radius
   for (let dx = -radius; dx <= radius; dx++) {
     for (let dy = -radius; dy <= radius; dy++) {
       // processLayer checks the ring of dz for this dx/dy.
-      if (processLayer(dx, dy, radius, cellContext)) foundBetter = true;
+      if (initProcessLayer(dx, dy, radius, cellContext)) foundBetter = true;
     }
   }
 

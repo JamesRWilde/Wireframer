@@ -4,7 +4,7 @@
  * PURPOSE:
  *   Shared state for the GPU scene renderer. This file holds the singleton
  *   renderer instance and failure flag that are shared between sceneRenderer,
- *   disableSceneRenderer, and drawGpuSceneModel.
+ *   disposeSceneRenderer, and drawGpuSceneModel.
  * 
  * ARCHITECTURE ROLE:
  *   Extracted to a separate file to avoid circular dependencies between

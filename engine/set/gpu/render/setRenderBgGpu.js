@@ -27,7 +27,7 @@
  * BEST PRACTICES:
  *   - Ensure all attribute/uniform locations are valid before calling.
  *   - Call this only after updating the buffer and uniforms for the current frame.
- *   - This function does not manage buffer or program lifetimes; see backgroundDispose for cleanup.
+ *   - This function does not manage buffer or program lifetimes; see disposeBackground for cleanup.
  *
  * MAINTAINER GUIDELINES:
  *   - This file must only contain this function and its export.

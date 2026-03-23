@@ -11,7 +11,7 @@
  *   @param {function} backgroundDispose - Helper to delete resources.
  *
  * USAGE:
- *   renderer(gl, buffer, program, backgroundDispose);
+ *   renderer(gl, buffer, program, disposeBackground);
  *
  * MAINTAINER GUIDELINES:
  *   - This file must only contain this function and its export.

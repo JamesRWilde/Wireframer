@@ -18,7 +18,7 @@
 import { getSceneRendererGpu }from '@engine/get/gpu/getSceneRendererGpu.js';
 
 // Import GPU renderer disabler for fallback on errors
-import { disableSceneRenderer }from '@engine/dispose/gpu/disableSceneRenderer.js';
+import { disposeSceneRenderer }from '@engine/dispose/gpu/disposeSceneRenderer.js';
 import { setSwitchToCpuMode } from '@engine/set/render/setSwitchToCpuMode.js';
 
 /**
@@ -43,7 +43,7 @@ export function setDrawSceneModel(gl, model, params) {
     return result;
   } catch (err) {
     // On GPU error, disable the renderer and mark GPU as failed
-    disableSceneRenderer(err);
+    disposeSceneRenderer(err);
 
     // Fall back to CPU mode to avoid continual GPU retries and ensure only
     // one pipeline is active at a time.

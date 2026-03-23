@@ -23,7 +23,7 @@ import {gpuState} from '@engine/state/gpu/scene.js';
  * @param {Error} err - The error that caused the GPU renderer to fail
  * @returns {void}
  */
-export function disableSceneRenderer(err) {
+export function disposeSceneRenderer(err) {
   // Dispose of the renderer if it has a cleanup method
   if (gpuState.renderer && typeof gpuState.renderer.dispose === 'function') {
     try {

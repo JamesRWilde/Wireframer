@@ -9,7 +9,7 @@
 
 import { evaluateCell } from '@engine/init/mesh/evaluateCell.js';
 
-export function processLayer(dx, dy, radius, context) {
+export function initProcessLayer(dx, dy, radius, context) {
   const { cx, cy, cz, grid, verts, point, bestDistSqAndIdx } = context;
 
   for (let dz = -radius; dz <= radius; dz++) {

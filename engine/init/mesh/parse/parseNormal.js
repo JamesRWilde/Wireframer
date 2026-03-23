@@ -22,7 +22,7 @@
  * @param {Array<string>} parts - Line parts (e.g., ["vn", "0.0", "1.0", "0.0"])
  * @param {Object} state - Parse state with normals array
  */
-export function normal(parts, state) {
+export function parseNormal(parts, state) {
   // Validate: normal line must have 3 components
   if (parts.length < 4) return;
   

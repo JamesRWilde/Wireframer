@@ -32,7 +32,7 @@
  * The function removes the first (oldest) entry if the cache size
  * exceeds the maximum. This is a simple FIFO eviction policy.
  */
-export function pruneLodCache(cache, maxSize = 12) {
+export function disposeLodCache(cache, maxSize = 12) {
   // If cache is within size limit, nothing to do
   if (cache.size <= maxSize) return;
   

@@ -20,7 +20,7 @@ import { vertexTransformState } from "@engine/state/render/vertexTransformBridge
  *
  * @returns {void}
  */
-export function workerTerminate() {
+export function disposeWorker() {
   if (vertexTransformState.worker) {
     vertexTransformState.worker.terminate();
     vertexTransformState.worker = null;

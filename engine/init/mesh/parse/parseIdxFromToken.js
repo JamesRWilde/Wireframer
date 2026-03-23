@@ -31,7 +31,7 @@ import {index}from '@engine/init/mesh/parse/index.js';
  *   vt: Texture coordinate index (0-based, or null if not specified)
  *   vn: Normal index (0-based, or null if not specified)
  */
-export function idxFromToken(token, state) {
+export function parseIdxFromToken(token, state) {
   // Split token by '/' to get individual indices
   const fields = token.split('/');
   

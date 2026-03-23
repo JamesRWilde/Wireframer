@@ -9,7 +9,7 @@
 
 "use strict";
 
-import { checkRadiusLayer } from '@engine/init/mesh/checkRadiusLayer.js';
+import { initCheckRadiusLayer } from '@engine/init/mesh/initCheckRadiusLayer.js';
 
 /**
  * findNearestInGrid - Find index of the closest vertex in `verts` to `point`
@@ -23,7 +23,7 @@ import { checkRadiusLayer } from '@engine/init/mesh/checkRadiusLayer.js';
  * @param {number} maxRadius - Max search ring radius in cell units.
  * @returns {number} Index of closest vertex in `verts`.
  */
-export function findNearestInGrid(point, grid, verts, min, cellSize, maxRadius) {
+export function initFindNearestInGrid(point, grid, verts, min, cellSize, maxRadius) {
   // Convert point to cell coordinates in grid space
   const invCell = 1 / cellSize;
   const cx = Math.floor((point[0] - min[0]) * invCell);
@@ -42,7 +42,7 @@ export function findNearestInGrid(point, grid, verts, min, cellSize, maxRadius) 
   // Expand radius layer by layer until no potential improvement persists
   for (let radius = 0; radius <= maxRadius; radius++) {
     // Check ring at current radius; sets bestDistSqAndIdx if closer vertex found
-    const foundBetter = checkRadiusLayer(radius, cellContext);
+    const foundBetter = initCheckRadiusLayer(radius, cellContext);
 
     // Break early if a close enough vertex was found relative to current radius
     if (foundBetter && bestDistSqAndIdx.bestDistSq < (cellSize * radius * 2) ** 2) break;

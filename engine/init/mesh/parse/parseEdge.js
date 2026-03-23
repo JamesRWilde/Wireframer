@@ -19,7 +19,7 @@
  *   which came from the author and which were computed.
  */
 
-export function edge(parts, state) {
+export function parseEdge(parts, state) {
   // Need at least "e v1 v2"
   if (parts.length < 3) return;
 

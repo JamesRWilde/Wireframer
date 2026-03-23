@@ -6,7 +6,7 @@
 
 "use strict";
 
-export function transformToUnitSphere(V, center, maxR) {
+export function initTransformToUnitSphere(V, center, maxR) {
   const [cx, cy, cz] = center;
   for (const v of V) {
     v[0] = (v[0] - cx) / maxR;

@@ -22,7 +22,7 @@
  * @param {Array<string>} parts - Line parts (e.g., ["vt", "0.5", "0.5"])
  * @param {Object} state - Parse state with uvs array
  */
-export function uv(parts, state) {
+export function parseUv(parts, state) {
   // Validate: UV line must have 2 components
   if (parts.length < 3) return;
   

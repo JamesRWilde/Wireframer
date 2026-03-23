@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { assignVerticesToCells } from '@engine/init/mesh/assignVerticesToCells.js';
+import { initAssignVerticesToCells } from '@engine/init/mesh/initAssignVerticesToCells.js';
 import { clusterVertices } from '@engine/init/mesh/clusterVertices.js';
 import { rebuildFaces } from '@engine/init/mesh/rebuildFaces.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
@@ -23,7 +23,7 @@ import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromF
  * @returns {Object|null} Decimated model or null if no reduction possible
  */
 export function setClusterDecimate(model, minX, minY, minZ, extent, cellSize) {
-  const cellMap = assignVerticesToCells(model.V, minX, minY, minZ, cellSize);
+  const cellMap = initAssignVerticesToCells(model.V, minX, minY, minZ, cellSize);
   const { newVerts, oldToNew } = clusterVertices(model.V, cellMap);
   if (!newVerts?.length) return null;
 

@@ -34,7 +34,7 @@ import { getTouchDist } from '@engine/get/render/touch/getTouchDist.js';
  * @param {HTMLCanvasElement} canvas - The canvas element to attach listeners to
  * @returns {void}
  */
-export function attachInputListeners(canvas) {
+export function initAttachInputListeners(canvas) {
   if (!canvas) return;
 
   // Remove any previous listeners by cloning the node

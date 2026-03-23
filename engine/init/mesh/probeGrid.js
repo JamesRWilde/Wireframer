@@ -10,8 +10,8 @@
 
 "use strict";
 
-import { findNearestInGrid } from '@engine/init/mesh/findNearestInGrid.js';
+import { initFindNearestInGrid } from '@engine/init/mesh/initFindNearestInGrid.js';
 
 export function probeGrid(point, grid, verts, min, cellSize, maxRadius = 3) {
-  return findNearestInGrid(point, grid, verts, min, cellSize, maxRadius);
+  return initFindNearestInGrid(point, grid, verts, min, cellSize, maxRadius);
 }
