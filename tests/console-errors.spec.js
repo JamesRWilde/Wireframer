@@ -1,21 +1,41 @@
 import { test, expect } from '@playwright/test';
 
 /**
- * Helper: attach console/pageerror listeners and return an issues collector.
+ * Persistent watcher: attaches once and collects throughout the test
  */
-function watchConsole(page) {
+function createPersistentConsoleWatcher(page) {
   const issues = [];
-  const onConsole = msg => {
-    if (msg.type() === 'error' || msg.type() === 'warning') issues.push(`[${msg.type()}] ${msg.text()}`);
+
+  const onConsole = (msg) => {
+    const type = msg.type();
+    if (type === 'error' || type === 'warning') {
+      const text = msg.text();
+      const loc = msg.location ? msg.location() : null;
+      const where = loc ? ` (${loc.url.split('/').pop() || 'page'}:${loc.lineNumber || '?'}:${loc.columnNumber || '?'})` : '';
+      const entry = `[${type.toUpperCase()}] ${text}${where}`;
+      issues.push(entry);
+      console.log(`CONSOLE CAUGHT: ${entry}`); // immediate visibility in test output
+    }
   };
-  const onPageError = err => issues.push(`[pageerror] ${err.message}`);
+
+  const onPageError = (err) => {
+    const entry = `[PAGEERROR] ${err.message}\n${err.stack || ''}`;
+    issues.push(entry);
+    console.log(`PAGEERROR CAUGHT: ${entry}`);
+  };
+
+  // Attach once and keep listening
   page.on('console', onConsole);
   page.on('pageerror', onPageError);
+
   return {
-    issues,
-    detach() {
-      page.off('console', onConsole);
-      page.off('pageerror', onPageError);
+    issues,  // direct reference – we check subsets via length or content
+    hasIssues() {
+      return issues.length > 0;
+    },
+    // Optional: if you want to reset checks between sections (rarely needed)
+    clearIssues() {
+      issues.length = 0;
     }
   };
 }
@@ -23,18 +43,21 @@ function watchConsole(page) {
 const SETTLE_MS = 500;
 
 function assertClean(issues, label) {
-  if (issues.length > 0) console.log(`CONSOLE ISSUES [${label}]:`, issues);
+  if (issues.length > 0) {
+    console.log(`CONSOLE ISSUES [${label}]:`, issues);
+  }
   expect(issues, label).toEqual([]);
 }
 
 // Full regression: one browser session, GPU then CPU.
 test('full regression: GPU then CPU', async ({ page }) => {
+  // ── Create persistent watcher FIRST ─────────────────────────────────
+  const watcher = createPersistentConsoleWatcher(page);
+
   // ── Load ────────────────────────────────────────────────────────────
-  const w0 = watchConsole(page);
   await page.goto('/');
   await page.waitForTimeout(3000);
-  assertClean(w0.issues, 'initial load');
-  w0.detach();
+  assertClean(watcher.issues, 'initial load');
 
   // ── GPU: shapes ─────────────────────────────────────────────────────
   const select = page.locator('#obj-select');
@@ -46,34 +69,28 @@ test('full regression: GPU then CPU', async ({ page }) => {
     : values;
 
   for (const value of sample) {
-    const w = watchConsole(page);
     await select.selectOption(value);
     await page.waitForTimeout(SETTLE_MS);
-    assertClean(w.issues, `GPU shape: ${value}`);
-    w.detach();
+    assertClean(watcher.issues, `GPU shape: ${value}`);
   }
 
   // ── GPU: theme ──────────────────────────────────────────────────────
   const themeSelect = page.locator('#theme-mode');
   for (const mode of ['light', 'dark']) {
-    const w = watchConsole(page);
     await themeSelect.selectOption(mode);
     await page.waitForTimeout(SETTLE_MS);
-    assertClean(w.issues, `GPU theme: ${mode}`);
-    w.detach();
+    assertClean(watcher.issues, `GPU theme: ${mode}`);
   }
 
   // ── GPU: swatches ───────────────────────────────────────────────────
   {
     const swatches = page.locator('#preset-swatches .preset-swatch');
     const count = await swatches.count();
-    const w = watchConsole(page);
     for (let i = 0; i < count; i++) {
       await swatches.nth(i).click();
       await page.waitForTimeout(SETTLE_MS);
     }
-    assertClean(w.issues, 'GPU swatches');
-    w.detach();
+    assertClean(watcher.issues, 'GPU swatches');
   }
 
   // ── GPU: sliders ────────────────────────────────────────────────────
@@ -94,7 +111,6 @@ test('full regression: GPU then CPU', async ({ page }) => {
       const el = page.locator(slider.id);
       const min = Number(await el.getAttribute('min')) || 0;
       const max = Number(await el.getAttribute('max')) || 100;
-      const w = watchConsole(page);
 
       for (const pct of [0, 25, 50, 75, 100]) {
         const val = Math.round(min + (max - min) * (pct / 100));
@@ -103,8 +119,7 @@ test('full regression: GPU then CPU', async ({ page }) => {
         await page.waitForTimeout(SETTLE_MS);
       }
 
-      assertClean(w.issues, `GPU slider: ${slider.name}`);
-      w.detach();
+      assertClean(watcher.issues, `GPU slider: ${slider.name}`);
     }
   }
 
@@ -115,35 +130,31 @@ test('full regression: GPU then CPU', async ({ page }) => {
   const rendererText = await statRenderer.textContent();
   expect(rendererText.toLowerCase()).toContain('cpu');
 
+  assertClean(watcher.issues, 'after switch to CPU');
+
   // ── CPU: shapes ─────────────────────────────────────────────────────
   for (const value of sample) {
-    const w = watchConsole(page);
     await select.selectOption(value);
     await page.waitForTimeout(SETTLE_MS);
-    assertClean(w.issues, `CPU shape: ${value}`);
-    w.detach();
+    assertClean(watcher.issues, `CPU shape: ${value}`);
   }
 
   // ── CPU: theme ──────────────────────────────────────────────────────
   for (const mode of ['light', 'dark']) {
-    const w = watchConsole(page);
     await themeSelect.selectOption(mode);
     await page.waitForTimeout(SETTLE_MS);
-    assertClean(w.issues, `CPU theme: ${mode}`);
-    w.detach();
+    assertClean(watcher.issues, `CPU theme: ${mode}`);
   }
 
   // ── CPU: swatches ───────────────────────────────────────────────────
   {
     const swatches = page.locator('#preset-swatches .preset-swatch');
     const count = await swatches.count();
-    const w = watchConsole(page);
     for (let i = 0; i < count; i++) {
       await swatches.nth(i).click();
       await page.waitForTimeout(SETTLE_MS);
     }
-    assertClean(w.issues, 'CPU swatches');
-    w.detach();
+    assertClean(watcher.issues, 'CPU swatches');
   }
 
   // ── CPU: sliders ────────────────────────────────────────────────────
@@ -164,7 +175,6 @@ test('full regression: GPU then CPU', async ({ page }) => {
       const el = page.locator(slider.id);
       const min = Number(await el.getAttribute('min')) || 0;
       const max = Number(await el.getAttribute('max')) || 100;
-      const w = watchConsole(page);
 
       for (const pct of [0, 25, 50, 75, 100]) {
         const val = Math.round(min + (max - min) * (pct / 100));
@@ -173,8 +183,10 @@ test('full regression: GPU then CPU', async ({ page }) => {
         await page.waitForTimeout(SETTLE_MS);
       }
 
-      assertClean(w.issues, `CPU slider: ${slider.name}`);
-      w.detach();
+      assertClean(watcher.issues, `CPU slider: ${slider.name}`);
     }
   }
+
+  // Final safety net – though each section already checks
+  assertClean(watcher.issues, 'final check – entire test');
 });

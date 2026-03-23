@@ -60,7 +60,7 @@ export function initBackgroundWorker(mode = 'cpu') {
   try {
     // Instantiate the background worker from its module URL
     backgroundWorkerState.worker = new Worker(
-      new URL('../../../workers/workersBackground.js', document.currentScript.src).href,
+      new URL('../../../workers/workersBackground.js', import.meta.url).href,
       { type: 'module' }
     );
 

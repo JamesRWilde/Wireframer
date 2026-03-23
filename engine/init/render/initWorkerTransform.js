@@ -31,7 +31,7 @@ export function initWorkerTransform() {
   try {
     // Instantiate the vertex transform worker from its module URL
     vertexTransformState.worker = new Worker(
-      new URL('../../state/gpu/vertexTransformWorker.js', import.meta.url).href,
+      new URL('../../state/gpu/stateVertexTransformWorker.js', import.meta.url).href,
       { type: 'module' }
     );
     vertexTransformState.workerAvailable = true;
