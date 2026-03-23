@@ -1,5 +1,5 @@
 /**
- * setSeedParticles.js - Background Particle Seeder
+ * utilSeedParticles.js - Background Particle Seeder
  *
  * PURPOSE:
  *   Populates the background particle array with the correct number of
@@ -41,14 +41,14 @@ let lastSize = { w: 0, h: 0 };
 let lastDensity = 1;
 
 /**
- * setSeedParticles - Seeds or reseeds the background particle array
+ * utilSeedParticles - Seeds or reseeds the background particle array
  *
  * @param {Array<Object>} particles - The particle array to populate (mutated in place)
  * @param {number} w - Canvas width in pixels
  * @param {number} h - Canvas height in pixels
  * @returns {Object} Rendering parameters { velScale, opacityScale, themeAlphaBoost }
  */
-export function setSeedParticles(particles, w, h) {
+export function utilSeedParticles(particles, w, h) {
   // Compute base particle count from canvas area (1 particle per ~45000 px^2)
   const baseCount = Math.max(8, Math.round((w * h) / 45000));
 

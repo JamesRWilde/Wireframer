@@ -6,9 +6,9 @@
  *   that keeps both vertex count and edge count under specified maximums.
  *
  * ARCHITECTURE ROLE:
- *   Called by setCpuDetailCap to find the best decimation that fits
+ *   Called by utilCpuDetailCap to find the best decimation that fits
  *   within CPU performance limits. Delegates the actual decimation to
- *   setDecimateByCluster at each binary search step.
+ *   utilDecimateByCluster at each binary search step.
  *
  * WHY THIS EXISTS:
  *   Simple percentage decimation doesn't guarantee a result under both
@@ -23,7 +23,7 @@ import { decimateByPercent } from '@engine/init/mesh/initDecimateByPercent.js';
 // Import bounding box computation — needed to determine spatial extent for cell sizing
 import { getBoundingBox } from '@engine/get/mesh/getBoundingBox.js';
 // Import cluster decimator — performs the actual vertex merging at a given cell size
-import { setDecimateByCluster } from '@engine/set/mesh/setDecimateByCluster.js';
+import { utilDecimateByCluster } from '@engine/util/mesh/utilDecimateByCluster.js';
 
 /**
  * setDecimateToCap - Binary searches for the smallest cell size that fits under caps
@@ -45,7 +45,7 @@ export function setDecimateToCap(model, maxVerts, maxEdges) {
 
   for (let iter = 0; iter < 20; iter++) {
     const mid = (low + high) / 2;
-    const candidate = setDecimateByCluster(model, minX, minY, minZ, extent, mid);
+    const candidate = utilDecimateByCluster(model, minX, minY, minZ, extent, mid);
     if (!candidate) break;
 
     const v = candidate.V.length;

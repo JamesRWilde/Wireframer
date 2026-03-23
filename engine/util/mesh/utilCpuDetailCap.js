@@ -1,5 +1,5 @@
 /**
- * setCpuDetailCap.js - CPU Mode Detail Caps for Performance Safety
+ * utilCpuDetailCap.js - CPU Mode Detail Caps for Performance Safety
  *
  * PURPOSE:
  *   Defines maximum vertex/edge counts for CPU rendering and provides
@@ -37,7 +37,7 @@ export const CPU_MAX_VERTS = 2000;
 export const CPU_MAX_EDGES = 7000;
 
 /**
- * setCpuDetailCap - Pre-decimates a model to CPU-safe limits
+ * utilCpuDetailCap - Pre-decimates a model to CPU-safe limits
  *
  * Checks if the model exceeds CPU caps and, if so, decimates it
  * to bring both vertices and edges under the limits. Returns the
@@ -46,7 +46,7 @@ export const CPU_MAX_EDGES = 7000;
  * @param {Object} model - The base model (with V, F, E arrays)
  * @returns {Object} Either the original model or a decimated copy
  */
-export function setCpuDetailCap(model) {
+export function utilCpuDetailCap(model) {
   if (!model?.V?.length) return model;
 
   const verts = model.V.length;

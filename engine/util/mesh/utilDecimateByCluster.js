@@ -1,5 +1,5 @@
 /**
- * setDecimateByCluster.js - Cluster-Based Model Decimation
+ * utilDecimateByCluster.js - Cluster-Based Model Decimation
  *
  * PURPOSE:
  *   Decimates a 3D model by clustering nearby vertices into spatial grid cells,
@@ -29,7 +29,7 @@ import { rebuildFaces } from '@engine/init/mesh/initRebuildFaces.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 
 /**
- * setDecimateByCluster - Decimates a model by clustering vertices into a spatial grid
+ * utilDecimateByCluster - Decimates a model by clustering vertices into a spatial grid
  * @param {Object} model - The model with V, F, E arrays
  * @param {number} minX - Bounding box minimum X
  * @param {number} minY - Bounding box minimum Y
@@ -38,7 +38,7 @@ import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromF
  * @param {number} cellSize - Grid cell size for clustering
  * @returns {Object|null} Decimated model or null if no reduction possible
  */
-export function setDecimateByCluster(model, minX, minY, minZ, extent, cellSize) {
+export function utilDecimateByCluster(model, minX, minY, minZ, extent, cellSize) {
   // Assign each vertex to a spatial grid cell
   const cellMap = initAssignVerticesToCells(model.V, minX, minY, minZ, cellSize);
   // Merge vertices within each cell, producing a remapping table
