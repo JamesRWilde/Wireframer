@@ -20,16 +20,16 @@
 import { initFillWorker } from '@engine/init/cpu/initFillWorker.js';
 
 // Import frame data getter for vertex transforms
-import { utilFrameData }from '@engine/get/render/model/utilFrameData.js';
+import { utilFrameData }from '@engine/util/render/model/utilFrameData.js';
 
 // Import triangle face getter for mesh geometry
-import { utilModelTriangles }from '@engine/get/render/model/utilModelTriangles.js';
+import { utilModelTriangles }from '@engine/util/render/model/utilModelTriangles.js';
 
 // Import shading mode detection for flat vs smooth shading
-import { utilShadingMode }from '@engine/get/cpu/utilShadingMode.js';
+import { utilShadingMode }from '@engine/util/cpu/utilShadingMode.js';
 
 // Import per-corner normal computation for smooth shading
-import { utilTriCornerNormals }from '@engine/get/render/model/utilTriCornerNormals.js';
+import { utilTriCornerNormals }from '@engine/util/render/model/utilTriCornerNormals.js';
 
 // Import CPU triangle rasterizer for main-thread fallback
 import { setDrawTrianglesCpu }from '@engine/set/render/setDrawTrianglesCpu.js';

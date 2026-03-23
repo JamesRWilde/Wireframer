@@ -13,11 +13,11 @@
 
 "use strict";
 
-import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
+import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { getColors } from '@engine/get/render/background/getColors.js';
 import { createBackgroundRenderer } from '@engine/init/gpu/background/createBackgroundRenderer.js';
-import { utilParsedCssColor } from '@engine/get/render/background/utilParsedCssColor.js';
+import { utilParsedCssColor } from '@engine/util/render/background/utilParsedCssColor.js';
 import { getGpuBgCanvas } from '@engine/get/render/background/getGpuBgCanvas.js';
 import { getGpuBgGl } from '@engine/get/render/background/getGpuBgGl.js';
 

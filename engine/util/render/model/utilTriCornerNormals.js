@@ -20,22 +20,22 @@
 "use strict";
 
 // Import shading mode detector
-import { utilShadingMode }from '@engine/get/cpu/utilShadingMode.js';
+import { utilShadingMode }from '@engine/util/cpu/utilShadingMode.js';
 
 // Import face normal computation
-import { utilFaceNormals }from '@engine/get/cpu/utilFaceNormals.js';
+import { utilFaceNormals }from '@engine/util/cpu/utilFaceNormals.js';
 
 // Import normal summing helper for adjacent face blending
-import {utilSummedNormals}from '@engine/get/cpu/geometry/utilSummedNormals.js';
+import {utilSummedNormals}from '@engine/util/cpu/geometry/utilSummedNormals.js';
 
 // Import vertex-to-face adjacency builder
 import { buildVertexToFaces }from '@engine/init/cpu/buildVertexToFaces.js';
 
 // Import flat normal assignment helper
-import {utilFlatNormals}from '@engine/get/cpu/geometry/utilFlatNormals.js';
+import {utilFlatNormals}from '@engine/util/cpu/geometry/utilFlatNormals.js';
 
 // Import precomputed triangle normals getter
-import { utilTriNormals }from '@engine/get/cpu/geometry/utilTriNormals.js';
+import { utilTriNormals }from '@engine/util/cpu/geometry/utilTriNormals.js';
 
 /**
  * triCornerNormals - Computes per-corner normals for triangle shading

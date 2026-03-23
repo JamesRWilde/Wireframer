@@ -12,7 +12,7 @@
  * @param {boolean} supportsUint32 - Whether 32-bit indices are supported (for large models).
  * @returns {{ utilModelBuffers: function(Object): Object|null }}
  */
-import { utilModelBuffers }from '@engine/get/gpu/utilModelBuffers.js';
+import { utilModelBuffers }from '@engine/util/gpu/utilModelBuffers.js';
 
 export function createSceneBufferStore(gl, supportsUint32) {
   // Cache for model-to-buffer mapping. Uses WeakMap so cache is cleaned up when models are GC'd.

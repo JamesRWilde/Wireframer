@@ -24,7 +24,7 @@
 import { parseIdxFromToken }from '@engine/init/mesh/parse/parseIdxFromToken.js';
 
 // Import vertex deduplication helper
-import { utilOrCreateVertIdx }from '@engine/get/mesh/utilOrCreateVertIdx.js';
+import { utilOrCreateVertIdx }from '@engine/util/mesh/utilOrCreateVertIdx.js';
 
 /**
  * parseFace - Parses an OBJ face line into triangles

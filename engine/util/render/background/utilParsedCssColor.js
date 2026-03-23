@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { setParseColorToRgb } from '@engine/set/render/draw/setParseColorToRgb.js';
+import { setParseColorToRgb } from '@engine/render/draw/setParseColorToRgb.js';
 
 /**
  * utilParsedCssColor - Converts a CSS color string to normalized {r, g, b, a} object

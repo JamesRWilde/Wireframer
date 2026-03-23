@@ -19,3 +19,5 @@ import { gpuModeState } from '@engine/set/render/gpuModeState.js';
 export function getIsGpuMode() {
   return gpuModeState.value;
 }
+
+export { getIsGpuMode as isGpuMode };

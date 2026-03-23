@@ -9,14 +9,14 @@
  *   Main-thread particle renderer for background layer.
  *
  * USAGE:
- *   import { setRenderMainThreadParticles } from '@engine/set/render/draw/setRenderMainThreadParticles.js';
+ *   import { setRenderMainThreadParticles } from '@engine/render/draw/setRenderMainThreadParticles.js';
  *   setRenderMainThreadParticles(ctx, particles, opacityScale, themeAlphaBoost, particleColor);
  */
 
 "use strict";
 
-import { setGetCachedColorRgb } from '@engine/set/render/draw/setGetCachedColorRgb.js';
-import { setEnsureBucketArrays } from '@engine/set/render/draw/setEnsureBucketArrays.js';
+import { setGetCachedColorRgb } from '@engine/render/draw/setGetCachedColorRgb.js';
+import { setEnsureBucketArrays } from '@engine/render/draw/setEnsureBucketArrays.js';
 
 export function setRenderMainThreadParticles(ctx, particles, opacityScale, themeAlphaBoost, particleColor) {
   if (particles.length === 0) return;

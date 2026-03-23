@@ -22,8 +22,8 @@
 
 // Import GPU math utilities
 import { getNormalizedVector3 } from '@engine/get/gpu/getNormalizedVector3.js';
-import { utilNormalizedRgb } from '@engine/get/gpu/utilNormalizedRgb.js';
-import { utilRowMajorRotation } from '@engine/get/gpu/utilRowMajorRotation.js';
+import { utilNormalizedRgb } from '@engine/util/gpu/utilNormalizedRgb.js';
+import { utilRowMajorRotation } from '@engine/util/gpu/utilRowMajorRotation.js';
 import { setProjectionUniforms } from '@engine/set/gpu/setProjectionUniforms.js';
 
 /**

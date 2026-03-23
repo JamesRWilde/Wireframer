@@ -19,13 +19,13 @@
 "use strict";
 
 // Import matrix multiplication for combining rotations
-import { utilMatrixMultiply3x3 }from '@engine/get/render/utilMatrixMultiply3x3.js';
+import { utilMatrixMultiply3x3 }from '@engine/util/render/utilMatrixMultiply3x3.js';
 
 // Import Y-axis rotation matrix constructor
-import { utilMatrixY }from '@engine/get/render/rotation/utilMatrixY.js';
+import { utilMatrixY }from '@engine/util/render/rotation/utilMatrixY.js';
 
 // Import X-axis rotation matrix constructor
-import { utilMatrixX }from '@engine/get/render/rotation/utilMatrixX.js';
+import { utilMatrixX }from '@engine/util/render/rotation/utilMatrixX.js';
 
 // Import the global rotation matrix reference
 import {R} from '@engine/state/render/rotationMatrixRef.js';

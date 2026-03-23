@@ -8,7 +8,7 @@
  *   Utility function for background particle rendering.
  *
  * USAGE:
- *   import { setParseColorToRgb } from '@engine/set/render/draw/setParseColorToRgb.js';
+ *   import { setParseColorToRgb } from '@engine/render/draw/setParseColorToRgb.js';
  *   const [r,g,b] = setParseColorToRgb('#ff0000');
  */
 

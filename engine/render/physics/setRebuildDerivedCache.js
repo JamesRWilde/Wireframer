@@ -1,7 +1,7 @@
 'use strict';
 
 import { renderState } from '@engine/state/render/renderState.js';
-import { utilRelativeLuminanceRaw } from '@engine/get/render/utilRelativeLuminanceRaw.js';
+import { utilRelativeLuminanceRaw } from '@engine/util/render/utilRelativeLuminanceRaw.js';
 
 /**
  * setRebuildDerivedCache - Recalculate derived render state properties from theme.

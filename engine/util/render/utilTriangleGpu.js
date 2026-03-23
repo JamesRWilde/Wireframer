@@ -21,7 +21,7 @@
 
 "use strict";
 
-import { utilLerpColor }from '@engine/get/render/utilLerpColor.js';
+import { utilLerpColor }from '@engine/util/render/utilLerpColor.js';
 export function utilTriangleGpu(normal, useSmoothShading, theme) {
   const LIGHT_DIR = [-0.532, 0.847, 0];
   const VIEW_DIR = [0, 0, -1];

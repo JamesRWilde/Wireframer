@@ -28,7 +28,7 @@ import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
 import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
 
 // Import renderer factory for initial creation
-import { getSceneRenderer } from '@engine/init/gpu/create/getSceneRenderer.js';
+import { getSceneRenderer } from '@engine/get/render/getSceneRenderer.js';
 
 /**
  * sceneRenderer - Returns the singleton GPU scene renderer

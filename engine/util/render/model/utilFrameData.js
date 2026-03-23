@@ -30,10 +30,10 @@ import { setSendToWorker }from '@engine/set/render/setSendToWorker.js';
 import { getCachedTransformResult }from '@engine/get/render/getCachedTransformResult.js';
 
 // Import flat-to-nested converter for worker results
-import { utilFlatNested }from '@engine/get/render/utilFlatNested.js';
+import { utilFlatNested }from '@engine/util/render/utilFlatNested.js';
 
 // Import synchronous transform fallback
-import { utilTransformSync }from '@engine/get/render/utilTransformSync.js';
+import { utilTransformSync }from '@engine/util/render/utilTransformSync.js';
 import { getRotation } from '@engine/state/render/physicsState.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { getModelCy } from '@engine/get/render/getModelCy.js';

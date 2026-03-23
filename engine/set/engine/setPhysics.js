@@ -20,15 +20,15 @@
 
 "use strict";
 
-import { utilEulerIncrement } from '@engine/get/render/utilEulerIncrement.js';
-import { utilReorthogonalized } from '@engine/get/render/utilReorthogonalized.js';
+import { utilEulerIncrement } from '@engine/util/render/utilEulerIncrement.js';
+import { utilReorthogonalized } from '@engine/util/render/utilReorthogonalized.js';
 import { state } from '@engine/state/loop.js';
 import {
   getRotation, getWx, getWy, getWz, isDragging, getAxisAngleX, getAxisAngleY,
   setRotation, setAutoWx, setAutoWy, setAutoWz, setAxisAngleX, setAxisAngleY,
 } from '@engine/state/render/physicsState.js';
-import { setApplyFriction } from '@engine/set/render/physics/setApplyFriction.js';
-import { setEaseTowardAuto } from '@engine/set/render/physics/setEaseTowardAuto.js';
+import { setApplyFriction } from '@engine/render/physics/setApplyFriction.js';
+import { setEaseTowardAuto } from '@engine/render/physics/setEaseTowardAuto.js';
 
 /**
  * physics - Updates rotation physics for the current frame.

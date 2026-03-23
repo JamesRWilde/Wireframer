@@ -36,7 +36,7 @@ import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';
 import { getFillLayerCtx } from '@engine/get/render/getFillLayerCtx.js';
 
 // Import canvas size synchronization to keep all canvases in sync
-import { setSyncCanvasSize }from '@engine/set/render/setSyncCanvasSize.js';
+import { setSyncCanvasSize } from '@engine/set/render/setSyncCanvasSize.js';
 import { setW } from '@engine/set/render/setW.js';
 import { setH } from '@engine/set/render/setH.js';
 

@@ -13,14 +13,14 @@
 
 "use strict";
 
-import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
+import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 import { getBgCanvas } from '@engine/get/render/background/getBgCanvas.js';
 import { getColors } from '@engine/get/render/background/getColors.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
 import { setPostToBackgroundWorker } from '@engine/set/render/setPostToBackgroundWorker.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
-import { setRenderWorkerParticles } from '@engine/set/render/draw/setRenderWorkerParticles.js';
+import { setRenderWorkerParticles } from '@engine/render/draw/setRenderWorkerParticles.js';
 import { initBackgroundWorker } from '@engine/init/render/initBackgroundWorker.js';
 
 /**

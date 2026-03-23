@@ -21,12 +21,12 @@
 
 "use strict";
 
-import { utilFrameData }from '@engine/get/render/model/utilFrameData.js';
-import { utilModelTriangles }from '@engine/get/render/model/utilModelTriangles.js';
-import { utilShadingMode }from '@engine/get/cpu/utilShadingMode.js';
-import { utilTriCornerNormals }from '@engine/get/render/model/utilTriCornerNormals.js';
-import { utilTriangleNormalCpu }from '@engine/get/render/utilTriangleNormalCpu.js';
-import { utilTriangleCpu }from '@engine/get/render/utilTriangleCpu.js';
+import { utilFrameData }from '@engine/util/render/model/utilFrameData.js';
+import { utilModelTriangles }from '@engine/util/render/model/utilModelTriangles.js';
+import { utilShadingMode }from '@engine/util/cpu/utilShadingMode.js';
+import { utilTriCornerNormals }from '@engine/util/render/model/utilTriCornerNormals.js';
+import { utilTriangleNormalCpu }from '@engine/util/render/utilTriangleNormalCpu.js';
+import { utilTriangleCpu }from '@engine/util/render/utilTriangleCpu.js';
 import { getEdgeColor } from '@engine/get/render/getEdgeColor.js';
 import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
 import { getWireOpacity } from '@engine/get/render/getWireOpacity.js';

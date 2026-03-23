@@ -1,5 +1,5 @@
 'use strict';
-import { utilLinear } from '@engine/get/render/utilLinear.js';
+import { utilLinear } from '@engine/util/render/utilLinear.js';
 
 /**
  * relativeLuminanceRaw - Compute relative luminance from RGB in linear gamma space.

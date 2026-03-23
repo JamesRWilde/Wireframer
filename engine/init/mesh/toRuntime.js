@@ -23,16 +23,16 @@
 import { parseObjLines }from '@engine/init/mesh/parse/parseObjLines.js';
 
 // Import raw text validator
-import { utilRawObjText }from '@engine/get/mesh/utilRawObjText.js';
+import { utilRawObjText }from '@engine/util/mesh/utilRawObjText.js';
 
 // Import parse result checker
-import { utilParseCheckResults }from '@engine/get/mesh/utilParseCheckResults.js';
+import { utilParseCheckResults }from '@engine/util/mesh/utilParseCheckResults.js';
 
 // Import mesh object builder
 import { buildObject }from '@engine/init/mesh/build/buildObject.js';
 
 // Import winding correction
-import { utilFixedWinding }from '@engine/get/mesh/utilFixedWinding.js';
+import { utilFixedWinding }from '@engine/util/mesh/utilFixedWinding.js';
 import { setMeshParseErrors } from '@engine/set/mesh/setMeshParseErrors.js';
 
 /**

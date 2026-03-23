@@ -8,13 +8,13 @@
  *   Cached color parser for background particle rendering.
  *
  * USAGE:
- *   import { setGetCachedColorRgb } from '@engine/set/render/draw/setGetCachedColorRgb.js';
+ *   import { setGetCachedColorRgb } from '@engine/render/draw/setGetCachedColorRgb.js';
  *   const rgb = setGetCachedColorRgb('#ff0000');
  */
 
 "use strict";
 
-import { setParseColorToRgb } from '@engine/set/render/draw/setParseColorToRgb.js';
+import { setParseColorToRgb } from '@engine/render/draw/setParseColorToRgb.js';
 
 const colorCache = new Map();
 

@@ -20,7 +20,7 @@
 
 // Import background worker state to track worker lifecycle
 import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
-import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
+import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
 import { setHandleWorkerReady } from '@engine/set/render/background/setHandleWorkerReady.js';
 import { setHandleWorkerParticles } from '@engine/set/render/background/setHandleWorkerParticles.js';
@@ -60,7 +60,7 @@ export function initBackgroundWorker(mode = 'cpu') {
   try {
     // Instantiate the background worker from its module URL
     backgroundWorkerState.worker = new Worker(
-      new URL('../../../workers/workersBackground.js', import.meta.url).href,
+      new URL('../../../workers/workersBackground.js', document.currentScript.src).href,
       { type: 'module' }
     );
 

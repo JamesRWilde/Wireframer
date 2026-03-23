@@ -30,9 +30,9 @@
  */
 
 "use strict";
-import {utilTriangleNormalGpu}from '@engine/get/render/utilTriangleNormalGpu.js';
-import {utilTriangleGpu}from '@engine/get/render/utilTriangleGpu.js';
-import {utilSeamGpu}from '@engine/get/render/utilSeamGpu.js';
+import {utilTriangleNormalGpu}from '@engine/util/render/utilTriangleNormalGpu.js';
+import {utilTriangleGpu}from '@engine/util/render/utilTriangleGpu.js';
+import {utilSeamGpu}from '@engine/util/render/utilSeamGpu.js';
 import {setFillTriangle}from '@engine/set/cpu/setFillTriangle.js';
 
 export function setDrawTrianglesGpu({ T, P2, triFaces, triCornerNormals, useSmoothShading, theme, fillAlpha, seamExpandPx, R, ctx }) {

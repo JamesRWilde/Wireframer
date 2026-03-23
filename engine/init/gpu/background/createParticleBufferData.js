@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { utilRandomFloat } from '@engine/get/render/background/utilRandomFloat.js';
+import { utilRandomFloat } from '@engine/util/render/background/utilRandomFloat.js';
 
 /**
  * createParticleBufferData - Creates a packed Float32Array of particle data

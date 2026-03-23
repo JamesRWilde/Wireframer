@@ -23,7 +23,7 @@ import { modelState } from '@engine/state/render/model.js';
 import { getMorph } from '@engine/get/mesh/getMorph.js';
 import { getMorphDuration } from '@engine/get/mesh/getMorphDuration.js';
 import { setCapModelForCpu } from '@engine/set/mesh/setCapModelForCpu.js';
-import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
+import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 import { setLodRangeForModel } from '@engine/set/mesh/setLodRangeForModel.js';
 
 /**

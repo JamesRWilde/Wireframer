@@ -25,8 +25,8 @@
 
 "use strict";
 
-import { utilFaceNormal } from '@engine/get/mesh/utilFaceNormal.js';
-import { utilDot3 } from '@engine/get/mesh/utilDot3.js';
+import { utilFaceNormal } from '@engine/util/mesh/utilFaceNormal.js';
+import { utilDot3 } from '@engine/util/mesh/utilDot3.js';
 
 /**
  * fixWinding - Detects and corrects inverted face normals.

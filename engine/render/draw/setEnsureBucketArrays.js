@@ -9,7 +9,7 @@
  *   Memory allocation helper for background particle rendering.
  *
  * USAGE:
- *   import { setEnsureBucketArrays } from '@engine/set/render/draw/setEnsureBucketArrays.js';
+ *   import { setEnsureBucketArrays } from '@engine/render/draw/setEnsureBucketArrays.js';
  *   const buckets = setEnsureBucketArrays();
  */
 
