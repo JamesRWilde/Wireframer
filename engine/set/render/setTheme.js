@@ -14,7 +14,7 @@
  *   loaded. Triggers a full color recomputation downstream.
  */
 
-import { renderState } from '@engine/state/render/renderState.js';
+import { renderState } from '@engine/state/render/stateRenderState.js';
 
 /**
  * Sets the active theme and invalidates the derived color cache.

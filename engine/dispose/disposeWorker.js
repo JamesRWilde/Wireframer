@@ -13,7 +13,7 @@
 "use strict";
 
 // Import shared transform state to access and clean up worker resources
-import { vertexTransformState } from "@engine/state/render/vertexTransformBridge.js";
+import { vertexTransformState } from "@engine/state/render/stateVertexTransformBridge.js";
 
 /**
  * workerTerminate - Terminates the vertex transform worker

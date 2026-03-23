@@ -21,7 +21,7 @@
 import {
   isDragging, getLastPointerX, getLastPointerY,
   setWx, setWy, setLastPointerX, setLastPointerY,
-} from '@engine/state/render/physicsState.js';
+} from '@engine/state/render/statePhysicsState.js';
 
 /**
  * onMove - Handles pointer movement for model rotation.

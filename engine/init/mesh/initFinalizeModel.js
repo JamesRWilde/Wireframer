@@ -19,7 +19,7 @@
 // Import the detail level setter for LOD control
 import { setDetailLevel }from '@engine/set/mesh/setDetailLevel.js';
 
-import { modelState } from '@engine/state/render/model.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 import { getMorph } from '@engine/get/mesh/getMorph.js';
 import { getMorphDuration } from '@engine/get/mesh/getMorphDuration.js';
 import { setCapModelForCpu } from '@engine/set/mesh/setCapModelForCpu.js';

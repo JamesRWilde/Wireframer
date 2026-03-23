@@ -21,7 +21,7 @@ import { setPersistedState }from '@ui/set/persist/setPersistedState.js';
 import { setFillOpacity } from '@engine/set/render/setFillOpacity.js';
 import { setWireOpacity } from '@engine/set/render/setWireOpacity.js';
 import { setDetailLevelValue } from '@engine/set/render/setDetailLevelValue.js';
-import { bgState } from '@engine/state/render/background/backgroundState.js';
+import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
 
 export function setSyncRenderToggles() {
   setDetailLevelValue(Number(lodSlider.value) / 100);

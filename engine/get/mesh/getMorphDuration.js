@@ -14,7 +14,7 @@
 
 "use strict";
 
-import { morphState } from '@engine/state/mesh/morphState.js';
+import { morphState } from '@engine/state/mesh/stateMorphState.js';
 
 export function getMorphDuration() {
   return morphState.durationMs;

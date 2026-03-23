@@ -27,7 +27,7 @@ import { setCanvasCpuHidden } from '@engine/set/cpu/setCanvasCpuHidden.js';
 import { setHud } from '@engine/set/engine/setHud.js';
 
 // Import loop state for backward compatibility
-import { state } from '@engine/state/loop.js';
+import { state } from '@engine/state/stateLoop.js';
 
 
 // Import CPU detail cap for performance safety

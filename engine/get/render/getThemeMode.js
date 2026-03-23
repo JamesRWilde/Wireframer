@@ -11,7 +11,7 @@
  *   Getter Module: engine/get/render/getThemeMode.js
  */
 
-import { renderState } from '@engine/state/render/renderState.js';
+import { renderState } from '@engine/state/render/stateRenderState.js';
 
 
 /**

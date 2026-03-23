@@ -9,7 +9,7 @@
  *   Getter Module: engine/get/mesh/getLodRange.js
  */
 
-import { lodRangeState } from '@engine/state/mesh/lodRangeState.js';
+import { lodRangeState } from '@engine/state/mesh/stateLodRangeState.js';
 
 
 /**

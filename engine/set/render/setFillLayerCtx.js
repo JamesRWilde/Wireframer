@@ -11,7 +11,7 @@
  *   Setter Module: engine/set/render/setFillLayerCtx.js
  */
 
-import { canvasElementsState } from '@engine/state/render/canvasElementsState.js';
+import { canvasElementsState } from '@engine/state/render/stateCanvasElementsState.js';
 
 /**
  * Sets fill layer 2d rendering context.

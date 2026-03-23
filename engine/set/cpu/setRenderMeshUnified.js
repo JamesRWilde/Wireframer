@@ -30,7 +30,7 @@ import { utilTriangleCpu }from '@engine/util/render/utilTriangleCpu.js';
 import { getEdgeColor } from '@engine/get/render/getEdgeColor.js';
 import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
 import { getWireOpacity } from '@engine/get/render/getWireOpacity.js';
-import { renderState } from '@engine/state/render/renderState.js';
+import { renderState } from '@engine/state/render/stateRenderState.js';
 import { setSortTrianglesByDepth } from '@engine/set/cpu/setSortTrianglesByDepth.js';
 import { setRenderTriangle } from '@engine/set/cpu/setRenderTriangle.js';
 

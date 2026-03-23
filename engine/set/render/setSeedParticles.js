@@ -19,11 +19,11 @@
 "use strict";
 
 // Import particle factory for creating individual particles
-import { createParticle }from '@engine/init/render/createParticle.js';
+import { createParticle }from '@engine/init/render/initCreateParticle.js';
 
 // Import centralized render state
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
-import { bgState } from '@engine/state/render/background/backgroundState.js';
+import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
 
 /** Maximum density multiplier to cap particle count */
 const MAX_DENSITY_MULT = 1.6;

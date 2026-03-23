@@ -9,7 +9,7 @@
  *   Setter Module: engine/set/render/setInputCanvas.js
  */
 
-import { inputCanvasState } from '@engine/state/render/inputCanvasState.js';
+import { inputCanvasState } from '@engine/state/render/stateInputCanvasState.js';
 
 
 /**

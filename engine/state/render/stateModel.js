@@ -19,7 +19,7 @@
 "use strict";
 
 import {statsState} from '@ui/state/stats.js';
-import { state }from '@engine/state/loop.js';
+import { state }from '@engine/state/stateLoop.js';
 
 /**
  * modelState - Mutable model state object.

@@ -20,7 +20,7 @@
 
 "use strict";
 
-import { buildModelBuffers }from '@engine/init/gpu/buildModelBuffers.js';
+import { buildModelBuffers }from '@engine/init/gpu/initBuildModelBuffers.js';
 
 /**
  * modelBuffers - Returns the GPU buffer set for a model, creating and caching it if needed.

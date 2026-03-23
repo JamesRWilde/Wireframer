@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { bgState } from '@engine/state/render/background/backgroundState.js';
+import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
 import { getGpuBgCanvas } from '@engine/get/render/background/getGpuBgCanvas.js';
 
 /**

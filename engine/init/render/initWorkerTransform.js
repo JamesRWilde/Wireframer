@@ -17,7 +17,7 @@
 "use strict";
 
 // Import shared transform state to track worker lifecycle
-import { vertexTransformState } from "@engine/state/render/vertexTransformBridge.js";
+import { vertexTransformState } from "@engine/state/render/stateVertexTransformBridge.js";
 
 /**
  * workerTransform - Creates and initializes the vertex transform worker

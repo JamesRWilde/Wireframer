@@ -18,7 +18,7 @@
 "use strict";
 
 // Import budget state and window size constant for circular buffer management
-import { budgetState, WINDOW_SIZE } from '@engine/set/engine/frame/budgetState.js';
+import { budgetState, WINDOW_SIZE } from '@engine/set/engine/frame/setBudgetState.js';
 
 /**
  * time - Records a frame duration in the circular buffer

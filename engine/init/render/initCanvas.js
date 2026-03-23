@@ -20,7 +20,7 @@
 "use strict";
 
 // Import background render state to locate the background canvas
-import {bgState} from '@engine/state/render/background/backgroundState.js';
+import {bgState} from '@engine/state/render/background/stateBackgroundState.js';
 
 // Canvas context setter/getter for the primary 2D draw context
 import { setCanvasCtx } from '@engine/set/render/setCanvasCtx.js';

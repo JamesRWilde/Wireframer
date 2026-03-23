@@ -33,18 +33,18 @@
 import { utilFilteredValidEdges }from '@engine/util/mesh/utilFilteredValidEdges.js';
 import { utilValidationResult }from '@engine/util/mesh/utilValidationResult.js';
 import { setLodRangeForModel }from '@engine/set/mesh/setLodRangeForModel.js';
-import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
-import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
-import { normalizeToBoundingSphere } from '@engine/init/mesh/normalizeToBoundingSphere.js';
+import { fitCameraToModel }from '@engine/init/mesh/initFitCameraToModel.js';
+import { finalizeModel }from '@engine/init/mesh/initFinalizeModel.js';
+import { normalizeToBoundingSphere } from '@engine/init/mesh/initNormalizeToBoundingSphere.js';
 
-import { buildEdgesFromFacesRuntime } from '@engine/init/mesh/build/buildEdgesFromFacesRuntime.js';
+import { buildEdgesFromFacesRuntime } from '@engine/init/mesh/build/initBuildEdgesFromFacesRuntime.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setMeshEdgesFromFacesRuntime.js';
-import { cloneMesh } from '@engine/init/mesh/cloneMesh.js';
+import { cloneMesh } from '@engine/init/mesh/initCloneMesh.js';
 import { getMeshClone } from '@engine/get/mesh/getMeshClone.js';
 import { setMeshClone } from '@engine/set/mesh/setMeshClone.js';
-import { getZoom } from '@engine/state/render/zoomState.js';
-import { modelState } from '@engine/state/render/model.js';
+import { getZoom } from '@engine/state/render/stateZoomState.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
 import { setInitMeshEngineLoad } from '@engine/set/mesh/setInitMeshEngineLoad.js';
 

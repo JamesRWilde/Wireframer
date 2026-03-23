@@ -11,7 +11,7 @@
  *   Setter Module: engine/set/render/setModelCy.js
  */
 
-import { viewportState } from '@engine/state/render/viewportState.js';
+import { viewportState } from '@engine/state/render/stateViewportState.js';
 
 
 /**

@@ -9,7 +9,7 @@
  *   Setter Module: engine/set/mesh/setMeshClone.js
  */
 
-import { cloneState } from '@engine/state/mesh/cloneState.js';
+import { cloneState } from '@engine/state/mesh/stateCloneState.js';
 
 
 /**

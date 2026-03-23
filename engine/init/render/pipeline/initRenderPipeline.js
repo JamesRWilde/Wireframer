@@ -58,14 +58,14 @@ import { setHud } from '@engine/set/engine/setHud.js';
 
 // Import GPU renderer getter (for WebGL context creation)
 import { getSceneRendererGpu } from '@engine/get/gpu/getSceneRendererGpu.js';
-import { bgState } from '@engine/state/render/background/backgroundState.js';
-import { createBackgroundRenderer } from '@engine/init/gpu/background/createBackgroundRenderer.js';
+import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
+import { createBackgroundRenderer } from '@engine/init/gpu/background/initCreateBackgroundRenderer.js';
 
 // Import loop state to maintain backward compatibility
-import { state } from '@engine/state/loop.js';
+import { state } from '@engine/state/stateLoop.js';
 
 // Import model state for LOD management
-import { modelState } from '@engine/state/render/model.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 
 // Import CPU pipeline initialization helper
 import { initializeCpuPipeline } from '@engine/init/render/pipeline/initializeCpuPipeline.js';

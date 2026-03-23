@@ -11,7 +11,7 @@
  *   Setter Module: engine/set/render/setFgCanvas.js
  */
 
-import { canvasElementsState } from '@engine/state/render/canvasElementsState.js';
+import { canvasElementsState } from '@engine/state/render/stateCanvasElementsState.js';
 
 /**
  * Sets foreground canvas dom element.

@@ -1,8 +1,8 @@
 'use strict';
 
 import { statsState } from '@ui/state/stats.js';
-import { state } from '@engine/state/loop.js';
-import { modelState } from '@engine/state/render/model.js';
+import { state } from '@engine/state/stateLoop.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 
 /**
  * setActiveModel - Updates the active mesh model and synchronizes all dependent state

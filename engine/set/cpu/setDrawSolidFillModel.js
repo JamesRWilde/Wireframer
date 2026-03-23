@@ -44,10 +44,10 @@ import { getCachedFrame }from '@engine/get/cpu/getCachedFrame.js';
 import { getIsFillWorkerAvailable }from '@engine/get/cpu/getIsFillWorkerAvailable.js';
 
 // Import render loop state for frame ID tracking
-import { state }from '@engine/state/loop.js';
+import { state }from '@engine/state/stateLoop.js';
 import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
 import { getTheme } from '@engine/get/render/getTheme.js';
-import { getRotation } from '@engine/state/render/physicsState.js';
+import { getRotation } from '@engine/state/render/statePhysicsState.js';
 import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';
 import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';

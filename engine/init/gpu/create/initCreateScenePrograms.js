@@ -20,7 +20,7 @@
 "use strict";
 
 // Import program linker to compile and link shader programs
-import { createProgram }from '@engine/init/gpu/create/createProgram.js';
+import { createProgram }from '@engine/init/gpu/create/initCreateProgram.js';
 
 /**
  * scenePrograms - Creates all GPU shader programs for scene rendering

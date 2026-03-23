@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { canvasContext } from '@engine/state/render/canvasContextState.js';
+import { canvasContext } from '@engine/state/render/stateCanvasContextState.js';
 
 /**
  * setCanvasCtx - set the current 2D canvas rendering context.

@@ -17,14 +17,14 @@
 import { initCanvas } from '@engine/init/render/initCanvas.js';
 
 // Mesh loader side-effects (registers load APIs in state modules)
-import '@engine/init/mesh/load.js';
-import '@engine/init/mesh/loadObjMesh.js';
+import '@engine/init/mesh/initLoad.js';
+import '@engine/init/mesh/initLoadObjMesh.js';
 
 // Model state side-effect
-import '@engine/state/render/model.js';
+import '@engine/state/render/stateModel.js';
 
 // Morph API side-effect (registers morph API in state modules)
-import '@engine/init/mesh/morphApi.js';
+import '@engine/init/mesh/initMorphApi.js';
 
 // UI init functions
 import { initObjectSelector } from '@ui/init/initObjectSelector.js';
@@ -34,8 +34,8 @@ import { setAnimationFrame } from '@engine/set/engine/frame/setAnimationFrame.js
 
 // Rotation
 import { getRotationInit } from '@engine/get/render/rotation/getRotationInit.js';
-import { R } from '@engine/state/render/rotationMatrixRef.js';
-import { setRotation } from '@engine/state/render/physicsState.js';
+import { R } from '@engine/state/render/stateRotationMatrixRef.js';
+import { setRotation } from '@engine/state/render/statePhysicsState.js';
 
 // Render toggles
 import { setSyncRenderToggles } from '@ui/set/setSyncRenderToggles.js';

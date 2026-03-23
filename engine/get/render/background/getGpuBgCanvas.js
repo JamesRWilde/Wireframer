@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { bgState } from '@engine/state/render/background/backgroundState.js';
+import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
 
 /**
  * gpuBackgroundCanvas - Returns the GPU background canvas element

@@ -34,14 +34,14 @@ import { setGetRenderForeground } from '@engine/set/render/setGetRenderForegroun
 import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 
 // Import decimation for GPU LOD matching
-import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
+import { decimateByPercent } from '@engine/init/mesh/initDecimateByPercent.js';
 
 // Import the mixed-state handler
 // Manages canvas visibility when switching between GPU and CPU
 import { setMixedRenderFlags } from '@engine/set/engine/setMixedRenderFlags.js';
 
 // Import model state to access the current mesh
-import { modelState } from '@engine/state/render/model.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 import { getMorph } from '@engine/get/mesh/getMorph.js';
 
 /**

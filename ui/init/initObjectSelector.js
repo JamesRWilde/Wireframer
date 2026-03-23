@@ -18,7 +18,7 @@
 
 "use strict";
 
-import {objectList}from '@engine/get/render/objectList.js';
+import {objectList}from '@engine/get/render/getObjectList.js';
 import { getLoadObjMesh } from '@engine/get/mesh/getLoadObjMesh.js';
 import { setPersistedState }from '@ui/set/persist/setPersistedState.js';
 

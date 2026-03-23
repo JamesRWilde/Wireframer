@@ -9,7 +9,7 @@
  *   Setter Module: engine/set/mesh/setLodRange.js
  */
 
-import { lodRangeState } from '@engine/state/mesh/lodRangeState.js';
+import { lodRangeState } from '@engine/state/mesh/stateLodRangeState.js';
 
 
 /**

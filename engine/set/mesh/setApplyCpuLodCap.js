@@ -17,7 +17,7 @@
 
 "use strict";
 
-import { modelState } from '@engine/state/render/model.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 import { getDetailLevelValue } from '@engine/get/render/getDetailLevelValue.js';
 import { setDetailLevel } from '@engine/set/mesh/setDetailLevel.js';
 import { setLodRangeForModel } from '@engine/set/mesh/setLodRangeForModel.js';

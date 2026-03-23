@@ -21,10 +21,10 @@
  */
 
 // Import edge building utility and state API
-import { buildEdgesFromFacesRuntime } from '@engine/init/mesh/build/buildEdgesFromFacesRuntime.js';
+import { buildEdgesFromFacesRuntime } from '@engine/init/mesh/build/initBuildEdgesFromFacesRuntime.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setMeshEdgesFromFacesRuntime.js';
-import { mergeEdges } from '@engine/init/mesh/build/mergeEdges.js';
+import { mergeEdges } from '@engine/init/mesh/build/initMergeEdges.js';
 
 // Ensure consumer path resolves through module state (no global object)
 if (!getMeshEdgesFromFacesRuntime()) {

@@ -9,7 +9,7 @@
  *   Setter Module: engine/set/mesh/setLoadObjMesh.js
  */
 
-import { loadObjMeshState } from '@engine/state/mesh/loadObjMeshState.js';
+import { loadObjMeshState } from '@engine/state/mesh/stateLoadObjMeshState.js';
 
 
 /**

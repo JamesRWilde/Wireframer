@@ -14,7 +14,7 @@
 "use strict";
 
 // Import shared fill state to check worker status
-import { fillRenderState } from "@engine/state/fillRenderBridge.js";
+import { fillRenderState } from "@engine/state/stateFillRenderBridge.js";
 
 /**
  * getIsFillWorkerAvailable - Checks if the fill worker is ready for commands

@@ -1,7 +1,7 @@
 /**
  * Handles background worker errors — logs details and resets state for retry.
  */
-import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
+import { backgroundWorkerState } from '@engine/state/render/background/stateWorker.js';
 
 export function setHandleWorkerError(message) {
   console.error('[BackgroundWorker]', message);

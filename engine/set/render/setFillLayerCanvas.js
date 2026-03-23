@@ -11,7 +11,7 @@
  *   Setter Module: engine/set/render/setFillLayerCanvas.js
  */
 
-import { canvasElementsState } from '@engine/state/render/canvasElementsState.js';
+import { canvasElementsState } from '@engine/state/render/stateCanvasElementsState.js';
 
 /**
  * Sets fill layer canvas dom element.

@@ -11,7 +11,7 @@
  *   Getter Module: engine/get/gpu/getGpuGl.js
  */
 
-import { glState } from '@engine/state/gpu/glState.js';
+import { glState } from '@engine/state/gpu/stateGlState.js';
 
 /**
  * Returns webgl rendering context.

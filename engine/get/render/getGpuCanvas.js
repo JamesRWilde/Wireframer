@@ -11,7 +11,7 @@
  *   Getter Module: engine/get/render/getGpuCanvas.js
  */
 
-import { canvasElementsState } from '@engine/state/render/canvasElementsState.js';
+import { canvasElementsState } from '@engine/state/render/stateCanvasElementsState.js';
 
 /**
  * Returns gpu canvas dom element.

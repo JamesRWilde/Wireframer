@@ -20,8 +20,8 @@
 
 "use strict";
 
-import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
-import { modelState } from '@engine/state/render/model.js';
+import { decimateByPercent }from '@engine/init/mesh/initDecimateByPercent.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
 import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 import { CPU_MAX_VERTS } from '@engine/set/mesh/setCapModelForCpu.js';

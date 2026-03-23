@@ -18,7 +18,7 @@
 "use strict";
 
 // Import shared transform state to track worker availability
-import { vertexTransformState } from "@engine/state/render/vertexTransformBridge.js";
+import { vertexTransformState } from "@engine/state/render/stateVertexTransformBridge.js";
 
 // Import worker initialization for lazy setup
 import { initWorkerTransform } from '@engine/init/render/initWorkerTransform.js';

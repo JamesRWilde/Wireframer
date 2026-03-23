@@ -13,8 +13,8 @@
 
 "use strict";
 
-import { toRuntime } from '@engine/init/mesh/toRuntime.js';
-import { load } from '@engine/init/mesh/load.js';
+import { toRuntime } from '@engine/init/mesh/initToRuntime.js';
+import { load } from '@engine/init/mesh/initLoad.js';
 import { setLoadObjMesh } from '@engine/set/mesh/setLoadObjMesh.js';
 
 /**

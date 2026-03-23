@@ -11,7 +11,7 @@
  *   Setter Module: engine/set/gpu/setGpuGl.js
  */
 
-import { glState } from '@engine/state/gpu/glState.js';
+import { glState } from '@engine/state/gpu/stateGlState.js';
 
 /**
  * Sets webgl rendering context for gpu operations.

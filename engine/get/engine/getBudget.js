@@ -21,7 +21,7 @@
 "use strict";
 
 // Import budget state for accessing current quality
-import { budgetState } from "@engine/set/engine/frame/budgetState.js";
+import { budgetState } from "@engine/set/engine/frame/setBudgetState.js";
 
 /**
  * budget - Evaluates frame budget and adjusts quality level

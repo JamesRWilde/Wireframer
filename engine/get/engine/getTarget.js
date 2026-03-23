@@ -21,7 +21,7 @@
 "use strict";
 
 // Import budget thresholds for quality level boundaries
-import { budgetState, BUDGET_LOW, BUDGET_MEDIUM, BUDGET_HIGH }from "@engine/set/engine/frame/budgetState.js";
+import { budgetState, BUDGET_LOW, BUDGET_MEDIUM, BUDGET_HIGH }from "@engine/set/engine/frame/setBudgetState.js";
 
 /**
  * determineTarget - Determines the target quality level from frame time

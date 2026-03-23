@@ -9,7 +9,7 @@
  *   Getter Module: engine/get/render/getInputCanvas.js
  */
 
-import { inputCanvasState } from '@engine/state/render/inputCanvasState.js';
+import { inputCanvasState } from '@engine/state/render/stateInputCanvasState.js';
 
 
 /**

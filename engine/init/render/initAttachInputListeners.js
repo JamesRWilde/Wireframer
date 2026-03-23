@@ -20,8 +20,8 @@
 "use strict";
 
 import { setHandleMove } from '@engine/set/render/setHandleMove.js';
-import { setDragging, setLastPointerX, setLastPointerY, setWx, setWy } from '@engine/state/render/physicsState.js';
-import { getZoom, getZoomMin, getZoomMax, setZoom } from '@engine/state/render/zoomState.js';
+import { setDragging, setLastPointerX, setLastPointerY, setWx, setWy } from '@engine/state/render/statePhysicsState.js';
+import { getZoom, getZoomMin, getZoomMax, setZoom } from '@engine/state/render/stateZoomState.js';
 import { setInputCanvas } from '@engine/set/render/setInputCanvas.js';
 import { getTouchDist } from '@engine/get/render/touch/getTouchDist.js';
 

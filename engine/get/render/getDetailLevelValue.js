@@ -11,7 +11,7 @@
  *   Getter Module: engine/get/render/getDetailLevelValue.js
  */
 
-import { detailLevelState } from '@engine/state/render/detailLevelState.js';
+import { detailLevelState } from '@engine/state/render/stateDetailLevelState.js';
 
 /**
  * Returns current lod detail level value.

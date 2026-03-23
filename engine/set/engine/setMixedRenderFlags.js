@@ -21,7 +21,7 @@
 
 "use strict";
 
-import { state } from '@engine/state/loop.js';
+import { state } from '@engine/state/stateLoop.js';
 
 /**
  * mixedRenderFlags - Manages rendering state for mixed canvas configurations

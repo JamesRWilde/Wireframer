@@ -16,14 +16,14 @@
 import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
 import { setIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 import { setGpuPath } from '@engine/set/render/setGpuPath.js';
-import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
+import { decimateByPercent } from '@engine/init/mesh/initDecimateByPercent.js';
 import { setGpuCanvasHidden } from '@engine/set/gpu/setGpuCanvasHidden.js';
 import { setCanvasCpuHidden } from '@engine/set/cpu/setCanvasCpuHidden.js';
 import { setHud } from '@engine/set/engine/setHud.js';
 import { setGpuCanvas } from '@engine/set/render/setGpuCanvas.js';
 import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
-import { state } from '@engine/state/loop.js';
-import { modelState } from '@engine/state/render/model.js';
+import { state } from '@engine/state/stateLoop.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
 
 export function setSwitchToGpuMode() {

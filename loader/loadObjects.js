@@ -14,7 +14,7 @@
 
 "use strict";
 
-import { objectList } from '@engine/get/render/objectList.js';
+import { objectList } from '@engine/get/render/getObjectList.js';
 
 export async function loadObjects() {
   try {

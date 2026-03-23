@@ -11,7 +11,7 @@
  *   Setter Module: engine/set/render/setDetailLevelValue.js
  */
 
-import { detailLevelState } from '@engine/state/render/detailLevelState.js';
+import { detailLevelState } from '@engine/state/render/stateDetailLevelState.js';
 
 /**
  * Sets lod detail level slider value.

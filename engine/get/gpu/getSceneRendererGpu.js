@@ -21,7 +21,7 @@
 "use strict";
 
 // Import GPU state singleton for renderer caching
-import { gpuState } from '@engine/state/gpu/scene.js';
+import { gpuState } from '@engine/state/gpu/stateScene.js';
 
 // Import GPU context state helpers
 import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';

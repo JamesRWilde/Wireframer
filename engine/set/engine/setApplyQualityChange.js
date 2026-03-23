@@ -20,7 +20,7 @@
 "use strict";
 
 // Import budget state and hysteresis thresholds
-import { budgetState, DOWNGRADE_THRESHOLD, UPGRADE_THRESHOLD } from "@engine/set/engine/frame/budgetState.js";
+import { budgetState, DOWNGRADE_THRESHOLD, UPGRADE_THRESHOLD } from "@engine/set/engine/frame/setBudgetState.js";
 
 // Import quality priority comparison helper
 import { getPriority }from '@engine/get/engine/getPriority.js';

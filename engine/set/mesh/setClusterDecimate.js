@@ -7,8 +7,8 @@
 "use strict";
 
 import { initAssignVerticesToCells } from '@engine/init/mesh/initAssignVerticesToCells.js';
-import { clusterVertices } from '@engine/init/mesh/clusterVertices.js';
-import { rebuildFaces } from '@engine/init/mesh/rebuildFaces.js';
+import { clusterVertices } from '@engine/init/mesh/initClusterVertices.js';
+import { rebuildFaces } from '@engine/init/mesh/initRebuildFaces.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 
 /**

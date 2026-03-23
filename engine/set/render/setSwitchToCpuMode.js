@@ -17,10 +17,10 @@ import { initializeCpuPipeline } from '@engine/init/render/pipeline/initializeCp
 import { setApplyCpuLodCap } from '@engine/set/mesh/setApplyCpuLodCap.js';
 import { setGpuCanvasHidden } from '@engine/set/gpu/setGpuCanvasHidden.js';
 import { setCanvasCpuHidden } from '@engine/set/cpu/setCanvasCpuHidden.js';
-import { state } from '@engine/state/loop.js';
+import { state } from '@engine/state/stateLoop.js';
 import { getSceneRendererGpu } from '@engine/get/gpu/getSceneRendererGpu.js';
-import { gpuState } from '@engine/state/gpu/scene.js';
-import { bgState } from '@engine/state/render/background/backgroundState.js';
+import { gpuState } from '@engine/state/gpu/stateScene.js';
+import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
 import { initBackgroundWorker } from '@engine/init/render/initBackgroundWorker.js';
 
 export function setSwitchToCpuMode() {

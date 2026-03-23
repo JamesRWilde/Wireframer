@@ -30,25 +30,25 @@
 import { initDeepCopy }from '@engine/init/mesh/initDeepCopy.js';
 
 // Import face normalization (ensures consistent face format)
-import { normalizeFaces }from '@engine/init/mesh/normalizeFaces.js';
+import { normalizeFaces }from '@engine/init/mesh/initNormalizeFaces.js';
 
 // Import bounding box computation
 import { getBoundingBox }from '@engine/get/mesh/getBoundingBox.js';
 
 // Import cluster parameter calculation
-import { computeClusterParams }from '@engine/init/mesh/computeClusterParams.js';
+import { computeClusterParams }from '@engine/init/mesh/initComputeClusterParams.js';
 
 // Import vertex-to-cell assignment
 import { initAssignVerticesToCells }from '@engine/init/mesh/initAssignVerticesToCells.js';
 
 // Import vertex clustering (merging nearby vertices)
-import { clusterVertices }from '@engine/init/mesh/clusterVertices.js';
+import { clusterVertices }from '@engine/init/mesh/initClusterVertices.js';
 
 // Import mesh edge builder state accessor
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 
 // Import face rebuilding (updating face indices after clustering)
-import { rebuildFaces }from '@engine/init/mesh/rebuildFaces.js';
+import { rebuildFaces }from '@engine/init/mesh/initRebuildFaces.js';
 
 // Import LOD cache pruning (removes old cache entries)
 import { disposeLodCache }from '@engine/dispose/disposeLodCache.js';

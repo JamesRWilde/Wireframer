@@ -11,7 +11,7 @@
  *   Setter Module: engine/set/render/setFillOpacity.js
  */
 
-import { renderState } from '@engine/state/render/renderState.js';
+import { renderState } from '@engine/state/render/stateRenderState.js';
 
 
 /**

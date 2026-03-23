@@ -9,7 +9,7 @@
  *   Getter Module: engine/get/mesh/getMeshParseErrors.js
  */
 
-import { meshParseErrorsState } from '@engine/state/mesh/meshParseErrorsState.js';
+import { meshParseErrorsState } from '@engine/state/mesh/stateMeshParseErrorsState.js';
 
 
 /**

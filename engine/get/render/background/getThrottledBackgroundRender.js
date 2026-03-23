@@ -14,7 +14,7 @@
 
 'use strict';
 
-import { BG_GPU_MIN_INTERVAL_MS } from '@engine/state/render/background/backgroundState.js';
+import { BG_GPU_MIN_INTERVAL_MS } from '@engine/state/render/background/stateBackgroundState.js';
 
 /**
  * Checks whether enough time has elapsed to allow a new background render.

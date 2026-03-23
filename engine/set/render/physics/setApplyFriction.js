@@ -13,7 +13,7 @@
  *   factor of 0.85 reduces velocities by 15% per frame.
  */
 
-import { physicsState } from '@engine/state/render/physicsState.js';
+import { physicsState } from '@engine/state/render/statePhysicsState.js';
 
 /**
  * Multiplies angular velocities by a friction factor to slow rotation.

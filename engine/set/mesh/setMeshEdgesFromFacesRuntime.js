@@ -1,4 +1,4 @@
-import { edgesFromFacesRuntimeState } from '@engine/state/mesh/edgesFromFacesRuntimeState.js';
+import { edgesFromFacesRuntimeState } from '@engine/state/mesh/stateEdgesFromFacesRuntimeState.js';
 
 /**
  * Registers the edge extraction function for mesh processing.

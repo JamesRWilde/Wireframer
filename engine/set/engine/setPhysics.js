@@ -22,11 +22,11 @@
 
 import { utilEulerIncrement } from '@engine/util/render/utilEulerIncrement.js';
 import { utilReorthogonalized } from '@engine/util/render/utilReorthogonalized.js';
-import { state } from '@engine/state/loop.js';
+import { state } from '@engine/state/stateLoop.js';
 import {
   getRotation, getWx, getWy, getWz, isDragging, getAxisAngleX, getAxisAngleY,
   setRotation, setAutoWx, setAutoWy, setAutoWz, setAxisAngleX, setAxisAngleY,
-} from '@engine/state/render/physicsState.js';
+} from '@engine/state/render/statePhysicsState.js';
 import { setApplyFriction } from '@engine/set/render/physics/setApplyFriction.js';
 import { setEaseTowardAuto } from '@engine/set/render/physics/setEaseTowardAuto.js';
 

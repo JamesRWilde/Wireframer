@@ -19,7 +19,7 @@
 "use strict";
 
 // Import morph state to check active flag
-import {morphState} from '@engine/state/mesh/morph.js';
+import {morphState} from '@engine/state/mesh/stateMorph.js';
 
 /**
  * getIsMorphing - Checks if a morph animation is in progress

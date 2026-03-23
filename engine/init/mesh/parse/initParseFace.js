@@ -21,7 +21,7 @@
  */
 
 // Import token parser for extracting vertex/uv/normal indices
-import { parseIdxFromToken }from '@engine/init/mesh/parse/parseIdxFromToken.js';
+import { parseIdxFromToken }from '@engine/init/mesh/parse/initParseIdxFromToken.js';
 
 // Import vertex deduplication helper
 import { utilOrCreateVertIdx }from '@engine/util/mesh/utilOrCreateVertIdx.js';

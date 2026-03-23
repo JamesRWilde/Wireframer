@@ -15,7 +15,7 @@
 "use strict";
 
 // Import shared fill state to access the cached frame
-import { fillRenderState } from "@engine/state/fillRenderBridge.js";
+import { fillRenderState } from "@engine/state/stateFillRenderBridge.js";
 
 /**
  * fillCachedFrame - Returns the cached fill render frame

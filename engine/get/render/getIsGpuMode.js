@@ -10,7 +10,7 @@
 
 "use strict";
 
-import { gpuModeState } from '@engine/set/render/gpuModeState.js';
+import { gpuModeState } from '@engine/set/render/setGpuModeState.js';
 
 /**
  * getIsGpuMode - Returns whether GPU rendering is active

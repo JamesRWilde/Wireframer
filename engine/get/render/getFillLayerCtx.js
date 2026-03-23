@@ -11,7 +11,7 @@
  *   Getter Module: engine/get/render/getFillLayerCtx.js
  */
 
-import { canvasElementsState } from '@engine/state/render/canvasElementsState.js';
+import { canvasElementsState } from '@engine/state/render/stateCanvasElementsState.js';
 
 /**
  * Returns fill layer 2d rendering context.

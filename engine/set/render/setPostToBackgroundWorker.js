@@ -14,7 +14,7 @@
 "use strict";
 
 // Import background worker state to access the worker instance
-import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
+import { backgroundWorkerState } from '@engine/state/render/background/stateWorker.js';
 
 /**
  * setPostToBackgroundWorker - Sends a message to the background worker

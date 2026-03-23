@@ -20,7 +20,7 @@
  */
 
 // Import OBJ line parser
-import { parseObjLines }from '@engine/init/mesh/parse/parseObjLines.js';
+import { parseObjLines }from '@engine/init/mesh/parse/initParseObjLines.js';
 
 // Import raw text validator
 import { utilRawObjText }from '@engine/util/mesh/utilRawObjText.js';
@@ -29,7 +29,7 @@ import { utilRawObjText }from '@engine/util/mesh/utilRawObjText.js';
 import { utilParseCheckResults }from '@engine/util/mesh/utilParseCheckResults.js';
 
 // Import mesh object builder
-import { buildObject }from '@engine/init/mesh/build/buildObject.js';
+import { buildObject }from '@engine/init/mesh/build/initBuildObject.js';
 
 // Import winding correction
 import { utilFixedWinding }from '@engine/util/mesh/utilFixedWinding.js';

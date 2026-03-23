@@ -35,12 +35,12 @@
 
 "use strict";
 
-import { morphState } from '@engine/state/mesh/morph.js';
-import { cloneMesh } from '@engine/init/mesh/cloneMesh.js';
-import { computeMorphMap } from '@engine/init/mesh/computeMorphMap.js';
-import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
-import { getZoom } from '@engine/state/render/zoomState.js';
-import { recenterToOrigin } from '@engine/init/mesh/recenterToOrigin.js';
+import { morphState } from '@engine/state/mesh/stateMorph.js';
+import { cloneMesh } from '@engine/init/mesh/initCloneMesh.js';
+import { computeMorphMap } from '@engine/init/mesh/initComputeMorphMap.js';
+import { decimateByPercent } from '@engine/init/mesh/initDecimateByPercent.js';
+import { getZoom } from '@engine/state/render/stateZoomState.js';
+import { recenterToOrigin } from '@engine/init/mesh/initRecenterToOrigin.js';
 
 /**
  * Target detail level for decimated meshes (10% of original vertex count).

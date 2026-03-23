@@ -11,7 +11,7 @@
  *   Setter Module: engine/set/render/setGpuCanvas.js
  */
 
-import { canvasElementsState } from '@engine/state/render/canvasElementsState.js';
+import { canvasElementsState } from '@engine/state/render/stateCanvasElementsState.js';
 
 /**
  * Sets gpu-accelerated canvas dom element.

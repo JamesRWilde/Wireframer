@@ -22,8 +22,8 @@
 "use strict";
 
 // Import morph API functions
-import { startMorph }from '@engine/init/mesh/startMorph.js';
-import { advanceMorphFrame }from '@engine/init/mesh/advanceMorphFrame.js';
+import { startMorph }from '@engine/init/mesh/initStartMorph.js';
+import { advanceMorphFrame }from '@engine/init/mesh/initAdvanceMorphFrame.js';
 import { getCurrentMorph }from '@engine/get/mesh/getCurrentMorph.js';
 import { getIsMorphing }from '@engine/get/mesh/getIsMorphing.js';
 

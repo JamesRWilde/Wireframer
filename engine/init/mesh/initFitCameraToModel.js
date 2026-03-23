@@ -18,7 +18,7 @@
  */
 
 // Import frame parameter computation for projection setup
-import { setZoom, setZoomMin, setZoomMax, setZHalf } from '@engine/state/render/zoomState.js';
+import { setZoom, setZoomMin, setZoomMax, setZHalf } from '@engine/state/render/stateZoomState.js';
 import { setModelCy } from '@engine/set/render/setModelCy.js';
 
 /**

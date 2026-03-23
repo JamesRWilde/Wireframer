@@ -15,7 +15,7 @@
  *   Edges are deduplicated so shared edges between faces appear only once.
  */
 
-import { addEdge }from '@engine/init/mesh/addEdge.js';
+import { addEdge }from '@engine/init/mesh/initAddEdge.js';
 
 /**
  * edgesFromFacesRuntime - Extracts unique edges from face arrays

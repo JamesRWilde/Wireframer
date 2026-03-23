@@ -9,7 +9,7 @@
  *   Setter Module: engine/set/mesh/setMeshParseErrors.js
  */
 
-import { meshParseErrorsState } from '@engine/state/mesh/meshParseErrorsState.js';
+import { meshParseErrorsState } from '@engine/state/mesh/stateMeshParseErrorsState.js';
 
 
 /**

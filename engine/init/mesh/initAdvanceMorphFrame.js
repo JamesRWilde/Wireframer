@@ -33,10 +33,10 @@
 
 "use strict";
 
-import { morphState } from '@engine/state/mesh/morph.js';
+import { morphState } from '@engine/state/mesh/stateMorph.js';
 import { getEaseOut } from '@engine/get/mesh/getEaseOut.js';
-import { cloneMesh } from '@engine/init/mesh/cloneMesh.js';
-import { interpolateInSphere } from '@engine/init/mesh/interpolateInSphere.js';
+import { cloneMesh } from '@engine/init/mesh/initCloneMesh.js';
+import { interpolateInSphere } from '@engine/init/mesh/initInterpolateInSphere.js';
 
 /**
  * Phase boundaries as fractions of total progress (0 → 1).

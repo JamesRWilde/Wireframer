@@ -15,7 +15,7 @@
 
 "use strict";
 
-import { renderForegroundState } from '@engine/state/render/renderForegroundState.js';
+import { renderForegroundState } from '@engine/state/render/stateRenderForegroundState.js';
 
 /**
  * getRenderForeground - Returns the current foreground render function

@@ -15,7 +15,7 @@
 "use strict";
 
 // Import shared transform state to access cached results
-import { vertexTransformState } from "@engine/state/render/vertexTransformBridge.js";
+import { vertexTransformState } from "@engine/state/render/stateVertexTransformBridge.js";
 
 /**
  * cachedTransformResult - Returns a copy of the cached transform result

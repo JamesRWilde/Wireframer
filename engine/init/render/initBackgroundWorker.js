@@ -19,7 +19,7 @@
 "use strict";
 
 // Import background worker state to track worker lifecycle
-import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
+import { backgroundWorkerState } from '@engine/state/render/background/stateWorker.js';
 import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
 import { setHandleWorkerReady } from '@engine/set/render/background/setHandleWorkerReady.js';
@@ -28,7 +28,7 @@ import { setHandleWorkerError } from '@engine/set/render/background/setHandleWor
 
 // Import background canvas getter to read current dimensions
 import {getBgCanvas}from '@engine/get/render/background/getBgCanvas.js';
-import { bgState } from '@engine/state/render/background/backgroundState.js';
+import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
 
 /**
  * backgroundWorker - Creates and initializes the background particle worker

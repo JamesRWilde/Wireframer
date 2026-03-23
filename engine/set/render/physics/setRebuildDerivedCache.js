@@ -1,6 +1,6 @@
 'use strict';
 
-import { renderState } from '@engine/state/render/renderState.js';
+import { renderState } from '@engine/state/render/stateRenderState.js';
 import { utilRelativeLuminanceRaw } from '@engine/util/render/utilRelativeLuminanceRaw.js';
 
 /**

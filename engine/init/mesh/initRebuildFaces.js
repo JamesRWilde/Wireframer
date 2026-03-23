@@ -24,7 +24,7 @@
 
 "use strict";
 
-import { normalizeFaces } from '@engine/init/mesh/normalizeFaces.js';
+import { normalizeFaces } from '@engine/init/mesh/initNormalizeFaces.js';
 
 /**
  * rebuildFaces - Rebuilds faces after vertex clustering

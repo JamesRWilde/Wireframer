@@ -14,7 +14,7 @@
 "use strict";
 
 // Import budget state to access the circular frame time buffer
-import { budgetState } from '@engine/set/engine/frame/budgetState.js';
+import { budgetState } from '@engine/set/engine/frame/setBudgetState.js';
 
 /**
  * averageTime - Computes the average frame time from the circular buffer

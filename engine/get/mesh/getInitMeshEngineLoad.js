@@ -9,7 +9,7 @@
  *   Getter Module: engine/get/mesh/getInitMeshEngineLoad.js
  */
 
-import { initMeshEngineLoadState } from '@engine/state/mesh/initMeshEngineLoadState.js';
+import { initMeshEngineLoadState } from '@engine/state/mesh/stateInitMeshEngineLoadState.js';
 
 
 /**

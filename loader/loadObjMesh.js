@@ -15,8 +15,8 @@
 
 "use strict";
 
-import { objectList } from '@engine/get/render/objectList.js';
-import { toRuntime } from '@engine/init/mesh/toRuntime.js';
+import { objectList } from '@engine/get/render/getObjectList.js';
+import { toRuntime } from '@engine/init/mesh/initToRuntime.js';
 import { getInitMeshEngineLoad } from '@engine/get/mesh/getInitMeshEngineLoad.js';
 import { setActiveModel } from '@engine/set/render/physics/model.js';
 

@@ -22,15 +22,15 @@
 
 // Import shader program creation
 // Compiles vertex and fragment shaders for fill and wire rendering
-import { createScenePrograms }from '@engine/init/gpu/create/createScenePrograms.js';
+import { createScenePrograms }from '@engine/init/gpu/create/initCreateScenePrograms.js';
 
 // Import buffer store creation
 // Manages vertex buffers for fill positions, normals, and wire edges
-import { createSceneBufferStore }from '@engine/init/gpu/create/createSceneBufferStore.js';
+import { createSceneBufferStore }from '@engine/init/gpu/create/initCreateSceneBufferStore.js';
 
 // Import draw API creation
 // Provides model and clear functions for WebGL rendering
-import { createSceneDraw }from '@engine/init/gpu/create/createSceneDraw.js';
+import { createSceneDraw }from '@engine/init/gpu/create/initCreateSceneDraw.js';
 
 /**
  * sceneRenderer - Creates a GPU scene renderer for a canvas element

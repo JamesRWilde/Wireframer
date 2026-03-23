@@ -13,7 +13,7 @@
 "use strict";
 
 // Import shared transform state to check worker availability
-import { vertexTransformState } from "@engine/state/render/vertexTransformBridge.js";
+import { vertexTransformState } from "@engine/state/render/stateVertexTransformBridge.js";
 
 /**
  * getIsAvailable - Checks if the transform worker is available

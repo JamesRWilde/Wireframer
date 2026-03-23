@@ -21,7 +21,7 @@
 
 "use strict";
 
-import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
+import { decimateByPercent } from '@engine/init/mesh/initDecimateByPercent.js';
 import { setDecimateToCap } from '@engine/set/mesh/setDecimateToCap.js';
 
 /** @type {number} Maximum vertices for CPU mode before auto-decimation */

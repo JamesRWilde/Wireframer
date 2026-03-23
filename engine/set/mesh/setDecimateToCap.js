@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
+import { decimateByPercent } from '@engine/init/mesh/initDecimateByPercent.js';
 import { getBoundingBox } from '@engine/get/mesh/getBoundingBox.js';
 import { setClusterDecimate } from '@engine/set/mesh/setClusterDecimate.js';
 

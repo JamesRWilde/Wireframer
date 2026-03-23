@@ -7,7 +7,7 @@
 
 "use strict";
 
-import { evaluateCell } from '@engine/init/mesh/evaluateCell.js';
+import { evaluateCell } from '@engine/init/mesh/initEvaluateCell.js';
 
 export function initProcessLayer(dx, dy, radius, context) {
   const { cx, cy, cz, grid, verts, point, bestDistSqAndIdx } = context;

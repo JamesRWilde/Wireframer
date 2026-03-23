@@ -29,7 +29,7 @@ import { utilFaceNormals }from '@engine/util/cpu/utilFaceNormals.js';
 import {utilSummedNormals}from '@engine/util/cpu/geometry/utilSummedNormals.js';
 
 // Import vertex-to-face adjacency builder
-import { buildVertexToFaces }from '@engine/init/cpu/buildVertexToFaces.js';
+import { buildVertexToFaces }from '@engine/init/cpu/initBuildVertexToFaces.js';
 
 // Import flat normal assignment helper
 import {utilFlatNormals}from '@engine/util/cpu/geometry/utilFlatNormals.js';

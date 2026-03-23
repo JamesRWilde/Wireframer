@@ -22,8 +22,8 @@
 /** Grid cell size as a fraction of bounding box diagonal */
 const CELL_SIZE_FACTOR = 0.02;
 
-import { buildSpatialGrid } from '@engine/init/mesh/buildSpatialGrid.js';
-import { probeGrid } from '@engine/init/mesh/probeGrid.js';
+import { buildSpatialGrid } from '@engine/init/mesh/initBuildSpatialGrid.js';
+import { probeGrid } from '@engine/init/mesh/initProbeGrid.js';
 import { getBoundingBox } from '@engine/get/mesh/getBoundingBox.js';
 
 /**

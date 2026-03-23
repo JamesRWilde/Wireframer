@@ -19,7 +19,7 @@
 "use strict";
 
 // Import shared GPU state for cleanup without forcing renderer initialization
-import { gpuState } from '@engine/state/gpu/scene.js';
+import { gpuState } from '@engine/state/gpu/stateScene.js';
 
 // Import GPU canvas clearer
 import { setGpuSceneCanvas }from '@engine/set/gpu/setGpuSceneCanvas.js';
@@ -32,12 +32,12 @@ import { setCanvasCpuHidden }from '@engine/set/cpu/setCanvasCpuHidden.js';
 
 // Import GPU canvas visibility toggle
 import { setGpuCanvasHidden }from '@engine/set/gpu/setGpuCanvasHidden.js';
-import { state } from '@engine/state/loop.js';
+import { state } from '@engine/state/stateLoop.js';
 import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';
 
 // Import model state to ensure CPU mode uses capped model
-import { modelState } from '@engine/state/render/model.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 
 // Import detail level to allow CPU path to react to slider changes
 import { setDetailLevel } from '@engine/set/mesh/setDetailLevel.js';

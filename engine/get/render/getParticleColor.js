@@ -11,7 +11,7 @@
  *   Getter Module: engine/get/render/getParticleColor.js
  */
 
-import { renderState } from '@engine/state/render/renderState.js';
+import { renderState } from '@engine/state/render/stateRenderState.js';
 import { setRebuildDerivedCache } from '@engine/set/render/physics/setRebuildDerivedCache.js';
 
 

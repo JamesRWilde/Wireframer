@@ -9,7 +9,7 @@
  *   Getter Module: engine/get/mesh/getLoadObjMesh.js
  */
 
-import { loadObjMeshState } from '@engine/state/mesh/loadObjMeshState.js';
+import { loadObjMeshState } from '@engine/state/mesh/stateLoadObjMeshState.js';
 
 
 /**

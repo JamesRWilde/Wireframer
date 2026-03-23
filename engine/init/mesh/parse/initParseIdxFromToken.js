@@ -18,7 +18,7 @@
  */
 
 // Import index parser for handling OBJ's 1-based indexing
-import {index}from '@engine/init/mesh/parse/index.js';
+import {index}from '@engine/init/mesh/parse/initIndex.js';
 
 /**
  * idxFromToken - Parses an OBJ face token into indices

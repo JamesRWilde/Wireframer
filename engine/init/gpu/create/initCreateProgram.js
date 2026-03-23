@@ -15,7 +15,7 @@
 "use strict";
 
 // Import shader compilation helper for individual vertex/fragment shaders
-import { compileShader }from '@engine/init/gpu/compileShader.js';
+import { compileShader }from '@engine/init/gpu/initCompileShader.js';
 
 /**
  * program - Creates and links a WebGL shader program

@@ -32,9 +32,9 @@
 
 "use strict";
 
-import { compileShader } from '@engine/init/gpu/compileShader.js';
+import { compileShader } from '@engine/init/gpu/initCompileShader.js';
 import { utilParsedCssColor } from '@engine/util/render/background/utilParsedCssColor.js';
-import { createParticleBufferData } from '@engine/init/gpu/background/createParticleBufferData.js';
+import { createParticleBufferData } from '@engine/init/gpu/background/initCreateParticleBufferData.js';
 import { getBgVertexShader } from '@engine/get/render/background/getBgVertexShader.js';
 import { getBgFragmentShader } from '@engine/get/render/background/getBgFragmentShader.js';
 

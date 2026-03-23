@@ -15,7 +15,7 @@
 "use strict";
 
 // Import shared GPU renderer state
-import {gpuState} from '@engine/state/gpu/scene.js';
+import {gpuState} from '@engine/state/gpu/stateScene.js';
 
 /**
  * disableSceneRenderer - Disables the GPU renderer and cleans up resources

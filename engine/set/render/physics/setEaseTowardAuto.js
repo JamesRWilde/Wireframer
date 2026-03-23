@@ -13,7 +13,7 @@
  *   fixed easing factor of 0.04 for smooth interpolation.
  */
 
-import { physicsState } from '@engine/state/render/physicsState.js';
+import { physicsState } from '@engine/state/render/statePhysicsState.js';
 
 /**
  * Eases angular velocities toward their auto-rotation targets.
