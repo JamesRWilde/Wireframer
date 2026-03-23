@@ -109,14 +109,19 @@ Every piece of data in Wireframer exists in exactly one `state/` file as a plain
 // state/render/renderState.js — the source of truth
 export const renderState = {
   theme: null,
-  bgColor: null,
-  fillRgb: null,
-  edgeRgb: null,
-  wireFarRgb: null,
-  wireOpacity: null,
-  fillOpacity: null,
-  detailLevel: null,
-  modelCy: null
+  themeMode: 'dark',
+  fillOpacity: 1,
+  wireOpacity: 1,
+  wireWidth: 0.2,
+  themeVer: 0,
+  cacheVer: -1,
+  shadeDarkRgb: [0, 0, 0],
+  shadeBrightRgb: [255, 255, 255],
+  fillRgb: [0, 200, 120],
+  edgeColor: '#ffffff',
+  bgRgb: [0, 0, 0],
+  bgColor: 'rgba(0,0,0,1)',
+  particleColor: 'rgba(200,220,255,1)',
 };
 
 // get/render/getTheme.js — read access
@@ -243,7 +248,7 @@ The morph system provides smooth vertex interpolation between any two meshes:
 3. `currentMorph()` — Returns the interpolated mesh for rendering
 4. `isMorphing()` — Returns whether a morph is in progress
 
-The morph API is initialized in `morphApi.js` and exposed globally via `window.morph`. Duration defaults to 1600ms.
+The morph API is initialized in `initMorphApi.js` and exposed globally via `window.morph`. Duration defaults to 1600ms.
 
 ### Theme System
 
@@ -284,20 +289,19 @@ All controls bind to state through `set/` functions. State changes trigger `sync
 The animation frame loop is the heartbeat of the application:
 
 ```
-animationFrame
-├── advanceMorphFrame()        — Update morph interpolation
-├── physicsStep()              — Update rotation velocity
-├── background()               — Render background particles
-│   ├── CPU: draw background on bgCanvas via worker data
-│   └── GPU: draw background particles in GPU pipeline
-├── renderForeground()         — Render 3D model (one path only)
-│   ├── GPU: gpuPath → shader uniforms → buffer bind → draw calls
-│   └── CPU: cpuPath → triangle fill → wireframe overlay
-├── renderHud()                — Overlay HUD if active
-└── syncFrameTelemetry()       — Update FPS, frame time, physics time, render time
+setRunFrame (called by setAnimationFrame via requestAnimationFrame)
+├── getShouldRunFrame()       — FPS limiting: skip frame if running too fast
+├── setPhysics()              — Update rotation velocity and state
+├── getBudget()               — Check frame budget, adjust quality if needed
+├── setScene()                — Render background + foreground (one path only)
+│   ├── Background: CPU draw on bgCanvas or GPU particle pipeline
+│   └── Foreground: gpuPath (WebGL) or cpuPath (Canvas 2D triangle fill)
+├── setFrameTime()            — Record frame duration for budget tracking
+├── setTelemetryState()       — Collect timing metrics (physics, bg, fg, interval)
+└── setTelemetryHud()         — Update live FPS and timing display
 ```
 
-Each frame tracks physics time and render time separately. The telemetry panel shows live FPS, last frame time, physics update time, and render time.
+Each frame tracks physics time, background render time, and foreground render time separately. The telemetry panel shows live FPS, frame time, physics update time, and render time.
 
 ---
 
@@ -310,8 +314,9 @@ Shapes are defined as OBJ files in the `meshes/` directory. The object list is s
 ### From Code
 
 ```javascript
-import { loadObjMesh } from '@engine/init/mesh/loadObjMesh.js';
+import { getLoadObjMesh } from '@engine/get/mesh/getLoadObjMesh.js';
 
+const loadObjMesh = getLoadObjMesh();
 await loadObjMesh('/meshes/myShape.obj', 'My Shape');
 ```
 
@@ -342,13 +347,13 @@ The mesh goes through the full normalization pipeline automatically: parsed, edg
 | File | What It Does |
 |------|--------------|
 | `js/startApp.js` | Bootstrap and orchestration — read this first to see the full init flow |
-| `engine/init/mesh/load.js` | Mesh loading pipeline — the core data flow |
+| `engine/init/mesh/initLoad.js` | Mesh loading pipeline — the core data flow |
 | `engine/init/render/pipeline/initRenderPipeline.js` | GPU/CPU detection and pipeline init |
-| `engine/set/engine/frame/animationFrame.js` | The frame loop — everything that happens each frame |
-| `engine/init/gpu/create/scenePrograms.js` | WebGL shaders — fill and wire programs |
-| `engine/init/mesh/greedyClusterDecimator.js` | LOD algorithm |
+| `engine/set/engine/frame/setAnimationFrame.js` | The frame loop — everything that happens each frame |
+| `engine/init/gpu/create/initCreateScenePrograms.js` | WebGL shaders — fill and wire programs |
+| `engine/init/mesh/initGreedyClusterDecimator.js` | LOD algorithm |
 | `workers/workersBackground.js` | Background particle worker |
-| `ui/init/attach/sliderListeners.js` | UI control binding |
+| `ui/init/attach/initAttachSliderListeners.js` | UI control binding |
 
 ---
 
