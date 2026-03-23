@@ -8,7 +8,7 @@
  *   Setter for the mutable render function reference.
  *
  * USAGE:
- *   import { setRenderForeground } from '@engine/render/setRenderForeground.js';
+ *   import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
  *   setRenderForeground(gpuPath);
  */
 

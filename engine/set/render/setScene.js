@@ -26,7 +26,7 @@
 
 // Import the background particle renderer
 // Draws animated ambient particles on the background canvas
-import { setDrawBackground } from '@engine/render/draw/setDrawBackground.js';
+import { setDrawBackground } from '@engine/set/render/draw/setDrawBackground.js';
 
 // Import the active foreground renderer function pointer
 // This is set to either gpuPath or cpuPath during initialization

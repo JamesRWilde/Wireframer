@@ -9,15 +9,15 @@
  *   Worker-path particle renderer for background layer.
  *
  * USAGE:
- *   import { setRenderWorkerParticles } from '@engine/render/draw/setRenderWorkerParticles.js';
+ *   import { setRenderWorkerParticles } from '@engine/set/render/draw/setRenderWorkerParticles.js';
  *   setRenderWorkerParticles(ctx, data, count, opacity, particleColor, themeMode);
  */
 
 "use strict";
 
-import { setGetCachedColorRgb } from '@engine/render/draw/setGetCachedColorRgb.js';
-import { setBucketWorkerParticles } from '@engine/render/draw/setBucketWorkerParticles.js';
-import { setDrawWorkerParticlesCpu } from '@engine/render/draw/setDrawWorkerParticlesCpu.js';
+import { setGetCachedColorRgb } from '@engine/set/render/draw/setGetCachedColorRgb.js';
+import { setBucketWorkerParticles } from '@engine/set/render/draw/setBucketWorkerParticles.js';
+import { setDrawWorkerParticlesCpu } from '@engine/set/render/draw/setDrawWorkerParticlesCpu.js';
 
 export function setRenderWorkerParticles(ctx, data, count, opacity, particleColor, themeMode) {
   if (count === 0) return;

@@ -20,7 +20,7 @@ import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
 import { setPostToBackgroundWorker } from '@engine/set/render/setPostToBackgroundWorker.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
-import { setRenderWorkerParticles } from '@engine/render/draw/setRenderWorkerParticles.js';
+import { setRenderWorkerParticles } from '@engine/set/render/draw/setRenderWorkerParticles.js';
 import { initBackgroundWorker } from '@engine/init/render/initBackgroundWorker.js';
 
 /**

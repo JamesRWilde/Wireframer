@@ -18,8 +18,8 @@
 "use strict";
 
 import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
-import { setBackgroundCpu } from '@engine/render/draw/setBackgroundCpu.js';
-import { setBackgroundGpu } from '@engine/render/draw/setBackgroundGpu.js';
+import { setBackgroundCpu } from '@engine/set/render/draw/setBackgroundCpu.js';
+import { setBackgroundGpu } from '@engine/set/render/draw/setBackgroundGpu.js';
 
 /**
  * background - Chooses background pipeline by mode

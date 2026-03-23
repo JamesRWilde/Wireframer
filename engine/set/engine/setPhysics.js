@@ -27,8 +27,8 @@ import {
   getRotation, getWx, getWy, getWz, isDragging, getAxisAngleX, getAxisAngleY,
   setRotation, setAutoWx, setAutoWy, setAutoWz, setAxisAngleX, setAxisAngleY,
 } from '@engine/state/render/physicsState.js';
-import { setApplyFriction } from '@engine/render/physics/setApplyFriction.js';
-import { setEaseTowardAuto } from '@engine/render/physics/setEaseTowardAuto.js';
+import { setApplyFriction } from '@engine/set/render/physics/setApplyFriction.js';
+import { setEaseTowardAuto } from '@engine/set/render/physics/setEaseTowardAuto.js';
 
 /**
  * physics - Updates rotation physics for the current frame.

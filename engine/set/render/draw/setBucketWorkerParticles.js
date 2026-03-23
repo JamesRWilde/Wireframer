@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { setEnsureBucketArrays } from '@engine/render/draw/setEnsureBucketArrays.js';
+import { setEnsureBucketArrays } from '@engine/set/render/draw/setEnsureBucketArrays.js';
 
 /**
  * setBucketWorkerParticles - Groups particle data into 16 alpha buckets for batched rendering

@@ -12,7 +12,7 @@
  */
 
 import { renderState } from '@engine/state/render/renderState.js';
-import { setRebuildDerivedCache } from '@engine/render/physics/setRebuildDerivedCache.js';
+import { setRebuildDerivedCache } from '@engine/set/render/physics/setRebuildDerivedCache.js';
 
 
 /**

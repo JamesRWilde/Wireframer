@@ -24,7 +24,7 @@ import { setGpuCanvas } from '@engine/set/render/setGpuCanvas.js';
 import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
 import { state } from '@engine/state/loop.js';
 import { modelState } from '@engine/state/render/model.js';
-import { setActiveModel } from '@engine/render/physics/setActiveModel.js';
+import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
 
 export function setSwitchToGpuMode() {
   const gpuCanvas = document.getElementById('gpu');
