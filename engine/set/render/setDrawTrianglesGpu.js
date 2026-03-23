@@ -41,7 +41,6 @@ import {utilTriangleGpu}from '@engine/util/render/utilTriangleGpu.js';
 // Import seam expansion — slightly enlarges triangles to prevent gaps between adjacent faces
 import {utilSeamGpu}from '@engine/util/render/utilSeamGpu.js';
 // Import single triangle rasterizer — fills a triangle on the 2D canvas context
-import {setFillTriangle}from '@engine/set/cpu/setFillTriangle.js';
 
 export function setDrawTrianglesGpu({ T, P2, triFaces, triCornerNormals, useSmoothShading, theme, fillAlpha, seamExpandPx, R, ctx }) {
   // Sort triangles back-to-front (painter's algorithm). Sorting by average depth helps
