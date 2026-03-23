@@ -1,26 +1,21 @@
 /**
- * R.js - Global Rotation Matrix Reference
- * 
+ * stateRotationMatrixRef.js - Global Rotation Matrix Reference
+ *
  * PURPOSE:
  *   Provides a shared reference to the global rotation matrix used throughout
  *   the application. This is the single source of truth for the model's current
  *   orientation.
- * 
+ *
  * ARCHITECTURE ROLE:
  *   Imported by physics, rendering, and initialization code that needs to read
  *   or modify the rotation matrix. The object wrapper allows the matrix to be
  *   replaced while maintaining references.
- * 
- * WHY OBJECT WRAPPER:
+ *
+ * WHY THIS EXISTS:
  *   Using { value: null } instead of exporting the matrix directly allows
  *   the matrix to be replaced (e.g., during initialization) while all importers
  *   see the update. If we exported the array directly, importers would have
  *   stale references after reassignment.
- *
- * WHY THIS EXISTS:
- *   Adds explicit standardized header metadata for tooling verifying the
- *   repository comment convention.
-
  */
 
 "use strict";

@@ -1,27 +1,19 @@
 /**
- * canvasContextState.js - Shared 2D canvas rendering context state
+ * canvasContextState.js - Shared 2D Canvas Rendering Context State
  *
  * PURPOSE:
- *   Provide a focused getter/setter for the main 2D rendering context
- *   (`ctx`) so callers use module state directly.
+ *   Holds the main 2D rendering context (`ctx`) used by the CPU pipeline.
+ *   Single source of truth for the canvas context so consumers import
+ *   from here instead of threading it through function parameters.
  *
- * ARCHITECTURE:
- *   This is one global state variable / domain, the first full migration
- *   for the old `window`-scoped ctx. All new code should import from here.
+ * ARCHITECTURE ROLE:
+ *   Written once during canvas init (initCanvas). Read by all CPU rendering
+ *   functions that need to draw on the main canvas.
  *
  * WHY THIS EXISTS:
- *   Explicitly documents the reason for segregated canvas context state and
- *   ensures it is included in the style guidelines.
- */
-
-"use strict";
-
-/**
- * canvasContextState.js - Shared 2D canvas context state container.
- *
- * PURPOSE:
- *   Holds mutable shared variables only. Getters/setters are exposed through
- *   engine/get/* and engine/set/*. This keeps domain separation explicit.
+ *   The rendering context was previously scoped to `window` — this module
+ *   replaces that with proper encapsulation so the context is trackable,
+ *   testable, and explicitly owned by the engine state layer.
  */
 
 export const canvasContext = {

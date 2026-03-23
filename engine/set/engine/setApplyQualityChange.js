@@ -15,6 +15,11 @@
  *   - Downgrades require DOWNGRADE_THRESHOLD (5) consecutive over-budget frames
  *   - Upgrades require UPGRADE_THRESHOLD (15) consecutive under-budget frames
  *   - This asymmetry prevents thrashing during borderline performance
+ *
+ * WHY THIS EXISTS:
+ *   Quality changes are expensive (shader recompile, buffer rebuild). Rapid
+ *   toggling between levels costs more than staying at a lower quality.
+ *   Hysteresis ensures we only switch when the trend is clear and sustained.
  */
 
 "use strict";
