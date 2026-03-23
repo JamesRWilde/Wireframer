@@ -58,7 +58,7 @@ import { initRenderPipeline } from '@engine/init/render/pipeline/initRenderPipel
 
 // Background worker initialization (dedicated background pipeline)
 import { initBackgroundWorker } from '@engine/init/render/initBackgroundWorker.js';
-import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
+import { getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 
 // Debug overlay removed for production build
 // (no longer supported)

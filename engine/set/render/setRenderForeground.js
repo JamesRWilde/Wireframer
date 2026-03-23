@@ -9,7 +9,7 @@
  *
  * ARCHITECTURE ROLE:
  *   Setter for the mutable render function reference in renderForegroundState.
- *   The frame loop calls setGetRenderForeground() to retrieve this pointer
+ *   The frame loop calls getRenderForeground() to retrieve this pointer
  *   and invoke it each frame.
  *
  * WHY THIS EXISTS:

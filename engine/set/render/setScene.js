@@ -30,7 +30,7 @@ import { setDrawBackground } from '@engine/set/render/draw/setDrawBackground.js'
 
 // Import the active foreground renderer function pointer
 // This is set to either gpuPath or cpuPath during initialization
-import { setGetRenderForeground } from '@engine/set/render/setGetRenderForeground.js';
+import { getRenderForeground } from '@engine/get/render/getRenderForeground.js';
 import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 
 // Import decimation for GPU LOD matching
@@ -103,9 +103,9 @@ export function setScene(nowMs) {
   }
 
   // Step 5: Render foreground using the active pipeline
-  // setGetRenderForeground() returns the function pointer set during initialization
+  // getRenderForeground returns the function pointer set during initialization
   // There is NO fallback - only one pipeline exists and if it fails, nothing renders
-  const renderFn = setGetRenderForeground();
+  const renderFn = getRenderForeground();
   const drewCpuForeground = renderFn(meshToRender, backgroundOnSeparateCanvas, morphing);
   
   // For GPU mode, the return value indicates success (true) or failure (false)

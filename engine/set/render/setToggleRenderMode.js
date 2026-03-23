@@ -18,7 +18,7 @@
 "use strict";
 
 // Import the GPU mode getter to determine current rendering state
-import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
+import { getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 // Import the CPU mode switch — disposes GPU pipeline, initializes CPU
 import { setSwitchToCpuMode } from '@engine/set/render/setSwitchToCpuMode.js';
 // Import the GPU mode switch — disposes CPU pipeline, initializes GPU

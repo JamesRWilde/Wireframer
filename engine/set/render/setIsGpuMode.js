@@ -2,19 +2,16 @@
  * setIsGpuMode.js - Set GPU Mode Flag
  *
  * PURPOSE:
- *   Gets and sets the boolean flag indicating whether GPU (WebGL) rendering
- *   mode is active. This flag is read by the frame loop and toggle logic
- *   to determine which rendering pipeline to use.
+ *   Sets the boolean flag indicating whether GPU (WebGL) rendering mode is active.
  *
  * ARCHITECTURE ROLE:
- *   Central accessor for the GPU mode flag stored in gpuModeState.
- *   Read by the frame loop to select the active renderer, and written
- *   when toggling between GPU and CPU pipelines.
+ *   Setter for the GPU mode flag stored in gpuModeState. Written when toggling
+ *   between GPU and CPU pipelines. For reads, use getIsGpuMode.js.
  *
  * WHY THIS EXISTS:
  *   The rendering pipeline needs a single source of truth for which mode
- *   is active. Rather than scattering the flag across multiple modules,
- *   this file encapsulates read/write access in one place.
+ *   is active. This file encapsulates the write access. Reads are handled
+ *   by getIsGpuMode.js to maintain single-function-per-file discipline.
  */
 
 "use strict";
@@ -29,12 +26,4 @@ import { gpuModeState } from '@engine/set/render/setGpuModeState.js';
  */
 export function setIsGpuMode(value) {
   gpuModeState.value = value;
-}
-
-/**
- * isGpuMode - Gets the current GPU mode flag
- * @returns {boolean} true if GPU mode is active
- */
-export function isGpuMode() {
-  return gpuModeState.value;
 }

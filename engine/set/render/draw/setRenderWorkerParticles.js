@@ -15,14 +15,14 @@
 
 "use strict";
 
-import { setGetCachedColorRgb } from '@engine/set/render/draw/setGetCachedColorRgb.js';
+import { getCachedColorRgb } from '@engine/set/render/draw/getCachedColorRgb.js';
 import { setBucketWorkerParticles } from '@engine/set/render/draw/setBucketWorkerParticles.js';
 import { setDrawWorkerParticlesCpu } from '@engine/set/render/draw/setDrawWorkerParticlesCpu.js';
 
 export function setRenderWorkerParticles(ctx, data, count, opacity, particleColor, themeMode) {
   if (count === 0) return;
 
-  const colorRgb = setGetCachedColorRgb(particleColor);
+  const colorRgb = getCachedColorRgb(particleColor);
   const buckets = setBucketWorkerParticles(data, count, opacity);
 
   setDrawWorkerParticlesCpu(ctx, buckets, colorRgb);

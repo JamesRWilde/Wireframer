@@ -15,13 +15,13 @@
 
 "use strict";
 
-import { setGetCachedColorRgb } from '@engine/set/render/draw/setGetCachedColorRgb.js';
+import { getCachedColorRgb } from '@engine/set/render/draw/getCachedColorRgb.js';
 import { setEnsureBucketArrays } from '@engine/set/render/draw/setEnsureBucketArrays.js';
 
 export function setRenderMainThreadParticles(ctx, particles, opacityScale, themeAlphaBoost, particleColor) {
   if (particles.length === 0) return;
 
-  const [baseR, baseG, baseB] = setGetCachedColorRgb(particleColor);
+  const [baseR, baseG, baseB] = getCachedColorRgb(particleColor);
   const buckets = setEnsureBucketArrays();
 
   // Bucket particles
