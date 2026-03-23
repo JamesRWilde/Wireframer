@@ -31,8 +31,9 @@ import { setDrawSceneModel }from '@engine/set/gpu/setDrawSceneModel.js';
 // GPU path shows the GPU canvas and hides the CPU canvas
 import { setGpuCanvasHidden }from '@engine/set/gpu/setGpuCanvasHidden.js';
 import { setCanvasCpuHidden }from '@engine/set/cpu/setCanvasCpuHidden.js';
-import { getRotation } from '@engine/state/render/statePhysicsState.js';
-import { getZoom, getZHalf } from '@engine/state/render/stateZoomState.js';
+import { getRotation } from '@engine/get/render/physics/getRotation.js';
+import { getZoom } from '@engine/get/render/getZoom.js';
+import { getZHalf } from '@engine/get/render/getZHalf.js';
 import { getModelCy } from '@engine/get/render/getModelCy.js';
 // getZHalf moved to zoomState import
 import { getW } from '@engine/get/render/getW.js';

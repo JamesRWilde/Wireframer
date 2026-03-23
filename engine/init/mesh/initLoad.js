@@ -47,7 +47,7 @@ import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setMeshEdgesFromF
 import { cloneMesh } from '@engine/init/mesh/initCloneMesh.js';
 import { getMeshClone } from '@engine/get/mesh/getMeshClone.js';
 import { setMeshClone } from '@engine/set/mesh/setMeshClone.js';
-import { getZoom } from '@engine/state/render/stateZoomState.js';
+import { getZoom } from '@engine/get/render/getZoom.js';
 import { modelState } from '@engine/state/render/stateModel.js';
 import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
 import { setInitMeshEngineLoad } from '@engine/set/mesh/setInitMeshEngineLoad.js';

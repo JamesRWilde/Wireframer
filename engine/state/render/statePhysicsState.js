@@ -43,78 +43,9 @@ export const physicsState = {
   axisAngleY: 0,
 };
 
-// --- Getters ---
+// This file stores only physics state and does not export any accessors.
+// Getters and setters are implemented in dedicated one-function-per-file
+// modules in engine/get/render/physics and engine/set/render/physics.
 
-/** Returns auto-rotation target x angular velocity. */
-export function getAutoWx() { return physicsState.AUTO_WX; }
+// End of statePhysicsState.js
 
-/** Returns auto-rotation target y angular velocity. */
-export function getAutoWy() { return physicsState.AUTO_WY; }
-
-/** Returns auto-rotation target z angular velocity. */
-export function getAutoWz() { return physicsState.AUTO_WZ; }
-
-/** Returns axis-angle x component. */
-export function getAxisAngleX() { return physicsState.axisAngleX; }
-
-/** Returns axis-angle y component. */
-export function getAxisAngleY() { return physicsState.axisAngleY; }
-
-/** Returns last recorded pointer x position. */
-export function getLastPointerX() { return physicsState.lastPointerX; }
-
-/** Returns last recorded pointer y position. */
-export function getLastPointerY() { return physicsState.lastPointerY; }
-
-/** Returns 4x4 rotation matrix. */
-export function getRotation() { return physicsState.R; }
-
-/** Returns x-axis angular velocity. */
-export function getWx() { return physicsState.wx; }
-
-/** Returns y-axis angular velocity. */
-export function getWy() { return physicsState.wy; }
-
-/** Returns z-axis angular velocity. */
-export function getWz() { return physicsState.wz; }
-
-/** Returns whether the user is currently dragging. */
-export function isDragging() { return physicsState.dragging; }
-
-// --- Setters ---
-
-/** Sets auto-rotation target angular velocity around x. */
-export function setAutoWx(value) { physicsState.AUTO_WX = value; }
-
-/** Sets auto-rotation target angular velocity around y. */
-export function setAutoWy(value) { physicsState.AUTO_WY = value; }
-
-/** Sets auto-rotation target angular velocity around z. */
-export function setAutoWz(value) { physicsState.AUTO_WZ = value; }
-
-/** Sets axis-angle x component for rotation. */
-export function setAxisAngleX(value) { physicsState.axisAngleX = value; }
-
-/** Sets axis-angle y component for rotation. */
-export function setAxisAngleY(value) { physicsState.axisAngleY = value; }
-
-/** Sets whether the user is currently dragging. */
-export function setDragging(value) { physicsState.dragging = value; }
-
-/** Sets last recorded pointer x position. */
-export function setLastPointerX(value) { physicsState.lastPointerX = value; }
-
-/** Sets last recorded pointer y position. */
-export function setLastPointerY(value) { physicsState.lastPointerY = value; }
-
-/** Sets 4x4 rotation matrix. */
-export function setRotation(value) { physicsState.R = value; }
-
-/** Sets x-axis angular velocity. */
-export function setWx(value) { physicsState.wx = value; }
-
-/** Sets y-axis angular velocity. */
-export function setWy(value) { physicsState.wy = value; }
-
-/** Sets z-axis angular velocity. */
-export function setWz(value) { physicsState.wz = value; }

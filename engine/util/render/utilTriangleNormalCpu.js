@@ -18,7 +18,7 @@
  *   - Smooth: Averages pre-computed corner normals, rotated to view space
  */
 
-import { getRotation } from '@engine/state/render/statePhysicsState.js';
+import { getRotation } from '@engine/get/render/physics/getRotation.js';
 
 /**
  * resolveTriangleNormal - Resolves surface normal for a triangle

@@ -12,7 +12,7 @@
  * WHY THIS EXISTS:
  *   Centralizes theme mode updates to avoid duplicated state transitions and
  *   inconsistent UI color behavior when toggling between modes.
- *
+ */
 
 "use strict";
 

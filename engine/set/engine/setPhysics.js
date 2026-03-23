@@ -31,10 +31,19 @@ import { utilReorthogonalized } from '@engine/util/render/utilReorthogonalized.j
 // Import loop state — holds frame counter used for periodic re-orthogonalization
 import { state } from '@engine/state/stateLoop.js';
 // Import physics state getters/setters — rotation matrix, angular velocities, drag flags, axis angles
-import {
-  getRotation, getWx, getWy, getWz, isDragging, getAxisAngleX, getAxisAngleY,
-  setRotation, setAutoWx, setAutoWy, setAutoWz, setAxisAngleX, setAxisAngleY,
-} from '@engine/state/render/statePhysicsState.js';
+import { getRotation } from '@engine/get/render/physics/getRotation.js';
+import { getWx } from '@engine/get/render/physics/getWx.js';
+import { getWy } from '@engine/get/render/physics/getWy.js';
+import { getWz } from '@engine/get/render/physics/getWz.js';
+import { isDragging } from '@engine/get/render/physics/isDragging.js';
+import { getAxisAngleX } from '@engine/get/render/physics/getAxisAngleX.js';
+import { getAxisAngleY } from '@engine/get/render/physics/getAxisAngleY.js';
+import { setRotation } from '@engine/set/render/physics/setRotation.js';
+import { setAutoWx } from '@engine/set/render/physics/setAutoWx.js';
+import { setAutoWy } from '@engine/set/render/physics/setAutoWy.js';
+import { setAutoWz } from '@engine/set/render/physics/setAutoWz.js';
+import { setAxisAngleX } from '@engine/set/render/physics/setAxisAngleX.js';
+import { setAxisAngleY } from '@engine/set/render/physics/setAxisAngleY.js';
 // Import friction applier — decelerates angular velocity during user drag
 import { setApplyFriction } from '@engine/set/render/physics/setApplyFriction.js';
 // Import auto-rotation ease — smoothly transitions velocities toward auto targets

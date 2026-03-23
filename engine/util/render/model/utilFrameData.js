@@ -38,8 +38,8 @@ import { utilFlatNested }from '@engine/util/render/utilFlatNested.js';
 
 // Import synchronous transform fallback
 import { utilTransformSync }from '@engine/util/render/utilTransformSync.js';
-import { getRotation } from '@engine/state/render/statePhysicsState.js';
-import { getZoom } from '@engine/state/render/stateZoomState.js';
+import { getRotation } from '@engine/get/render/physics/getRotation.js';
+import { getZoom } from '@engine/get/render/getZoom.js';
 import { getModelCy } from '@engine/get/render/getModelCy.js';
 import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';

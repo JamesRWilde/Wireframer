@@ -30,30 +30,9 @@ export const zoomState = {
   zoomMax: 2.75,
 };
 
-// --- Getters ---
+// This file stores only zoom state and does not export any accessors.
+// Getters and setters are implemented in dedicated one-function-per-file
+// modules in engine/get/render and engine/set/render.
 
-/** Returns zHalf. */
-export function getZHalf() { return zoomState.zHalf; }
+// End of stateZoomState.js
 
-/** Returns camera zoom level. */
-export function getZoom() { return zoomState.zoom; }
-
-/** Returns minimum zoom level. */
-export function getZoomMax() { return zoomState.zoomMax; }
-
-/** Returns maximum zoom level. */
-export function getZoomMin() { return zoomState.zoomMin; }
-
-// --- Setters ---
-
-/** Sets zHalf. */
-export function setZHalf(value) { zoomState.zHalf = value; }
-
-/** Sets camera zoom level. */
-export function setZoom(value) { zoomState.zoom = value; }
-
-/** Sets minimum zoom level. */
-export function setZoomMax(value) { zoomState.zoomMax = value; }
-
-/** Sets maximum zoom level. */
-export function setZoomMin(value) { zoomState.zoomMin = value; }

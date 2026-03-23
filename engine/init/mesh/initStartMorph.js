@@ -43,7 +43,7 @@ import { morphState } from '@engine/state/mesh/stateMorph.js';
 import { cloneMesh } from '@engine/init/mesh/initCloneMesh.js';
 import { computeMorphMap } from '@engine/init/mesh/initComputeMorphMap.js';
 import { decimateByPercent } from '@engine/init/mesh/initDecimateByPercent.js';
-import { getZoom } from '@engine/state/render/stateZoomState.js';
+import { getZoom } from '@engine/get/render/getZoom.js';
 import { recenterToOrigin } from '@engine/init/mesh/initRecenterToOrigin.js';
 
 /**

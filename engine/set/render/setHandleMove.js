@@ -28,10 +28,13 @@
 // getLastPointerX/Y: previous frame's pointer position for delta calculation
 // setWx/Wy: set angular velocity (radians per frame) for X/Y rotation
 // setLastPointerX/Y: store current position for next frame's delta
-import {
-  isDragging, getLastPointerX, getLastPointerY,
-  setWx, setWy, setLastPointerX, setLastPointerY,
-} from '@engine/state/render/statePhysicsState.js';
+import { isDragging } from '@engine/get/render/physics/isDragging.js';
+import { getLastPointerX } from '@engine/get/render/physics/getLastPointerX.js';
+import { getLastPointerY } from '@engine/get/render/physics/getLastPointerY.js';
+import { setWx } from '@engine/set/render/physics/setWx.js';
+import { setWy } from '@engine/set/render/physics/setWy.js';
+import { setLastPointerX } from '@engine/set/render/physics/setLastPointerX.js';
+import { setLastPointerY } from '@engine/set/render/physics/setLastPointerY.js';
 
 /**
  * setHandleMove - Handles pointer movement for model rotation

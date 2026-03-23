@@ -39,7 +39,7 @@ import { setAnimationFrame } from '@engine/set/engine/frame/setAnimationFrame.js
 // Rotation
 import { getRotationInit } from '@engine/get/render/rotation/getRotationInit.js';
 import { R } from '@engine/state/render/stateRotationMatrixRef.js';
-import { setRotation } from '@engine/state/render/statePhysicsState.js';
+import { setRotation } from '@engine/set/render/physics/setRotation.js';
 
 // Render toggles
 import { setSyncRenderToggles } from '@ui/set/setSyncRenderToggles.js';
