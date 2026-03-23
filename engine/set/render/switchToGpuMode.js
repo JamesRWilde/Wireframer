@@ -15,11 +15,11 @@
 
 import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
 import { setIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
-import { gpuPath } from '@engine/set/render/gpuPath.js';
+import { setGpuPath } from '@engine/set/render/setGpuPath.js';
 import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
-import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
-import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
-import { hud } from '@engine/set/engine/hud.js';
+import { setGpuCanvasHidden } from '@engine/set/gpu/setGpuCanvasHidden.js';
+import { setCanvasCpuHidden } from '@engine/set/cpu/setCanvasCpuHidden.js';
+import { setHud } from '@engine/set/engine/setHud.js';
 import { setGpuCanvas } from '@engine/set/render/setGpuCanvas.js';
 import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
 import { state } from '@engine/state/loop.js';
@@ -44,19 +44,19 @@ export function switchToGpuMode() {
   setGpuGl(gl);
   setGpuCanvas(gpuCanvas);
   setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {
-    return gpuPath(gl, meshToRender, morphing);
+    return setGpuPath(gl, meshToRender, morphing);
   });
   setIsGpuMode(true);
 
   state.foregroundRenderMode = 'gpu';
-  hud('gpu');
+  setHud('gpu');
 
   // Confirm we are in GPU mode and CPU mode is inactive
   state.gpuSceneDrawnLastFrame = false;
   state.cpuForegroundDrawnOnMainCanvas = false;
 
-  canvasHidden(false);
-  canvasCpuHidden(true);
+  setGpuCanvasHidden(false);
+  setCanvasCpuHidden(true);
 
   // GPU background canvas appears; CPU background is hidden.
   const cpuBg = document.getElementById('bg');

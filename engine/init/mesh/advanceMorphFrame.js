@@ -34,7 +34,7 @@
 "use strict";
 
 import { morphState } from '@engine/state/mesh/morph.js';
-import { easeOut } from '@engine/get/mesh/easeOut.js';
+import { getEaseOut } from '@engine/get/mesh/getEaseOut.js';
 import { cloneMesh } from '@engine/init/mesh/cloneMesh.js';
 import { interpolateInSphere } from '@engine/init/mesh/interpolateInSphere.js';
 
@@ -85,7 +85,7 @@ export function advanceMorphFrame() {
     // Source mesh collapses toward its decimated (low-poly) form using
     // the _oldToNew cluster mapping. Each high-poly vertex finds its
     // target in the decimated mesh and slides there along the sphere.
-    const t = easeOut(tRaw / PHASE1_END);
+    const t = getEaseOut(tRaw / PHASE1_END);
     const fromV = fromMesh.V;
     const decV = fromDec.V;
     const oldToNew = fromMesh._oldToNew;
@@ -109,7 +109,7 @@ export function advanceMorphFrame() {
     // Decimated source morphs to decimated target using the precomputed
     // morphMap (nearest-vertex spatial mapping via computeMorphMap).
     // The morphMap must exist — if null, something went wrong in startMorph.
-    const t = easeOut((tRaw - PHASE1_END) / (PHASE2_END - PHASE1_END));
+    const t = getEaseOut((tRaw - PHASE1_END) / (PHASE2_END - PHASE1_END));
 
     if (!morphMap) throw new Error('Phase 2 morph requires morphMap but it was null');
 
@@ -136,7 +136,7 @@ export function advanceMorphFrame() {
     // Decimated target expands into full-detail target using the _oldToNew
     // cluster mapping. Each decimated vertex fans out to its original
     // high-poly positions, sliding along the sphere surface.
-    const t = easeOut((tRaw - PHASE2_END) / (1 - PHASE2_END));
+    const t = getEaseOut((tRaw - PHASE2_END) / (1 - PHASE2_END));
     const toV = toMesh.V;
     const oldToNew = toMesh._oldToNew;
 

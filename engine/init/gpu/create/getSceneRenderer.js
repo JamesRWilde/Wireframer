@@ -22,15 +22,15 @@
 
 // Import shader program creation
 // Compiles vertex and fragment shaders for fill and wire rendering
-import { scenePrograms }from '@engine/init/gpu/create/scenePrograms.js';
+import { createScenePrograms }from '@engine/init/gpu/create/createScenePrograms.js';
 
 // Import buffer store creation
 // Manages vertex buffers for fill positions, normals, and wire edges
-import { sceneBufferStore }from '@engine/init/gpu/create/sceneBufferStore.js';
+import { createSceneBufferStore }from '@engine/init/gpu/create/createSceneBufferStore.js';
 
 // Import draw API creation
 // Provides model and clear functions for WebGL rendering
-import { sceneDraw }from '@engine/init/gpu/create/sceneDraw.js';
+import { createSceneDraw }from '@engine/init/gpu/create/createSceneDraw.js';
 
 /**
  * sceneRenderer - Creates a GPU scene renderer for a canvas element
@@ -51,7 +51,7 @@ export function getSceneRenderer(gl) {
   // Compile fill and wire shader programs
   let shaderPack;
   try {
-    shaderPack = scenePrograms(gl);
+    shaderPack = createScenePrograms(gl);
     if (!shaderPack) console.warn('[sceneRenderer] scenePrograms returned null');
   } catch (err) {
     console.warn('[sceneRenderer] shader error:', err);
@@ -59,11 +59,11 @@ export function getSceneRenderer(gl) {
   }
 
   // Create GPU buffer store for vertex/index data
-  const bufferStore = sceneBufferStore(gl, supportsUint32);
+  const bufferStore = createSceneBufferStore(gl, supportsUint32);
   if (!bufferStore) console.warn('[sceneRenderer] bufferStore failed');
 
   // Create the draw API that wraps all GPU rendering operations
-  const drawApi = sceneDraw(gl, gl.canvas, shaderPack, bufferStore);
+  const drawApi = createSceneDraw(gl, gl.canvas, shaderPack, bufferStore);
   if (!drawApi) console.warn('[sceneRenderer] drawApi failed');
 
   // Return the engine-owned renderer interface

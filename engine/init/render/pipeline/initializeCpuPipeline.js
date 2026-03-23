@@ -17,14 +17,14 @@ import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
 import { setIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 
 // Import CPU path function
-import { cpuPath } from '@engine/set/render/cpuPath.js';
+import { setCpuPath } from '@engine/set/render/setCpuPath.js';
 
 // Import canvas visibility controls
-import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
-import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
+import { setGpuCanvasHidden } from '@engine/set/gpu/setGpuCanvasHidden.js';
+import { setCanvasCpuHidden } from '@engine/set/cpu/setCanvasCpuHidden.js';
 
 // Import HUD updater
-import { hud } from '@engine/set/engine/hud.js';
+import { setHud } from '@engine/set/engine/setHud.js';
 
 // Import loop state for backward compatibility
 import { state } from '@engine/state/loop.js';
@@ -42,7 +42,7 @@ import { applyCpuLodCap } from '@engine/set/mesh/applyCpuLodCap.js';
 export function initializeCpuPipeline() {
   // Set the render function pointer to CPU path
   setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {
-    return cpuPath(meshToRender, backgroundOnSeparateCanvas, morphing);
+    return setCpuPath(meshToRender, backgroundOnSeparateCanvas, morphing);
   });
   setIsGpuMode(false);
   
@@ -50,11 +50,11 @@ export function initializeCpuPipeline() {
   state.foregroundRenderMode = 'cpu';
   
   // Update HUD to show CPU mode
-  hud('cpu');
+  setHud('cpu');
   
   // Show CPU canvas, hide GPU canvas
-  canvasHidden(true);
-  canvasCpuHidden(false);
+  setGpuCanvasHidden(true);
+  setCanvasCpuHidden(false);
 
   // CPU background canvas appears; GPU background is hidden.
   const cpuBg = document.getElementById('bg');

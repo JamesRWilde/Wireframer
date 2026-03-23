@@ -15,17 +15,17 @@
 
 import { initializeCpuPipeline } from '@engine/init/render/pipeline/initializeCpuPipeline.js';
 import { applyCpuLodCap } from '@engine/set/mesh/applyCpuLodCap.js';
-import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
-import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
+import { setGpuCanvasHidden } from '@engine/set/gpu/setGpuCanvasHidden.js';
+import { setCanvasCpuHidden } from '@engine/set/cpu/setCanvasCpuHidden.js';
 import { state } from '@engine/state/loop.js';
-import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
+import { getSceneRendererGpu } from '@engine/get/gpu/getSceneRendererGpu.js';
 import { gpuState } from '@engine/state/gpu/scene.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
-import { backgroundWorker } from '@engine/init/render/backgroundWorker.js';
+import { initBackgroundWorker } from '@engine/init/render/initBackgroundWorker.js';
 
 export function switchToCpuMode() {
   // Dispose previous GPU pipeline (if any)
-  const renderer = sceneRenderer();
+  const renderer = getSceneRendererGpu();
   if (renderer?.dispose) renderer.dispose();
 
   // Clear cached GPU renderer
@@ -48,11 +48,11 @@ export function switchToCpuMode() {
   applyCpuLodCap();
 
   // Initialize CPU background worker pipeline now that GPU has been disabled.
-  backgroundWorker('cpu');
+  initBackgroundWorker('cpu');
 
   // Ensure correct canvas visibility
-  canvasHidden(true);
-  canvasCpuHidden(false);
+  setGpuCanvasHidden(true);
+  setCanvasCpuHidden(false);
 
   // Set backward compatible state
   state.foregroundRenderMode = 'cpu';

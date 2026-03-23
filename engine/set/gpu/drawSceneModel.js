@@ -15,7 +15,7 @@
 "use strict";
 
 // Import GPU renderer getter to access the singleton renderer instance
-import { sceneRenderer }from '@engine/get/gpu/sceneRenderer.js';
+import { getSceneRendererGpu }from '@engine/get/gpu/getSceneRendererGpu.js';
 
 // Import GPU renderer disabler for fallback on errors
 import { disableSceneRenderer }from '@engine/dispose/gpu/disableSceneRenderer.js';
@@ -33,7 +33,7 @@ import { switchToCpuMode } from '@engine/set/render/switchToCpuMode.js';
  */
 export function drawSceneModel(gl, model, params) {
   // Get the GPU scene renderer (lazy-creates on first call)
-  const renderer = sceneRenderer(gl);
+  const renderer = getSceneRendererGpu(gl);
   if (!renderer) return false;
 
   try {

@@ -15,11 +15,11 @@
 
 import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
-import { colors } from '@engine/get/render/background/colors.js';
+import { getColors } from '@engine/get/render/background/getColors.js';
 import { createBackgroundRenderer } from '@engine/init/gpu/background/createBackgroundRenderer.js';
 import { parseCssColor } from '@engine/get/render/background/parseCssColor.js';
-import { gpuBackgroundCanvas } from '@engine/get/render/background/gpuBackgroundCanvas.js';
-import { gpuBackgroundGl } from '@engine/get/render/background/gpuBackgroundGl.js';
+import { getGpuBgCanvas } from '@engine/get/render/background/getGpuBgCanvas.js';
+import { getGpuBgGl } from '@engine/get/render/background/getGpuBgGl.js';
 
 /**
  * backgroundGpu - GPU background pipeline
@@ -32,13 +32,13 @@ export function backgroundGpu(nowMs) {
     throw new Error('backgroundGpu executed while CPU mode active');
   }
 
-  const bgCanvas = gpuBackgroundCanvas();
+  const bgCanvas = getGpuBgCanvas();
   if (!bgCanvas) return false;
 
   const w = bgCanvas.clientWidth || bgCanvas.width;
   const h = bgCanvas.clientHeight || bgCanvas.height;
 
-  const gl = gpuBackgroundGl();
+  const gl = getGpuBgGl();
   if (!gl) return false;
 
   // Show GPU background canvas and hide CPU background canvas
@@ -47,7 +47,7 @@ export function backgroundGpu(nowMs) {
   bgCanvas.style.visibility = 'visible';
 
   // Clear background in WebGL before particle draw
-  const { bgColor, particleColor } = colors();
+  const { bgColor, particleColor } = getColors();
 
   // Decode particle color into numeric RGB directly to avoid parser edge cases.
   const decodedParticleColor = parseCssColor(particleColor || '#ffffff');

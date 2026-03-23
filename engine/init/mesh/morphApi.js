@@ -24,7 +24,7 @@
 // Import morph API functions
 import { startMorph }from '@engine/init/mesh/startMorph.js';
 import { advanceMorphFrame }from '@engine/init/mesh/advanceMorphFrame.js';
-import { currentMorph }from '@engine/get/mesh/currentMorph.js';
+import { getCurrentMorph }from '@engine/get/mesh/getCurrentMorph.js';
 import { isMorphing }from '@engine/get/mesh/isMorphing.js';
 
 // Set default morph duration and API through state modules
@@ -35,6 +35,6 @@ setMorphDuration(1600);
 setMorph({
   startMorph,
   advanceMorphFrame,
-  currentMorph,
+  currentMorph: getCurrentMorph,
   isMorphing,
 });

@@ -17,14 +17,14 @@
  */
 
 // Import the detail level setter for LOD control
-import { detailLevel }from '@engine/set/mesh/detailLevel.js';
+import { setDetailLevel }from '@engine/set/mesh/setDetailLevel.js';
 
 import { modelState } from '@engine/state/render/model.js';
 import { getMorph } from '@engine/get/mesh/getMorph.js';
 import { getMorphDuration } from '@engine/get/mesh/getMorphDuration.js';
 import { capModelForCpu } from '@engine/set/mesh/capModelForCpu.js';
 import { isGpuMode } from '@engine/set/render/isGpuMode.js';
-import { lodRangeForModel } from '@engine/set/mesh/lodRangeForModel.js';
+import { setLodRangeForModel } from '@engine/set/mesh/setLodRangeForModel.js';
 
 /**
  * finalizeModel - Finalizes and activates a mesh model
@@ -52,10 +52,10 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct, 
     modelState.cpuBaseModel = capModelForCpu(newModelCopy);
     // Update LOD range to reflect the capped model's vertex count
     // This ensures the slider's 100% corresponds to the actual maximum available in CPU mode
-    lodRangeForModel(modelState.cpuBaseModel);
+    setLodRangeForModel(modelState.cpuBaseModel);
   } else {
     // In GPU mode, LOD range uses the full model's vertex count
-    lodRangeForModel(newModelCopy);
+    setLodRangeForModel(newModelCopy);
   }
 
   // Reset LOD to full detail on new model load
@@ -69,11 +69,11 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct, 
     // Morph animation: smooth transition from old to new model
     // Pass targetZoom so the morph interpolates zoom as well as vertices
     morphApi.startMorph(oldModel, newModelCopy, morphDuration, () => {
-      detailLevel(detailLevelPct, name);
+      setDetailLevel(detailLevelPct, name);
     }, targetZoom);
   } else {
     // Instant transition: directly set the detail level
     // This immediately activates the new model at the specified LOD
-    detailLevel(detailLevelPct, name);
+    setDetailLevel(detailLevelPct, name);
   }
 }

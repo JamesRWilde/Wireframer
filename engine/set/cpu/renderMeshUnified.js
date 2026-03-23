@@ -21,7 +21,7 @@
 
 "use strict";
 
-import { frameData }from '@engine/get/render/model/frameData.js';
+import { getFrameData }from '@engine/get/render/model/getFrameData.js';
 import { getModelTriangles }from '@engine/get/render/model/getModelTriangles.js';
 import { getShadingMode }from '@engine/get/cpu/getShadingMode.js';
 import { getTriCornerNormals }from '@engine/get/render/model/getTriCornerNormals.js';
@@ -44,7 +44,7 @@ export function renderMeshUnified(model, ctx) {
   if (!model?.V?.length || !model?.F?.length || !ctx) return;
 
   // Get transformed vertices
-  const fd = frameData(model);
+  const fd = getFrameData(model);
   if (!fd) return;
   const { T, P2 } = fd;
 

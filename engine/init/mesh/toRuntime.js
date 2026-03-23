@@ -23,16 +23,16 @@
 import { objLines }from '@engine/init/mesh/parse/objLines.js';
 
 // Import raw text validator
-import { rawObjText }from '@engine/get/mesh/rawObjText.js';
+import { getRawObjText }from '@engine/get/mesh/getRawObjText.js';
 
 // Import parse result checker
-import { parseCheckResults }from '@engine/get/mesh/parseCheckResults.js';
+import { getParseCheckResults }from '@engine/get/mesh/getParseCheckResults.js';
 
 // Import mesh object builder
-import { object }from '@engine/init/mesh/build/object.js';
+import { buildObject }from '@engine/init/mesh/build/buildObject.js';
 
 // Import winding correction
-import { fixWinding }from '@engine/get/mesh/fixWinding.js';
+import { getFixedWinding }from '@engine/get/mesh/getFixedWinding.js';
 import { setMeshParseErrors } from '@engine/set/mesh/setMeshParseErrors.js';
 
 /**
@@ -60,7 +60,7 @@ export function toRuntime(text, overrides = {}) {
   }
   
   // Step 1: Split text into lines and validate format
-  const lines = rawObjText(text, overrides);
+  const lines = getRawObjText(text, overrides);
 
   // Step 2: Parse lines into raw mesh data
   const {uniqueVerts, faces, rawEdges, rawLines, materialSections, failingLines} = objLines(lines, overrides);
@@ -69,14 +69,14 @@ export function toRuntime(text, overrides = {}) {
   setMeshParseErrors(failingLines);
 
   // Step 3: Check for parse errors
-  parseCheckResults(uniqueVerts, faces, failingLines, overrides);
+  getParseCheckResults(uniqueVerts, faces, failingLines, overrides);
 
   // Step 4: Build final mesh object with all properties
   // Passes raw edges, lines, and material sections through — no auto-deriving
-  const meshObj = object(uniqueVerts, faces, rawEdges, rawLines, materialSections);
+  const meshObj = buildObject(uniqueVerts, faces, rawEdges, rawLines, materialSections);
 
   // Step 5: Fix face winding (detect inward normals and flip if needed)
-  fixWinding(meshObj);
+  getFixedWinding(meshObj);
 
   // Step 6: Sanity validate the result
   if (!Array.isArray(meshObj.V) || !Array.isArray(meshObj.F)) {

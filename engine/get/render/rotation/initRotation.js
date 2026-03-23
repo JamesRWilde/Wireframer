@@ -19,13 +19,13 @@
 "use strict";
 
 // Import matrix multiplication for combining rotations
-import { matrixMultiply3x3 }from '@engine/get/render/matrixMultiply3x3.js';
+import { getMatrixMultiply3x3 }from '@engine/get/render/getMatrixMultiply3x3.js';
 
 // Import Y-axis rotation matrix constructor
-import { matrixY }from '@engine/get/render/rotation/matrixY.js';
+import { getMatrixY }from '@engine/get/render/rotation/getMatrixY.js';
 
 // Import X-axis rotation matrix constructor
-import { matrixX }from '@engine/get/render/rotation/matrixX.js';
+import { getMatrixX }from '@engine/get/render/rotation/getMatrixX.js';
 
 // Import the global rotation matrix reference
 import {R} from '@engine/state/render/rotationMatrixRef.js';
@@ -41,5 +41,5 @@ import {R} from '@engine/state/render/rotationMatrixRef.js';
  * Falls back to identity matrix if rotation functions aren't available.
  */
 export function initRotation() {
-  R.value = matrixMultiply3x3(matrixY(0.4), matrixX(0.18));
+  R.value = getMatrixMultiply3x3(getMatrixY(0.4), getMatrixX(0.18));
 }

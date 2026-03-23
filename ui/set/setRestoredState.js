@@ -18,12 +18,12 @@
 import { getUiState }from '@ui/get/read/getState.js';
 import { applyThemeMode }from '@ui/set/apply/applyThemeMode.js';
 import { setClampedValue }from '@ui/set/apply/setClampedValue.js';
-import { bldMigratedState }from '@ui/init/bldMigratedState.js';
+import { buildMigratedState }from '@ui/init/buildMigratedState.js';
 import {select,themeModeEl,lodSlider,bgDensity,bgVelocity,bgOpacity,fillOpacity,wireOpacity} from '@ui/state/dom.js';
 
 const UI_STATE_KEY = 'wireframer.uiState';
 
-export function setRestoredState() {
+export function setRestoredUiState() {
   const savedState = getUiState();
   if (!savedState) return null;
 
@@ -36,7 +36,7 @@ export function setRestoredState() {
   applyThemeMode(savedState);
 
   try {
-    localStorage.setItem(UI_STATE_KEY, JSON.stringify(bldMigratedState(savedState)));
+    localStorage.setItem(UI_STATE_KEY, JSON.stringify(buildMigratedState(savedState)));
     try { localStorage.removeItem('undefined'); } catch {}
   } catch {}
 

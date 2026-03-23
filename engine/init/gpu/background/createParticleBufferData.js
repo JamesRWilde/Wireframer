@@ -6,7 +6,7 @@
 
 "use strict";
 
-import { randomFloat } from '@engine/get/render/background/randomFloat.js';
+import { getRandomFloat } from '@engine/get/render/background/getRandomFloat.js';
 
 /**
  * createParticleBufferData - Creates a packed Float32Array of particle data
@@ -34,9 +34,9 @@ export function createParticleBufferData(width, height, density, baseSpeed) {
     data[valueOffset + 1] = Math.random() * height;
     data[valueOffset + 2] = Math.cos(angle) * velocityMag * width * spatialVelocityScale;
     data[valueOffset + 3] = Math.sin(angle) * velocityMag * height * spatialVelocityScale;
-    data[valueOffset + 4] = randomFloat(1.2, 3.8);
-    data[valueOffset + 5] = randomFloat(0.35, 0.95);
-    data[valueOffset + 6] = randomFloat(0.9, 1.3) * baseSpeed;
+    data[valueOffset + 4] = getRandomFloat(1.2, 3.8);
+    data[valueOffset + 5] = getRandomFloat(0.35, 0.95);
+    data[valueOffset + 6] = getRandomFloat(0.9, 1.3) * baseSpeed;
     data[valueOffset + 7] = Math.random() * Math.PI * 2;
   }
 

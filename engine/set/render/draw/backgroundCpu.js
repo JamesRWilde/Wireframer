@@ -14,14 +14,14 @@
 "use strict";
 
 import { isGpuMode } from '@engine/set/render/isGpuMode.js';
-import { canvas } from '@engine/get/render/background/canvas.js';
-import { colors } from '@engine/get/render/background/colors.js';
+import { getBgCanvas } from '@engine/get/render/background/getBgCanvas.js';
+import { getColors } from '@engine/get/render/background/getColors.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
 import { postToBackgroundWorker } from '@engine/set/render/postToBackgroundWorker.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
 import { renderWorkerParticles } from '@engine/set/render/draw/renderWorkerParticles.js';
-import { backgroundWorker } from '@engine/init/render/backgroundWorker.js';
+import { initBackgroundWorker } from '@engine/init/render/initBackgroundWorker.js';
 
 /**
  * backgroundCpu - GPU background pipeline (worker + 2D canvas)
@@ -34,15 +34,15 @@ export function backgroundCpu(nowMs) {
     throw new Error('backgroundCpu executed while GPU mode active');
   }
 
-  const canvasState = canvas();
+  const canvasState = getBgCanvas();
   if (!canvasState) return false;
   const { ctx, w, h } = canvasState;
 
-  const { bgColor, particleColor } = colors();
+  const { bgColor, particleColor } = getColors();
 
   if (!backgroundWorkerState.workerReady) {
     if (!backgroundWorkerState.workerInitialized || !backgroundWorkerState.workerAvailable) {
-      backgroundWorker('cpu');
+      initBackgroundWorker('cpu');
     }
 
     ctx.fillStyle = bgColor;

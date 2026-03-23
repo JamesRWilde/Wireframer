@@ -32,9 +32,9 @@
  */
 import { getModelTriangles }from '@engine/get/render/model/getModelTriangles.js';
 import { getTriCornerNormals }from '@engine/get/render/model/getTriCornerNormals.js';
-import { wirePosData }from '@engine/init/gpu/create/wirePosData.js';
-import { fillBuffers }from '@engine/init/gpu/create/fillBuffers.js';
-import { edgeIndexData }from '@engine/init/gpu/create/edgeIndexData.js';
+import { createWirePosData }from '@engine/init/gpu/create/createWirePosData.js';
+import { createFillBuffers }from '@engine/init/gpu/create/createFillBuffers.js';
+import { createEdgeIndexData }from '@engine/init/gpu/create/createEdgeIndexData.js';
 
 export function buildModelBuffers(gl, model, supportsUint32) {
   // Defensive: model must have vertices and edges
@@ -57,15 +57,15 @@ export function buildModelBuffers(gl, model, supportsUint32) {
 
   // Delegate wireframe vertex buffer creation
   // Packs all model vertex positions ([x, y, z]) into a contiguous Float32Array
-  const wirePosDataArr = wirePosData(model);
+  const wirePosDataArr = createWirePosData(model);
 
   // Delegate fill buffer creation (positions, normals, UVs, source indices)
   // Packs all triangle corner attributes into contiguous arrays for fill rendering
-  const { fillPosData, fillNormalData, fillUVData } = fillBuffers(model, triFaces, triCornerNormals);
+  const { fillPosData, fillNormalData, fillUVData } = createFillBuffers(model, triFaces, triCornerNormals);
 
   // Delegate edge index buffer creation
   // Packs all model edges into an index buffer, choosing 16/32 bit as needed
-  const { edgeData, indexType } = edgeIndexData(model, vertexCount, supportsUint32, gl);
+  const { edgeData, indexType } = createEdgeIndexData(model, vertexCount, supportsUint32, gl);
 
   // Create and upload all GPU buffers
   // Each buffer is created, bound, and populated with the corresponding data array

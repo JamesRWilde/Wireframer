@@ -10,7 +10,12 @@ export default defineConfig({
   projects: [
     {
       name: 'gpu',
-      use: { browserName: 'chromium', headless: false },
+      use: {
+        browserName: 'chromium',
+        headless: false,
+        channel: 'chrome',
+        launchOptions: { args: ['--disable-blink-features=AutomationControlled'] },
+      },
     },
   ],
   webServer: {

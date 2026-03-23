@@ -30,14 +30,14 @@
 
 "use strict";
 
-import { filterValidEdges }from '@engine/get/mesh/filterValidEdges.js';
-import { validationResult }from '@engine/get/mesh/validationResult.js';
-import { lodRangeForModel }from '@engine/set/mesh/lodRangeForModel.js';
+import { getFilteredValidEdges }from '@engine/get/mesh/getFilteredValidEdges.js';
+import { getValidationResult }from '@engine/get/mesh/getValidationResult.js';
+import { setLodRangeForModel }from '@engine/set/mesh/setLodRangeForModel.js';
 import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
 import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
 import { normalizeToBoundingSphere } from '@engine/init/mesh/normalizeToBoundingSphere.js';
 
-import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
+import { buildEdgesFromFacesRuntime } from '@engine/init/mesh/build/buildEdgesFromFacesRuntime.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setMeshEdgesFromFacesRuntime.js';
 import { cloneMesh } from '@engine/init/mesh/cloneMesh.js';
@@ -50,7 +50,7 @@ import { setInitMeshEngineLoad } from '@engine/set/mesh/setInitMeshEngineLoad.js
 
 // Register through module state so callers can retrieve the shared builder.
 if (!getMeshEdgesFromFacesRuntime()) {
-  setMeshEdgesFromFacesRuntime(edgesFromFacesRuntime);
+  setMeshEdgesFromFacesRuntime(buildEdgesFromFacesRuntime);
 }
 
 // Register clone API in state for safe module-based access (no global object)
@@ -84,7 +84,7 @@ export function load(mesh, name = 'Shape', options = {}) {
   } = options || {};
 
   // Step 1: Validate mesh structure
-  validationResult(mesh, name, meshFileName, meshType);
+  getValidationResult(mesh, name, meshFileName, meshType);
 
   // Step 2: Extract vertices and faces
   const V = mesh.V;
@@ -108,14 +108,14 @@ export function load(mesh, name = 'Shape', options = {}) {
   const newModel = {
     V,
     F,
-    E: filterValidEdges(E, V),
+    E: getFilteredValidEdges(E, V),
     _meshFormat: 'obj-style',
     _shadingMode: 'auto',
     _creaseAngleDeg: undefined,
   };
 
   // Step 6: Set LOD range for detail level control
-  lodRangeForModel(newModel);
+  setLodRangeForModel(newModel);
 
   // Step 7: Clamp detail percent to valid range
   const clampedDetail = Math.max(0, Math.min(1, Number(detailPercent) || 1));

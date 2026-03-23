@@ -19,8 +19,8 @@
 
 import { modelState } from '@engine/state/render/model.js';
 import { getDetailLevelValue } from '@engine/get/render/getDetailLevelValue.js';
-import { detailLevel } from '@engine/set/mesh/detailLevel.js';
-import { lodRangeForModel } from '@engine/set/mesh/lodRangeForModel.js';
+import { setDetailLevel } from '@engine/set/mesh/setDetailLevel.js';
+import { setLodRangeForModel } from '@engine/set/mesh/setLodRangeForModel.js';
 import { capModelForCpu } from '@engine/set/mesh/capModelForCpu.js';
 
 /**
@@ -46,8 +46,8 @@ export function applyCpuLodCap() {
 
   // Update LOD range to reflect the capped model's vertex count in CPU mode
   // This ensures the slider's 100% corresponds to the actual maximum available
-  lodRangeForModel(modelState.cpuBaseModel);
+  setLodRangeForModel(modelState.cpuBaseModel);
 
   // Recompute current LOD model from capped base
-  detailLevel(modelState.currentLodPct);
+  setDetailLevel(modelState.currentLodPct);
 }

@@ -14,7 +14,7 @@
 "use strict";
 
 // Import the scene model renderer for actual GPU draw calls
-import { sceneModel } from '@engine/set/gpu/render/sceneModel.js';
+import { setSceneModel } from '@engine/set/gpu/render/setSceneModel.js';
 
 /**
  * model - Renders a 3D model using the GPU scene pipeline
@@ -28,5 +28,5 @@ import { sceneModel } from '@engine/set/gpu/render/sceneModel.js';
  * @returns {boolean} Whether rendering succeeded
  */
 export function getModelFn(gl, model, params, shaderPack, bufferStore, tmpArrays) {
-  return sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays);
+  return setSceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays);
 }

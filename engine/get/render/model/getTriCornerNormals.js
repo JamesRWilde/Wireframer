@@ -26,13 +26,13 @@ import { getShadingMode }from '@engine/get/cpu/getShadingMode.js';
 import { getFaceNormals }from '@engine/get/cpu/getFaceNormals.js';
 
 // Import normal summing helper for adjacent face blending
-import {sumNormals}from '@engine/get/cpu/geometry/sumNormals.js';
+import {getSummedNormals}from '@engine/get/cpu/geometry/getSummedNormals.js';
 
 // Import vertex-to-face adjacency builder
 import { buildVertexToFaces }from '@engine/init/cpu/buildVertexToFaces.js';
 
 // Import flat normal assignment helper
-import {flatNormals}from '@engine/get/cpu/geometry/flatNormals.js';
+import {getFlatNormals}from '@engine/get/cpu/geometry/getFlatNormals.js';
 
 // Import precomputed triangle normals getter
 import { getTriNormals }from '@engine/get/cpu/geometry/getTriNormals.js';
@@ -71,7 +71,7 @@ export function getTriCornerNormals(model, triFaces) {
 
   // 4. Flat shading: assign face normal to all corners
   if (shadingMode === 'flat') {
-    return flatNormals(faceNormals);
+    return getFlatNormals(faceNormals);
   }
 
   // 5. Build vertex-to-face adjacency list for smoothing
@@ -97,7 +97,7 @@ export function getTriCornerNormals(model, triFaces) {
 
       // Sum normals of adjacent faces within crease threshold,
       // respecting OBJ smoothing groups if present
-      const [nx, ny, nz] = sumNormals(nRef, faceNormals, adjacent, cosThreshold, smoothGroups, refGroup);
+      const [nx, ny, nz] = getSummedNormals(nRef, faceNormals, adjacent, cosThreshold, smoothGroups, refGroup);
       const nl = Math.hypot(nx, ny, nz);
 
       if (nl < 1e-9) {

@@ -17,10 +17,10 @@
 "use strict";
 
 // Import fill worker initialization for lazy worker creation
-import { fillWorker } from '@engine/init/cpu/fillWorker.js';
+import { initFillWorker } from '@engine/init/cpu/initFillWorker.js';
 
 // Import frame data getter for vertex transforms
-import { frameData }from '@engine/get/render/model/frameData.js';
+import { getFrameData }from '@engine/get/render/model/getFrameData.js';
 
 // Import triangle face getter for mesh geometry
 import { getModelTriangles }from '@engine/get/render/model/getModelTriangles.js';
@@ -32,13 +32,13 @@ import { getShadingMode }from '@engine/get/cpu/getShadingMode.js';
 import { getTriCornerNormals }from '@engine/get/render/model/getTriCornerNormals.js';
 
 // Import CPU triangle rasterizer for main-thread fallback
-import { trianglesCpu }from '@engine/set/render/trianglesCpu.js';
+import { drawTrianglesCpu }from '@engine/set/render/drawTrianglesCpu.js';
 
 // Import worker command sender for async fill rendering
 import { sendRenderCommand }from '@engine/set/cpu/fill/sendRenderCommand.js';
 
 // Import cached frame getter for worker-rendered results
-import { fillCachedFrame }from '@engine/get/cpu/fillCachedFrame.js';
+import { getCachedFrame }from '@engine/get/cpu/getCachedFrame.js';
 
 // Import worker availability check for render path selection
 import { isFillWorkerAvailable }from '@engine/get/cpu/isFillWorkerAvailable.js';
@@ -83,7 +83,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   }
 
   // Get transformed vertex data (2D projections + 3D positions)
-  const fd = frameData(model);
+  const fd = getFrameData(model);
   if (!fd) return;
   const { T, P2 } = fd;
 
@@ -106,7 +106,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
 
   // Lazy-initialize the fill render worker
   if (!workerInitialized) {
-    workerInitialized = fillWorker(W, H);
+    workerInitialized = initFillWorker(W, H);
   }
 
   // Try to use worker for parallel rendering
@@ -128,7 +128,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
     }, state.RENDER_FRAME_ID);
 
     // Draw cached frame from previous render (pipeline latency hiding)
-    const cached = fillCachedFrame();
+    const cached = getCachedFrame();
     if (cached?.imageBitmap) {
       fillLayerCtx.setTransform(1, 0, 0, 1, 0, 0);
       fillLayerCtx.clearRect(0, 0, W, H);
@@ -158,7 +158,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   fillLayerCtx.globalCompositeOperation = 'source-over';
 
   // Rasterize triangles on the CPU
-  trianglesCpu({
+  drawTrianglesCpu({
     triOrder,
     P2,
     T,

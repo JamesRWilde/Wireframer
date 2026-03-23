@@ -1,7 +1,7 @@
 'use strict';
 
 import { renderState } from '@engine/state/render/renderState.js';
-import { relativeLuminanceRaw } from '@engine/get/render/relativeLuminanceRaw.js';
+import { getRelativeLuminanceRaw } from '@engine/get/render/getRelativeLuminanceRaw.js';
 
 /**
  * rebuildDerivedCache - Recalculate derived render state properties from theme.
@@ -20,7 +20,7 @@ export function rebuildDerivedCache() {
   const fill = t?.fill;
   renderState.fillRgb = Array.isArray(fill) ? fill : [0, 200, 120];
 
-  const lum = relativeLuminanceRaw(renderState.fillRgb);
+  const lum = getRelativeLuminanceRaw(renderState.fillRgb);
   renderState.edgeColor = lum > 0.5 ? '#000000' : '#ffffff';
 
   const bg = t?.bg;
