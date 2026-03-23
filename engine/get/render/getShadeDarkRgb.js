@@ -12,7 +12,7 @@
  */
 
 import { renderState } from '@engine/state/render/renderState.js';
-import { rebuildDerivedCache } from '@engine/set/render/physics/rebuildDerivedCache.js';
+import { setRebuildDerivedCache } from '@engine/set/render/physics/setRebuildDerivedCache.js';
 
 
 /**
@@ -20,6 +20,6 @@ import { rebuildDerivedCache } from '@engine/set/render/physics/rebuildDerivedCa
  * @returns {*} The current value from state.
  */
 export function getShadeDarkRgb() {
-  rebuildDerivedCache();
+  setRebuildDerivedCache();
   return renderState.shadeDarkRgb;
 }

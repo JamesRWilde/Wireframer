@@ -8,8 +8,8 @@
  *
  * ARCHITECTURE ROLE:
  *   Central state module for the fill render bridge. Read and written by
- *   fillWorker.js (init), sendRenderCommand.js (post), fillCachedFrame.js
- *   (read), and isFillWorkerAvailable.js (read). Shared across the
+ *   fillWorker.js (init), setSendRenderCommand.js (post), fillCachedFrame.js
+ *   (read), and getIsFillWorkerAvailable.js (read). Shared across the
  *   engine/set and engine/init layers.
  *
  * DETAILS:

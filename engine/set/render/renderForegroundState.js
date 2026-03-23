@@ -12,7 +12,7 @@
  *
  * USAGE:
  *   This module should NOT be imported directly by consumers.
- *   Use getRenderForeground.js and setRenderForeground.js instead.
+ *   Use setGetRenderForeground.js and setRenderForeground.js instead.
  */
 
 "use strict";

@@ -7,7 +7,7 @@
  *   Marks the GPU as failed so the app falls back to CPU rendering.
  *
  * ARCHITECTURE ROLE:
- *   Called by drawSceneModel when a GPU rendering error is caught.
+ *   Called by setDrawSceneModel when a GPU rendering error is caught.
  *   Also callable directly when GPU initialization fails. Ensures
  *   graceful degradation to the CPU render path.
  */

@@ -9,7 +9,7 @@
  * ARCHITECTURE ROLE:
  *   Central state module for the vertex transform pipeline. Read and
  *   written by workerTransform.js (init), workerSend.js (post),
- *   cachedTransformResult.js (read), and isAvailable.js (read).
+ *   cachedTransformResult.js (read), and getIsAvailable.js (read).
  *
  * DETAILS:
  *   Uses a mutable object so importing modules can assign properties

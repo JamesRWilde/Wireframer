@@ -6,7 +6,7 @@
  *   is not available or when switching from GPU to CPU.
  * 
  * ARCHITECTURE ROLE:
- *   Called by initRenderPipeline() and toggleRenderMode(). Configures
+ *   Called by initRenderPipeline() and setToggleRenderMode(). Configures
  *   the render function pointer to use CPU rendering and updates UI.
  */
 
@@ -31,7 +31,7 @@ import { state } from '@engine/state/loop.js';
 
 
 // Import CPU detail cap for performance safety
-import { applyCpuLodCap } from '@engine/set/mesh/applyCpuLodCap.js';
+import { setApplyCpuLodCap } from '@engine/set/mesh/setApplyCpuLodCap.js';
 
 /**
  * initializeCpuPipeline - Sets up CPU (Canvas 2D) rendering path
@@ -63,5 +63,5 @@ export function initializeCpuPipeline() {
   if (gpuBg) gpuBg.style.visibility = 'hidden';
 
   // Apply CPU LOD cap
-  applyCpuLodCap();
+  setApplyCpuLodCap();
 }

@@ -21,7 +21,7 @@
 
 // Import the GPU scene renderer - handles all WebGL operations
 // This includes shader compilation, buffer setup, and draw calls
-import { drawSceneModel }from '@engine/set/gpu/drawSceneModel.js';
+import { setDrawSceneModel }from '@engine/set/gpu/setDrawSceneModel.js';
 
 // Import canvas visibility toggles
 // GPU path shows the GPU canvas and hides the CPU canvas
@@ -41,7 +41,7 @@ import { getWireOpacity } from '@engine/get/render/getWireOpacity.js';
 import { getShadeDarkRgb } from '@engine/get/render/getShadeDarkRgb.js';
 import { getShadeBrightRgb } from '@engine/get/render/getShadeBrightRgb.js';
 import { renderState } from '@engine/state/render/renderState.js';
-import { hexToRgb } from '@engine/set/render/hexToRgb.js';
+import { setHexToRgb } from '@engine/set/render/setHexToRgb.js';
 
 /**
  * renderGpuPath - Renders the 3D model using the GPU (WebGL) rendering path
@@ -65,7 +65,7 @@ export function setGpuPath(gl, meshToRender, morphing) {
   // These are gathered from renderState and passed as a config object
   // Use the computed edge color (high contrast) for GPU wire rendering.
   // This ensures wires remain visible regardless of theme fill colors.
-  const edgeColor = hexToRgb(getEdgeColor());
+  const edgeColor = setHexToRgb(getEdgeColor());
 
   // Use the theme-derived shade colors (same as CPU) so GPU shading matches.
   // This ensures the fill color matches the HUD RGB-based theme palette.
@@ -74,7 +74,7 @@ export function setGpuPath(gl, meshToRender, morphing) {
   const fillRgb = getFillRgb();
   const baseTheme = getTheme() || {};
 
-  const gpuDrawn = drawSceneModel(gl, meshToRender, {
+  const gpuDrawn = setDrawSceneModel(gl, meshToRender, {
     // Theme colors for shading and wire
     theme: {
       ...baseTheme,

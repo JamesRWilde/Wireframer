@@ -17,7 +17,7 @@
 
 import {lodSlider, lodValue, bgDensity, bgDensityValue, bgVelocity, bgVelocityValue, bgOpacity, bgOpacityValue, fillOpacity, fillOpacityValue, wireOpacity, wireOpacityValue}from '@ui/state/dom.js';
 import { getSliderDisplayPercent }from '@ui/get/getSliderDisplayPercent.js';
-import { setPersistedState }from '@ui/set/persist/setState.js';
+import { setPersistedState }from '@ui/set/persist/setPersistedState.js';
 import { setFillOpacity } from '@engine/set/render/setFillOpacity.js';
 import { setWireOpacity } from '@engine/set/render/setWireOpacity.js';
 import { setDetailLevelValue } from '@engine/set/render/setDetailLevelValue.js';

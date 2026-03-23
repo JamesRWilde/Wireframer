@@ -36,7 +36,7 @@ import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';
 import { getFillLayerCtx } from '@engine/get/render/getFillLayerCtx.js';
 
 // Import canvas size synchronization to keep all canvases in sync
-import { syncCanvasSize }from '@engine/set/render/syncCanvasSize.js';
+import { setSyncCanvasSize }from '@engine/set/render/setSyncCanvasSize.js';
 import { setW } from '@engine/set/render/setW.js';
 import { setH } from '@engine/set/render/setH.js';
 
@@ -70,10 +70,10 @@ export function initCanvas() {
   // Sync canvas sizes and set up resize listeners
   const currentWindow = ('window' in globalThis) ? globalThis.window : undefined;
   if (currentWindow?.addEventListener) {
-    syncCanvasSize(cpuCanvas);
+    setSyncCanvasSize(cpuCanvas);
 
     // On resize, synchronize all canvas dimensions to viewport size
-    currentWindow.addEventListener('resize', () => syncCanvasSize(cpuCanvas));
+    currentWindow.addEventListener('resize', () => setSyncCanvasSize(cpuCanvas));
     currentWindow.addEventListener('resize', () => {
       setW(currentWindow.innerWidth);
       setH(currentWindow.innerHeight);

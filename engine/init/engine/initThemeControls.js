@@ -37,7 +37,7 @@ import { customRed, customGreen, customBlue } from '@ui/state/dom.js';
 
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences
-import { setPersistedState }from '@ui/set/persist/setState.js';
+import { setPersistedState }from '@ui/set/persist/setPersistedState.js';
 
 /**
  * themeControls - Initializes the theme system and wires up event handlers

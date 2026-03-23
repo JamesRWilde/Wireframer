@@ -9,7 +9,7 @@
  * ARCHITECTURE ROLE:
  *   Called by the render loop when the engine is in CPU mode.
  *   Switches canvas visibility, manages GPU state cleanup, and
- *   delegates to renderMeshUnified for the actual drawing.
+ *   delegates to setRenderMeshUnified for the actual drawing.
  *
  * DETAILS:
  *   If the GPU rendered last frame, clears the GPU canvas to prevent
@@ -25,7 +25,7 @@ import { gpuState } from '@engine/state/gpu/scene.js';
 import { setGpuSceneCanvas }from '@engine/set/gpu/setGpuSceneCanvas.js';
 
 // Import unified CPU mesh renderer
-import { renderMeshUnified }from '@engine/set/cpu/renderMeshUnified.js';
+import { setRenderMeshUnified }from '@engine/set/cpu/setRenderMeshUnified.js';
 
 // Import CPU canvas visibility toggle
 import { setCanvasCpuHidden }from '@engine/set/cpu/setCanvasCpuHidden.js';
@@ -103,7 +103,7 @@ export function setCpuPath(meshToRender, backgroundOnSeparateCanvas, morphing) {
   }
 
   // Render the mesh using the unified CPU pipeline
-  renderMeshUnified(cpuMesh, ctx);
+  setRenderMeshUnified(cpuMesh, ctx);
 
   return true;
 }

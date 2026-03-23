@@ -7,7 +7,7 @@
  *   synchronization with the render loop.
  *
  * ARCHITECTURE ROLE:
- *   Called by drawSolidFillModel to retrieve the worker-rendered frame
+ *   Called by setDrawSolidFillModel to retrieve the worker-rendered frame
  *   for compositing onto the fill layer canvas. Returns null if no
  *   cached frame is available.
  */

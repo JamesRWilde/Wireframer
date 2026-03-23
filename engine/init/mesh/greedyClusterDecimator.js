@@ -33,7 +33,7 @@ import { deepCopy }from '@engine/init/mesh/deepCopy.js';
 import { normalizeFaces }from '@engine/init/mesh/normalizeFaces.js';
 
 // Import bounding box computation
-import { computeBoundingBox }from '@engine/get/mesh/computeBoundingBox.js';
+import { getBoundingBox }from '@engine/get/mesh/getBoundingBox.js';
 
 // Import cluster parameter calculation
 import { computeClusterParams }from '@engine/init/mesh/computeClusterParams.js';
@@ -88,7 +88,7 @@ export function greedyClusterDecimator(model, targetFaces) {
   const F = normalizeFaces(model.F);
 
   // Compute bounding box for spatial grid setup
-  const { minX, minY, minZ, extent } = computeBoundingBox(V);
+  const { minX, minY, minZ, extent } = getBoundingBox(V);
   
   // Compute cluster parameters (cell size) based on target face count
   const { cellSize } = computeClusterParams(targetFaces, extent);

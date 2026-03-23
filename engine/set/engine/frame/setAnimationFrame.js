@@ -4,27 +4,27 @@
  * PURPOSE:
  *   Provides the animationFrame() function that serves as the callback for requestAnimationFrame.
  *   This is the heartbeat of the application - called by the browser ~60 times per second
- *   to drive the animation loop. It delegates actual work to runFrame() while handling
+ *   to drive the animation loop. It delegates actual work to setRunFrame() while handling
  *   frame timing and loop continuation.
  * 
  * ARCHITECTURE ROLE:
  *   This is the outermost layer of the animation loop. It's called by requestAnimationFrame,
- *   schedules the next frame, then delegates to runFrame() for the actual work. This
- *   separation allows runFrame to be called independently (e.g., for single-step debugging).
+ *   schedules the next frame, then delegates to setRunFrame() for the actual work. This
+ *   separation allows setRunFrame to be called independently (e.g., for single-step debugging).
  * 
  * FRAME LOOP FLOW:
  *   1. Browser calls animationFrame(timestamp)
  *   2. animationFrame() schedules next frame via requestAnimationFrame(frame)
- *   3. animationFrame() calls runFrame(nowMs) to do actual work
- *   4. runFrame() updates physics, renders, updates telemetry
+ *   3. animationFrame() calls setRunFrame(nowMs) to do actual work
+ *   4. setRunFrame() updates physics, renders, updates telemetry
  *   5. Browser calls animationFrame() again ~16ms later
  */
 
 "use strict";
 
-// Import the runFrame function that performs the actual per-frame work
+// Import the setRunFrame function that performs the actual per-frame work
 // This includes physics updates, rendering, and telemetry updates
-import {runFrame}from '@engine/set/engine/frame/runFrame.js';
+import {setRunFrame}from '@engine/set/engine/setRunFrame.js';
 
 // Frame state flags (gpuSceneDrawnLastFrame, cpuForegroundDrawnOnMainCanvas)
 // are now on the shared loop state object imported from engine/state/loop.js
@@ -40,7 +40,7 @@ let __lastRafMs = 0;
  *   This is a DOMHighResTimeStamp representing the current time in milliseconds
  *   since page load. Provided automatically by the browser.
  * 
- * @returns {*} The return value of runFrame (typically undefined)
+ * @returns {*} The return value of setRunFrame (typically undefined)
  * 
  * This function is designed to be passed directly to requestAnimationFrame:
  *   requestAnimationFrame(frame);
@@ -53,10 +53,10 @@ export function setAnimationFrame(nowMs = 0) {
   
   // Schedule the NEXT frame immediately, before doing any work
   // This ensures the browser can optimize scheduling and we don't miss frames
-  // if runFrame takes longer than expected
+  // if setRunFrame takes longer than expected
   requestAnimationFrame(setAnimationFrame);
   
-  // Delegate actual work to runFrame
-  // This separation allows runFrame to be called independently for debugging
-  return runFrame(nowMs);
+  // Delegate actual work to setRunFrame
+  // This separation allows setRunFrame to be called independently for debugging
+  return setRunFrame(nowMs);
 }

@@ -23,8 +23,8 @@
 import { decimateByPercent }from '@engine/init/mesh/decimateByPercent.js';
 import { modelState } from '@engine/state/render/model.js';
 import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
-import { isGpuMode } from '@engine/set/render/isGpuMode.js';
-import { CPU_MAX_VERTS } from '@engine/set/mesh/capModelForCpu.js';
+import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
+import { CPU_MAX_VERTS } from '@engine/set/mesh/setCapModelForCpu.js';
 
 /**
  * detailLevel - Sets the LOD detail level for the active model
@@ -45,7 +45,7 @@ export function setDetailLevel(percent, name) {
   // - GPU mode: use baseModel (full detail, no CPU cap)
   // - CPU mode: use cpuBaseModel (capped for performance)
   let base;
-  if (isGpuMode()) {
+  if (getIsGpuMode()) {
     base = modelState.baseModel;
   } else {
     base = modelState.cpuBaseModel || modelState.baseModel;
@@ -65,7 +65,7 @@ export function setDetailLevel(percent, name) {
   // If the user requests full detail, avoid unnecessary decimation and
   // ensure the active LOD model is the full base model (no intermediate copy).
   if (clampedPercent >= 0.999) {
-    if (!isGpuMode() && modelState.baseModel?.V?.length <= CPU_MAX_VERTS) {
+    if (!getIsGpuMode() && modelState.baseModel?.V?.length <= CPU_MAX_VERTS) {
       // For small models in CPU mode, use the uncapped base model to prevent
       // undesired downsampling due to prior cap state.
       modelState.currentLodModel = modelState.baseModel;

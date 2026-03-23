@@ -8,7 +8,7 @@
  *
  * ARCHITECTURE ROLE:
  *   Central data provider for renderers that need 3D-transformed and
- *   2D-projected vertex positions. Called by drawSolidFillModel and
+ *   2D-projected vertex positions. Called by setDrawSolidFillModel and
  *   other render modules each frame.
  *
  * DETAILS:
@@ -24,13 +24,13 @@
 import { state }from '@engine/state/loop.js';
 
 // Import worker command sender for async transforms
-import { sendToWorker }from '@engine/set/render/sendToWorker.js';
+import { setSendToWorker }from '@engine/set/render/setSendToWorker.js';
 
 // Import cached transform result getter
 import { getCachedTransformResult }from '@engine/get/render/getCachedTransformResult.js';
 
 // Import flat-to-nested converter for worker results
-import { convertFlatToNested }from '@engine/get/render/convertFlatToNested.js';
+import { getFlatNested }from '@engine/get/render/getFlatNested.js';
 
 // Import synchronous transform fallback
 import { getTransformSync }from '@engine/get/render/getTransformSync.js';
@@ -86,13 +86,13 @@ export function getFrameData(model) {
 
   // Send transform request to worker (async)
   const flatR = new Float32Array(Rmat);
-  sendToWorker(flatV, flatR, fov, halfW, halfH, modelCy, state.RENDER_FRAME_ID);
+  setSendToWorker(flatV, flatR, fov, halfW, halfH, modelCy, state.RENDER_FRAME_ID);
 
   // Check for cached worker result from a previous frame
   const cached = getCachedTransformResult();
   if (cached?.T && cached?.P2) {
     // Convert flat worker result back to nested arrays
-    const converted = convertFlatToNested(cached.T, cached.P2, vertexCount);
+    const converted = getFlatNested(cached.T, cached.P2, vertexCount);
     T = converted.T;
     P2 = converted.P2;
   } else {

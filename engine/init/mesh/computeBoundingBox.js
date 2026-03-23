@@ -1,5 +1,5 @@
 /**
- * computeBoundingBox.js - Axis-aligned bounding box calculator
+ * getBoundingBox.js - Axis-aligned bounding box calculator
  *
  * One function per file module.
  */

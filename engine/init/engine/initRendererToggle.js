@@ -23,7 +23,7 @@
 import {statsState} from '@ui/state/stats.js';
 
 // Import the toggle function
-import { toggleRenderMode } from '@engine/set/render/toggleRenderMode.js';
+import { setToggleRenderMode } from '@engine/set/render/setToggleRenderMode.js';
 
 // Import GPU renderer getter to check if GPU is available
 import { getSceneRendererGpu }from '@engine/get/gpu/getSceneRendererGpu.js';
@@ -64,7 +64,7 @@ export function initRendererToggle() {
   
   // Add click event listener to toggle between GPU and CPU modes
   statRenderer.addEventListener('click', () => {
-    toggleRenderMode();
+    setToggleRenderMode();
   });
   
   // Add visual styling to indicate it's clickable

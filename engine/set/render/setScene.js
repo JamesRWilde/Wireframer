@@ -3,11 +3,11 @@
  * 
  * PURPOSE:
  *   Coordinates the rendering of all visual elements each frame: background particles
- *   and foreground 3D model. This is the main rendering entry point called by runFrame,
+ *   and foreground 3D model. This is the main rendering entry point called by setRunFrame,
  *   and it handles the timing measurements for telemetry.
  * 
  * ARCHITECTURE ROLE:
- *   Sits between runFrame (which calls this) and the active foreground renderer
+ *   Sits between setRunFrame (which calls this) and the active foreground renderer
  *   (either GPU or CPU path, determined at startup). Manages rendering order,
  *   morph state, and timing measurements.
  * 
@@ -26,12 +26,12 @@
 
 // Import the background particle renderer
 // Draws animated ambient particles on the background canvas
-import { drawBackground } from '@engine/set/render/draw/drawBackground.js';
+import { setDrawBackground } from '@engine/set/render/draw/setDrawBackground.js';
 
 // Import the active foreground renderer function pointer
 // This is set to either gpuPath or cpuPath during initialization
-import { getRenderForeground } from '@engine/set/render/getRenderForeground.js';
-import { isGpuMode } from '@engine/set/render/isGpuMode.js';
+import { setGetRenderForeground } from '@engine/set/render/setGetRenderForeground.js';
+import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 
 // Import decimation for GPU LOD matching
 import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
@@ -62,13 +62,13 @@ export function setScene(nowMs) {
   const currentModel = modelState.model;
 
   if (!currentModel) {
-    drawBackground(nowMs);
+    setDrawBackground(nowMs);
     return { bgMs: 0, fgMs: 0, drewCpuForeground: false, backgroundOnSeparateCanvas: false };
   }
 
   // Step 1: Render background particles
   const bgStartMs = performance.now();
-  const backgroundOnSeparateCanvas = drawBackground(nowMs) === true;
+  const backgroundOnSeparateCanvas = setDrawBackground(nowMs) === true;
   const bgMs = performance.now() - bgStartMs;
 
   // Step 2: Prepare foreground rendering
@@ -79,7 +79,7 @@ export function setScene(nowMs) {
   if (morphApi?.advanceMorphFrame) morphApi.advanceMorphFrame();
 
   // Step 4: Determine which mesh to render
-  const morphing = morphApi?.isMorphing?.() ?? false;
+  const morphing = morphApi?.getIsMorphing?.() ?? false;
   const baseMesh = morphing ? morphApi?.currentMorph?.() ?? currentModel : currentModel;
 
   // Select mesh based on LOD and morph state
@@ -88,7 +88,7 @@ export function setScene(nowMs) {
   let meshToRender;
   if (morphing) {
     meshToRender = baseMesh;
-  } else if (isGpuMode() && modelState.baseModel?.V?.length) {
+  } else if (getIsGpuMode() && modelState.baseModel?.V?.length) {
     // GPU path: use base model with optional LOD decimation
     const lodChanged = modelState.currentLodPct !== 1;
     if (lodChanged) {
@@ -103,15 +103,15 @@ export function setScene(nowMs) {
   }
 
   // Step 5: Render foreground using the active pipeline
-  // getRenderForeground() returns the function pointer set during initialization
+  // setGetRenderForeground() returns the function pointer set during initialization
   // There is NO fallback - only one pipeline exists and if it fails, nothing renders
-  const renderFn = getRenderForeground();
+  const renderFn = setGetRenderForeground();
   const drewCpuForeground = renderFn(meshToRender, backgroundOnSeparateCanvas, morphing);
   
   // For GPU mode, the return value indicates success (true) or failure (false)
   // For CPU mode, the return value is always true
   // (Fix: isGpuMode is a function and must be invoked)
-  const gpuDrawn = isGpuMode() && drewCpuForeground;
+  const gpuDrawn = getIsGpuMode() && drewCpuForeground;
 
   setMixedRenderFlags(backgroundOnSeparateCanvas, gpuDrawn);
 

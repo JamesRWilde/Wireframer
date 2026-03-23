@@ -7,7 +7,7 @@
  *   passing, and error handling.
  *
  * ARCHITECTURE ROLE:
- *   Called by drawSolidFillModel to set up the offscreen fill render
+ *   Called by setDrawSolidFillModel to set up the offscreen fill render
  *   pipeline. The worker receives render commands and returns rendered
  *   ImageBitmaps for compositing onto the main canvas.
  *

@@ -33,7 +33,7 @@ import { initObjectSelector } from '@ui/init/initObjectSelector.js';
 import { setAnimationFrame } from '@engine/set/engine/frame/setAnimationFrame.js';
 
 // Rotation
-import { initRotation } from '@engine/get/render/rotation/initRotation.js';
+import { getRotationInit } from '@engine/get/render/rotation/getRotationInit.js';
 import { R } from '@engine/state/render/rotationMatrixRef.js';
 import { setRotation } from '@engine/state/render/physicsState.js';
 
@@ -58,7 +58,7 @@ import { initRenderPipeline } from '@engine/init/render/pipeline/initRenderPipel
 
 // Background worker initialization (dedicated background pipeline)
 import { initBackgroundWorker } from '@engine/init/render/initBackgroundWorker.js';
-import { isGpuMode } from '@engine/set/render/isGpuMode.js';
+import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 
 // Debug overlay removed for production build
 // (no longer supported)
@@ -81,7 +81,7 @@ import {
  */
 export function startApp() {
   // Step 1: Initialize rotation matrix
-  initRotation();
+  getRotationInit();
   
   // Step 2: Zoom state is self-initializing via zoomState.js import
   // (defaults: zoom=1, min=0.45, max=2.75)
@@ -125,7 +125,7 @@ export function startApp() {
 
   // Step 12: Initialize the background worker pipeline for CPU particle updates only.
   // GPU background is handled through dedicated WebGL pipeline in bgState.gpuBackgroundRenderer.
-  if (!isGpuMode()) {
+  if (!getIsGpuMode()) {
     initBackgroundWorker('cpu');
   }
 

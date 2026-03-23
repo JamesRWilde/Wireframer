@@ -6,7 +6,7 @@
  *   Uses renderState cache for efficient theme reads.
  *
  * ARCHITECTURE ROLE:
- *   Called by drawBackground to get colors for rendering.
+ *   Called by setDrawBackground to get colors for rendering.
  *
  * COLOR RESOLUTION ORDER:
  *   1. Theme particle color (if set)

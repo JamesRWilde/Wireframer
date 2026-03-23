@@ -19,3 +19,11 @@ import { gpuModeState } from '@engine/set/render/gpuModeState.js';
 export function setIsGpuMode(value) {
   gpuModeState.value = value;
 }
+
+/**
+ * isGpuMode - Returns whether GPU rendering mode is currently active
+ * @returns {boolean}
+ */
+export function isGpuMode() {
+  return gpuModeState.value;
+}

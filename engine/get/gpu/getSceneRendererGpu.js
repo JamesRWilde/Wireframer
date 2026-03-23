@@ -8,7 +8,7 @@
  *   repeated attempts.
  *
  * ARCHITECTURE ROLE:
- *   Called by drawSceneModel and other GPU render modules to obtain the
+ *   Called by setDrawSceneModel and other GPU render modules to obtain the
  *   renderer. This is the single entry point for GPU renderer access.
  *
  * DETAILS:

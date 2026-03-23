@@ -17,7 +17,7 @@
 "use strict";
 
 // Import point expansion helper to move vertices away from centroid
-import { expandGeometryPoint }from '@engine/set/cpu/expandGeometryPoint.js';
+import { setExpandGeometryPoint }from '@engine/set/cpu/setExpandGeometryPoint.js';
 
 /**
  * expandTriangleForSeam - Expands triangle vertices outward from centroid
@@ -52,8 +52,8 @@ export function getSeamCpu(tri2d, seamExpandPx) {
 
   // Expand all three vertices outward from centroid
   return [
-    expandGeometryPoint(ax, ay, mx, my, seamExpandPx),
-    expandGeometryPoint(bx, by, mx, my, seamExpandPx),
-    expandGeometryPoint(cx, cy, mx, my, seamExpandPx)
+    setExpandGeometryPoint(ax, ay, mx, my, seamExpandPx),
+    setExpandGeometryPoint(bx, by, mx, my, seamExpandPx),
+    setExpandGeometryPoint(cx, cy, mx, my, seamExpandPx)
   ];
 }

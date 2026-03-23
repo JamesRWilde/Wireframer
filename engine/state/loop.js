@@ -7,7 +7,7 @@
  *   mode, and telemetry smoothing values.
  * 
  * ARCHITECTURE ROLE:
- *   Imported by multiple loop modules (frame.js, runFrame.js, telemetryState.js, etc.)
+ *   Imported by multiple loop modules (frame.js, setRunFrame.js, telemetryState.js, etc.)
  *   that need to read or update loop state. The state object is mutable while the
  *   export binding is const, following the project's pattern for shared mutable state.
  * 
@@ -78,7 +78,7 @@ export const MAX_FPS = 0; // 0 = uncapped
  * MIN_FRAME_INTERVAL_MS - Minimum time between frames in milliseconds
  * 
  * Calculated from MAX_FPS. When MAX_FPS is 0, this is also 0 (no throttling).
- * Used by shouldRunFrame() to skip frames when running too fast.
+ * Used by getShouldRunFrame() to skip frames when running too fast.
  */
 export const MIN_FRAME_INTERVAL_MS = 0;
 

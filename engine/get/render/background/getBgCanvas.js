@@ -7,7 +7,7 @@
  *   rendering code that needs canvas access.
  * 
  * ARCHITECTURE ROLE:
- *   Called by drawBackground to get the canvas for rendering. Centralizes
+ *   Called by setDrawBackground to get the canvas for rendering. Centralizes
  *   canvas access and dimension synchronization.
  * 
  * WHY SYNCHRONIZE DIMENSIONS:

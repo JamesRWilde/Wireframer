@@ -7,7 +7,7 @@
  *   actual performance changes.
  * 
  * ARCHITECTURE ROLE:
- *   Called by runFrame() each frame with timing measurements. Updates the
+ *   Called by setRunFrame() each frame with timing measurements. Updates the
  *   smoothed EMA values in StateEngineLoop that are read by hud().
  * 
  * EMA FORMULA:

@@ -6,7 +6,7 @@
  *   size, alpha, and phase for background animation effects.
  *
  * ARCHITECTURE ROLE:
- *   Called by seedParticles to populate the background particle array.
+ *   Called by setSeedParticles to populate the background particle array.
  *   Each particle represents a floating dot that drifts across the
  *   background canvas with pulsing opacity.
  */

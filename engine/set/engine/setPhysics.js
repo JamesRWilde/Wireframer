@@ -7,7 +7,7 @@
  *   maintenance (re-orthogonalization to prevent drift).
  *
  * ARCHITECTURE ROLE:
- *   Called by runFrame() each frame before rendering. Updates the rotation
+ *   Called by setRunFrame() each frame before rendering. Updates the rotation
  *   matrix via physicsState setters so the rendering pipeline reads a fresh
  *   matrix each frame to transform vertices.
  *
@@ -20,15 +20,15 @@
 
 "use strict";
 
-import { applyEulerIncrement } from '@engine/get/render/applyEulerIncrement.js';
+import { getEulerIncrement } from '@engine/get/render/getEulerIncrement.js';
 import { getReorthogonalized } from '@engine/get/render/getReorthogonalized.js';
 import { state } from '@engine/state/loop.js';
 import {
   getRotation, getWx, getWy, getWz, isDragging, getAxisAngleX, getAxisAngleY,
   setRotation, setAutoWx, setAutoWy, setAutoWz, setAxisAngleX, setAxisAngleY,
 } from '@engine/state/render/physicsState.js';
-import { applyFriction } from '@engine/set/render/physics/applyFriction.js';
-import { easeTowardAuto } from '@engine/set/render/physics/easeTowardAuto.js';
+import { setApplyFriction } from '@engine/set/render/physics/setApplyFriction.js';
+import { setEaseTowardAuto } from '@engine/set/render/physics/setEaseTowardAuto.js';
 
 /**
  * physics - Updates rotation physics for the current frame.
@@ -44,7 +44,7 @@ export function setPhysics() {
 
   // Apply angular velocities to rotation matrix
   const currentR = getRotation();
-  applyEulerIncrement(currentR, getWx(), getWy(), getWz());
+  getEulerIncrement(currentR, getWx(), getWy(), getWz());
 
   // Periodically re-orthogonalize to prevent numerical drift (~2s at 60fps)
   if ((++state.frameCount) % 120 === 0) {
@@ -53,10 +53,10 @@ export function setPhysics() {
 
   if (isDragging()) {
     // User dragging — apply friction for smooth deceleration
-    applyFriction(0.85);
+    setApplyFriction(0.85);
   } else {
     // Not dragging — ease toward auto-rotation targets
-    easeTowardAuto();
+    setEaseTowardAuto();
 
     // Slowly orbit the spin axis through 3D space at fixed speed.
     // Two slow oscillators at different rates ensure the axis traces

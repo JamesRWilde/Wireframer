@@ -15,10 +15,10 @@
 "use strict";
 
 // Import the model rendering function for GPU scene draw calls
-import { getModelFn } from '@engine/set/gpu/render/getModelFn.js';
+import { setGetModelFn } from '@engine/set/gpu/render/setGetModelFn.js';
 
 // Import the clear/draw function to clear the WebGL canvas
-import { drawGpu } from '@engine/set/gpu/drawGpu.js';
+import { setDrawGpu } from '@engine/set/gpu/setDrawGpu.js';
 
 /**
  * sceneDraw - Creates the GPU scene draw API
@@ -49,7 +49,7 @@ export function createSceneDraw(gl, canvas, shaderPack, bufferStore) {
      * @returns {boolean} Whether rendering succeeded
      */
     model(model, params) {
-      return getModelFn(gl, model, params, shaderPack, bufferStore, tmpArrays);
+      return setGetModelFn(gl, model, params, shaderPack, bufferStore, tmpArrays);
     },
 
     /**

@@ -19,7 +19,7 @@
 
 "use strict";
 
-import { handleMove } from '@engine/set/render/handleMove.js';
+import { setHandleMove } from '@engine/set/render/setHandleMove.js';
 import { setDragging, setLastPointerX, setLastPointerY, setWx, setWy } from '@engine/state/render/physicsState.js';
 import { getZoom, getZoomMin, getZoomMax, setZoom } from '@engine/state/render/zoomState.js';
 import { setInputCanvas } from '@engine/set/render/setInputCanvas.js';
@@ -59,7 +59,7 @@ export function attachInputListeners(canvas) {
     });
 
     // Mouse move: update rotation based on drag delta
-    appWindow.addEventListener('mousemove', e => handleMove(e.clientX, e.clientY));
+    appWindow.addEventListener('mousemove', e => setHandleMove(e.clientX, e.clientY));
   }
 
   // Pinch zoom state (two-finger gesture)
@@ -97,7 +97,7 @@ export function attachInputListeners(canvas) {
       const newZoom = Math.max(getZoomMin(), Math.min(getZoomMax(), pinchStartZoom * scale));
       setZoom(newZoom);
     } else if (e.touches.length === 1) {
-      handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      setHandleMove(e.touches[0].clientX, e.touches[0].clientY);
     }
   }, { passive: false });
 

@@ -15,7 +15,7 @@
  *   - startMorph: Begins a morph animation between two models
  *   - advanceMorphFrame: Updates morph state each frame
  *   - currentMorph: Gets the current interpolated mesh
- *   - isMorphing: Checks if a morph is in progress
+ *   - getIsMorphing: Checks if a morph is in progress
 
  */
 
@@ -25,7 +25,7 @@
 import { startMorph }from '@engine/init/mesh/startMorph.js';
 import { advanceMorphFrame }from '@engine/init/mesh/advanceMorphFrame.js';
 import { getCurrentMorph }from '@engine/get/mesh/getCurrentMorph.js';
-import { isMorphing }from '@engine/get/mesh/isMorphing.js';
+import { getIsMorphing }from '@engine/get/mesh/getIsMorphing.js';
 
 // Set default morph duration and API through state modules
 import { setMorph } from '@engine/set/mesh/setMorph.js';
@@ -36,5 +36,5 @@ setMorph({
   startMorph,
   advanceMorphFrame,
   currentMorph: getCurrentMorph,
-  isMorphing,
+  getIsMorphing,
 });

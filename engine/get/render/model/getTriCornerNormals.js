@@ -7,7 +7,7 @@
  *   in the fill renderer.
  *
  * ARCHITECTURE ROLE:
- *   Called by drawSolidFillModel when smooth shading is active. Provides
+ *   Called by setDrawSolidFillModel when smooth shading is active. Provides
  *   the per-corner normal data needed for smooth Phong-like shading
  *   without per-vertex normal attributes.
  *

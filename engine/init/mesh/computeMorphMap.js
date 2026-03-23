@@ -24,7 +24,7 @@ const CELL_SIZE_FACTOR = 0.02;
 
 import { buildSpatialGrid } from '@engine/init/mesh/buildSpatialGrid.js';
 import { probeGrid } from '@engine/init/mesh/probeGrid.js';
-import { computeBoundingBox } from '@engine/get/mesh/computeBoundingBox.js';
+import { getBoundingBox } from '@engine/get/mesh/getBoundingBox.js';
 
 /**
  * computeMorphMap - Precompute nearest-vertex mapping for morphing
@@ -56,7 +56,7 @@ export function computeMorphMap(fromMesh, toMesh, scaleFactor = 1) {
     return { indices, tx, ty, tz };
   }
 
-  const { minX, maxX, minY, maxY, minZ, maxZ } = computeBoundingBox(toV);
+  const { minX, maxX, minY, maxY, minZ, maxZ } = getBoundingBox(toV);
 
   const cx = (minX + maxX) * 0.5;
   const cy = (minY + maxY) * 0.5;

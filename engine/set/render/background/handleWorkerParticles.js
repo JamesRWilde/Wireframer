@@ -1,8 +1,0 @@
-/**
- * Handles received particle data from background worker.
- */
-import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
-
-export function handleWorkerParticles(data, count) {
-  backgroundWorkerState.pendingWorkerParticles = { data, count };
-}

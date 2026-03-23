@@ -20,11 +20,11 @@
 
 // Import background worker state to track worker lifecycle
 import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
-import { isGpuMode } from '@engine/set/render/isGpuMode.js';
+import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
-import { handleWorkerReady } from '@engine/set/render/background/handleWorkerReady.js';
-import { handleWorkerParticles } from '@engine/set/render/background/handleWorkerParticles.js';
-import { handleWorkerError } from '@engine/set/render/background/handleWorkerError.js';
+import { setHandleWorkerReady } from '@engine/set/render/background/setHandleWorkerReady.js';
+import { setHandleWorkerParticles } from '@engine/set/render/background/setHandleWorkerParticles.js';
+import { setHandleWorkerError } from '@engine/set/render/background/setHandleWorkerError.js';
 
 // Import background canvas getter to read current dimensions
 import {getBgCanvas}from '@engine/get/render/background/getBgCanvas.js';
@@ -41,7 +41,7 @@ export function initBackgroundWorker(mode = 'cpu') {
     throw new Error('backgroundWorker called with non-cpu mode');
   }
 
-  if (isGpuMode()) {
+  if (getIsGpuMode()) {
     throw new Error('backgroundWorker called while GPU mode is active');
   }
 
@@ -68,17 +68,17 @@ export function initBackgroundWorker(mode = 'cpu') {
     backgroundWorkerState.worker.onmessage = (event) => {
       const { type, data, count, message } = event.data;
       if (type === 'ready') {
-        handleWorkerReady();
+        setHandleWorkerReady();
         return;
       }
 
       if (type === 'particles') {
-        handleWorkerParticles(data, count);
+        setHandleWorkerParticles(data, count);
         return;
       }
 
       if (type === 'error') {
-        handleWorkerError(message || event.data.message);
+        setHandleWorkerError(message || event.data.message);
       }
     };
 
