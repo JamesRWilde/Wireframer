@@ -26,6 +26,6 @@
  *   - This file must only contain this function and its export.
  *   - Update comments if buffer rebuild logic or particle structure changes.
  */
-export function utilBgParticleBufferNeedsRebuild(particles, lastCount) {
+export function getBgParticleBufferNeedsRebuild(particles, lastCount) {
   return particles?.length !== lastCount;
 }
