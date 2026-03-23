@@ -8,12 +8,12 @@
 
 "use strict";
 
-import { restoreState }from '@ui/set/restoreState.js';
+import { setRestoredState }from '@ui/set/setRestoredState.js';
 
 export function restoredState() {
   let restoredShapeName = null;
   try {
-    restoredShapeName = restoreState();
+    restoredShapeName = setRestoredState();
     if (restoredShapeName) {
     }
   } catch (e) {

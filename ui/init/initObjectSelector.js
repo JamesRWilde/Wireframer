@@ -20,7 +20,7 @@
 
 import {objectList}from '@engine/get/render/objectList.js';
 import { getLoadObjMesh } from '@engine/get/mesh/getLoadObjMesh.js';
-import { state as persistState }from '@ui/set/persist/state.js';
+import { setPersistedState as persistState }from '@ui/set/persist/setState.js';
 
 
 export async function initObjectSelector(restoredShapeName = null) {

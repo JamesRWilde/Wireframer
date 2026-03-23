@@ -103,5 +103,5 @@ export const TELEMETRY_ALPHA = 0.2;
 // Note: Trivial setter functions were intentionally removed to follow the
 // project's single-responsibility rule. Modules that need to update state
 // should import `state` and write properties directly:
-//   import { state }from '@ui/get/read/state.js';
+//   import { getUiState }from '@ui/get/read/getState.js';
 //   state.frameCount++;

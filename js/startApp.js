@@ -38,7 +38,7 @@ import { R } from '@engine/state/render/rotationMatrixRef.js';
 import { setRotation } from '@engine/state/render/physicsState.js';
 
 // Render toggles
-import { syncRenderToggles } from '@ui/set/syncRenderToggles.js';
+import { setSyncRenderToggles } from '@ui/set/setSyncRenderToggles.js';
 
 // Restored state
 import { restoredState } from '@engine/set/engine/restoredState.js';
@@ -111,9 +111,9 @@ export function startApp() {
   
   // Step 9: Initialize render toggles from UI state
   try {
-    syncRenderToggles();
+    setSyncRenderToggles();
   } catch (e) {
-    console.warn('[startApp] syncRenderToggles failed', e);
+    console.warn('[startApp] setSyncRenderToggles failed', e);
   }
   
   // Step 10: Initialize UI theme controls

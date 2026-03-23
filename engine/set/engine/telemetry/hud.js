@@ -24,7 +24,7 @@ import { state, TELEMETRY_UI_INTERVAL_MS }from '@engine/state/loop.js';
 import {statsState} from '@ui/state/stats.js';
 
 // Import stat writer utility
-import { writeStat }from '@ui/set/writeStat.js';
+import { setWriteStat }from '@ui/set/setWriteStat.js';
 
 /**
  * hud - Updates the telemetry HUD with current performance metrics
@@ -48,6 +48,6 @@ export function hud(nowMs) {
   
   // Write all stats to their DOM elements
   for (const {el, val} of stats) {
-    writeStat(el, val);
+    setWriteStat(el, val);
   }
 }

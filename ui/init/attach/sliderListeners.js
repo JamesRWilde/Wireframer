@@ -20,7 +20,7 @@
 
 // Import the function that reads slider values and updates global render parameters
 // This syncs FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM to globals
-import { syncRenderToggles }from '@ui/set/syncRenderToggles.js';
+import { setSyncRenderToggles }from '@ui/set/setSyncRenderToggles.js';
 
 /**
  * attachSliderListeners - Binds input event handlers to all UI sliders
@@ -46,7 +46,7 @@ export function sliderListeners(sliders, lodSlider, detailLevel) {
           try {
             // Sync all slider values to global render parameters
             // This reads FILL_OPACITY, WIRE_OPACITY, BG_DENSITY, etc. from DOM
-            syncRenderToggles();
+            setSyncRenderToggles();
           } catch (e) {
             // Log but don't throw - allows other sliders to continue working
             console.warn('[startApp] slider syncRenderToggles error', e);
@@ -65,7 +65,7 @@ export function sliderListeners(sliders, lodSlider, detailLevel) {
         try {
           const lodPct = Number(lodSlider.value) / 100;
           // First, sync the LOD value to global state (like other sliders)
-          syncRenderToggles();
+          setSyncRenderToggles();
 
           // Then trigger model decimation if the callback is available
           // We divide by 100 because the slider range is 0-100 but the engine expects 0-1
