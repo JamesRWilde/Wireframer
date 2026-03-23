@@ -23,14 +23,14 @@
 import { CUSTOM_RGB } from '@ui/state/dom.js';
 import { setCustomRgbState } from '@ui/set/setCustomRgbState.js';
 
-import { getClampByte } from '@ui/get/color/getClampByte.js';
+import { utilClampByte } from '@ui/get/color/utilClampByte.js';
 import { setUpdateCustomColor }from '@ui/set/setUpdateCustomColor.js';
 import { getCustomRgb }from '@ui/get/read/getCustomRgb.js';
 import { setPalette }from '@ui/set/apply/setPalette.js';
 
 export function setCustomRgb(rgb, options = {}) {
   const { persist = true, apply = true } = options;
-  const newRgb = [getClampByte(rgb[0]), getClampByte(rgb[1]), getClampByte(rgb[2])];
+  const newRgb = [utilClampByte(rgb[0]), utilClampByte(rgb[1]), utilClampByte(rgb[2])];
 
   // Update module-exported binding (used by other modules) and new state
   try {

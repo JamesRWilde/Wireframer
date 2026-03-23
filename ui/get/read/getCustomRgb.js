@@ -17,7 +17,7 @@
 "use strict";
 
 import {customRed,customGreen,customBlue, CUSTOM_RGB_KEY, CUSTOM_RGB_DEFAULT }from '@ui/state/dom.js';
-import { getClampByte }from '@ui/get/color/getClampByte.js';
+import { utilClampByte }from '@ui/get/color/utilClampByte.js';
 
 export function getCustomRgb() {
   try {
@@ -25,7 +25,7 @@ export function getCustomRgb() {
     if (!saved) return CUSTOM_RGB_DEFAULT.slice();
     const parsed = JSON.parse(saved);
     if (!Array.isArray(parsed) || parsed.length !== 3) return CUSTOM_RGB_DEFAULT.slice();
-    return [getClampByte(parsed[0]), getClampByte(parsed[1]), getClampByte(parsed[2])];
+    return [utilClampByte(parsed[0]), utilClampByte(parsed[1]), utilClampByte(parsed[2])];
   } catch {
     return CUSTOM_RGB_DEFAULT.slice();
   }

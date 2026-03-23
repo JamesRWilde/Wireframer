@@ -24,7 +24,7 @@
 import { idxFromToken }from '@engine/init/mesh/parse/idxFromToken.js';
 
 // Import vertex deduplication helper
-import { getOrCreateVertIdx }from '@engine/get/mesh/getOrCreateVertIdx.js';
+import { utilOrCreateVertIdx }from '@engine/get/mesh/utilOrCreateVertIdx.js';
 
 /**
  * parseFace - Parses an OBJ face line into triangles
@@ -59,9 +59,9 @@ export function face(parts, originalLine, state) {
   for (let i = 1; i < faceVerts.length - 1; i++) {
     // Get or create unique vertex indices for this triangle
     const tri = [
-      getOrCreateVertIdx(faceVerts[0].v, faceVerts[0].vt, faceVerts[0].vn, state),
-      getOrCreateVertIdx(faceVerts[i].v, faceVerts[i].vt, faceVerts[i].vn, state),
-      getOrCreateVertIdx(faceVerts[i+1].v, faceVerts[i+1].vt, faceVerts[i+1].vn, state)
+      utilOrCreateVertIdx(faceVerts[0].v, faceVerts[0].vt, faceVerts[0].vn, state),
+      utilOrCreateVertIdx(faceVerts[i].v, faceVerts[i].vt, faceVerts[i].vn, state),
+      utilOrCreateVertIdx(faceVerts[i+1].v, faceVerts[i+1].vt, faceVerts[i+1].vn, state)
     ];
     
     // Only add triangle if all 3 vertices are unique (skip degenerate triangles)

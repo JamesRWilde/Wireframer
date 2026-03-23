@@ -21,12 +21,12 @@
 
 "use strict";
 
-import { getFrameData }from '@engine/get/render/model/getFrameData.js';
-import { getModelTriangles }from '@engine/get/render/model/getModelTriangles.js';
-import { getShadingMode }from '@engine/get/cpu/getShadingMode.js';
-import { getTriCornerNormals }from '@engine/get/render/model/getTriCornerNormals.js';
-import { getTriangleNormalCpu }from '@engine/get/render/getTriangleNormalCpu.js';
-import { getTriangleCpu }from '@engine/get/render/getTriangleCpu.js';
+import { utilFrameData }from '@engine/get/render/model/utilFrameData.js';
+import { utilModelTriangles }from '@engine/get/render/model/utilModelTriangles.js';
+import { utilShadingMode }from '@engine/get/cpu/utilShadingMode.js';
+import { utilTriCornerNormals }from '@engine/get/render/model/utilTriCornerNormals.js';
+import { utilTriangleNormalCpu }from '@engine/get/render/utilTriangleNormalCpu.js';
+import { utilTriangleCpu }from '@engine/get/render/utilTriangleCpu.js';
 import { getEdgeColor } from '@engine/get/render/getEdgeColor.js';
 import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
 import { getWireOpacity } from '@engine/get/render/getWireOpacity.js';
@@ -44,19 +44,19 @@ export function setRenderMeshUnified(model, ctx) {
   if (!model?.V?.length || !model?.F?.length || !ctx) return;
 
   // Get transformed vertices
-  const fd = getFrameData(model);
+  const fd = utilFrameData(model);
   if (!fd) return;
   const { T, P2 } = fd;
 
   // Get triangle faces
-  const triFaces = getModelTriangles(model);
+  const triFaces = utilModelTriangles(model);
   if (!triFaces?.length) return;
 
   // Get shading mode and normals
-  const shadingMode = getShadingMode(model, triFaces);
+  const shadingMode = utilShadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
   const triCornerNormals = useSmoothShading
-    ? getTriCornerNormals(model, triFaces)
+    ? utilTriCornerNormals(model, triFaces)
     : null;
 
   // Read cached derived values from renderState
@@ -88,11 +88,11 @@ export function setRenderMeshUnified(model, ctx) {
     let t0 = performance.now();
 
     // Compute normal for lighting
-    const normal = getTriangleNormalCpu(tri, triIdx, T, triCornerNormals, useSmoothShading);
+    const normal = utilTriangleNormalCpu(tri, triIdx, T, triCornerNormals, useSmoothShading);
     if (!normal) continue;
 
     // Compute shade color
-    const shadeColor = getTriangleCpu(normal, useSmoothShading);
+    const shadeColor = utilTriangleCpu(normal, useSmoothShading);
 
     tLight += performance.now() - t0;
 

@@ -17,7 +17,7 @@ import { isGpuMode as getIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
 import { getColors } from '@engine/get/render/background/getColors.js';
 import { createBackgroundRenderer } from '@engine/init/gpu/background/createBackgroundRenderer.js';
-import { getParsedCssColor } from '@engine/get/render/background/getParsedCssColor.js';
+import { utilParsedCssColor } from '@engine/get/render/background/utilParsedCssColor.js';
 import { getGpuBgCanvas } from '@engine/get/render/background/getGpuBgCanvas.js';
 import { getGpuBgGl } from '@engine/get/render/background/getGpuBgGl.js';
 
@@ -50,10 +50,10 @@ export function setBackgroundGpu(nowMs) {
   const { bgColor, particleColor } = getColors();
 
   // Decode particle color into numeric RGB directly to avoid parser edge cases.
-  const decodedParticleColor = getParsedCssColor(particleColor || '#ffffff');
+  const decodedParticleColor = utilParsedCssColor(particleColor || '#ffffff');
   const activeParticleColor = [decodedParticleColor.r, decodedParticleColor.g, decodedParticleColor.b];
 
-  const parsedColor = getParsedCssColor(bgColor);
+  const parsedColor = utilParsedCssColor(bgColor);
   gl.viewport(0, 0, w, h);
   gl.clearColor(parsedColor.r, parsedColor.g, parsedColor.b, 1);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

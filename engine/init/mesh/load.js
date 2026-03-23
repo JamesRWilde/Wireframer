@@ -30,8 +30,8 @@
 
 "use strict";
 
-import { getFilteredValidEdges }from '@engine/get/mesh/getFilteredValidEdges.js';
-import { getValidationResult }from '@engine/get/mesh/getValidationResult.js';
+import { utilFilteredValidEdges }from '@engine/get/mesh/utilFilteredValidEdges.js';
+import { utilValidationResult }from '@engine/get/mesh/utilValidationResult.js';
 import { setLodRangeForModel }from '@engine/set/mesh/setLodRangeForModel.js';
 import { fitCameraToModel }from '@engine/init/mesh/fitCameraToModel.js';
 import { finalizeModel }from '@engine/init/mesh/finalizeModel.js';
@@ -84,7 +84,7 @@ export function load(mesh, name = 'Shape', options = {}) {
   } = options || {};
 
   // Step 1: Validate mesh structure
-  getValidationResult(mesh, name, meshFileName, meshType);
+  utilValidationResult(mesh, name, meshFileName, meshType);
 
   // Step 2: Extract vertices and faces
   const V = mesh.V;
@@ -108,7 +108,7 @@ export function load(mesh, name = 'Shape', options = {}) {
   const newModel = {
     V,
     F,
-    E: getFilteredValidEdges(E, V),
+    E: utilFilteredValidEdges(E, V),
     _meshFormat: 'obj-style',
     _shadingMode: 'auto',
     _creaseAngleDeg: undefined,

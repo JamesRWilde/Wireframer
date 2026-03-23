@@ -23,16 +23,16 @@
 import { objLines }from '@engine/init/mesh/parse/objLines.js';
 
 // Import raw text validator
-import { getRawObjText }from '@engine/get/mesh/getRawObjText.js';
+import { utilRawObjText }from '@engine/get/mesh/utilRawObjText.js';
 
 // Import parse result checker
-import { getParseCheckResults }from '@engine/get/mesh/getParseCheckResults.js';
+import { utilParseCheckResults }from '@engine/get/mesh/utilParseCheckResults.js';
 
 // Import mesh object builder
 import { buildObject }from '@engine/init/mesh/build/buildObject.js';
 
 // Import winding correction
-import { getFixedWinding }from '@engine/get/mesh/getFixedWinding.js';
+import { utilFixedWinding }from '@engine/get/mesh/utilFixedWinding.js';
 import { setMeshParseErrors } from '@engine/set/mesh/setMeshParseErrors.js';
 
 /**
@@ -60,7 +60,7 @@ export function toRuntime(text, overrides = {}) {
   }
   
   // Step 1: Split text into lines and validate format
-  const lines = getRawObjText(text, overrides);
+  const lines = utilRawObjText(text, overrides);
 
   // Step 2: Parse lines into raw mesh data
   const {uniqueVerts, faces, rawEdges, rawLines, materialSections, failingLines} = objLines(lines, overrides);
@@ -69,14 +69,14 @@ export function toRuntime(text, overrides = {}) {
   setMeshParseErrors(failingLines);
 
   // Step 3: Check for parse errors
-  getParseCheckResults(uniqueVerts, faces, failingLines, overrides);
+  utilParseCheckResults(uniqueVerts, faces, failingLines, overrides);
 
   // Step 4: Build final mesh object with all properties
   // Passes raw edges, lines, and material sections through — no auto-deriving
   const meshObj = buildObject(uniqueVerts, faces, rawEdges, rawLines, materialSections);
 
   // Step 5: Fix face winding (detect inward normals and flip if needed)
-  getFixedWinding(meshObj);
+  utilFixedWinding(meshObj);
 
   // Step 6: Sanity validate the result
   if (!Array.isArray(meshObj.V) || !Array.isArray(meshObj.F)) {

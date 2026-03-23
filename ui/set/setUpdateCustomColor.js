@@ -13,8 +13,8 @@
 "use strict";
 
 import {CUSTOM_RGB,PRESET_SWATCH_BUTTONS,customBlue,customBlueValue,customGreen,customGreenValue,customHex,customRed,customRedValue,customSwatch} from '@ui/state/dom.js';
-import { getHex }from '@ui/get/color/getHex.js';
-import { getRgbCss }from '@ui/get/color/getRgbCss.js';
+import { utilHex }from '@ui/get/color/utilHex.js';
+import { utilRgbCss }from '@ui/get/color/utilRgbCss.js';
 import { getRgbEquals }from '@ui/get/color/getRgbEquals.js';
 
 export function setUpdateCustomColor() {
@@ -28,8 +28,8 @@ export function setUpdateCustomColor() {
   if (customRedValue) customRedValue.textContent = String(r);
   if (customGreenValue) customGreenValue.textContent = String(g);
   if (customBlueValue) customBlueValue.textContent = String(b);
-  if (customHex) customHex.textContent = getHex(CUSTOM_RGB);
-  if (customSwatch) customSwatch.style.background = getRgbCss(CUSTOM_RGB);
+  if (customHex) customHex.textContent = utilHex(CUSTOM_RGB);
+  if (customSwatch) customSwatch.style.background = utilRgbCss(CUSTOM_RGB);
 
   for (const entry of PRESET_SWATCH_BUTTONS) {
     entry.button.classList.toggle('is-active', getRgbEquals(entry.rgb, CUSTOM_RGB));

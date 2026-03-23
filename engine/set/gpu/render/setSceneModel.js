@@ -22,8 +22,8 @@
 
 // Import GPU math utilities
 import { getNormalizedVector3 } from '@engine/get/gpu/getNormalizedVector3.js';
-import { getNormalizedRgb } from '@engine/get/gpu/getNormalizedRgb.js';
-import { getRowMajorRotation } from '@engine/get/gpu/getRowMajorRotation.js';
+import { utilNormalizedRgb } from '@engine/get/gpu/utilNormalizedRgb.js';
+import { utilRowMajorRotation } from '@engine/get/gpu/utilRowMajorRotation.js';
 import { setProjectionUniforms } from '@engine/set/gpu/setProjectionUniforms.js';
 
 /**
@@ -46,7 +46,7 @@ export function setSceneModel(gl, model, params, shaderPack, bufferStore, tmpArr
   if (!buffers) return false;
 
   // Extract rotation matrix in row-major format
-  const rot = getRowMajorRotation(params.rotation);
+  const rot = utilRowMajorRotation(params.rotation);
 
   // Set viewport and optionally clear buffers
   gl.viewport(0, 0, params.width, params.height);
@@ -85,8 +85,8 @@ export function setSceneModel(gl, model, params, shaderPack, bufferStore, tmpArr
     gl.uniform3fv(fillLoc.uViewDir, getNormalizedVector3(tmpView, params.viewDir, [0, 0, -1]));
 
     // Set shading colors (convert from RGB 0-255 to normalized 0-1)
-    gl.uniform3fv(fillLoc.uShadeDark, getNormalizedRgb(tmpShadeDark, params.theme.shadeDark, [35, 48, 64]));
-    gl.uniform3fv(fillLoc.uShadeBright, getNormalizedRgb(tmpShadeBright, params.theme.shadeBright, [120, 180, 230]));
+    gl.uniform3fv(fillLoc.uShadeDark, utilNormalizedRgb(tmpShadeDark, params.theme.shadeDark, [35, 48, 64]));
+    gl.uniform3fv(fillLoc.uShadeBright, utilNormalizedRgb(tmpShadeBright, params.theme.shadeBright, [120, 180, 230]));
     gl.uniform1f(fillLoc.uAlpha, fillAlpha);
 
     // Bind position attribute buffer
@@ -136,8 +136,8 @@ export function setSceneModel(gl, model, params, shaderPack, bufferStore, tmpArr
     gl.uniform1f(wireLoc.uZHalf, Math.max(0.01, params.zHalf || 1));
 
     // Set wire colors (near=far edges, far=near edges for depth fade)
-    gl.uniform3fv(wireLoc.uWireNear, getNormalizedRgb(tmpWireNear, params.theme.wireNear, [210, 245, 255]));
-    gl.uniform3fv(wireLoc.uWireFar, getNormalizedRgb(tmpWireFar, params.theme.wireFar, [120, 195, 255]));
+    gl.uniform3fv(wireLoc.uWireNear, utilNormalizedRgb(tmpWireNear, params.theme.wireNear, [210, 245, 255]));
+    gl.uniform3fv(wireLoc.uWireFar, utilNormalizedRgb(tmpWireFar, params.theme.wireFar, [120, 195, 255]));
     gl.uniform1f(wireLoc.uAlpha, wireAlpha);
 
     // Bind wire position attribute buffer

@@ -30,8 +30,8 @@
  * @param {boolean} supportsUint32 - Whether the context supports 32-bit indices.
  * @returns {Object|null} The GPU buffer store for the model, or null if invalid.
  */
-import { getModelTriangles }from '@engine/get/render/model/getModelTriangles.js';
-import { getTriCornerNormals }from '@engine/get/render/model/getTriCornerNormals.js';
+import { utilModelTriangles }from '@engine/get/render/model/utilModelTriangles.js';
+import { utilTriCornerNormals }from '@engine/get/render/model/utilTriCornerNormals.js';
 import { createWirePosData }from '@engine/init/gpu/create/createWirePosData.js';
 import { createFillBuffers }from '@engine/init/gpu/create/createFillBuffers.js';
 import { createEdgeIndexData }from '@engine/init/gpu/create/createEdgeIndexData.js';
@@ -42,13 +42,13 @@ export function buildModelBuffers(gl, model, supportsUint32) {
 
   // Compute triangle faces for the model (handles n-gons)
   // Do not mutate the model, as some may be frozen (e.g., BASE_MODEL)
-  let triFaces = model.triangles || model._triFaces || getModelTriangles(model);
+  let triFaces = model.triangles || model._triFaces || utilModelTriangles(model);
   if (!triFaces?.length) return null;
   // Each face is either an array of indices or an object with .indices
   triFaces = triFaces.map(f => f?.indices ?? f);
 
   // Compute per-corner normals for smooth shading
-  const triCornerNormals = getTriCornerNormals(model, triFaces);
+  const triCornerNormals = utilTriCornerNormals(model, triFaces);
   if (triCornerNormals?.length !== triFaces.length) return null;
 
   const vertexCount = model.V.length;

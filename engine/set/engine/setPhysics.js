@@ -20,8 +20,8 @@
 
 "use strict";
 
-import { getEulerIncrement } from '@engine/get/render/getEulerIncrement.js';
-import { getReorthogonalized } from '@engine/get/render/getReorthogonalized.js';
+import { utilEulerIncrement } from '@engine/get/render/utilEulerIncrement.js';
+import { utilReorthogonalized } from '@engine/get/render/utilReorthogonalized.js';
 import { state } from '@engine/state/loop.js';
 import {
   getRotation, getWx, getWy, getWz, isDragging, getAxisAngleX, getAxisAngleY,
@@ -44,11 +44,11 @@ export function setPhysics() {
 
   // Apply angular velocities to rotation matrix
   const currentR = getRotation();
-  getEulerIncrement(currentR, getWx(), getWy(), getWz());
+  utilEulerIncrement(currentR, getWx(), getWy(), getWz());
 
   // Periodically re-orthogonalize to prevent numerical drift (~2s at 60fps)
   if ((++state.frameCount) % 120 === 0) {
-    setRotation(getReorthogonalized(getRotation()));
+    setRotation(utilReorthogonalized(getRotation()));
   }
 
   if (isDragging()) {

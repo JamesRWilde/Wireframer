@@ -16,7 +16,7 @@
 "use strict";
 
 import {lodSlider, lodValue, bgDensity, bgDensityValue, bgVelocity, bgVelocityValue, bgOpacity, bgOpacityValue, fillOpacity, fillOpacityValue, wireOpacity, wireOpacityValue}from '@ui/state/dom.js';
-import { getSliderDisplayPercent }from '@ui/get/getSliderDisplayPercent.js';
+import { utilSliderDisplayPercent }from '@ui/get/utilSliderDisplayPercent.js';
 import { setPersistedState }from '@ui/set/persist/setPersistedState.js';
 import { setFillOpacity } from '@engine/set/render/setFillOpacity.js';
 import { setWireOpacity } from '@engine/set/render/setWireOpacity.js';
@@ -25,17 +25,17 @@ import { bgState } from '@engine/state/render/background/backgroundState.js';
 
 export function setSyncRenderToggles() {
   setDetailLevelValue(Number(lodSlider.value) / 100);
-  lodValue.textContent = `${getSliderDisplayPercent(lodSlider)}%`;
+  lodValue.textContent = `${utilSliderDisplayPercent(lodSlider)}%`;
 
   const rawDensity = Number(bgDensity.value);
   const densityPct = rawDensity / 100;
   bgState.densityPct = densityPct;
-  bgDensityValue.textContent = `${getSliderDisplayPercent(bgDensity)}%`;
+  bgDensityValue.textContent = `${utilSliderDisplayPercent(bgDensity)}%`;
 
   const rawVelocity = Number(bgVelocity.value);
   const velocityPct = rawVelocity / 100;
   bgState.velocityPct = velocityPct;
-  bgVelocityValue.textContent = `${getSliderDisplayPercent(bgVelocity)}%`;
+  bgVelocityValue.textContent = `${utilSliderDisplayPercent(bgVelocity)}%`;
 
   const rawOpacity = Number(bgOpacity.value);
   const opacityPct = rawOpacity / 100;

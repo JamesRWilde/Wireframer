@@ -16,123 +16,123 @@
 
 "use strict";
 
-import { getClampByte }from '@ui/get/color/getClampByte.js';
-import { getMixedRgb }from '@ui/get/color/getMixedRgb.js';
-import { getRgbCss }from '@ui/get/color/getRgbCss.js';
-import { getRgbaCss }from '@ui/get/color/getRgbaCss.js';
-import { getEnforcedContrast }from '@ui/get/color/getEnforcedContrast.js';
+import { utilClampByte }from '@ui/get/color/utilClampByte.js';
+import { utilMixedRgb }from '@ui/get/color/utilMixedRgb.js';
+import { utilRgbCss }from '@ui/get/color/utilRgbCss.js';
+import { utilRgbaCss }from '@ui/get/color/utilRgbaCss.js';
+import { utilEnforcedContrast }from '@ui/get/color/utilEnforcedContrast.js';
 
 export function setCustomTheme(rgbInput, themeMode) {
-  const base = [getClampByte(rgbInput[0]), getClampByte(rgbInput[1]), getClampByte(rgbInput[2])];
+  const base = [utilClampByte(rgbInput[0]), utilClampByte(rgbInput[1]), utilClampByte(rgbInput[2])];
   const isLight = themeMode === 'light';
   const choose = (lightVal, darkVal) => (isLight ? lightVal : darkVal);
 
   const bg = choose(
-    getMixedRgb(base, [255, 255, 255], 0.95),
+    utilMixedRgb(base, [255, 255, 255], 0.95),
     [0, 0, 0]
   );
   const uiBg = choose(
-    getMixedRgb(base, [255, 255, 255], 0.88),
-    getMixedRgb(base, [0, 0, 0], 0.9)
+    utilMixedRgb(base, [255, 255, 255], 0.88),
+    utilMixedRgb(base, [0, 0, 0], 0.9)
   );
   const panelBg = choose(
-    getMixedRgb(base, [255, 255, 255], 0.78),
-    getMixedRgb(base, [0, 0, 0], 0.88)
+    utilMixedRgb(base, [255, 255, 255], 0.78),
+    utilMixedRgb(base, [0, 0, 0], 0.88)
   );
   const optionBg = choose(
-    getMixedRgb(base, [255, 255, 255], 0.82),
-    getMixedRgb(base, [0, 0, 0], 0.88)
+    utilMixedRgb(base, [255, 255, 255], 0.82),
+    utilMixedRgb(base, [0, 0, 0], 0.88)
   );
 
   const title = choose(
-    getEnforcedContrast(getMixedRgb(base, [0, 0, 0], 0.72), bg, 5.5),
-    getEnforcedContrast(getMixedRgb(base, [255, 255, 255], 0.54), bg, 5.5)
+    utilEnforcedContrast(utilMixedRgb(base, [0, 0, 0], 0.72), bg, 5.5),
+    utilEnforcedContrast(utilMixedRgb(base, [255, 255, 255], 0.54), bg, 5.5)
   );
   const subtitle = choose(
-    getEnforcedContrast(getMixedRgb(base, [0, 0, 0], 0.46), bg, 2.3),
-    getEnforcedContrast(getMixedRgb(base, [255, 255, 255], 0.16), bg, 2.3)
+    utilEnforcedContrast(utilMixedRgb(base, [0, 0, 0], 0.46), bg, 2.3),
+    utilEnforcedContrast(utilMixedRgb(base, [255, 255, 255], 0.16), bg, 2.3)
   );
   const controlFg = choose(
-    getEnforcedContrast(getMixedRgb(base, [0, 0, 0], 0.6), bg, 4.2),
-    getEnforcedContrast(getMixedRgb(base, [255, 255, 255], 0.32), bg, 4.2)
+    utilEnforcedContrast(utilMixedRgb(base, [0, 0, 0], 0.6), bg, 4.2),
+    utilEnforcedContrast(utilMixedRgb(base, [255, 255, 255], 0.32), bg, 4.2)
   );
   const controlHoverFg = choose(
-    getEnforcedContrast(getMixedRgb(base, [0, 0, 0], 0.8), bg, 5.5),
-    getEnforcedContrast(getMixedRgb(base, [255, 255, 255], 0.58), bg, 5.5)
+    utilEnforcedContrast(utilMixedRgb(base, [0, 0, 0], 0.8), bg, 5.5),
+    utilEnforcedContrast(utilMixedRgb(base, [255, 255, 255], 0.58), bg, 5.5)
   );
   const label = choose(
-    getEnforcedContrast(getMixedRgb(base, [0, 0, 0], 0.54), bg, 3.6),
-    getEnforcedContrast(getMixedRgb(base, [255, 255, 255], 0.26), bg, 3.6)
+    utilEnforcedContrast(utilMixedRgb(base, [0, 0, 0], 0.54), bg, 3.6),
+    utilEnforcedContrast(utilMixedRgb(base, [255, 255, 255], 0.26), bg, 3.6)
   );
   const value = choose(
-    getEnforcedContrast(getMixedRgb(base, [0, 0, 0], 0.72), bg, 4.8),
-    getEnforcedContrast(getMixedRgb(base, [255, 255, 255], 0.46), bg, 4.8)
+    utilEnforcedContrast(utilMixedRgb(base, [0, 0, 0], 0.72), bg, 4.8),
+    utilEnforcedContrast(utilMixedRgb(base, [255, 255, 255], 0.46), bg, 4.8)
   );
 
   return {
     bg,
     particle: choose(
-      getMixedRgb(base, [0, 0, 0], 0.9),
-      getMixedRgb(base, [255, 255, 255], 0.34)
+      utilMixedRgb(base, [0, 0, 0], 0.9),
+      utilMixedRgb(base, [255, 255, 255], 0.34)
     ),
     wireA: choose(
-      getMixedRgb(base, [255, 255, 255], 0.12),
-      getMixedRgb(base, [0, 0, 0], 0.2)
+      utilMixedRgb(base, [255, 255, 255], 0.12),
+      utilMixedRgb(base, [0, 0, 0], 0.2)
     ),
     wireB: choose(
-      getMixedRgb(base, [0, 0, 0], 0.18),
-      getMixedRgb(base, [255, 255, 255], 0.08)
+      utilMixedRgb(base, [0, 0, 0], 0.18),
+      utilMixedRgb(base, [255, 255, 255], 0.08)
     ),
     wireNear: choose(
-      getMixedRgb(base, [255, 255, 255], 0.28),
-      getMixedRgb(base, [0, 0, 0], 0.42)
+      utilMixedRgb(base, [255, 255, 255], 0.28),
+      utilMixedRgb(base, [0, 0, 0], 0.42)
     ),
     wireFar: choose(
-      getMixedRgb(base, [0, 0, 0], 0.46),
-      getMixedRgb(base, [255, 255, 255], 0.46)
+      utilMixedRgb(base, [0, 0, 0], 0.46),
+      utilMixedRgb(base, [255, 255, 255], 0.46)
     ),
     shadeDark: choose(
-      getMixedRgb(base, [255, 255, 255], 0.22),
-      getMixedRgb(base, [0, 0, 0], 0.5)
+      utilMixedRgb(base, [255, 255, 255], 0.22),
+      utilMixedRgb(base, [0, 0, 0], 0.5)
     ),
     shadeBright: choose(
-      getMixedRgb(base, [0, 0, 0], 0.24),
-      getMixedRgb(base, [255, 255, 255], 0.3)
+      utilMixedRgb(base, [0, 0, 0], 0.24),
+      utilMixedRgb(base, [255, 255, 255], 0.3)
     ),
     morph: choose(
-      getMixedRgb(base, [0, 0, 0], 0.28),
-      getMixedRgb(base, [255, 255, 255], 0.36)
+      utilMixedRgb(base, [0, 0, 0], 0.28),
+      utilMixedRgb(base, [255, 255, 255], 0.36)
     ),
     uiVars: {
-      '--bg-solid': getRgbCss(bg),
-      '--ui-title': getRgbaCss(title, 0.88),
-      '--ui-subtitle': getRgbaCss(subtitle, 0.5),
-      '--ui-control-border': getRgbaCss(choose(
-        getMixedRgb(base, [0, 0, 0], 0.2),
-        getMixedRgb(base, [255, 255, 255], 0.12)
+      '--bg-solid': utilRgbCss(bg),
+      '--ui-title': utilRgbaCss(title, 0.88),
+      '--ui-subtitle': utilRgbaCss(subtitle, 0.5),
+      '--ui-control-border': utilRgbaCss(choose(
+        utilMixedRgb(base, [0, 0, 0], 0.2),
+        utilMixedRgb(base, [255, 255, 255], 0.12)
       ), 0.42),
-      '--ui-control-fg': getRgbaCss(controlFg, 0.86),
-      '--ui-control-hover-border': getRgbaCss(choose(
-        getMixedRgb(base, [0, 0, 0], 0.36),
-        getMixedRgb(base, [255, 255, 255], 0.28)
+      '--ui-control-fg': utilRgbaCss(controlFg, 0.86),
+      '--ui-control-hover-border': utilRgbaCss(choose(
+        utilMixedRgb(base, [0, 0, 0], 0.36),
+        utilMixedRgb(base, [255, 255, 255], 0.28)
       ), 0.7),
-      '--ui-control-hover-fg': getRgbaCss(controlHoverFg, 0.98),
-      '--ui-control-bg': getRgbaCss(uiBg, isLight ? 0.92 : 0.9),
-      '--ui-panel-bg': getRgbaCss(panelBg, isLight ? 0.8 : 0.4),
-      '--ui-control-option-bg': getRgbCss(optionBg),
-      '--ui-label': getRgbaCss(label, 0.82),
-      '--ui-value': getRgbaCss(value, 0.9),
-      '--ui-switch-glow': getRgbaCss(choose(
-        getMixedRgb(base, [0, 0, 0], 0.24),
-        getMixedRgb(base, [255, 255, 255], 0.46)
+      '--ui-control-hover-fg': utilRgbaCss(controlHoverFg, 0.98),
+      '--ui-control-bg': utilRgbaCss(uiBg, isLight ? 0.92 : 0.9),
+      '--ui-panel-bg': utilRgbaCss(panelBg, isLight ? 0.8 : 0.4),
+      '--ui-control-option-bg': utilRgbCss(optionBg),
+      '--ui-label': utilRgbaCss(label, 0.82),
+      '--ui-value': utilRgbaCss(value, 0.9),
+      '--ui-switch-glow': utilRgbaCss(choose(
+        utilMixedRgb(base, [0, 0, 0], 0.24),
+        utilMixedRgb(base, [255, 255, 255], 0.46)
       ), 0.58),
-      '--ui-stats': getRgbaCss(choose(
-        getMixedRgb(base, [0, 0, 0], 0.34),
-        getMixedRgb(base, [255, 255, 255], 0.18)
+      '--ui-stats': utilRgbaCss(choose(
+        utilMixedRgb(base, [0, 0, 0], 0.34),
+        utilMixedRgb(base, [255, 255, 255], 0.18)
       ), 0.42),
-      '--ui-object-label': getRgbaCss(value, 0.64),
-      '--ui-hint': getRgbaCss(label, 0.36),
-      '--ui-accent': getRgbCss(base),
+      '--ui-object-label': utilRgbaCss(value, 0.64),
+      '--ui-hint': utilRgbaCss(label, 0.36),
+      '--ui-accent': utilRgbCss(base),
     },
   };
 }

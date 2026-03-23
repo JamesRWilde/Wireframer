@@ -20,16 +20,16 @@
 import { initFillWorker } from '@engine/init/cpu/initFillWorker.js';
 
 // Import frame data getter for vertex transforms
-import { getFrameData }from '@engine/get/render/model/getFrameData.js';
+import { utilFrameData }from '@engine/get/render/model/utilFrameData.js';
 
 // Import triangle face getter for mesh geometry
-import { getModelTriangles }from '@engine/get/render/model/getModelTriangles.js';
+import { utilModelTriangles }from '@engine/get/render/model/utilModelTriangles.js';
 
 // Import shading mode detection for flat vs smooth shading
-import { getShadingMode }from '@engine/get/cpu/getShadingMode.js';
+import { utilShadingMode }from '@engine/get/cpu/utilShadingMode.js';
 
 // Import per-corner normal computation for smooth shading
-import { getTriCornerNormals }from '@engine/get/render/model/getTriCornerNormals.js';
+import { utilTriCornerNormals }from '@engine/get/render/model/utilTriCornerNormals.js';
 
 // Import CPU triangle rasterizer for main-thread fallback
 import { setDrawTrianglesCpu }from '@engine/set/render/setDrawTrianglesCpu.js';
@@ -83,21 +83,21 @@ export function setDrawSolidFillModel(model, alphaScale = 1) {
   }
 
   // Get transformed vertex data (2D projections + 3D positions)
-  const fd = getFrameData(model);
+  const fd = utilFrameData(model);
   if (!fd) return;
   const { T, P2 } = fd;
 
   // Get triangle faces for the model
-  const triFaces = getModelTriangles(model);
+  const triFaces = utilModelTriangles(model);
   if (!triFaces?.length) return;
 
   // Determine shading mode and compute corner normals if needed
-  const shadingMode = getShadingMode(model, triFaces);
+  const shadingMode = utilShadingMode(model, triFaces);
   const useSmoothShading = shadingMode === 'smooth';
   const seamExpandPx = useSmoothShading ? DENSE_SEAM_EXPAND_PX : 0;
 
   const triCornerNormalsResult = useSmoothShading
-    ? getTriCornerNormals(model, triFaces)
+    ? utilTriCornerNormals(model, triFaces)
     : null;
 
   // Compute fill alpha (1.0 for opaque, <1 for transparent fills)

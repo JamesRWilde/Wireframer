@@ -33,7 +33,7 @@
 "use strict";
 
 import { compileShader } from '@engine/init/gpu/compileShader.js';
-import { getParsedCssColor } from '@engine/get/render/background/getParsedCssColor.js';
+import { utilParsedCssColor } from '@engine/get/render/background/utilParsedCssColor.js';
 import { createParticleBufferData } from '@engine/init/gpu/background/createParticleBufferData.js';
 import { getBgVertexShader } from '@engine/get/render/background/getBgVertexShader.js';
 import { getBgFragmentShader } from '@engine/get/render/background/getBgFragmentShader.js';
@@ -113,7 +113,7 @@ export function createBackgroundRenderer(gl) {
         if (Array.isArray(opts.colorRgb) && opts.colorRgb.length === 3) {
           color = { r: opts.colorRgb[0], g: opts.colorRgb[1], b: opts.colorRgb[2], a: 1 };
         } else {
-          color = getParsedCssColor(opts.color || '#ffffff');
+          color = utilParsedCssColor(opts.color || '#ffffff');
         }
 
         gl.viewport(0, 0, opts.width, opts.height);

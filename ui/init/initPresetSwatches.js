@@ -20,8 +20,8 @@
 
 "use strict";
 
-import { getHex }from '@ui/get/color/getHex.js';
-import { getRgbCss }from '@ui/get/color/getRgbCss.js';
+import { utilHex }from '@ui/get/color/utilHex.js';
+import { utilRgbCss }from '@ui/get/color/utilRgbCss.js';
 import { setCustomRgb }from '@ui/set/setCustomRgb.js';
 import { getRandomPresetRgb }from '@ui/get/getRandomPresetRgb.js';
 import { PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, presetSwatchesEl, SHUFFLE_SWATCH_NAME }from '@ui/state/dom.js';
@@ -53,9 +53,9 @@ export function initPresetSwatches() {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'preset-swatch';
-    button.title = `${preset.name} (${getHex(preset.rgb)})`;
-    button.setAttribute('aria-label', `${preset.name} preset ${getHex(preset.rgb)}`);
-    button.style.setProperty('--swatch-color', getRgbCss(preset.rgb));
+    button.title = `${preset.name} (${utilHex(preset.rgb)})`;
+    button.setAttribute('aria-label', `${preset.name} preset ${utilHex(preset.rgb)}`);
+    button.style.setProperty('--swatch-color', utilRgbCss(preset.rgb));
     button.addEventListener('click', () => {
       setCustomRgb(preset.rgb, { persist: true, apply: true });
     });
