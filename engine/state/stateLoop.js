@@ -1,5 +1,5 @@
 /**
- * StateEngineLoop.js - Main Render Loop State Constants and Shared State
+ * stateLoop.js - Main Render Loop State Constants and Shared State
  * 
  * PURPOSE:
  *   Defines the shared state object and constants used by the main render loop.

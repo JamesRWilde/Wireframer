@@ -22,7 +22,7 @@ import { getBgCanvas } from '@engine/get/render/background/getBgCanvas.js';
 import { getColors } from '@engine/get/render/background/getColors.js';
 import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
 import { backgroundWorkerState } from '@engine/state/render/background/stateWorker.js';
-import { setPostToBackgroundWorker } from '@engine/set/render/setPostToBackgroundWorker.js';
+import { setWorkerMessage } from '@engine/set/render/setWorkerMessage.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
 import { setRenderWorkerParticles } from '@engine/set/render/draw/setRenderWorkerParticles.js';
 import { initBackgroundWorker } from '@engine/init/render/initBackgroundWorker.js';
@@ -58,7 +58,7 @@ export function setBackgroundCpu(nowMs) {
   const speed = bgState.velocityPct;
   const opacity = bgState.opacityPct;
 
-  setPostToBackgroundWorker({
+  setWorkerMessage({
     type: 'update',
     mode: 'cpu',
     timestamp: nowMs ?? performance.now(),

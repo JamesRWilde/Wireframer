@@ -20,7 +20,7 @@
 
 // Import shared transform state to access cached results
 // Tracks latest worker transform output and associated frameId.
-import { vertexTransformState } from "@engine/state/render/stateVertexTransformBridge.js";
+import { vertexTransformWorkerState } from "@engine/state/render/stateVertexTransformWorkerState.js";
 
 /**
  * cachedTransformResult - Returns a copy of the cached transform result
@@ -30,7 +30,7 @@ import { vertexTransformState } from "@engine/state/render/stateVertexTransformB
  */
 export function getCachedTransformResult() {
   // Return snapshot copy since the underlying state object may be mutated in-place.
-  return vertexTransformState.cachedResult
-    ? { ...vertexTransformState.cachedResult, frameId: vertexTransformState.cachedFrameId }
+  return vertexTransformWorkerState.cachedResult
+    ? { ...vertexTransformWorkerState.cachedResult, frameId: vertexTransformWorkerState.cachedFrameId }
     : null;
 }

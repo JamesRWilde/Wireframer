@@ -1,5 +1,5 @@
 /**
- * setPostToBackgroundWorker.js - Background Worker Message Sender
+ * setWorkerMessage.js - Background Worker Message Sender
  *
  * PURPOSE:
  *   Sends a message to the background particle worker if it exists.
@@ -22,12 +22,12 @@
 import { backgroundWorkerState } from '@engine/state/render/background/stateWorker.js';
 
 /**
- * setPostToBackgroundWorker - Sends a message to the background worker
+ * setWorkerMessage - Sends a message to the background worker
  *
  * @param {Object} msg - The message object to post to the worker
  * @returns {void}
  */
-export function setPostToBackgroundWorker(msg) {
+export function setWorkerMessage(msg) {
   // Guard: only post if the worker has been created
   if (backgroundWorkerState.worker) {
     backgroundWorkerState.worker.postMessage(msg);

@@ -19,7 +19,7 @@
 
 // Import the render foreground state container
 // Holds the function pointer (fn) that the frame loop invokes each frame
-import { renderForegroundState } from '@engine/set/render/setRenderForegroundState.js';
+import { renderForegroundState } from '@engine/state/render/stateRenderForegroundState.js';
 
 /**
  * getRenderForeground - Returns the active foreground render function

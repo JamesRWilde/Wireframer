@@ -8,7 +8,7 @@
  *
  * ARCHITECTURE ROLE:
  *   Central state module for the background particle pipeline. Read and
- *   written by backgroundWorker.js (init), setPostToBackgroundWorker.js (post),
+ *   written by backgroundWorker.js (init), setWorkerMessage.js (post),
  *   pendingWorkerParticles.js (read), and isBackgroundWorkerReady.js (read).
  *
  * WHY THIS EXISTS:

@@ -1,26 +1,32 @@
 /**
- * renderForegroundState.js - Foreground render function pointer state
+ * stateRenderForegroundState.js - Foreground Render Function State
  *
  * PURPOSE:
- *   Contains the mutable state for the active foreground render function
- *   and GPU mode flag. This module ONLY holds the state variables.
+ *   Holds the mutable reference to the active foreground render function.
+ *   Both getter and setter modules access this same state variable.
  *
  * ARCHITECTURE ROLE:
- *   State module in engine/state/render/. The getter and setter modules
- *   in engine/get/render/ and engine/set/render/ provide controlled access.
+ *   Single source of truth for the render function pointer. The setter
+ *   updates this value during initialization or mode switches. The getter
+ *   returns it for actual rendering.
  *
  * WHY THIS EXISTS:
- *   Documents the role of this state container as the source of render path
- *   selection, aiding maintainability of pipeline toggles.
+ *   ES module exports are read-only bindings, so we can't reassign the
+ *   export directly. Wrapping the function pointer in an object allows
+ *   mutation while maintaining the module encapsulation pattern.
  *
- * STATE:
- *   - _renderForeground: The active render function (or null)
- *   - _isGpuMode: Boolean flag indicating GPU rendering is active
+ * USAGE:
+ *   This module should NOT be imported directly by consumers.
+ *   Use getRenderForeground.js and setRenderForeground.js instead.
  */
 
 "use strict";
 
-export let renderForegroundState = {
-  _renderForeground: null,
-  _isGpuMode: false
+/**
+ * @type {{ fn: Function|null }} Active foreground render function wrapper
+ * We use an object with a property so the reference can be mutated
+ * without violating ES module read-only binding rules.
+ */
+export const renderForegroundState = {
+  fn: null
 };

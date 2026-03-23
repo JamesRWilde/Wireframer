@@ -11,7 +11,7 @@
  *   Moves expensive per-frame vertex math off the main thread.
  *
  * SIDE EFFECTS:
- *   - Mutates vertexTransformState (worker, workerAvailable, cachedResult, etc.)
+ *   - Mutates vertexTransformWorkerState (worker, workerAvailable, cachedResult, etc.)
  *
  * WHY THIS EXISTS:
  *   Defines worker startup and events for vertex transform offloading,
@@ -21,7 +21,7 @@
 "use strict";
 
 // Import shared transform state to track worker lifecycle
-import { vertexTransformState } from "@engine/state/render/stateVertexTransformBridge.js";
+import { vertexTransformWorkerState } from "@engine/state/render/stateVertexTransformWorkerState.js";
 
 /**
  * workerTransform - Creates and initializes the vertex transform worker
@@ -30,44 +30,44 @@ import { vertexTransformState } from "@engine/state/render/stateVertexTransformB
  */
 export function initWorkerTransform() {
   // Return early if worker already exists
-  if (vertexTransformState.worker) return true;
+  if (vertexTransformWorkerState.worker) return true;
 
   try {
     // Instantiate the vertex transform worker from its module URL
-    vertexTransformState.worker = new Worker(
+    vertexTransformWorkerState.worker = new Worker(
       new URL('../../state/gpu/stateVertexTransformWorker.js', import.meta.url).href,
       { type: 'module' }
     );
-    vertexTransformState.workerAvailable = true;
+    vertexTransformWorkerState.workerAvailable = true;
 
     // Handle messages from the transform worker
-    vertexTransformState.worker.onmessage = (event) => {
+    vertexTransformWorkerState.worker.onmessage = (event) => {
       const { type, T, P2, frameId, message } = event.data;
       if (type === 'transformed') {
         // Cache the transformed vertex data for the current frame
-        vertexTransformState.cachedResult = { T, P2 };
-        vertexTransformState.cachedFrameId = frameId;
+        vertexTransformWorkerState.cachedResult = { T, P2 };
+        vertexTransformWorkerState.cachedFrameId = frameId;
       } else if (type === 'error') {
         // Log worker errors with throttling to avoid console spam
-        if (vertexTransformState.errorCount < vertexTransformState.MAX_ERROR_LOGS) {
+        if (vertexTransformWorkerState.errorCount < vertexTransformWorkerState.MAX_ERROR_LOGS) {
           console.warn('[vertexTransformBridge] Worker error:', message);
-          vertexTransformState.errorCount++;
+          vertexTransformWorkerState.errorCount++;
         }
       }
     };
 
     // Handle fatal worker errors (e.g., script crash)
-    vertexTransformState.worker.onerror = (error) => {
-      if (vertexTransformState.errorCount < vertexTransformState.MAX_ERROR_LOGS) {
+    vertexTransformWorkerState.worker.onerror = (error) => {
+      if (vertexTransformWorkerState.errorCount < vertexTransformWorkerState.MAX_ERROR_LOGS) {
         console.warn('[vertexTransformBridge] Worker error:', error.message);
-        vertexTransformState.errorCount++;
+        vertexTransformWorkerState.errorCount++;
       }
     };
 
     return true;
   } catch (error) {
     console.warn('[vertexTransformBridge] Worker creation failed:', error.message);
-    vertexTransformState.workerAvailable = false;
+    vertexTransformWorkerState.workerAvailable = false;
     return false;
   }
 }

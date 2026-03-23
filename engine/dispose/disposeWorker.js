@@ -17,7 +17,7 @@
 "use strict";
 
 // Import shared transform state to access and clean up worker resources
-import { vertexTransformState } from "@engine/state/render/stateVertexTransformBridge.js";
+import { vertexTransformWorkerState } from "@engine/state/render/stateVertexTransformWorkerState.js";
 
 /**
  * workerTerminate - Terminates the vertex transform worker
@@ -25,9 +25,9 @@ import { vertexTransformState } from "@engine/state/render/stateVertexTransformB
  * @returns {void}
  */
 export function disposeWorker() {
-  if (vertexTransformState.worker) {
-    vertexTransformState.worker.terminate();
-    vertexTransformState.worker = null;
-    vertexTransformState.workerAvailable = false;
+  if (vertexTransformWorkerState.worker) {
+    vertexTransformWorkerState.worker.terminate();
+    vertexTransformWorkerState.worker = null;
+    vertexTransformWorkerState.workerAvailable = false;
   }
 }

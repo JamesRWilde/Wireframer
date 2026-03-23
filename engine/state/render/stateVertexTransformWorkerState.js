@@ -1,5 +1,5 @@
 /**
- * vertexTransformBridge.js - Vertex Transform Worker State
+ * stateVertexTransformWorkerState.js - Vertex Transform Worker State
  *
  * PURPOSE:
  *   Holds the shared mutable state for the vertex transform Web Worker,
@@ -23,7 +23,7 @@
 "use strict";
 
 /**
- * vertexTransformState - Mutable state for the vertex transform worker
+ * vertexTransformWorkerState - Mutable state for the vertex transform worker
  * @property {Worker|null} worker - The vertex transform Web Worker instance
  * @property {boolean} workerAvailable - Whether a worker was successfully created
  * @property {number} pendingFrameId - Frame ID of the most recently sent transform request
@@ -31,7 +31,7 @@
  * @property {number} cachedFrameId - Frame ID of the cached result
  * @property {number} errorCount - Number of errors encountered (for throttling logs)
  */
-export const vertexTransformState = {
+export const vertexTransformWorkerState = {
   worker: null,
   workerAvailable: false,
   pendingFrameId: -1,

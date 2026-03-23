@@ -1,5 +1,5 @@
 /**
- * fill-render-worker.js - Fill Rendering Web Worker
+ * stateFillWorker.js - Fill Rendering Web Worker State
  * 
  * PURPOSE:
  *   Performs triangle sorting, lighting calculations, and rasterization
