@@ -23,6 +23,7 @@ import { onMove } from '@engine/set/render/onMove.js';
 import { setDragging, setLastPointerX, setLastPointerY, setWx, setWy } from '@engine/state/render/physicsState.js';
 import { getZoom, getZoomMin, getZoomMax, setZoom } from '@engine/state/render/zoomState.js';
 import { setInputCanvas } from '@engine/set/render/setInputCanvas.js';
+import { getTouchDist } from '@engine/get/render/touch/getTouchDist.js';
 
 /**
  * attachInputListeners - Attaches input event listeners to canvas.
@@ -64,10 +65,6 @@ export function attachInputListeners(canvas) {
   // Pinch zoom state (two-finger gesture)
   let pinchStartDist = 0;
   let pinchStartZoom = 1;
-
-  function getTouchDist(t1, t2) {
-    return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-  }
 
   // Touch start: single-finger drag or two-finger pinch
   canvas.addEventListener('touchstart', e => {

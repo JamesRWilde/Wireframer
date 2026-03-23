@@ -22,6 +22,9 @@
 import { workerState as state } from '@engine/state/render/background/worker.js';
 import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
+import { handleWorkerReady } from '@engine/set/render/background/handleWorkerReady.js';
+import { handleWorkerParticles } from '@engine/set/render/background/handleWorkerParticles.js';
+import { handleWorkerError } from '@engine/set/render/background/handleWorkerError.js';
 
 // Import background canvas getter to read current dimensions
 import {canvas}from '@engine/get/render/background/canvas.js';
@@ -62,21 +65,6 @@ export function backgroundWorker(mode = 'cpu') {
     );
 
     // Handle messages from the background worker
-    function handleWorkerReady() {
-      state.workerReady = true;
-      state.workerAvailable = true;
-    }
-
-    function handleWorkerParticles(data, count) {
-      state.pendingWorkerParticles = { data, count };
-    }
-
-    function handleWorkerError(message) {
-      console.error('[BackgroundWorker]', message);
-      state.workerReady = false;
-      state.workerAvailable = false;
-    }
-
     state.worker.onmessage = (event) => {
       const { type, data, count, message } = event.data;
       if (type === 'ready') {
