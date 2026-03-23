@@ -25,7 +25,7 @@
 /** Centralized zoom state storage. */
 export const zoomState = {
   zoom: 1,
-  zHalf: 0,
+  zHalf: 1,  // Unit sphere radius (immutable constant)
   zoomMin: 0.45,
   zoomMax: 2.75,
 };

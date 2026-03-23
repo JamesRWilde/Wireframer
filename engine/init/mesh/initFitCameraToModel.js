@@ -25,8 +25,7 @@
 import { setZoom } from '@engine/set/render/setZoom.js';
 import { setZoomMin } from '@engine/set/render/setZoomMin.js';
 import { setZoomMax } from '@engine/set/render/setZoomMax.js';
-import { setZHalf } from '@engine/set/render/setZHalf.js';
-import { setModelCy } from '@engine/set/render/setModelCy.js';
+
 
 /**
  * fitCameraToModel - Adjusts camera to frame the model
@@ -58,9 +57,8 @@ export function fitCameraToModel(model) {
     if (v[1] > maxY) maxY = v[1];
   }
 
-  // Update frame parameters for projection
-  setModelCy(0);  // Sphere is centred at origin — no offset needed
-  setZHalf(1);    // Sphere radius is 1
+  // Projection parameters: MODEL_CY = 0 (centred at origin), Z_HALF = 1 (unit sphere)
+  // These are immutable constants baked into state defaults
   
   // Set zoom bounds — sphere is law (unit sphere, radius 1, diameter 2)
   // Min: sphere = 8% of screen (small but visible)

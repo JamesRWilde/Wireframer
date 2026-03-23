@@ -40,7 +40,6 @@ import { utilFlatNested }from '@engine/util/render/utilFlatNested.js';
 import { utilTransformSync }from '@engine/util/render/utilTransformSync.js';
 import { getRotation } from '@engine/get/render/physics/getRotation.js';
 import { getZoom } from '@engine/get/render/getZoom.js';
-import { getModelCy } from '@engine/get/render/getModelCy.js';
 import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';
 
@@ -76,7 +75,7 @@ export function utilFrameData(model) {
   const fov = Math.min(w, h) * 0.9 * getZoom();
   const halfW = w * 0.5;
   const halfH = h * 0.5;
-  const modelCy = getModelCy();
+  const modelCy = 0;  // MODEL_CY is always 0 (model centred at origin)
 
   let T, P2;
 

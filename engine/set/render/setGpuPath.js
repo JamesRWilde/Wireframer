@@ -33,9 +33,6 @@ import { setGpuCanvasHidden }from '@engine/set/gpu/setGpuCanvasHidden.js';
 import { setCanvasCpuHidden }from '@engine/set/cpu/setCanvasCpuHidden.js';
 import { getRotation } from '@engine/get/render/physics/getRotation.js';
 import { getZoom } from '@engine/get/render/getZoom.js';
-import { getZHalf } from '@engine/get/render/getZHalf.js';
-import { getModelCy } from '@engine/get/render/getModelCy.js';
-// getZHalf moved to zoomState import
 import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';
 import { getTheme } from '@engine/get/render/getTheme.js';
@@ -97,8 +94,8 @@ export function setGpuPath(gl, meshToRender, morphing) {
 
     // Camera parameters - control view and projection
     zoom: getZoom(),
-    modelCy: getModelCy(),  // Model vertical center for projection
-    zHalf: getZHalf(),      // Half-depth for depth calculations
+    modelCy: 0,             // MODEL_CY is always 0 (model centred at origin)
+    zHalf: 1,               // Z_HALF is always 1 (unit sphere radius)
 
     // Canvas dimensions - required for viewport setup
     width: getW(),
