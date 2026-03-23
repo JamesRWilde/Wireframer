@@ -34,12 +34,12 @@ import { state } from '@engine/state/stateLoop.js';
 import { setApplyCpuLodCap } from '@engine/set/mesh/setApplyCpuLodCap.js';
 
 /**
- * initializeCpuPipeline - Sets up CPU (Canvas 2D) rendering path
+ * initCpuPipeline - Sets up CPU (Canvas 2D) rendering path
  * 
  * Configures the render function pointer to use CPU rendering and
  * updates the HUD and canvas visibility accordingly.
  */
-export function initializeCpuPipeline() {
+export function initCpuPipeline() {
   // Set the render function pointer to CPU path
   setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {
     return setCpuPath(meshToRender, backgroundOnSeparateCanvas, morphing);

@@ -13,7 +13,7 @@
 
 "use strict";
 
-import { initializeCpuPipeline } from '@engine/init/render/pipeline/initializeCpuPipeline.js';
+import { initCpuPipeline } from '@engine/init/render/pipeline/initCpuPipeline.js';
 import { setApplyCpuLodCap } from '@engine/set/mesh/setApplyCpuLodCap.js';
 import { setGpuCanvasHidden } from '@engine/set/gpu/setGpuCanvasHidden.js';
 import { setCanvasCpuHidden } from '@engine/set/cpu/setCanvasCpuHidden.js';
@@ -44,7 +44,7 @@ export function setSwitchToCpuMode() {
   bgState.gpuBackgroundGl = null;
 
   // Initialize CPU pipeline and apply LOD cap
-  initializeCpuPipeline();
+  initCpuPipeline();
   setApplyCpuLodCap();
 
   // Initialize CPU background worker pipeline now that GPU has been disabled.

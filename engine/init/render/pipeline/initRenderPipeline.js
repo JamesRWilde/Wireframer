@@ -68,7 +68,7 @@ import { state } from '@engine/state/stateLoop.js';
 import { modelState } from '@engine/state/render/stateModel.js';
 
 // Import CPU pipeline initialization helper
-import { initializeCpuPipeline } from '@engine/init/render/pipeline/initializeCpuPipeline.js';
+import { initCpuPipeline } from '@engine/init/render/pipeline/initCpuPipeline.js';
 
 /**
  * initRenderPipeline - Detects WebGL and initializes the appropriate pipeline
@@ -84,7 +84,7 @@ export function initRenderPipeline() {
   const gpuCanvas = getGpuCanvas();
   
   if (!gpuCanvas) {
-    initializeCpuPipeline();
+    initCpuPipeline();
     return false;
   }
   
@@ -94,7 +94,7 @@ export function initRenderPipeline() {
              gpuCanvas.getContext('experimental-webgl');
   
   if (!gl) {
-    initializeCpuPipeline();
+    initCpuPipeline();
     return false;
   }
   
@@ -105,7 +105,7 @@ export function initRenderPipeline() {
   const renderer = getSceneRendererGpu(gl);
   
   if (!renderer) {
-    initializeCpuPipeline();
+    initCpuPipeline();
     return false;
   }
   
