@@ -14,6 +14,7 @@
 
 "use strict";
 
+// Import canvas context getter — retrieves the 2D rendering context attached to the CPU canvas
 import { getCanvasCtx } from '@engine/get/render/getCanvasCtx.js';
 
 /**

@@ -1,5 +1,12 @@
 /**
- * sceneCanvas.js - GPU Scene Canvas Clear
+ * WHY THIS EXISTS:
+ *   The WebGL framebuffer must be cleared before each render pass to prevent
+ *   ghosting from the previous frame. This function combines viewport setup
+ *   and clear in one call to ensure they're always paired.
+ */
+
+/**
+ * setGpuSceneCanvas.js - GPU Scene Canvas Clear
  *
  * PURPOSE:
  *   Sets the WebGL viewport to the canvas dimensions and clears both

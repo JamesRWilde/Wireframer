@@ -18,11 +18,12 @@
 
 "use strict";
 
-// Import particle factory for creating individual particles
+// Import particle factory — creates individual particle objects with random position/velocity
 import { createParticle }from '@engine/init/render/initCreateParticle.js';
 
-// Import centralized render state
+// Import theme mode getter — needed to boost alpha for visibility on light backgrounds
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
+// Import background state — holds density, velocity, and opacity percentage settings
 import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
 
 /** Maximum density multiplier to cap particle count */

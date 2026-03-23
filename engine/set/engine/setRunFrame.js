@@ -11,6 +11,12 @@
  *   run() focuses purely on the work to be done each frame, making
  *   it testable independently of the animation loop.
  * 
+ * WHY THIS EXISTS:
+ *   The frame loop needs a single orchestrator that chains physics → budget →
+ *   render → telemetry in the correct order. This function is that chain.
+ *   Separating it from requestAnimationFrame scheduling makes it independently
+ *   testable and allows the frame loop to focus on timing rather than work.
+ *
  * FRAME PIPELINE:
  *   1. Check if frame should run (FPS limiting)
  *   2. Update rotation physics

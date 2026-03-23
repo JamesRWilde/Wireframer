@@ -20,12 +20,22 @@
 "use strict";
 
 // Import budget state and hysteresis thresholds
-import { budgetState, DOWNGRADE_THRESHOLD, UPGRADE_THRESHOLD } from "@engine/set/engine/frame/setBudgetState.js";
+// budgetState tracks current quality and counters; thresholds define how many
+// consecutive frames must trend before a change is committed
+import { budgetState, DOWNGRADE_THRESHOLD, UPGRADE_THRESHOLD } from '@engine/set/engine/frame/setBudgetState.js';
 
-// Import quality priority comparison helper
+// Import quality priority comparison helper — returns numeric priority for 'high'/'medium'/'low'
 import { getPriority }from '@engine/get/engine/getPriority.js';
+
 /**
- * qualityApplyChange - Evaluates and applies a quality level change with hysteresis
+ * WHY THIS EXISTS:
+ *   Rapid quality switching (high→low→high) creates visible stuttering as shaders
+ *   and buffers are recompiled. Hysteresis ensures quality only changes after
+ *   sustained performance trend, trading responsiveness for stability.
+ */
+
+/**
+ * setApplyQualityChange - Evaluates and applies a quality level change with hysteresis
  *
  * @param {string} targetQuality - The suggested target quality level ('high'|'medium'|'low')
  * @param {number} avgFrameTime - The current average frame time in ms (for debug logging)

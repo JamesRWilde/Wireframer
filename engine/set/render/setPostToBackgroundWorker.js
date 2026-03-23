@@ -9,6 +9,11 @@
  *   Called by the background renderer to send update commands to the
  *   worker thread. Centralizes the worker message posting to avoid
  *   duplicate null checks across the codebase.
+ *
+ * WHY THIS EXISTS:
+ *   Multiple places in the background rendering code need to post messages
+ *   to the worker. Rather than checking for worker existence each time,
+ *   this wrapper centralizes the guard and the post.
  */
 
 "use strict";
@@ -22,4 +27,9 @@ import { backgroundWorkerState } from '@engine/state/render/background/stateWork
  * @param {Object} msg - The message object to post to the worker
  * @returns {void}
  */
-export function setPostToBackgroundWorker(msg) { if (backgroundWorkerState.worker) backgroundWorkerState.worker.postMessage(msg); }
+export function setPostToBackgroundWorker(msg) {
+  // Guard: only post if the worker has been created
+  if (backgroundWorkerState.worker) {
+    backgroundWorkerState.worker.postMessage(msg);
+  }
+}

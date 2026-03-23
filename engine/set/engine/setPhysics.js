@@ -20,14 +20,20 @@
 
 "use strict";
 
+// Import Euler angle increment — applies angular velocity to rotation matrix
 import { utilEulerIncrement } from '@engine/util/render/utilEulerIncrement.js';
+// Import re-orthogonalization — corrects numerical drift in the rotation matrix
 import { utilReorthogonalized } from '@engine/util/render/utilReorthogonalized.js';
+// Import loop state — holds frame counter used for periodic re-orthogonalization
 import { state } from '@engine/state/stateLoop.js';
+// Import physics state getters/setters — rotation matrix, angular velocities, drag flags, axis angles
 import {
   getRotation, getWx, getWy, getWz, isDragging, getAxisAngleX, getAxisAngleY,
   setRotation, setAutoWx, setAutoWy, setAutoWz, setAxisAngleX, setAxisAngleY,
 } from '@engine/state/render/statePhysicsState.js';
+// Import friction applier — decelerates angular velocity during user drag
 import { setApplyFriction } from '@engine/set/render/physics/setApplyFriction.js';
+// Import auto-rotation ease — smoothly transitions velocities toward auto targets
 import { setEaseTowardAuto } from '@engine/set/render/physics/setEaseTowardAuto.js';
 
 /**

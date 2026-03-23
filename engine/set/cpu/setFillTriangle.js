@@ -21,6 +21,15 @@
 
 "use strict";
 
+/**
+ * setFillTriangle - Rasterizes a single filled triangle onto a canvas context
+ *
+ * @param {CanvasRenderingContext2D} ctx - Canvas context to draw into
+ * @param {Array<[number,number]>} tri2d - Triangle vertices [[x0,y0], [x1,y1], [x2,y2]]
+ * @param {Array<number>} color - RGB color as [r, g, b] with values 0-255
+ * @param {number} alpha - Opacity from 0 (transparent) to 1 (opaque)
+ * @returns {void}
+ */
 export function setFillTriangle(ctx, tri2d, color, alpha) {
   // Draw a filled path for the triangle.
   ctx.beginPath();

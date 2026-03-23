@@ -1,5 +1,5 @@
 /**
- * onMove.js - Pointer Movement Handler
+ * setHandleMove.js - Pointer Movement Handler
  *
  * PURPOSE:
  *   Handles pointer movement (mouse or touch) and converts it into rotation
@@ -10,6 +10,11 @@
  *   Called by attachInputListeners for both mouse and touch move events.
  *   Updates angular velocities via physicsState setters based on pointer delta.
  *
+ * WHY THIS EXISTS:
+ *   The user drags the model on screen, but the physics system works with
+ *   angular velocities (degrees per frame). This function bridges the gap
+ *   by computing the pointer delta and converting it to rotation speed.
+ *
  * ROTATION MAPPING:
  *   - Horizontal drag (dx) → Y axis rotation (yaw)
  *   - Vertical drag (dy) → X axis rotation (pitch)
@@ -18,20 +23,25 @@
 
 "use strict";
 
+// Import physics state getters/setters for drag tracking and angular velocity
+// isDragging: guard to skip when not in a drag operation
+// getLastPointerX/Y: previous frame's pointer position for delta calculation
+// setWx/Wy: set angular velocity (radians per frame) for X/Y rotation
+// setLastPointerX/Y: store current position for next frame's delta
 import {
   isDragging, getLastPointerX, getLastPointerY,
   setWx, setWy, setLastPointerX, setLastPointerY,
 } from '@engine/state/render/statePhysicsState.js';
 
 /**
- * onMove - Handles pointer movement for model rotation.
+ * setHandleMove - Handles pointer movement for model rotation
  *
  * @param {number} cx - Current pointer X position (clientX)
  * @param {number} cy - Current pointer Y position (clientY)
  * @returns {void}
  */
 export function setHandleMove(cx, cy) {
-  // Skip if not dragging
+  // Skip if not dragging — only process movement during active drag
   if (!isDragging()) return;
 
   // Get previous pointer position (fallback to current if not set)
@@ -40,15 +50,16 @@ export function setHandleMove(cx, cy) {
   const px = typeof prevX === 'number' ? prevX : cx;
   const py = typeof prevY === 'number' ? prevY : cy;
 
-  // Calculate pointer delta
+  // Calculate pointer delta (how far the pointer moved since last frame)
   const dx = cx - px, dy = cy - py;
 
   // Convert delta to angular velocities
   // Horizontal → Y rotation (yaw), Vertical → X rotation (pitch)
+  // 0.007 is the sensitivity factor — higher values = faster rotation
   setWy(dx * 0.007);
   setWx(dy * 0.007);
 
-  // Store current position for next frame
+  // Store current position for next frame's delta calculation
   setLastPointerX(cx);
   setLastPointerY(cy);
 }

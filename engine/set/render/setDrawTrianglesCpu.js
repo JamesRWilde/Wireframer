@@ -10,6 +10,11 @@
  *   Called by setDrawSolidFillModel for synchronous (main-thread) triangle
  *   fill rendering. Operates on pre-sorted triangles from the painter's
  *   algorithm pass.
+ *
+ * WHY THIS EXISTS:
+ *   The CPU rendering path must rasterize triangles directly onto a canvas
+ *   context. This function is the main loop that iterates over sorted
+ *   triangles, computes lighting for each, and calls the rasterizer.
  */
 
 "use strict";

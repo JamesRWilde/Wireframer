@@ -1,5 +1,13 @@
 /**
- * projectionUniforms.js - GPU Projection Uniform Setter
+ * WHY THIS EXISTS:
+ *   The vertex shader needs field of view, projection scale, and depth
+ *   parameters to transform 3D vertices into screen space. These values
+ *   depend on the current canvas size and zoom level, so they must be
+ *   re-uploaded whenever either changes.
+ */
+
+/**
+ * setProjectionUniforms.js - GPU Projection Uniform Setter
  *
  * PURPOSE:
  *   Sets the projection-related uniforms on a GPU shader program,

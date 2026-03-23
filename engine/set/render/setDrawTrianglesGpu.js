@@ -30,9 +30,13 @@
  */
 
 "use strict";
+
+// Import GPU triangle shading — computes fill color from normal, theme, and smooth shading
 import {utilTriangleNormalGpu}from '@engine/util/render/utilTriangleNormalGpu.js';
 import {utilTriangleGpu}from '@engine/util/render/utilTriangleGpu.js';
+// Import seam expansion — slightly enlarges triangles to prevent gaps between adjacent faces
 import {utilSeamGpu}from '@engine/util/render/utilSeamGpu.js';
+// Import single triangle rasterizer — fills a triangle on the 2D canvas context
 import {setFillTriangle}from '@engine/set/cpu/setFillTriangle.js';
 
 export function setDrawTrianglesGpu({ T, P2, triFaces, triCornerNormals, useSmoothShading, theme, fillAlpha, seamExpandPx, R, ctx }) {

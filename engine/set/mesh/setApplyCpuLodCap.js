@@ -17,10 +17,15 @@
 
 "use strict";
 
+// Import model state — holds the base model and current LOD model
 import { modelState } from '@engine/state/render/stateModel.js';
+// Import detail level slider getter — reads the current UI slider value
 import { getDetailLevelValue } from '@engine/get/render/getDetailLevelValue.js';
+// Import detail level setter — decimates the model to the target LOD percentage
 import { setDetailLevel } from '@engine/set/mesh/setDetailLevel.js';
+// Import LOD range setter — updates the slider range to match the model's vertex count
 import { setLodRangeForModel } from '@engine/set/mesh/setLodRangeForModel.js';
+// Import CPU cap applier — pre-decimates the model to CPU-safe limits
 import { setCapModelForCpu } from '@engine/set/mesh/setCapModelForCpu.js';
 
 /**

@@ -1,5 +1,5 @@
 /**
- * gpuModeState.js - GPU Mode Flag State
+ * setGpuModeState.js - GPU Mode Flag State
  *
  * PURPOSE:
  *   Holds the mutable GPU mode flag. Both getter and setter modules
@@ -7,6 +7,11 @@
  *
  * ARCHITECTURE ROLE:
  *   Single source of truth for whether GPU rendering is active.
+ *
+ * WHY THIS EXISTS:
+ *   ES module exports are read-only bindings, so we can't reassign the
+ *   export directly. Wrapping the boolean in an object allows mutation
+ *   while maintaining the module encapsulation pattern.
  *
  * USAGE:
  *   This module should NOT be imported directly by consumers.

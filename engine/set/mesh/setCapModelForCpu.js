@@ -21,7 +21,9 @@
 
 "use strict";
 
+// Import decimation helper — reduces model complexity by percentage
 import { decimateByPercent } from '@engine/init/mesh/initDecimateByPercent.js';
+// Import binary search decimator — finds optimal detail level under vertex/edge caps
 import { setDecimateToCap } from '@engine/set/mesh/setDecimateToCap.js';
 
 /** @type {number} Maximum vertices for CPU mode before auto-decimation */

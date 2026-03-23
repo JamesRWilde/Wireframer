@@ -1,5 +1,12 @@
 /**
- * rebuildBuffer.js - Helper to rebuild the particle buffer for the GPU background renderer
+ * WHY THIS EXISTS:
+ *   When the background particle array changes (density slider, init, resize),
+ *   the GPU buffer must be re-uploaded with the new vertex data. This function
+ *   centralizes the upload and count update.
+ */
+
+/**
+ * setRebuildBackgroundBuffer.js - Helper to rebuild the particle buffer for the GPU background renderer
  *
  * PURPOSE:
  *   Updates the WebGL buffer with the latest particle data and returns the new particle count.

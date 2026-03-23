@@ -22,8 +22,7 @@
 
 "use strict";
 
-// Import the setRunFrame function that performs the actual per-frame work
-// This includes physics updates, rendering, and telemetry updates
+// Import the frame executor — performs physics, render, and telemetry per frame
 import {setRunFrame}from '@engine/set/engine/setRunFrame.js';
 
 // Frame state flags (gpuSceneDrawnLastFrame, cpuForegroundDrawnOnMainCanvas)

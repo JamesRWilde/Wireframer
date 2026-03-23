@@ -1,5 +1,7 @@
+"use strict";
+
 /**
- * geometryExpandPoint.js - Expand a point outward from centroid
+ * setExpandGeometryPoint.js - Expand a point outward from centroid
  *
  * PURPOSE:
  *   Moves a 2D point outward from a given centroid by a specified distance.

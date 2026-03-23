@@ -1,5 +1,5 @@
 /**
- * renderForegroundState.js - Foreground Render Function State
+ * setRenderForegroundState.js - Foreground Render Function State
  *
  * PURPOSE:
  *   Holds the mutable reference to the active foreground render function.
@@ -9,6 +9,11 @@
  *   Single source of truth for the render function pointer. The setter
  *   updates this value during initialization or mode switches. The getter
  *   returns it for actual rendering.
+ *
+ * WHY THIS EXISTS:
+ *   ES module exports are read-only bindings, so we can't reassign the
+ *   export directly. Wrapping the function pointer in an object allows
+ *   mutation while maintaining the module encapsulation pattern.
  *
  * USAGE:
  *   This module should NOT be imported directly by consumers.

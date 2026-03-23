@@ -1,14 +1,21 @@
 /**
  * setFillTriangleOnLayer.js - Triangle Rasterization
- * 
+ *
  * PURPOSE:
  *   Fills a single triangle on a 2D canvas context with the specified color.
  *   Handles alpha blending for transparent fill rendering.
- * 
+ *
  * ARCHITECTURE ROLE:
  *   Called by fill renderer for each visible triangle.
  *   Low-level rasterization primitive for CPU-based fill rendering.
+ *
+ * WHY THIS EXISTS:
+ *   Every filled triangle in the model must be rasterized individually.
+ *   This is the lowest-level draw call in the CPU fill pipeline — called
+ *   once per visible triangle per frame.
  */
+
+"use strict";
 
 /**
  * setFillTriangleOnLayer - Fills a triangle on the canvas with specified color

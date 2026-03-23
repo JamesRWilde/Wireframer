@@ -19,10 +19,11 @@
 
 "use strict";
 
+// Import GPU canvas getter — retrieves the WebGL canvas DOM element
 import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
 
 /**
- * canvasHidden - Shows or hides the GPU canvas
+ * setGpuCanvasHidden - Shows or hides the GPU canvas
  *
  * @param {boolean} hidden - Whether to hide the canvas (true) or show it (false)
  */

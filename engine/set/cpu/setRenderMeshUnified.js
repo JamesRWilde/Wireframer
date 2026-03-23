@@ -21,17 +21,28 @@
 
 "use strict";
 
+// Import frame data getter — retrieves transformed (T) and projected (P2) vertex positions
 import { utilFrameData }from '@engine/util/render/model/utilFrameData.js';
+// Import triangle face getter — extracts face index arrays from the model
 import { utilModelTriangles }from '@engine/util/render/model/utilModelTriangles.js';
+// Import shading mode detector — determines flat vs smooth shading for the model
 import { utilShadingMode }from '@engine/util/cpu/utilShadingMode.js';
+// Import corner normal computer — computes per-corner normals for smooth shading
 import { utilTriCornerNormals }from '@engine/util/render/model/utilTriCornerNormals.js';
+// Import triangle normal resolver — determines face/corner normals for lighting
 import { utilTriangleNormalCpu }from '@engine/util/render/utilTriangleNormalCpu.js';
+// Import triangle shading computer — calculates fill color from normal using Blinn-Phong
 import { utilTriangleCpu }from '@engine/util/render/utilTriangleCpu.js';
+// Import edge color getter — retrieves the precomputed wireframe edge color
 import { getEdgeColor } from '@engine/get/render/getEdgeColor.js';
+// Import opacity getters — read the current fill and wire opacity from slider state
 import { getFillOpacity } from '@engine/get/render/getFillOpacity.js';
 import { getWireOpacity } from '@engine/get/render/getWireOpacity.js';
+// Import render state — holds wire width and other rendering parameters
 import { renderState } from '@engine/state/render/stateRenderState.js';
+// Import depth sort — sorts triangle indices by average z-depth for painter's algorithm
 import { setSortTrianglesByDepth } from '@engine/set/cpu/setSortTrianglesByDepth.js';
+// Import triangle renderer — draws a single filled + stroked triangle on canvas
 import { setRenderTriangle } from '@engine/set/cpu/setRenderTriangle.js';
 
 /**

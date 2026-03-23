@@ -11,6 +11,11 @@
  *   TELEMETRY_UI_INTERVAL_MS intervals to reduce DOM manipulation overhead.
  *   Writes computed EMA (exponential moving average) values to DOM elements.
  *
+ * WHY THIS EXISTS:
+ *   The render loop runs at 60fps but updating the DOM every frame is expensive.
+ *   This function throttles HUD updates to TELEMETRY_UI_INTERVAL_MS intervals
+ *   so the display stays responsive without wasting frame time on DOM writes.
+ *
  * DETAILS:
  *   Also reports per-frame CPU phase breakdown (lighting, fill, stroke)
  */

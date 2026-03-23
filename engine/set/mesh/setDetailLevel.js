@@ -20,10 +20,15 @@
 
 "use strict";
 
+// Import decimation helper — reduces model complexity by percentage
 import { decimateByPercent }from '@engine/init/mesh/initDecimateByPercent.js';
+// Import model state — holds base model, cpuBaseModel, and current LOD model
 import { modelState } from '@engine/state/render/stateModel.js';
+// Import active model setter — swaps the rendered model in shared state
 import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
+// Import GPU mode check — determines which base model to decimate from
 import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
+// Import CPU vertex cap — used to decide whether to use uncapped base for small models
 import { CPU_MAX_VERTS } from '@engine/set/mesh/setCapModelForCpu.js';
 
 /**
