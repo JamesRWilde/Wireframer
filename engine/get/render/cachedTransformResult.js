@@ -15,7 +15,7 @@
 "use strict";
 
 // Import shared transform state to access cached results
-import { transformState } from "@engine/state/render/vertexTransformBridge.js";
+import { vertexTransformState } from "@engine/state/render/vertexTransformBridge.js";
 
 /**
  * cachedTransformResult - Returns a copy of the cached transform result
@@ -24,5 +24,5 @@ import { transformState } from "@engine/state/render/vertexTransformBridge.js";
  *   Cached transform result with frame ID, or null if no result is cached
  */
 export function cachedTransformResult() {
-  return transformState.cachedResult ? { ...transformState.cachedResult, frameId: transformState.cachedFrameId } : null;
+  return vertexTransformState.cachedResult ? { ...vertexTransformState.cachedResult, frameId: vertexTransformState.cachedFrameId } : null;
 }

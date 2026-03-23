@@ -27,6 +27,6 @@ import { sceneModel } from '@engine/set/gpu/render/sceneModel.js';
  * @param {Object} tmpArrays - Pre-allocated Float32Arrays for uniform uploads
  * @returns {boolean} Whether rendering succeeded
  */
-export function model(gl, model, params, shaderPack, bufferStore, tmpArrays) {
+export function getModelFn(gl, model, params, shaderPack, bufferStore, tmpArrays) {
   return sceneModel(gl, model, params, shaderPack, bufferStore, tmpArrays);
 }

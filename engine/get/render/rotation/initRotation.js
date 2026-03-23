@@ -40,6 +40,6 @@ import {R} from '@engine/state/render/rotationMatrixRef.js';
  * This gives a pleasing three-quarter view of the model.
  * Falls back to identity matrix if rotation functions aren't available.
  */
-export function initialize() {
+export function initRotation() {
   R.value = matrixMultiply3x3(matrixY(0.4), matrixX(0.18));
 }

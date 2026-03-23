@@ -39,7 +39,7 @@ import { sceneDraw }from '@engine/init/gpu/create/sceneDraw.js';
  * @returns {Object|null} Renderer object with { mode, model, clear, dispose }
  *   or null if WebGL initialization fails
  */
-export function sceneRenderer(gl) {
+export function getSceneRenderer(gl) {
   if (!gl) {
     return null;
   }

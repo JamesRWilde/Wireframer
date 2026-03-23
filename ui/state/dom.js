@@ -22,7 +22,7 @@ import {statsState} from '@ui/state/stats.js';
 
 const THEME = null;
 export const select = document.getElementById('obj-select');
-export const themeMode = document.getElementById('theme-mode');
+export const themeModeEl = document.getElementById('theme-mode');
 export const lodSlider = document.getElementById('lod-slider');
 export const lodValue = document.getElementById('lod-value');
 export const fillOpacity = document.getElementById('fill-opacity');
@@ -35,7 +35,7 @@ export const bgVelocity = document.getElementById('bg-velocity');
 export const bgVelocityValue = document.getElementById('bg-velocity-value');
 export const bgOpacity = document.getElementById('bg-opacity');
 export const bgOpacityValue = document.getElementById('bg-opacity-value');
-export const presetSwatches = document.getElementById('preset-swatches');
+export const presetSwatchesEl = document.getElementById('preset-swatches');
 export const customRed = document.getElementById('custom-red');
 export const customGreen = document.getElementById('custom-green');
 export const customBlue = document.getElementById('custom-blue');

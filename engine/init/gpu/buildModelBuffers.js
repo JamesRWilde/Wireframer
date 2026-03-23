@@ -30,8 +30,8 @@
  * @param {boolean} supportsUint32 - Whether the context supports 32-bit indices.
  * @returns {Object|null} The GPU buffer store for the model, or null if invalid.
  */
-import { triangles as modelTriangles }from '@engine/get/render/model/triangles.js';
-import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
+import { getModelTriangles }from '@engine/get/render/model/getModelTriangles.js';
+import { getTriCornerNormals }from '@engine/get/render/model/getTriCornerNormals.js';
 import { wirePosData }from '@engine/init/gpu/create/wirePosData.js';
 import { fillBuffers }from '@engine/init/gpu/create/fillBuffers.js';
 import { edgeIndexData }from '@engine/init/gpu/create/edgeIndexData.js';
@@ -42,7 +42,7 @@ export function buildModelBuffers(gl, model, supportsUint32) {
 
   // Compute triangle faces for the model (handles n-gons)
   // Do not mutate the model, as some may be frozen (e.g., BASE_MODEL)
-  let triFaces = model.triangles || model._triFaces || modelTriangles(model);
+  let triFaces = model.triangles || model._triFaces || getModelTriangles(model);
   if (!triFaces?.length) return null;
   // Each face is either an array of indices or an object with .indices
   triFaces = triFaces.map(f => f?.indices ?? f);

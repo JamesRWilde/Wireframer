@@ -33,7 +33,7 @@ import { initObjectSelector } from '@ui/init/initObjectSelector.js';
 import { animationFrame } from '@engine/set/engine/frame/animationFrame.js';
 
 // Rotation
-import { initialize as rotationInitialize } from '@engine/get/render/rotation/initialize.js';
+import { initRotation } from '@engine/get/render/rotation/initRotation.js';
 import { R } from '@engine/state/render/rotationMatrixRef.js';
 import { setRotation } from '@engine/state/render/physicsState.js';
 
@@ -81,7 +81,7 @@ import {
  */
 export function startApp() {
   // Step 1: Initialize rotation matrix
-  rotationInitialize();
+  initRotation();
   
   // Step 2: Zoom state is self-initializing via zoomState.js import
   // (defaults: zoom=1, min=0.45, max=2.75)

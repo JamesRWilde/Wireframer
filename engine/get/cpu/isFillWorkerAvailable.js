@@ -14,7 +14,7 @@
 "use strict";
 
 // Import shared fill state to check worker status
-import { fillState } from "@engine/state/fillRenderBridge.js";
+import { fillRenderState } from "@engine/state/fillRenderBridge.js";
 
 /**
  * isFillWorkerAvailable - Checks if the fill worker is ready for commands
@@ -22,5 +22,5 @@ import { fillState } from "@engine/state/fillRenderBridge.js";
  * @returns {boolean} True if the worker exists and has sent a 'ready' message
  */
 export function isFillWorkerAvailable() {
-  return fillState.workerAvailable && fillState.workerReady;
+  return fillRenderState.workerAvailable && fillRenderState.workerReady;
 }

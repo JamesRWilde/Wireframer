@@ -36,7 +36,7 @@
 "use strict";
 
 import { morphState } from '@engine/state/mesh/morph.js';
-import { clone } from '@engine/init/mesh/clone.js';
+import { cloneMesh } from '@engine/init/mesh/cloneMesh.js';
 import { computeMorphMap } from '@engine/init/mesh/computeMorphMap.js';
 import { decimateByPercent } from '@engine/init/mesh/decimateByPercent.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
@@ -71,8 +71,8 @@ const MORPH_DETAIL = 0.1;
 
 export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
   // Clone both meshes to avoid mutating the originals
-  const fromClone = clone(fromMesh);
-  const toClone = clone(toMesh);
+  const fromClone = cloneMesh(fromMesh);
+  const toClone = cloneMesh(toMesh);
 
   // Decimate both meshes to common low detail level (10% of original vertices)
   const fromDec = decimateByPercent(fromClone, MORPH_DETAIL);
@@ -103,7 +103,7 @@ export function startMorph(fromMesh, toMesh, durationMs, onComplete) {
   morphState.fromDecimated = fromDec;
   morphState.toDecimated = toDec;
   morphState.morphMap = morphMap;
-  morphState.currentMesh = clone(fromClone);
+  morphState.currentMesh = cloneMesh(fromClone);
   morphState.progress = 0;
   morphState.onComplete = typeof onComplete === 'function' ? onComplete : null;
   morphState.startZoom = getZoom();

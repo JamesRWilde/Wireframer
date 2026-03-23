@@ -19,7 +19,7 @@
  *   if (triNormals) return triNormals;
  *   // ...fallback to other normal computation...
  */
-export function triNormals(model, triCount) {
+export function getTriNormals(model, triCount) {
   // Check if precomputed triangleNormals are present
   if (model.triangleNormals) {
     // Create a shallow copy to avoid mutating the original array

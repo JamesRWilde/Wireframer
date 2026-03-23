@@ -27,7 +27,7 @@ import { backgroundGpu } from '@engine/set/render/draw/backgroundGpu.js';
  * @param {number} [nowMs]
  * @returns {boolean}
  */
-export function background(nowMs) {
+export function drawBackground(nowMs) {
   if (isGpuMode()) {
     return backgroundGpu(nowMs);
   }

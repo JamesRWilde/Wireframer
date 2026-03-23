@@ -19,14 +19,14 @@
 "use strict";
 
 /**
- * workerState - Mutable state for the background particle worker
+ * backgroundWorkerState - Mutable state for the background particle worker
  * @property {Worker|null} worker - The background particle Web Worker instance
  * @property {boolean} workerReady - Whether the worker has sent a 'ready' message
  * @property {boolean} workerInitialized - Whether initialization has been attempted
  * @property {Object|null} pendingWorkerParticles - Latest particle data { data: Float32Array, count: number }
  * @property {boolean} workerAvailable - Whether a worker was successfully created
  */
-export const workerState = {
+export const backgroundWorkerState = {
   worker: null,
   workerReady: false,
   workerInitialized: false,

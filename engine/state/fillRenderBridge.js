@@ -20,7 +20,7 @@
 "use strict";
 
 /**
- * fillState - Mutable state for the CPU fill render worker
+ * fillRenderState - Mutable state for the CPU fill render worker
  * @property {Worker|null} worker - The fill render Web Worker instance
  * @property {OffscreenCanvas|null} offscreenCanvas - Transferred canvas for worker rendering
  * @property {boolean} workerReady - Whether the worker has sent a 'ready' message
@@ -29,7 +29,7 @@
  * @property {number} cachedFrameId - Frame ID of the cached image bitmap
  * @property {number} errorCount - Number of errors encountered (for throttling logs)
  */
-export const fillState = {
+export const fillRenderState = {
   worker: null,
   offscreenCanvas: null,
   workerReady: false,

@@ -20,10 +20,10 @@
 "use strict";
 
 // Import shading mode detector
-import { shadingMode as getShadingMode }from '@engine/get/cpu/shadingMode.js';
+import { getShadingMode }from '@engine/get/cpu/getShadingMode.js';
 
 // Import face normal computation
-import { faceNormals as computeFaceNormals }from '@engine/get/cpu/faceNormals.js';
+import { getFaceNormals }from '@engine/get/cpu/getFaceNormals.js';
 
 // Import normal summing helper for adjacent face blending
 import {sumNormals}from '@engine/get/cpu/geometry/sumNormals.js';
@@ -35,7 +35,7 @@ import { buildVertexToFaces }from '@engine/init/cpu/buildVertexToFaces.js';
 import {flatNormals}from '@engine/get/cpu/geometry/flatNormals.js';
 
 // Import precomputed triangle normals getter
-import { triNormals as computeTriNormals }from '@engine/get/cpu/geometry/triNormals.js';
+import { getTriNormals }from '@engine/get/cpu/geometry/getTriNormals.js';
 
 /**
  * triCornerNormals - Computes per-corner normals for triangle shading
@@ -47,7 +47,7 @@ import { triNormals as computeTriNormals }from '@engine/get/cpu/geometry/triNorm
  * Returns cached normals if available and valid. Falls back through
  * precomputed normals, flat shading, and smooth/crease computation.
  */
-export function triCornerNormals(model, triFaces) {
+export function getTriCornerNormals(model, triFaces) {
   // Determine shading mode ('flat', 'smooth', or 'auto')
   const shadingMode = getShadingMode(model, triFaces);
 
@@ -63,10 +63,10 @@ export function triCornerNormals(model, triFaces) {
   }
 
   // 2. Compute face normals for all triangles
-  const faceNormals = computeFaceNormals(model, triFaces);
+  const faceNormals = getFaceNormals(model, triFaces);
 
   // 3. Use precomputed triangleNormals if available on the model
-  const triNormals = computeTriNormals(model, triFaces.length);
+  const triNormals = getTriNormals(model, triFaces.length);
   if (triNormals) return triNormals;
 
   // 4. Flat shading: assign face normal to all corners

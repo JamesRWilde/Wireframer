@@ -27,7 +27,7 @@
  * 3. Maps model.F faces, extracting .indices if present
  * 4. Returns empty array if no triangle data found
  */
-export function triangles(model) {
+export function getModelTriangles(model) {
   // Return empty array if no model
   if (!model) return [];
   

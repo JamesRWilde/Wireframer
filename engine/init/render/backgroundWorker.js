@@ -12,14 +12,14 @@
  *   thread, improving main-thread frame budget.
  *
  * SIDE EFFECTS:
- *   - Mutates workerState (worker, workerReady, workerInitialized, etc.)
+ *   - Mutates backgroundWorkerState (worker, workerReady, workerInitialized, etc.)
  *   - Posts init message to worker with canvas dimensions and theme settings
  */
 
 "use strict";
 
 // Import background worker state to track worker lifecycle
-import { workerState as state } from '@engine/state/render/background/worker.js';
+import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
 import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
 import { handleWorkerReady } from '@engine/set/render/background/handleWorkerReady.js';
@@ -46,26 +46,26 @@ export function backgroundWorker(mode = 'cpu') {
   }
 
   // Update desired running mode in worker state
-  state.workerMode = mode;
+  backgroundWorkerState.workerMode = mode;
 
   // Return current readiness if already initialized (idempotent)
-  if (state.workerInitialized) {
-    return state.workerReady;
+  if (backgroundWorkerState.workerInitialized) {
+    return backgroundWorkerState.workerReady;
   }
-  state.workerInitialized = true;
+  backgroundWorkerState.workerInitialized = true;
 
   // Guard against environments without Worker support
   if (typeof Worker === 'undefined') return false;
 
   try {
     // Instantiate the background worker from its module URL
-    state.worker = new Worker(
+    backgroundWorkerState.worker = new Worker(
       new URL('../../../workers/workersBackground.js', import.meta.url).href,
       { type: 'module' }
     );
 
     // Handle messages from the background worker
-    state.worker.onmessage = (event) => {
+    backgroundWorkerState.worker.onmessage = (event) => {
       const { type, data, count, message } = event.data;
       if (type === 'ready') {
         handleWorkerReady();
@@ -83,9 +83,9 @@ export function backgroundWorker(mode = 'cpu') {
     };
 
     // Handle fatal worker errors (e.g., script crash)
-    state.worker.onerror = (event) => {
-      state.workerReady = false;
-      state.workerAvailable = false;
+    backgroundWorkerState.worker.onerror = (event) => {
+      backgroundWorkerState.workerReady = false;
+      backgroundWorkerState.workerAvailable = false;
       console.error('[BackgroundWorker] worker error occurred', event);
       console.error('[BackgroundWorker] worker event info', {
         message: event?.message,
@@ -97,17 +97,17 @@ export function backgroundWorker(mode = 'cpu') {
       });
 
       // Retry with a new worker on next frame
-      state.workerInitialized = false;
-      if (state.worker) {
-        state.worker.terminate();
-        state.worker = null;
+      backgroundWorkerState.workerInitialized = false;
+      if (backgroundWorkerState.worker) {
+        backgroundWorkerState.worker.terminate();
+        backgroundWorkerState.worker = null;
       }
     };
 
     // Get current canvas dimensions for worker initialization
     const canvasState = canvas();
     if (canvasState) {
-      state.worker.postMessage({
+      backgroundWorkerState.worker.postMessage({
         type: 'init',
         width: canvasState.w,
         height: canvasState.h,
@@ -120,8 +120,8 @@ export function backgroundWorker(mode = 'cpu') {
 
     return true;
   } catch (error) {
-    state.workerReady = false;
-    state.workerAvailable = false;
+    backgroundWorkerState.workerReady = false;
+    backgroundWorkerState.workerAvailable = false;
     console.warn('[BackgroundWorker] Failed to initialize:', error);
     return false;
   }

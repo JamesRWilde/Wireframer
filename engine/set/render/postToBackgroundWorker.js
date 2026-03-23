@@ -14,7 +14,7 @@
 "use strict";
 
 // Import background worker state to access the worker instance
-import { workerState } from '@engine/state/render/background/worker.js';
+import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
 
 /**
  * postToBackgroundWorker - Sends a message to the background worker
@@ -22,4 +22,4 @@ import { workerState } from '@engine/state/render/background/worker.js';
  * @param {Object} msg - The message object to post to the worker
  * @returns {void}
  */
-export function postToBackgroundWorker(msg) { if (workerState.worker) workerState.worker.postMessage(msg); }
+export function postToBackgroundWorker(msg) { if (backgroundWorkerState.worker) backgroundWorkerState.worker.postMessage(msg); }

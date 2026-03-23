@@ -33,7 +33,7 @@
  * - Metadata: _shadingMode, _creaseAngleDeg
  * - Optional: groups, objects, smoothingGroups, triangleNormals, triangleUVs
  */
-export function clone(mesh) {
+export function cloneMesh(mesh) {
   return {
     // Deep copy vertices: map each vertex and slice its array
     V: mesh.V.map(v => v.slice()),

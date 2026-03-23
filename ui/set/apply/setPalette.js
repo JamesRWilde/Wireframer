@@ -21,7 +21,7 @@
 "use strict";
 
 import { setCustomTheme } from '@ui/set/setCustomTheme.js';
-import { CUSTOM_RGB, themeMode as themeModeEl } from '@ui/state/dom.js';
+import { CUSTOM_RGB, themeModeEl } from '@ui/state/dom.js';
 import { setTheme } from '@engine/set/render/setTheme.js';
 
 /**

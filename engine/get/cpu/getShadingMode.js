@@ -28,7 +28,7 @@
  * 2. In auto mode, uses 'smooth' for models with >80 faces
  * 3. Otherwise uses 'flat' for simpler models
  */
-export function shadingMode(model, triFaces) {
+export function getShadingMode(model, triFaces) {
   // Get explicit mode or default to 'auto'
   // Use optional chaining for conciseness per SonarQube S6582
   const mode = model?.__shadingMode || 'auto';

@@ -13,7 +13,7 @@
 "use strict";
 
 // Import shared transform state to check worker availability
-import { transformState } from "@engine/state/render/vertexTransformBridge.js";
+import { vertexTransformState } from "@engine/state/render/vertexTransformBridge.js";
 
 /**
  * isAvailable - Checks if the transform worker is available
@@ -21,5 +21,5 @@ import { transformState } from "@engine/state/render/vertexTransformBridge.js";
  * @returns {boolean} True if the worker was successfully created
  */
 export function isAvailable() {
-  return transformState.workerAvailable;
+  return vertexTransformState.workerAvailable;
 }

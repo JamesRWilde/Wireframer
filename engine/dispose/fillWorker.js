@@ -13,7 +13,7 @@
 "use strict";
 
 // Import shared fill state to access and clean up worker resources
-import { fillState } from "@engine/state/fillRenderBridge.js";
+import { fillRenderState } from "@engine/state/fillRenderBridge.js";
 
 /**
  * fillWorker - Terminates the fill render worker and releases resources
@@ -22,19 +22,19 @@ import { fillState } from "@engine/state/fillRenderBridge.js";
  */
 export function fillWorker() {
   // Terminate the worker if it exists
-  if (fillState.worker) {
-    fillState.worker.terminate();
-    fillState.worker = null;
-    fillState.workerReady = false;
-    fillState.workerAvailable = false;
+  if (fillRenderState.worker) {
+    fillRenderState.worker.terminate();
+    fillRenderState.worker = null;
+    fillRenderState.workerReady = false;
+    fillRenderState.workerAvailable = false;
   }
 
   // Close and release the cached image bitmap to free GPU memory
-  if (fillState.cachedImageBitmap) {
-    fillState.cachedImageBitmap.close();
-    fillState.cachedImageBitmap = null;
+  if (fillRenderState.cachedImageBitmap) {
+    fillRenderState.cachedImageBitmap.close();
+    fillRenderState.cachedImageBitmap = null;
   }
 
   // Clear the offscreen canvas reference
-  fillState.offscreenCanvas = null;
+  fillRenderState.offscreenCanvas = null;
 }

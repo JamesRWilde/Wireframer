@@ -37,7 +37,7 @@ import { customRed, customGreen, customBlue } from '@ui/state/dom.js';
 
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences
-import { setPersistedState as persistState }from '@ui/set/persist/setState.js';
+import { setPersistedState }from '@ui/set/persist/setState.js';
 
 /**
  * themeControls - Initializes the theme system and wires up event handlers
@@ -105,7 +105,7 @@ export function themeControls() {
         // Persist the new theme mode to localStorage
         // Wrapped in try/catch because persistence is non-critical
         try {
-          persistState();
+          setPersistedState();
         } catch {
           // Ignore persistence errors - theme still works for this session
         }

@@ -21,7 +21,7 @@
 
 // Import the GPU scene renderer - handles all WebGL operations
 // This includes shader compilation, buffer setup, and draw calls
-import { drawSceneModel as drawGpuSceneModel }from '@engine/set/gpu/drawSceneModel.js';
+import { drawSceneModel }from '@engine/set/gpu/drawSceneModel.js';
 
 // Import canvas visibility toggles
 // GPU path shows the GPU canvas and hides the CPU canvas
@@ -74,7 +74,7 @@ export function gpuPath(gl, meshToRender, morphing) {
   const fillRgb = getFillRgb();
   const baseTheme = getTheme() || {};
 
-  const gpuDrawn = drawGpuSceneModel(gl, meshToRender, {
+  const gpuDrawn = drawSceneModel(gl, meshToRender, {
     // Theme colors for shading and wire
     theme: {
       ...baseTheme,

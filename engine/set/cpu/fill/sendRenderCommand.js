@@ -19,7 +19,7 @@
 "use strict";
 
 // Import shared fill state to check worker readiness
-import { fillState } from "@engine/state/fillRenderBridge.js";
+import { fillRenderState } from "@engine/state/fillRenderBridge.js";
 
 /**
  * sendRenderCommand - Posts a render command to the fill worker
@@ -30,10 +30,10 @@ import { fillState } from "@engine/state/fillRenderBridge.js";
  */
 export function sendRenderCommand(renderData, frameId) {
   // Guard: only send if worker exists and is ready
-  if (!fillState.worker || !fillState.workerReady) return;
+  if (!fillRenderState.worker || !fillRenderState.workerReady) return;
 
   // Post the render command with frame data and frame ID
-  fillState.worker.postMessage({
+  fillRenderState.worker.postMessage({
     type: 'render',
     ...renderData,
     frameId

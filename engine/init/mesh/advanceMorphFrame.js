@@ -35,7 +35,7 @@
 
 import { morphState } from '@engine/state/mesh/morph.js';
 import { easeOut } from '@engine/get/mesh/easeOut.js';
-import { clone } from '@engine/init/mesh/clone.js';
+import { cloneMesh } from '@engine/init/mesh/cloneMesh.js';
 import { interpolateInSphere } from '@engine/init/mesh/interpolateInSphere.js';
 
 /**
@@ -161,7 +161,7 @@ export function advanceMorphFrame() {
   // Handle animation completion
   if (tRaw >= 1) {
     morphState.active = false;
-    morphState.currentMesh = clone(morphState.toMesh);
+    morphState.currentMesh = cloneMesh(morphState.toMesh);
     if (morphState.onComplete) morphState.onComplete();
   }
 }

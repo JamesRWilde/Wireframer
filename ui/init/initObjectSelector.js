@@ -20,7 +20,7 @@
 
 import {objectList}from '@engine/get/render/objectList.js';
 import { getLoadObjMesh } from '@engine/get/mesh/getLoadObjMesh.js';
-import { setPersistedState as persistState }from '@ui/set/persist/setState.js';
+import { setPersistedState }from '@ui/set/persist/setState.js';
 
 
 export async function initObjectSelector(restoredShapeName = null) {
@@ -59,7 +59,7 @@ export async function initObjectSelector(restoredShapeName = null) {
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       const name = OBJECTS[idx].name;
       await loadObjMeshFn(OBJECTS[idx].obj, name);
-      persistState(OBJECTS);
+      setPersistedState(OBJECTS);
     }
   });
 }

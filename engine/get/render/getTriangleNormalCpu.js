@@ -33,7 +33,7 @@ import { getRotation } from '@engine/state/render/physicsState.js';
  * 3. Normalizes the result
  * 4. Returns null if normal is degenerate (near-zero length)
  */
-export function triangleNormalCpu(tri, triIndex, T, triCornerNormals, useSmoothShading) {
+export function getTriangleNormalCpu(tri, triIndex, T, triCornerNormals, useSmoothShading) {
   // Get triangle vertex indices
   const [a, b, c] = tri;
   const v0 = T[a];

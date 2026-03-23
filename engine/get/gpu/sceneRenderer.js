@@ -28,7 +28,7 @@ import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
 import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
 
 // Import renderer factory for initial creation
-import { sceneRenderer as createSceneRenderer } from '@engine/init/gpu/create/sceneRenderer.js';
+import { getSceneRenderer } from '@engine/init/gpu/create/getSceneRenderer.js';
 
 /**
  * sceneRenderer - Returns the singleton GPU scene renderer
@@ -62,7 +62,7 @@ export function sceneRenderer() {
 
   // Create the renderer (compiles shaders, sets up buffers)
   try {
-    gpuState.renderer = createSceneRenderer(gl);
+    gpuState.renderer = getSceneRenderer(gl);
   } catch (err) {
     // CreateSceneRenderer can throw when shader compilation/linking fails.
     console.error('[sceneRenderer-get] createSceneRenderer threw:', err);

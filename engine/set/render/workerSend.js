@@ -18,7 +18,7 @@
 "use strict";
 
 // Import shared transform state to track worker availability
-import { transformState } from "@engine/state/render/vertexTransformBridge.js";
+import { vertexTransformState } from "@engine/state/render/vertexTransformBridge.js";
 
 // Import worker initialization for lazy setup
 import { workerTransform } from '@engine/init/render/workerTransform.js';
@@ -37,13 +37,13 @@ import { workerTransform } from '@engine/init/render/workerTransform.js';
  */
 export function workerSend(vertices, rotation, fov, halfW, halfH, modelCy, frameId) {
   // Lazily initialize the transform worker if not yet available
-  if (!transformState.workerAvailable && !workerTransform()) return;
+  if (!vertexTransformState.workerAvailable && !workerTransform()) return;
 
   // Track the pending frame ID for result matching
-  transformState.pendingFrameId = frameId;
+  vertexTransformState.pendingFrameId = frameId;
 
   // Post the transform command to the worker
-  transformState.worker.postMessage({
+  vertexTransformState.worker.postMessage({
     type: 'transform',
     vertices, rotation, fov, halfW, halfH, modelCy, frameId
   });

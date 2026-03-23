@@ -35,7 +35,7 @@ const Hx = -0.376, Hy = 0.599, Hz = -0.707;
  * @param {boolean} useSmoothShading - Whether smooth shading is enabled
  * @returns {[number, number, number]} RGB color [r, g, b] with values 0-255
  */
-export function triangleCpu(normal, useSmoothShading) {
+export function getTriangleCpu(normal, useSmoothShading) {
   // Read cached RGB from renderState (re-parsed only when theme changes)
   const dark = getShadeDarkRgb();
   const bright = getShadeBrightRgb();

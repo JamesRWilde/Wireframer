@@ -15,7 +15,7 @@
 "use strict";
 
 // Import shared fill state to access the cached frame
-import { fillState } from "@engine/state/fillRenderBridge.js";
+import { fillRenderState } from "@engine/state/fillRenderBridge.js";
 
 /**
  * fillCachedFrame - Returns the cached fill render frame
@@ -24,5 +24,5 @@ import { fillState } from "@engine/state/fillRenderBridge.js";
  *   The cached frame with its frame ID, or null if no frame is available
  */
 export function fillCachedFrame() {
-  return fillState.cachedImageBitmap ? { imageBitmap: fillState.cachedImageBitmap, frameId: fillState.cachedFrameId } : null;
+  return fillRenderState.cachedImageBitmap ? { imageBitmap: fillRenderState.cachedImageBitmap, frameId: fillRenderState.cachedFrameId } : null;
 }

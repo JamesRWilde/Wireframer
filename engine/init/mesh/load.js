@@ -40,9 +40,9 @@ import { normalizeToBoundingSphere } from '@engine/init/mesh/normalizeToBounding
 import { edgesFromFacesRuntime } from '@engine/init/mesh/build/edgesFromFacesRuntime.js';
 import { getMeshEdgesFromFacesRuntime } from '@engine/get/mesh/getMeshEdgesFromFacesRuntime.js';
 import { setMeshEdgesFromFacesRuntime } from '@engine/set/mesh/setMeshEdgesFromFacesRuntime.js';
-import { clone as cloneMesh } from '@engine/init/mesh/clone.js';
+import { cloneMesh } from '@engine/init/mesh/cloneMesh.js';
 import { getMeshClone } from '@engine/get/mesh/getMeshClone.js';
-import { setMeshClone as configureMeshClone } from '@engine/set/mesh/setMeshClone.js';
+import { setMeshClone } from '@engine/set/mesh/setMeshClone.js';
 import { getZoom } from '@engine/state/render/zoomState.js';
 import { modelState } from '@engine/state/render/model.js';
 import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
@@ -55,7 +55,7 @@ if (!getMeshEdgesFromFacesRuntime()) {
 
 // Register clone API in state for safe module-based access (no global object)
 if (!getMeshClone()) {
-  configureMeshClone(cloneMesh);
+  setMeshClone(cloneMesh);
 }
 
 /**

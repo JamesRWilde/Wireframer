@@ -17,7 +17,7 @@ import { isGpuMode } from '@engine/set/render/isGpuMode.js';
 import { canvas } from '@engine/get/render/background/canvas.js';
 import { colors } from '@engine/get/render/background/colors.js';
 import { bgState } from '@engine/state/render/background/backgroundState.js';
-import { workerState } from '@engine/state/render/background/worker.js';
+import { backgroundWorkerState } from '@engine/state/render/background/worker.js';
 import { postToBackgroundWorker } from '@engine/set/render/postToBackgroundWorker.js';
 import { getThemeMode } from '@engine/get/render/getThemeMode.js';
 import { renderWorkerParticles } from '@engine/set/render/draw/renderWorkerParticles.js';
@@ -40,8 +40,8 @@ export function backgroundCpu(nowMs) {
 
   const { bgColor, particleColor } = colors();
 
-  if (!workerState.workerReady) {
-    if (!workerState.workerInitialized || !workerState.workerAvailable) {
+  if (!backgroundWorkerState.workerReady) {
+    if (!backgroundWorkerState.workerInitialized || !backgroundWorkerState.workerAvailable) {
       backgroundWorker('cpu');
     }
 
@@ -67,7 +67,7 @@ export function backgroundCpu(nowMs) {
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, w, h);
 
-  const pending = workerState.pendingWorkerParticles;
+  const pending = backgroundWorkerState.pendingWorkerParticles;
   if (pending) {
     ctx.save();
     // CPU path uses straightforward fillRect rendering; no additional shadow/glow.

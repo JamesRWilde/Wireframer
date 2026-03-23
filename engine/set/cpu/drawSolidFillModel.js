@@ -23,13 +23,13 @@ import { fillWorker } from '@engine/init/cpu/fillWorker.js';
 import { frameData }from '@engine/get/render/model/frameData.js';
 
 // Import triangle face getter for mesh geometry
-import { triangles as modelTriangles }from '@engine/get/render/model/triangles.js';
+import { getModelTriangles }from '@engine/get/render/model/getModelTriangles.js';
 
 // Import shading mode detection for flat vs smooth shading
-import { shadingMode as getShadingMode }from '@engine/get/cpu/shadingMode.js';
+import { getShadingMode }from '@engine/get/cpu/getShadingMode.js';
 
 // Import per-corner normal computation for smooth shading
-import { triCornerNormals as getTriCornerNormals }from '@engine/get/render/model/triCornerNormals.js';
+import { getTriCornerNormals }from '@engine/get/render/model/getTriCornerNormals.js';
 
 // Import CPU triangle rasterizer for main-thread fallback
 import { trianglesCpu }from '@engine/set/render/trianglesCpu.js';
@@ -88,7 +88,7 @@ export function drawSolidFillModel(model, alphaScale = 1) {
   const { T, P2 } = fd;
 
   // Get triangle faces for the model
-  const triFaces = modelTriangles(model);
+  const triFaces = getModelTriangles(model);
   if (!triFaces?.length) return;
 
   // Determine shading mode and compute corner normals if needed
