@@ -9,7 +9,7 @@ Wireframer is not a wrapper around Three.js. It is a from-scratch rendering engi
 ## What You Get
 
 - **Dual Rendering Pipeline** — Solid shading and wireframe overlay composed together with depth-aware color interpolation, running on GPU (WebGL) when available with automatic CPU fallback
-- **20+ Parametric Objects** — Fractal-inspired and classic shapes including Menger sponge, Sierpinski pyramid, Jerusalem cube, Klein bottle, Moebius strip, and more
+- **35 Mesh Objects** — Classic shapes, vehicles, animals, and fractals including torus, icosahedron, sierpinski pyramid, cinquefoil knot, airplane, drone, cat, dog, and more
 - **Smooth Morphing** — Real-time vertex interpolation between any two objects with configurable duration
 - **LOD Slider** — Live mesh decimation using a greedy cluster algorithm with per-level caching
 - **Background Particles** — Animated ambient particles computed on a Web Worker to keep the main thread free
