@@ -15,7 +15,7 @@
 
 "use strict";
 
-import { getCachedColorRgb } from '@engine/set/render/draw/getCachedColorRgb.js';
+import { getCachedColorRgb } from '@engine/get/render/draw/getCachedColorRgb.js';
 import { setEnsureBucketArrays } from '@engine/set/render/draw/setEnsureBucketArrays.js';
 
 export function setRenderMainThreadParticles(ctx, particles, opacityScale, themeAlphaBoost, particleColor) {

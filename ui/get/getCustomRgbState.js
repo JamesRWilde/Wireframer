@@ -12,7 +12,7 @@
 
 "use strict";
 
-import { customRgbState } from '@ui/state/customRgbState.js';
+import { customRgbState } from '@ui/state/stateCustomRgbState.js';
 
 /**
  * getCustomRgbState - Returns the current custom RGB as [r,g,b]

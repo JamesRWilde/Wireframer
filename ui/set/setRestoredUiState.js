@@ -18,8 +18,8 @@
 import { getUiState }from '@ui/get/read/getUiState.js';
 import { setApplyThemeMode }from '@ui/set/apply/setApplyThemeMode.js';
 import { setClampedValue }from '@ui/set/apply/setClampedValue.js';
-import { buildMigratedState }from '@ui/init/buildMigratedState.js';
-import {select,themeModeEl,lodSlider,bgDensity,bgVelocity,bgOpacity,fillOpacity,wireOpacity} from '@ui/state/dom.js';
+import { buildMigratedState }from '@ui/init/initBuildMigratedState.js';
+import {select,themeModeEl,lodSlider,bgDensity,bgVelocity,bgOpacity,fillOpacity,wireOpacity} from '@ui/state/stateDom.js';
 
 const UI_STATE_KEY = 'wireframer.uiState';
 

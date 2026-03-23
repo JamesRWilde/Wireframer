@@ -10,7 +10,7 @@
  *   via a single shared object. Used by hud and stat-setter modules.
  *
  * USAGE:
- *   from '@ui/state/stats.js';
+ *   from '@ui/state/stateStats.js';
  *   statsState.statRenderer = document.getElementById('stat-renderer');
  *   statsState.statFps.textContent = '60';
  *

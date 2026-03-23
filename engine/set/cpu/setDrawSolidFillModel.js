@@ -52,7 +52,7 @@ import { getW } from '@engine/get/render/getW.js';
 import { getH } from '@engine/get/render/getH.js';
 import { getFillLayerCanvas } from '@engine/get/render/getFillLayerCanvas.js';
 import { getFillLayerCtx } from '@engine/get/render/getFillLayerCtx.js';
-import { DENSE_SEAM_EXPAND_PX } from '@ui/state/dom.js';
+import { DENSE_SEAM_EXPAND_PX } from '@ui/state/stateDom.js';
 
 // Track if worker has been initialized to avoid redundant setup
 let workerInitialized = false;

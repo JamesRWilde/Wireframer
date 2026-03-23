@@ -33,7 +33,7 @@ import { setCustomRgb }from '@ui/set/setCustomRgb.js';
 // Import the function to set dark/light theme mode
 // Adjusts background brightness, contrast enforcement, etc.
 import { setUiThemeMode }from '@ui/set/setUiThemeMode.js';
-import { customRed, customGreen, customBlue } from '@ui/state/dom.js';
+import { customRed, customGreen, customBlue } from '@ui/state/stateDom.js';
 
 // Import the function to persist UI state to localStorage
 // Called when theme changes to save user preferences

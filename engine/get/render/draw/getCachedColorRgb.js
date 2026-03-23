@@ -10,7 +10,7 @@
  *   per frame, returns cached result on subsequent calls.
  *
  * USAGE:
- *   import { getCachedColorRgb } from '@engine/set/render/draw/getCachedColorRgb.js';
+ *   import { getCachedColorRgb } from '@engine/get/render/draw/getCachedColorRgb.js';
  *   const rgb = getCachedColorRgb('#ff0000');
  */
 

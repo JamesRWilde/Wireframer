@@ -15,7 +15,7 @@
 
 "use strict";
 
-import { getCachedColorRgb } from '@engine/set/render/draw/getCachedColorRgb.js';
+import { getCachedColorRgb } from '@engine/get/render/draw/getCachedColorRgb.js';
 import { setBucketWorkerParticles } from '@engine/set/render/draw/setBucketWorkerParticles.js';
 import { setDrawWorkerParticlesCpu } from '@engine/set/render/draw/setDrawWorkerParticlesCpu.js';
 

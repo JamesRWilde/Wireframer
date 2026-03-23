@@ -26,7 +26,7 @@
 import { state, TELEMETRY_UI_INTERVAL_MS }from '@engine/state/stateLoop.js';
 
 // Import stats DOM element references
-import {statsState} from '@ui/state/stats.js';
+import {statsState} from '@ui/state/stateStats.js';
 
 // Import stat writer utility
 import { setWriteStat }from '@ui/set/setWriteStat.js';

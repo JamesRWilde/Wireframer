@@ -11,7 +11,7 @@
  * @param {Object} state - Raw state object read from localStorage
  * @returns {Object} Normalized UI state object
  */
-import {bgDensity,bgOpacity,bgVelocity,customBlue,customGreen,customRed,fillOpacity,lodSlider,select,themeModeEl,wireOpacity} from '@ui/state/dom.js';
+import {bgDensity,bgOpacity,bgVelocity,customBlue,customGreen,customRed,fillOpacity,lodSlider,select,themeModeEl,wireOpacity} from '@ui/state/stateDom.js';
 
 export function buildMigratedState(state) {
   return {

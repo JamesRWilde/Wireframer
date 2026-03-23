@@ -74,7 +74,7 @@ import {
   fillOpacity,
   wireOpacity,
   lodSlider,
-} from '@ui/state/dom.js';
+} from '@ui/state/stateDom.js';
 
 /**
  * startApp - Initializes all subsystems and starts the animation loop

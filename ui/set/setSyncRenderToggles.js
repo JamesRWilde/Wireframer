@@ -15,7 +15,7 @@
 
 "use strict";
 
-import {lodSlider, lodValue, bgDensity, bgDensityValue, bgVelocity, bgVelocityValue, bgOpacity, bgOpacityValue, fillOpacity, fillOpacityValue, wireOpacity, wireOpacityValue}from '@ui/state/dom.js';
+import {lodSlider, lodValue, bgDensity, bgDensityValue, bgVelocity, bgVelocityValue, bgOpacity, bgOpacityValue, fillOpacity, fillOpacityValue, wireOpacity, wireOpacityValue}from '@ui/state/stateDom.js';
 import { utilSliderDisplayPercent }from '@ui/get/utilSliderDisplayPercent.js';
 import { setPersistedState }from '@ui/set/persist/setPersistedState.js';
 import { setFillOpacity } from '@engine/set/render/setFillOpacity.js';

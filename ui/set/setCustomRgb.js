@@ -20,7 +20,7 @@
 
 "use strict";
 
-import { CUSTOM_RGB } from '@ui/state/dom.js';
+import { CUSTOM_RGB } from '@ui/state/stateDom.js';
 import { setCustomRgbState } from '@ui/set/setCustomRgbState.js';
 
 import { utilClampByte } from '@ui/get/color/utilClampByte.js';

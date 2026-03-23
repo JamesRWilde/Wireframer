@@ -20,7 +20,7 @@
 "use strict";
 
 // Import the DOM element reference for the renderer stat display
-import {statsState} from '@ui/state/stats.js';
+import {statsState} from '@ui/state/stateStats.js';
 
 // Import the toggle function
 import { setToggleRenderMode } from '@engine/set/render/setToggleRenderMode.js';

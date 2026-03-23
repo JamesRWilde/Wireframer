@@ -1,6 +1,6 @@
 'use strict';
 
-import { statsState } from '@ui/state/stats.js';
+import { statsState } from '@ui/state/stateStats.js';
 import { state } from '@engine/state/stateLoop.js';
 import { modelState } from '@engine/state/render/stateModel.js';
 

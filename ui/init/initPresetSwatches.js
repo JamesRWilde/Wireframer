@@ -24,7 +24,7 @@ import { utilHex }from '@ui/get/color/utilHex.js';
 import { utilRgbCss }from '@ui/get/color/utilRgbCss.js';
 import { setCustomRgb }from '@ui/set/setCustomRgb.js';
 import { getRandomPresetRgb }from '@ui/get/getRandomPresetRgb.js';
-import { PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, presetSwatchesEl, SHUFFLE_SWATCH_NAME }from '@ui/state/dom.js';
+import { PRESET_SWATCHES, PRESET_SWATCH_BUTTONS, presetSwatchesEl, SHUFFLE_SWATCH_NAME }from '@ui/state/stateDom.js';
 
 /**
  * presetSwatches - Builds the preset swatch UI and wires click handlers.

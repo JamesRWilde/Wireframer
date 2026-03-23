@@ -13,7 +13,7 @@
 
 "use strict";
 
-import {CUSTOM_RGB_KEY}from '@ui/state/dom.js';
+import {CUSTOM_RGB_KEY}from '@ui/state/stateDom.js';
 import { getCustomRgbState } from '@ui/get/getCustomRgbState.js';
 
 export function setPersistedCustomRgb() {
