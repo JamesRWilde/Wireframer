@@ -1,17 +1,17 @@
 import { test, expect } from '@playwright/test';
 
-test('no console errors on load', async ({ page }) => {
-  const errors = [];
-  page.on('console', msg => {
-    if (msg.type() === 'error') errors.push(msg.text());
-  });
-  page.on('pageerror', err => errors.push(err.message));
+test('no console errors or warnings on load', async ({ page }) => {
+    const issues = [];
+    page.on('console', msg => {
+        if (msg.type() === 'error' || msg.type() === 'warning') issues.push(msg.text());
+    });
+    page.on('pageerror', err => issues.push(err.message));
 
-  await page.goto('/');
+    await page.goto('/');
 
-  // Wait for page to settle — JS to finish importing and initializing
-  await page.waitForTimeout(3000);
+    // Wait for page to settle — JS to finish importing and initializing
+    await page.waitForTimeout(3000);
 
-  if (errors.length > 0) console.log('CONSOLE ERRORS:', errors);
-  expect(errors).toEqual([]);
+    if (issues.length > 0) console.log('CONSOLE ISSUES:', issues);
+    expect(issues).toEqual([]);
 });
