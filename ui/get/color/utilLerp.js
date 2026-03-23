@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by computeTriangleShadeColor to blend between dark and bright
  *   theme colors based on lighting intensity.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a single, reusable implementation for linear RGB interpolation
+ *   to avoid inconsistent color blending logic.
  */
 
 "use strict";

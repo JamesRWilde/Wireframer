@@ -9,8 +9,12 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/render/getTheme.js
+ *
+ * WHY THIS EXISTS:
+ *   Provides a centralized, immutable access point for current theme data.
  */
 
+// Import render state containing theme selection and derived palette values. 
 import { renderState } from '@engine/state/render/stateRenderState.js';
 
 

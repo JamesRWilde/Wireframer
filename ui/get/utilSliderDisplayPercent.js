@@ -8,6 +8,9 @@
  * ARCHITECTURE ROLE:
  *   Called by syncRenderToggles to update percentage displays next to sliders.
  *   Provides consistent percentage calculation across all slider controls.
+ *
+ * WHY THIS EXISTS:
+ *   Ensures a single slider-to-percentage conversion so all UI displays match.
  */
 
 "use strict";

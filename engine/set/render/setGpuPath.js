@@ -10,7 +10,11 @@
  *   Called by the frame loop when foregroundRenderMode is 'gpu'. Delegates to
  *   drawGpuSceneModel which handles shader compilation, buffer management, and
  *   WebGL draw calls. Manages canvas visibility and fallback logic.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Isolates GPU rendering path orchestration from the frame loop and makes
+ *   toggling between paths explicit and maintainable.
+ *
  * GPU VS CPU:
  *   - GPU path: Faster, uses WebGL shaders for fill and wire rendering
  *   - CPU path: Fallback, uses Canvas 2D for all rendering

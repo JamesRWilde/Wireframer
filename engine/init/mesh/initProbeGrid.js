@@ -1,11 +1,16 @@
 /**
  * probeGrid.js - Nearest neighbor search inside spatial grid
  *
- * Purpose:
+ * PURPOSE:
  *   Finds the nearest vertex in the spatial hash grid for a query point.
  *
- * Architecture:
- *   One function per file.
+ * ARCHITECTURE ROLE:
+ *   Wrapper that delegates to initFindNearestInGrid, making the API consistent
+ *   for grid-based neighbor queries.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a single exported probe API so callers don't need to know about
+ *   the underlying step implementation and can stay decoupled.
  */
 
 "use strict";

@@ -10,6 +10,10 @@
  *   Called by the background rendering loop to throttle GPU-intensive
  *   particle drawing. Uses the BG_GPU_MIN_INTERVAL_MS constant from
  *   backgroundState.
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes throttle timing policy to avoid duplicating interval checks
+ *   across multiple rendering entry points.
  */
 
 'use strict';
@@ -24,5 +28,4 @@ import { BG_GPU_MIN_INTERVAL_MS } from '@engine/state/render/background/stateBac
  */
 export function getThrottledBackgroundRender(lastRenderTime, currentTime) {
   return (currentTime - lastRenderTime) >= BG_GPU_MIN_INTERVAL_MS;
-}
 }

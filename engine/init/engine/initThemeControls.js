@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called during startApp() after DOM elements are available. Centralizes all theme
  *   initialization logic to keep the startup sequence clean and maintainable.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Keeps theme initialization in one location so startup is consistent and
+ *   easy to reason about, with a graceful fallback path on errors.
+ *
  * THEME SYSTEM OVERVIEW:
  *   The theme system allows users to customize the app's color scheme via RGB sliders
  *   or preset swatches. Colors are persisted to localStorage and applied as CSS

@@ -11,6 +11,10 @@
  *   rendering surface for both CPU and GPU render paths. Stores references
  *   in module state via dedicated setters/getters.
  *
+ * WHY THIS EXISTS:
+ *   Consolidates canvas and context setup into a single module to avoid
+ *   scattershot initialization and to centralize fallback handling.
+ *
  * SIDE EFFECTS:
  *   - Creates a new fillLayerCanvas element
  *   - Stores canvas/context references in module state

@@ -1,9 +1,16 @@
 /**
- * geometryGetFlatNormals.js - Helper for flat shading corner normals
+ * utilFlatNormals.js - Helper for flat shading corner normals
  *
  * PURPOSE:
  *   Returns an array of per-corner normals for each triangle, where all corners use the face normal.
- *   Used for flat shading, where each triangle's corners share the same normal (no smoothing).
+ *   Used for flat shading where each triangle's corners share the same normal (no smoothing).
+ *
+ * ARCHITECTURE ROLE:
+ *   Utility function in engine/util/cpu/geometry supporting CPU mesh shading routines.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a reusable helper that standardizes flat shading normal expansion and
+ *   avoids duplicating corner-normal generation logic in multiple render paths.
  *
  * @param {Array<Array<number>>} faceNormals - Array of face normals, one per triangle ([x, y, z])
  * @returns {Array<Array<Array<number>>>} Per-triangle, per-corner normal vectors ([[[x,y,z],[x,y,z],[x,y,z]], ...])

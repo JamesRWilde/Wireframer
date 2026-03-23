@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by theme toggle logic to persist the visual state of the
  *   theme-mode input/select element in the UI.
+ *
+ * WHY THIS EXISTS:
+ *   Keeps DOM theme mode control in sync with internal theme state, preventing
+ *   mismatch between input element state and actual applied theme.
  */
 
 "use strict";

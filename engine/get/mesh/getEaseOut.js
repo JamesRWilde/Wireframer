@@ -10,6 +10,10 @@
  *   Used by advanceMorphFrame to smooth the morph animation progress. Without
  *   easing, morphs would have linear interpolation which looks mechanical.
  * 
+ * WHY THIS EXISTS:
+ *   Centralizes animation easing behavior to a single function for reuse
+ *   and consistent motion across the engine.
+ * 
  * MATHEMATICAL BASIS:
  *   Uses a quadratic ease-in-out curve:
  *   - For t < 0.5: 2t² (acceleration)

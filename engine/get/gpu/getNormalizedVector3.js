@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by sceneModel.js to normalize light direction and view
  *   direction vectors before uploading to GPU uniforms.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates reliable vector normalization validation in one helper,
+ *   avoiding mis-normalization bugs and repeated checks across GPU path.
  */
 
 "use strict";

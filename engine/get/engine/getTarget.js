@@ -11,6 +11,10 @@
  *   average frame time against budget thresholds to decide which
  *   quality level the engine should target.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes budget threshold logic so quality decision rules are
+ *   tested and maintained in one place.
+ *
  * THRESHOLDS:
  *   - >24ms (BUDGET_LOW): target 'low'
  *   - >18ms (BUDGET_MEDIUM): target 'medium'

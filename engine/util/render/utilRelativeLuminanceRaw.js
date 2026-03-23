@@ -1,3 +1,19 @@
+/**
+ * relativeLuminanceRaw.js - RGB Luminance Conversion
+ *
+ * PURPOSE:
+ *   Converts linearized RGB values to relative luminance using
+ *   standard Rec. 709 weights.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by color and lighting utilities to compute brightness for
+ *   contrast, palette selection, and UI color harmonization.
+ *
+ * WHY THIS EXISTS:
+ *   Avoids duplicating luminance conversion logic in multiple places
+ *   and ensures consistency across shading and color palette controls.
+ */
+
 'use strict';
 import { utilLinear } from '@engine/util/render/utilLinear.js';
 

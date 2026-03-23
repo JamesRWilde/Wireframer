@@ -10,6 +10,10 @@
  *   Called by scenePrograms to create the fill and wire shader programs.
  *   A low-level utility that encapsulates the WebGL program creation
  *   workflow.
+ *
+ * WHY THIS EXISTS:
+ *   Expressly states the purpose of this linking helper within the WebGL
+ *   initialization pipeline.
  */
 
 "use strict";

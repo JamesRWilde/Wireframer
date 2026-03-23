@@ -9,6 +9,10 @@
  *   Utility for background-worker.js. Converts an array of particle objects
  *   into a flat, transferable buffer for fast communication with the main thread.
  *
+ * WHY THIS EXISTS:
+ *   Makes the data packing contract explicit for a frequently reused worker
+ *   utility.
+ *
  * HOW IT WORKS:
  *   1. Allocates a Float32Array of length 4 * particle count
  *   2. For each particle, writes x, y, size, and alpha to the array

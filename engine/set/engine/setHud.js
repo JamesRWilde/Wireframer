@@ -11,6 +11,10 @@
  *   by fallbackToCpuForegroundMode() when switching from GPU to CPU, and by
  *   toggleRendererMode() when the user manually toggles the mode. Updates a
  *   DOM element to display the current mode.
+ *
+ * WHY THIS EXISTS:
+ *   Keeps render mode UI feedback logic separated from core rendering path
+ *   decisions so mode display consistency is enforced.
  * 
  * TOGGLE FUNCTIONALITY:
  *   When GPU is supported, the renderer stat becomes a clickable toggle button

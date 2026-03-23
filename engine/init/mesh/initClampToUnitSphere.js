@@ -1,7 +1,15 @@
 /**
  * clampToUnitSphere.js - Clamp vertices to unit sphere surface
  *
- * One function per file module.
+ * PURPOSE:
+ *   Ensures vertex positions do not exceed unit sphere radius after normalization.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called by normalization routines to keep mesh data inside valid bounds.
+ *
+ * WHY THIS EXISTS:
+ *   Provides safe bounding sphere enforcement so mesh coordinates never drift
+ *   outside [-1,1] range in GPU/cpu projections.
  */
 
 "use strict";

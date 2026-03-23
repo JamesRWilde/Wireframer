@@ -6,6 +6,10 @@
  *   Serves all files from the project root directory, allowing the browser
  *   to load ES modules and fetch mesh files without CORS issues.
  * 
+ * WHY THIS EXISTS:
+ *   Documents the server role in development and satisfies the repository's
+ *   comment header standard for critical entry points.
+ * 
  * WHY EXPRESS:
  *   While the app can run from file:// protocol for basic viewing, a local
  *   server is needed for: fetch() calls to load OBJ files, ES module imports

@@ -11,6 +11,10 @@
  *   available. Provides the same computation as the vertex transform
  *   worker but on the main thread.
  *
+ * WHY THIS EXISTS:
+ *   Ensures fallback rendering correctness when worker threads are
+ *   unavailable, with identical math to the worker-based path.
+ *
  * DETAILS:
  *   Uses manual rotation matrix application (dot products with rows)
  *   and perspective division (divide by depth + offset) for projection.

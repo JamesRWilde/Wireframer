@@ -1,13 +1,17 @@
 /**
- * objectList.js - Mesh Object Registry
+ * getObjectList.js - Mesh Object Registry
  * 
  * PURPOSE:
  *   Loads the list of available 3D mesh objects from a static manifest.
  *   Provides metadata (key, display name, file path) for each mesh.
  * 
  * ARCHITECTURE ROLE:
- *   Imported by initObjectSelector and loader.js to populate the mesh dropdown.
- *   The static manifest file (meshes-manifest.json) contains the list of meshes.
+ *   Used by the UI object selector and loader to present available meshes.
+ *   Non-blocking async getter in engine/get layer.
+ * 
+ * WHY THIS EXISTS:
+ *   Avoids duplicate fetch logic and ensures a single cached source of object
+ *   metadata for consistent object browsing and selection.
  */
 
 "use strict";

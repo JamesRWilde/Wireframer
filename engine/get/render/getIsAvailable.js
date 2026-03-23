@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by render modules to decide whether to use the async
  *   worker path or fall back to synchronous vertex transforms.
+ *
+ * WHY THIS EXISTS:
+ *   Keep worker availability checks in one place to reduce repeated state
+ *   inspection logic and to simplify transition to different worker strategies.
  */
 
 "use strict";

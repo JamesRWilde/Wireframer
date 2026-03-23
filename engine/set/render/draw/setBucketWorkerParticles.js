@@ -1,7 +1,17 @@
 /**
  * setBucketWorkerParticles.js - Bucket worker particle data by alpha for batch rendering
  *
- * One function per file module.
+ * PURPOSE:
+ *   Groups background particle paint calls into coarse alpha bins to reduce
+ *   draw calls and state changes when rendering with CPU fill rectangles.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called by CPU background rendering pipeline after worker data is received.
+ *   Prepares particles for batched draw loops by alpha bucket.
+ *
+ * WHY THIS EXISTS:
+ *   Improves CPU background rendering performance by enabling grouped draw
+ *   operations instead of per-particle style updates.
  */
 
 "use strict";

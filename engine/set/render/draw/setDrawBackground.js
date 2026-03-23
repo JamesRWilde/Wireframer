@@ -10,6 +10,10 @@
  *   Called each frame by the render loop to draw the background layer.
  *   Assumes backgroundWorker was initialized at startup.
  *
+ * WHY THIS EXISTS:
+ *   Provides unified mode selection for background rendering while isolating
+ *   CPU/GPU pipeline specifics behind dedicated functions.
+ *
  * DETAILS:
  *   No main-thread fallback; if the worker is unavailable, only the base
  *   background color is drawn.

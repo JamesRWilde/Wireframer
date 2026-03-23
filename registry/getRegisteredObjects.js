@@ -7,6 +7,10 @@
  * ARCHITECTURE ROLE:
  *   Query function to retrieve the object catalog.
  *
+ * WHY THIS EXISTS:
+ *   Makes datasets retrieval explicit and ensures the registry discovery
+ *   path is well-documented for consumers.
+ *
  * USAGE:
  *   import { getRegisteredObjects } from '@registry/getRegisteredObjects.js';
  *   const objects = getRegisteredObjects();

@@ -10,6 +10,10 @@
  *   Used by LOD algorithms to determine the spatial extent of the mesh,
  *   which is needed to compute appropriate cluster cell sizes.
  * 
+ * WHY THIS EXISTS:
+ *   Provides a robust geometry utility for mesh dimension analysis in a central
+ *   utility so multiple components do not duplicate this computation.
+ * 
  * WHY BOUNDING BOX:
  *   The bounding box provides a quick approximation of the mesh's size
  *   and position in 3D space. It's used to:

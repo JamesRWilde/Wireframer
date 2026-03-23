@@ -8,7 +8,11 @@
  * ARCHITECTURE ROLE:
  *   Called by randomPresetRgb to generate pleasing random colors.
  *   HSV is more intuitive for random color generation than RGB.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Provides a stable and reusable HSV->RGB conversion to support predictable
+ *   color generation behavior.
+ *
  * COLOR SPACE:
  *   - H: Hue (0-1, maps to 0-360 degrees)
  *   - S: Saturation (0-1, 0=gray, 1=vivid)

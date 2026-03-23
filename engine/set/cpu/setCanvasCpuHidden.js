@@ -10,6 +10,10 @@
  *   Called by cpuPath and gpuPath to manage canvas visibility.
  *   The CPU canvas should be visible when using CPU rendering and hidden
  *   when using GPU rendering to avoid visual conflicts.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates display toggle behavior in one place so each rendering
+ *   path does not need to directly manipulate DOM styles.
  */
 
 "use strict";

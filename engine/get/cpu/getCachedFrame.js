@@ -1,5 +1,5 @@
 /**
- * fillCachedFrame.js - Cached Fill Frame Getter
+ * getCachedFrame.js - Cached Fill Frame Getter
  *
  * PURPOSE:
  *   Returns the most recently rendered fill frame (ImageBitmap) from
@@ -10,6 +10,10 @@
  *   Called by setDrawSolidFillModel to retrieve the worker-rendered frame
  *   for compositing onto the fill layer canvas. Returns null if no
  *   cached frame is available.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates worker fill frame retrieval to keep render orchestration
+ *   logic consistent and prevent in-place state mutations.
  */
 
 "use strict";

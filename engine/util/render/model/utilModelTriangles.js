@@ -9,6 +9,10 @@
  *   Called by fill and wireframe renderers to get triangle faces.
  *   Normalizes different model formats to consistent triangle array.
  * 
+ * WHY THIS EXISTS:
+ *   Centralizes triangle access logic so renderers can rely on a
+ *   single, stable representation regardless of model source format.
+ * 
  * SUPPORTED FORMATS:
  *   - model.triangles: Direct triangle array
  *   - model.F: Face array (may have .indices property or be raw arrays)

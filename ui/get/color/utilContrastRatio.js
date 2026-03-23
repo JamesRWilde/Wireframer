@@ -8,7 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by enforceContrast to verify color combinations meet minimum
  *   contrast requirements for accessibility.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Provides a stable WCAG contrast ratio helper for all accessibility checks.
+ *
  * WCAG FORMULA:
  *   contrast = (L1 + 0.05) / (L2 + 0.05)
  *   where L1 is lighter luminance, L2 is darker

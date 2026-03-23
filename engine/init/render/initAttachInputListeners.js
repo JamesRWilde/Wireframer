@@ -10,6 +10,10 @@
  *   Called by restoreStateAndAttachInput during app initialization. Sets up
  *   all input event handlers on the canvas element.
  *
+ * WHY THIS EXISTS:
+ *   Encapsulates platform input listener registration so input handling is
+ *   initialized consistently and can be modified in one place.
+ *
  * SUPPORTED INPUTS:
  *   - Mouse drag: Rotates the model
  *   - Mouse wheel: Zooms in/out

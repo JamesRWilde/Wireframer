@@ -10,11 +10,16 @@
  *   Called by frameData.js to check if a worker-computed transform
  *   is available for the current frame. If not available, falls back
  *   to synchronous transform.
+ *
+ * WHY THIS EXISTS:
+ *   Exposes a safe read-only snapshot of transform worker output to avoid
+ *   sharing mutable objects between threads and render frame consumers.
  */
 
 "use strict";
 
 // Import shared transform state to access cached results
+// Tracks latest worker transform output and associated frameId.
 import { vertexTransformState } from "@engine/state/render/stateVertexTransformBridge.js";
 
 /**
@@ -24,5 +29,8 @@ import { vertexTransformState } from "@engine/state/render/stateVertexTransformB
  *   Cached transform result with frame ID, or null if no result is cached
  */
 export function getCachedTransformResult() {
-  return vertexTransformState.cachedResult ? { ...vertexTransformState.cachedResult, frameId: vertexTransformState.cachedFrameId } : null;
+  // Return snapshot copy since the underlying state object may be mutated in-place.
+  return vertexTransformState.cachedResult
+    ? { ...vertexTransformState.cachedResult, frameId: vertexTransformState.cachedFrameId }
+    : null;
 }

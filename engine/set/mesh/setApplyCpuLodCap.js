@@ -10,6 +10,10 @@
  *   Setter module in engine/set/mesh/. Modifies modelState to apply
  *   the CPU detail cap and sets the current LOD model.
  *
+ * WHY THIS EXISTS:
+ *   Ensures CPU rendering uses a predictable capped model to avoid
+ *   performance cliff states while keeping LOD behavior centralized.
+ *
  * DEPENDENCIES:
  *   - Uses setCapModelForCpu to create a capped base model
  *   - Uses detailLevel to set the active LOD model

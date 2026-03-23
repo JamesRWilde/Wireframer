@@ -1,5 +1,5 @@
 /**
- * geometryConvex.js - Convexity Check for Polygon Vertices
+ * getIsConvex.js - Convexity Check for Polygon Vertices
  * 
  * PURPOSE:
  *   Determines whether a vertex in a polygon forms a convex angle. This is used
@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by triangulateFaceEarClipping to test if a potential ear is valid.
  *   A vertex is convex if the interior angle is less than 180 degrees.
+ * 
+ * WHY THIS EXISTS:
+ *   Provides a dedicated geometry utility for convexity checks to keep
+ *   triangulation logic decoupled from low-level math.
  * 
  * MATHEMATICAL BASIS:
  *   Uses the cross product of two edge vectors to determine orientation.

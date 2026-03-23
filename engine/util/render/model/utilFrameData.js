@@ -11,6 +11,10 @@
  *   2D-projected vertex positions. Called by setDrawSolidFillModel and
  *   other render modules each frame.
  *
+ * WHY THIS EXISTS:
+ *   Provides one consistent entrypoint for frame-level vertex transforms,
+ *   ensuring worker path and fallback path produce equivalent outputs.
+ *
  * DETAILS:
  *   1. Returns cached data if frame ID matches (avoids recomputation)
  *   2. Sends flat vertex data to the transform worker for async processing

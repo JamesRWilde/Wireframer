@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by greedyClusterDecimator to set up the spatial grid for vertex
  *   clustering. The cluster count directly affects the decimation ratio.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Isolates cluster parameter math so the decimation pipeline can reuse
+ *   consistent computations for cell sizes and counts.
+ *
  * HOW IT WORKS:
  *   1. Compute cluster count from target face count using cube root
  *   2. Divide mesh extent by cluster count to get cell size

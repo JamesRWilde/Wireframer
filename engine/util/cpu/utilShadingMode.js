@@ -8,7 +8,11 @@
  * ARCHITECTURE ROLE:
  *   Called by fill renderer to determine shading approach.
  *   Used by getModelTriCornerNormals to decide normal computation strategy.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes shading mode selection policy and default thresholds so the
+ *   pipeline behavior is consistent and configurable.
+ *
  * MODES:
  *   - 'flat': Each face has uniform color (faster, good for low-poly)
  *   - 'smooth': Interpolated normals for smooth appearance (better for high-poly)

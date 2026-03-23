@@ -11,6 +11,10 @@
  *   the target particle count from viewport area and density percentage,
  *   then creates particles using createParticle().
  *
+ * WHY THIS EXISTS:
+ *   Decouples particle population logic from render loop updates, ensuring
+ *   density/size reseed logic is centralized and deterministic.
+ *
  * DETAILS:
  *   Tracks the last canvas size and density to avoid unnecessary reseeding.
  *   Returns scaling factors for velocity, opacity, and theme alpha boost.

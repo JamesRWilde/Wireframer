@@ -1,6 +1,15 @@
 /**
  * checkRadiusLayer.js - check one radius shell in the grid for a closer point
  *
+ * PURPOSE:
+ *   Searches one concentric grid shell for a closer vertex during nearest-neighbor lookups.
+ *
+ * ARCHITECTURE ROLE:
+ *   Part of spatial grid probe system used by morph mapping and clustering.
+ *
+ * WHY THIS EXISTS:
+ *   Keeps radius-shell search logic isolated, making neighbor queries easier to maintain.
+ *
  * Architecture:
  *   One function per file.
  */

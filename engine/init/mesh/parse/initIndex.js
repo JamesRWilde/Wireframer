@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by idxFromToken to parse individual index components from
  *   face tokens. Essential for correct OBJ parsing.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Creates a shared index normalization helper used by face parsing to
+ *   avoid multiple interpreted 1-based to 0-based conversions.
+ *
  * OBJ INDEX FORMATS:
  *   - Positive: 1-based index (1 = first element)
  *   - Negative: Relative to end (-1 = last element)

@@ -10,6 +10,10 @@
  *   Used by rotationInitialize() to set up the initial model orientation.
  *   Available for any code that needs X-axis rotation.
  * 
+ * WHY THIS EXISTS:
+ *   Captures X-axis rotation math in a reusable helper, reducing duplication
+ *   and ensuring consistent orientation logic across rendering code.
+ * 
  * MATHEMATICAL BASIS:
  *   The rotation matrix for angle θ around the X axis is:
  *   [1,    0,     0   ]

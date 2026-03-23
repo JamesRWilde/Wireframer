@@ -10,10 +10,10 @@
  *   Called by toRuntime after parsing completes. Acts as a gatekeeper
  *   to ensure only valid meshes proceed to the rendering pipeline.
  * 
- * WHY VALIDATE:
- *   A mesh with no vertices or faces cannot be rendered. Parse errors
- *   may indicate corrupted or malformed OBJ files. Failing fast with
- *   a clear error message helps diagnose loading issues.
+ * WHY THIS EXISTS:
+ *   Prevents invalid or incomplete mesh data from entering the render
+ *   pipeline. Quick failure at parse stage avoids undefined behavior
+ *   and simplifies debugging of importer issues.
  */
 
 /**

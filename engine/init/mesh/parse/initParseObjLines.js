@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by toRuntime to perform the actual parsing. Returns a
  *   state object containing all parsed data and any errors encountered.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Provides a single robust parser entrypoint with extended error
+ *   capture and format support for OBJ files.
+ *
  * OBJ FORMAT SUPPORTED:
  *   - v: Vertex positions (x, y, z)
  *   - vn: Vertex normals (nx, ny, nz)

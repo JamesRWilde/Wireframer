@@ -11,6 +11,10 @@
  *   the per-corner normal data needed for smooth Phong-like shading
  *   without per-vertex normal attributes.
  *
+ * WHY THIS EXISTS:
+ *   Ensures triangle normal generation is centralized and consistent across
+ *   shading modes to avoid visual artifacts due to mismatched normal math.
+ *
  * SHADING MODES:
  *   - Flat: All corners get the face normal (faceted look)
  *   - Smooth: Corners average normals from all adjacent faces

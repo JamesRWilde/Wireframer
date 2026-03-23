@@ -8,7 +8,11 @@
  * ARCHITECTURE ROLE:
  *   Helper for edgesFromFacesRuntime. Extracted to follow one-function-per-file
  *   architecture rule.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Provides shared edge deduplication behavior to avoid inconsistent edge
+ *   generation and duplicated canonicalization logic.
+ *
  * EDGE DEDUPLICATION:
  *   Edges are stored as [lo, hi] where lo < hi. This ensures that edge (a,b)
  *   and edge (b,a) are treated as the same edge. The key format "lo|hi" is

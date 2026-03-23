@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   General-purpose vector math utility used by mesh analysis functions
  *   (fixWinding) and any code that needs to compare vector directions.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates 3D dot product math in a single function for reuse and
+ *   to avoid duplication in geometry pipeline code.
  */
 
 "use strict";

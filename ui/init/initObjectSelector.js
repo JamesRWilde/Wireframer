@@ -9,6 +9,10 @@
  *   Called during app startup to initialize the object selector UI.
  *   Handles restoring a previously selected shape and persisting selection.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes object dropdown initialization and selection persistence
+ *   behavior so this UI concern is not duplicated in multiple startup paths.
+ *
  * DATA FORMAT:
  *   - OBJECTS is an array of { name, obj } entries representing meshes.
  *   - The select element stores the selected index as its value.

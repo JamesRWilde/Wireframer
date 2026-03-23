@@ -8,6 +8,9 @@
  * ARCHITECTURE ROLE:
  *   Called by restoreState and other UI functions to safely clamp values.
  *   Provides consistent numeric validation across the application.
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes clamping logic so invalid values are handled consistently.
  */
 
 "use strict";

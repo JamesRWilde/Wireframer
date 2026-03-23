@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called whenever UI controls change to keep the user's preferences persistent.
  *
+ * WHY THIS EXISTS:
+ *   Persists UI settings so returned users get a consistent experience without
+ *   manual reconfiguration after refresh.
+ *
  * DATA FORMAT:
  *   - Stores a JSON object with keys like selectedShapeName, themeMode, lod, fillOpacity, etc.
  */

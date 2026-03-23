@@ -10,6 +10,10 @@
  *   Called by the LOD slider handler and by finalizeModel when loading a new
  *   mesh. Uses module state directly; no global object dependency.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes LOD model switching to ensure consistent decimation behavior
+ *   across both GPU and CPU paths and eliminates per-call divergence.
+ *
  * HOW LOD WORKS:
  *   1. The base model (full detail) is stored in modelState.baseModel
  *   2. When detail level changes, we decimate the base model to the target %

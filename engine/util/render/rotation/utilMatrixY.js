@@ -10,6 +10,10 @@
  *   Used by rotationInitialize() to set up the initial model orientation.
  *   Available for any code that needs Y-axis rotation.
  * 
+ * WHY THIS EXISTS:
+ *   Centralizes Y rotation math in one function to prevent inconsistent
+ *   matrix construction and to make rotation inheritance easier to debug.
+ * 
  * MATHEMATICAL BASIS:
  *   The rotation matrix for angle θ around the Y axis is:
  *   [ cos(θ), 0, sin(θ)]

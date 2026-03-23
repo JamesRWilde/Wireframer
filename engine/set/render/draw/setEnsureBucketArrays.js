@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Memory allocation helper for background particle rendering.
  *
+ * WHY THIS EXISTS:
+ *   Provides a single reusable bucket storage and avoids per-frame array allocations
+ *   for high-frequency particle rendering updates.
+ *
  * USAGE:
  *   import { setEnsureBucketArrays } from '@engine/set/render/draw/setEnsureBucketArrays.js';
  *   const buckets = setEnsureBucketArrays();

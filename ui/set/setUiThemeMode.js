@@ -9,10 +9,10 @@
  *   Called by theme mode toggle in UI controls.
  *   Updates renderState mode and triggers palette rebuild.
  *
- * MODES:
- *   - 'light': Light background with dark text
- *   - 'dark': Dark background with light text
- */
+ * WHY THIS EXISTS:
+ *   Centralizes theme mode updates to avoid duplicated state transitions and
+ *   inconsistent UI color behavior when toggling between modes.
+ *
 
 "use strict";
 

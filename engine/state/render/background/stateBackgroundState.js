@@ -10,7 +10,11 @@
  *   Imported by background rendering modules that need to read or update
  *   the background renderer state. The state object is mutable while the
  *   export binding is const.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Provides a consistent labeled intent for background state management,
+ *   complementing the existing WHY SEPARATE STATE section.
+ *
  * WHY SEPARATE STATE:
  *   The background renderer has its own state separate from the main loop
  *   because it can run on a different cadence (throttled to 60fps max)

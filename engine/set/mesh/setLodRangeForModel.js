@@ -10,6 +10,10 @@
  *   Called by load when a new model is loaded. Updates the shared LOD range
  *   state so the UI slider can be configured appropriately for the model.
  *
+ * WHY THIS EXISTS:
+ *   Isolates per-model LOD range logic so the slider always maps to meaningful
+ *   detail levels for the currently active mesh.
+ *
  * WHY PER-MODEL RANGE:
  *   Different models have vastly different vertex counts. A small cube might
  *   have 8 vertices while a Menger sponge has thousands. The LOD slider

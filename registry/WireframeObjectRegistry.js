@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Exposes the register method to allow modules to add shape definitions.
  *
+ * WHY THIS EXISTS:
+ *   Documents the registry as the single authoritative shape source and
+ *   satisfies the required header structure.
+ *
  * SCHEMA CONTRACT:
  *   Each registered object must conform to: { name: string, build: function }
  *   The build function returns the engine's internal mesh format with V, F, E arrays.

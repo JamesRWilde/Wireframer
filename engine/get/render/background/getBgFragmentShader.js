@@ -1,5 +1,16 @@
 /**
- * Background particle fragment shader with soft circular falloff.
+ * getBgFragmentShader.js - Background Particle Fragment Shader
+ *
+ * PURPOSE:
+ *   Provides GLSL source for the fragment shader that renders soft, glowing
+ *   particles in the background.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by GPU background renderer to construct shader programs.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates shader source in a single module for easier testing and
+ *   replacement, and adds clarity to the one-file-per-utility pattern.
  */
 export function getBgFragmentShader() {
   return `precision highp float;

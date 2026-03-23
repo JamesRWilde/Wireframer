@@ -10,7 +10,11 @@
  *   Called by greedyClusterDecimator after vertices have been assigned to
  *   spatial cells. Produces the new vertex array and a mapping from old
  *   to new vertex indices.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates cluster merge semantics so vertex clustering behavior is
+ *   consistent and testable separate from the higher-level decimation flow.
+ *
  * HOW IT WORKS:
  *   1. For each cell, compute the average position of all vertices in it
  *   2. Create a new vertex at the average position

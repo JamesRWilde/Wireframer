@@ -1,8 +1,14 @@
 /**
  * buildSpatialGrid.js - Build spatial hash grid for morph map
  *
- * Purpose:
+ * PURPOSE:
  *   Create a sparse 3D grid of target points that enables fast nearest-neighbor search.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by morph map computation to accelerate nearest-vertex queries.
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes the spatial grid construction so all morph and proximity logic uses the same indexing behavior.
  *
  * Architecture:
  *   One function per file.

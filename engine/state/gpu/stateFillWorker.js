@@ -10,7 +10,11 @@
  *   Receives transformed vertex data and triangle faces, computes lighting,
  *   sorts triangles back-to-front, and rasterizes them to an OffscreenCanvas.
  *   Returns the rendered ImageBitmap for compositing on the main thread.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Documents the worker role and intent, making the communications protocol
+ *   explicit for maintenance and debugging.
+ *
  * MESSAGE PROTOCOL:
  *   Main → Worker:
  *     { type: 'init', canvas: OffscreenCanvas } - Initialize with canvas

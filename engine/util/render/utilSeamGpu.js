@@ -9,6 +9,10 @@
  *   Provides a small amount of overdraw so that adjacent triangles do not leave
  *   pixel-sized gaps due to rasterization rounding.
  *
+ * WHY THIS EXISTS:
+ *   Ensures consistent seam-handling logic in GPU and CPU fill paths, avoiding
+ *   subtle rendering artifacts when triangles are adjacent.
+ *
  * DATA FORMAT:
  *   - tri2d: [[x0,y0], [x1,y1], [x2,y2]] triangle vertices in screen space.
  *   - expandPx: expansion factor in pixels.

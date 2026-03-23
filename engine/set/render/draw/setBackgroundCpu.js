@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Used by the main scene renderer when CPU mode is active.
  *   This pipeline is independent of GPU background pipeline.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a standalone CPU background rendering path that can be selected
+ *   at runtime and kept separate from GPU logic.
  */
 
 "use strict";

@@ -11,6 +11,10 @@
  *   Switches canvas visibility, manages GPU state cleanup, and
  *   delegates to setRenderMeshUnified for the actual drawing.
  *
+ * WHY THIS EXISTS:
+ *   Keeps CPU path orchestration centralized so mode selection logic is decoupled
+ *   from low-level mesh draw internals.
+ *
  * DETAILS:
  *   If the GPU rendered last frame, clears the GPU canvas to prevent
  *   stale artifacts from remaining visible.

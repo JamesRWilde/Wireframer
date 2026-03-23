@@ -10,7 +10,11 @@
  *   Sits between setRunFrame (which calls this) and the active foreground renderer
  *   (either GPU or CPU path, determined at startup). Manages rendering order,
  *   morph state, and timing measurements.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes full-scene rendering orchestration (background + foreground) and
+ *   timing instrumentation around a single function call from the loop.
+ *
  * RENDERING ORDER:
  *   1. Background particles (always rendered)
  *   2. Morph frame advancement (if morphing)

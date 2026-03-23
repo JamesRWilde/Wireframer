@@ -11,6 +11,10 @@
  *   written by backgroundWorker.js (init), setPostToBackgroundWorker.js (post),
  *   pendingWorkerParticles.js (read), and isBackgroundWorkerReady.js (read).
  *
+ * WHY THIS EXISTS:
+ *   Makes the background worker lifecycle semantics explicit and aids
+ *   maintainers in understanding mutation contracts.
+ *
  * DETAILS:
  *   Uses a mutable object so importing modules can assign properties
  *   directly without creating new objects.

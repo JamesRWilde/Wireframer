@@ -1,13 +1,17 @@
 /**
- * projectVerticesVertices.js - Single Point Projection
+ * utilProjectedVertices.js - Single Point Projection
  * 
  * PURPOSE:
  *   Projects a single 3D point to 2D screen coordinates.
- *   Uses perspective projectVerticesVerticesion with configurable zoom and vertical offset.
+ *   Uses perspective projection with configurable zoom and vertical offset.
  * 
  * ARCHITECTURE ROLE:
- *   Used for projectVerticesVerticesing individual points (e.g., debug markers, UI elements).
- *   For bulk vertex projectVerticesVerticesion, use getModelFrameData instead.
+ *   Used for projecting individual points (e.g., debug markers, UI elements).
+ *   For bulk vertex projection, use getModelFrameData instead.
+ * 
+ * WHY THIS EXISTS:
+ *   Provides a reusable single-point projection helper for UI overlay
+ *   features and debugging tools, keeping projection math consistent.
  * 
  * PROJECTION FORMULA:
  *   screenX = centerX + (worldX * fov) / (worldZ + 3)

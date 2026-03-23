@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by program.js to compile individual shaders before linking.
  *   A low-level utility that encapsulates the shader compilation workflow.
+ *
+ * WHY THIS EXISTS:
+ *   Makes shader compilation and error diagnostics reusable across GPU pipeline
+ *   initialization steps.
  */
 
 "use strict";

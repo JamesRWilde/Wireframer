@@ -1,7 +1,15 @@
 /**
  * getBoundingBox.js - Axis-aligned bounding box calculator
  *
- * One function per file module.
+ * PURPOSE:
+ *   Computes min/max axis-aligned bounds for a vertex list.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by mesh normalization and culling logic throughout the pipeline.
+ *
+ * WHY THIS EXISTS:
+ *   Standardizes bounding box calculation so all consumers use a correct,
+ *   shared implementation.
  */
 
 "use strict";

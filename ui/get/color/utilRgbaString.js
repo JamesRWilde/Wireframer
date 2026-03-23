@@ -8,6 +8,9 @@
  * ARCHITECTURE ROLE:
  *   Called by wireframe renderer to create edge colors with alpha.
  *   Provides consistent rgba string formatting.
+ *
+ * WHY THIS EXISTS:
+ *   Reuses a consistent rgba formatter across UI and render modules.
  */
 
 "use strict";

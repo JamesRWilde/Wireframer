@@ -9,6 +9,10 @@
  *   Called by setSeedParticles to populate the background particle array.
  *   Each particle represents a floating dot that drifts across the
  *   background canvas with pulsing opacity.
+ *
+ * WHY THIS EXISTS:
+ *   Separates particle creation logic from update/render loops, enabling
+ *   isolated tuning and easier unit testing.
  */
 
 "use strict";

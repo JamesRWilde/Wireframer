@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Single source of truth for LOD range. Written by setLodRange;
  *   read by getLodRange and the mesh tessellation pipeline.
+ *
+ * WHY THIS EXISTS:
+ *   Signals the intended use of this state module and provides a shared
+ *   design intent doc for LOD behavior.
  */
 
 "use strict";

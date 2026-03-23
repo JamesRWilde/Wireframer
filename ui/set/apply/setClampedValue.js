@@ -9,6 +9,10 @@
  *   Utility used by restoreState to consistently apply saved state values
  *   to the UI controls while enforcing min/max ranges.
  *
+ * WHY THIS EXISTS:
+ *   Avoids repeating min/max clamping and missing value handling for each
+ *   restored slider control in the app startup flow.
+ *
  * @param {Object} params
  * @param {Object} params.state - The deserialized UI state object from localStorage
  * @param {string} params.key - Key name in the state object

@@ -4,6 +4,10 @@
  * PURPOSE:
  *   Handles cleanup of all GPU resources allocated by the background renderer, including buffer and program.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes GPU renderer cleanup semantics for consistent cross-module
+ *   tear-down behavior.
+ *
  * PARAMETERS:
  *   @param {WebGLRenderingContext} gl - The WebGL context used for rendering.
  *   @param {WebGLBuffer} buffer - The buffer to delete.

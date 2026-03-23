@@ -1,7 +1,15 @@
 /**
  * utilParsedCssColor.js - Parse CSS color string to normalized RGBA object
  *
- * One function per file module.
+ * PURPOSE:
+ *   Converts CSS color string input into normalized RGBA values for rendering.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by background renderer components to allow theme colors in CSS format.
+ *
+ * WHY THIS EXISTS:
+ *   Provides consistent color parsing so UI themes and user-provided colors
+ *   are restored in a predictable normalized format.
  */
 
 "use strict";

@@ -9,6 +9,10 @@
  *   Used by theme management code to compute UI colors that respect contrast
  *   requirements and provide a consistent look across the app.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes palette-derived color math so all theme updates are consistent
+ *   with contrast and visual hierarchy requirements.
+ *
  * DATA FORMAT:
  *   - rgbInput: [r, g, b] base color values (0-255)
  *   - Returns an object containing named colors and uiVars (CSS variables)

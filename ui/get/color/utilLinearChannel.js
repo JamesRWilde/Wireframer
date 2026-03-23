@@ -9,9 +9,9 @@
  *   Called by relativeLuminance to convert sRGB values before
  *   computing perceptual luminance.
  * 
- * WHY CONVERSION IS NEEDED:
- *   sRGB uses gamma encoding for perceptual uniformity.
- *   Luminance calculations require linear (non-gamma) values.
+ * WHY THIS EXISTS:
+ *   Encapsulates sRGB gamma inverse logic so luminance and contrast functions
+ *   remain consistent and spec-compliant.
  */
 
 "use strict";

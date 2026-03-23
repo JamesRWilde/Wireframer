@@ -18,6 +18,10 @@
  * RETURNS:
  *   @returns {number} The updated particle count after rendering.
  *
+ * WHY THIS EXISTS:
+ *   Encapsulates the GPU background render pipeline so a single function can
+ *   manage buffer rebuild and draw calls, enabling cleaner high-level control.
+ *
  * USAGE:
  *   particleCount = backgroundRenderer({ gl, locations, buffer, params, rebuildBuffer, background, particleCount });
  *

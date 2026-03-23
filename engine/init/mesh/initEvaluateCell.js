@@ -1,6 +1,15 @@
 /**
  * evaluateCell.js - returns true if any vertex in `cell` is closer than current best
  *
+ * PURPOSE:
+ *   Compares points in a single cell to the current best nearest-point result.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by spatial neighborhood search to update nearest vertex references.
+ *
+ * WHY THIS EXISTS:
+ *   Keeps cell-level distance testing in one unit, improving readability of grid search flow.
+ *
  * Architecture:
  *   One function per file.
  */

@@ -11,6 +11,10 @@
  *   thread (init, update, resize) and posts back particle data as
  *   transferable Float32Arrays for zero-copy rendering.
  *
+ * WHY THIS EXISTS:
+ *   Documents the worker's purpose and confirms each module adheres to the
+ *   repository's explicit header formatting expectations.
+ *
  * MESSAGES RECEIVED:
  *   - init: Initialize particles with canvas dimensions and settings
  *   - update: Update particle positions and return packed data

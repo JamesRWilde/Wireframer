@@ -1,6 +1,16 @@
 /**
- * Background particle vertex shader.
- * Simulates particle motion with position, velocity, size, and phase.
+ * getBgVertexShader.js - Background Particle Vertex Shader
+ *
+ * PURPOSE:
+ *   Provides GLSL source for the vertex shader that animates background
+ *   particles with velocity, size, and pulsation effects.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by GPU background renderer to construct shader programs.
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes shader source code for worker-safe injection and easier
+ *   future maintenance of visual style effects.
  */
 export function getBgVertexShader() {
   return `precision highp float;

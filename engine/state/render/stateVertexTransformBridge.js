@@ -11,6 +11,10 @@
  *   written by workerTransform.js (init), workerSend.js (post),
  *   cachedTransformResult.js (read), and getIsAvailable.js (read).
  *
+ * WHY THIS EXISTS:
+ *   Ensures a recognizable header format and clarifies this module's state
+ *   role in the worker pipeline.
+ *
  * DETAILS:
  *   Uses a mutable object so importing modules can assign properties
  *   directly without creating new objects.

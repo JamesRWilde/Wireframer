@@ -1,7 +1,14 @@
 /**
  * setDrawWorkerParticlesCpu.js - Draw bucketed worker particles using Canvas 2D fillRect
  *
- * One function per file module.
+ * PURPOSE:
+ *   Renders bucketed background particles on 2D canvas with alpha batching.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called by setRenderWorkerParticles for CPU background path after worker bucketization.
+ *
+ * WHY THIS EXISTS:
+ *   Reduces draw calls by grouping particles by alpha and using a single fillStyle per bucket.
  */
 
 "use strict";

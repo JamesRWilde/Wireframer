@@ -8,7 +8,11 @@
  * ARCHITECTURE ROLE:
  *   Called by parseObjLines for each "v" line in the OBJ file. Stores
  *   parsed vertices in the state for later use when building faces.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes vertex parsing and validation behavior so invalid lines
+ *   are consistently rejected and reported.
+ *
  * OBJ VERTEX FORMAT:
  *   v x y z [w]
  *   Where x, y, z are the 3D coordinates. Optional w is ignored.

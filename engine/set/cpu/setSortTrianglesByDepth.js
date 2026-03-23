@@ -18,6 +18,10 @@ let sortIdx = null;  // Uint32Array of triangle indices
  *   Called by setDrawSolidFillModel and setRenderMeshUnified to determine
  *   triangle rendering order.
  *
+ * WHY THIS EXISTS:
+ *   Provides consistent depth-sorting behavior while reusing typed arrays
+ *   for performance-critical render loops.
+ *
  * @param {Array<Array<number>>} triFaces - Array of triangle face index arrays [a, b, c]
  * @param {Array<Array<number>>} T - Transformed vertex positions [[x,y,z], ...]
  * @param {number} triCount - Number of triangles

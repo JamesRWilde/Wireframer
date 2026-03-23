@@ -11,6 +11,10 @@
  *   and theme-related constants (custom colors, presets, light direction) used
  *   across the application.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes shared UI element state so modules can use common references
+ *   without repeated document queries and to avoid inconsistent state.
+ *
  * DATA FORMAT:
  *   - Exports DOM elements (inputs, display elements) as `HTMLElement` references.
  *   - Exports theme constants such as CUSTOM_RGB, PRESET_SWATCHES, and vectors.

@@ -9,6 +9,10 @@
  *   Provides a consistent shading response for triangles based on surface normals
  *   and theme colors. Works with smooth and flat shading modes.
  *
+ * WHY THIS EXISTS:
+ *   Encapsulates triangle lighting math and prevents inconsistent shading
+ *   across fill render passes.
+ *
  * DATA FORMAT:
  *   - normal: normalized surface normal [nx, ny, nz]
  *   - theme: object containing shadeDark and shadeBright color values

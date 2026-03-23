@@ -8,6 +8,9 @@
  * ARCHITECTURE ROLE:
  *   Called by buildCustomTheme to create CSS variables with alpha.
  *   Used for UI theme color definitions.
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes rgba string formatting for consistent alpha color strings.
  */
 
 "use strict";

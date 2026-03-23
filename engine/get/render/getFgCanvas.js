@@ -9,8 +9,13 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/render/getFgCanvas.js
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes canvas element state so render initialization can avoid
+ *   querying DOM repeatedly and can gracefully handle unmounted canvas.
  */
 
+// Import shared canvas elements state reference
 import { canvasElementsState } from '@engine/state/render/stateCanvasElementsState.js';
 
 /**

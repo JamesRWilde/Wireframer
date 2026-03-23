@@ -9,6 +9,9 @@
  *   Cached color parser for particle rendering. Called once per unique color
  *   per frame, returns cached result on subsequent calls.
  *
+ * WHY THIS EXISTS:
+ *   Prevents expensive color parsing in hot rendering paths by memoizing results.
+ *
  * USAGE:
  *   import { getCachedColorRgb } from '@engine/get/render/draw/getCachedColorRgb.js';
  *   const rgb = getCachedColorRgb('#ff0000');

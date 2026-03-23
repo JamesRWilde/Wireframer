@@ -9,6 +9,10 @@
  *   Called when loading external OBJ files by path. Wraps the fetch +
  *   parse + load sequence into a single async call. Stores the loader
  *   function in module state via setLoadObjMesh.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates external OBJ load behavior so error handling, parsing,
+ *   and pipeline invocation are consistently applied.
  */
 
 "use strict";

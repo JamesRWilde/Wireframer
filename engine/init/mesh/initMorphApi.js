@@ -10,7 +10,11 @@
  *   Imported early during engine bootstrap to make the morph API available
  *   before other modules need it. Exposes the API globally for flexible
  *   access without circular imports.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Establishes consistent morph API state and defaults for all engine
+ *   modules, avoiding ad-hoc global morph wiring.
+ *
  * MORPH API FUNCTIONS:
  *   - startMorph: Begins a morph animation between two models
  *   - advanceMorphFrame: Updates morph state each frame

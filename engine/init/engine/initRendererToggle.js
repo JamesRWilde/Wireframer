@@ -10,7 +10,11 @@
  *   Called during app initialization in startApp.js. Sets up the click event
  *   listener and visual styling for the renderer stat element. Only enables
  *   the toggle if GPU rendering is supported.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes renderer mode toggle initialization so mode switching UI
+ *   logic is in one place and not scattered across startup code.
+ *
  * BEHAVIOR:
  *   - If GPU is supported: makes the renderer stat clickable with hover effects
  *   - If GPU is not supported: leaves the renderer stat as a static display

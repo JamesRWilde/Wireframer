@@ -9,6 +9,10 @@
  *   Allows direct assignment and access to stat display elements from any module
  *   via a single shared object. Used by hud and stat-setter modules.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes stats DOM references to avoid repeated lookups and to
+ *   unify telemetry display code paths.
+ *
  * USAGE:
  *   from '@ui/state/stateStats.js';
  *   statsState.statRenderer = document.getElementById('stat-renderer');

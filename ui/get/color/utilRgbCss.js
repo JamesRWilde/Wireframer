@@ -8,6 +8,9 @@
  * ARCHITECTURE ROLE:
  *   Called by buildCustomTheme and updateCustomColor to create
  *   CSS color values for UI elements.
+ *
+ * WHY THIS EXISTS:
+ *   Avoids duplicated css string formatting in UI color code paths.
  */
 
 "use strict";

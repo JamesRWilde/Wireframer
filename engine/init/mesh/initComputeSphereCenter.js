@@ -1,7 +1,15 @@
 /**
  * computeSphereCenter.js - Center for bounding sphere
  *
- * One function per file module.
+ * PURPOSE:
+ *   Computes the geometric center of the bounding box.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by mesh initialization to position the model around the origin.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a clear shared utility for centering objects and avoids
+ *   duplicated min/max center calculation logic.
  */
 
 "use strict";

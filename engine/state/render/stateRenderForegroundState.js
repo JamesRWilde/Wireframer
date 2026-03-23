@@ -9,6 +9,10 @@
  *   State module in engine/state/render/. The getter and setter modules
  *   in engine/get/render/ and engine/set/render/ provide controlled access.
  *
+ * WHY THIS EXISTS:
+ *   Documents the role of this state container as the source of render path
+ *   selection, aiding maintainability of pipeline toggles.
+ *
  * STATE:
  *   - _renderForeground: The active render function (or null)
  *   - _isGpuMode: Boolean flag indicating GPU rendering is active

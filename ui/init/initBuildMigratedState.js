@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Used by restoreState to persist a clean, validated state shape back to localStorage.
  *
+ * WHY THIS EXISTS:
+ *   Provides a safe migration path from legacy or malformed stored UI state data,
+ *   preventing runtime errors from missing keys.
+ *
  * @param {Object} state - Raw state object read from localStorage
  * @returns {Object} Normalized UI state object
  */

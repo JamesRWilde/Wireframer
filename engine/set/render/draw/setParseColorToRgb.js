@@ -7,6 +7,10 @@
  * ARCHITECTURE ROLE:
  *   Utility function for background particle rendering.
  *
+ * WHY THIS EXISTS:
+ *   Standardizes color string parsing to RGB values in one location to avoid
+ *   repeated parse code and inconsistent edge handling.
+ *
  * USAGE:
  *   import { setParseColorToRgb } from '@engine/set/render/draw/setParseColorToRgb.js';
  *   const [r,g,b] = setParseColorToRgb('#ff0000');

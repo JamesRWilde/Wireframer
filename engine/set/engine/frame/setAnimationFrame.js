@@ -11,6 +11,10 @@
  *   This is the outermost layer of the animation loop. It's called by requestAnimationFrame,
  *   schedules the next frame, then delegates to setRunFrame() for the actual work. This
  *   separation allows setRunFrame to be called independently (e.g., for single-step debugging).
+ *
+ * WHY THIS EXISTS:
+ *   Provides a lightweight wrapper around requestAnimationFrame so the frame loop can be
+ *   controlled and tested independently from the request scheduling behavior.
  * 
  * FRAME LOOP FLOW:
  *   1. Browser calls animationFrame(timestamp)

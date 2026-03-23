@@ -9,6 +9,10 @@
  *   Called by renderCpuPath to render the solid fill portion of the model.
  *   Results are composited onto the main canvas with opacity blending.
  *
+ * WHY THIS EXISTS:
+ *   Encapsulates the most expensive part of CPU rendering and abstracts
+ *   worker vs. foreground fallback so renderCpuPath remains concise.
+ *
  * OPTIMIZATION:
  *   Uses Web Worker with OffscreenCanvas when available for parallel rendering.
  *   Falls back to main-thread rendering if worker is unavailable.

@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by budget.js to get the smoothed frame time average.
  *   Reads from the circular buffer maintained by time.js.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a reliable averaged timing measure for adaptive performance
+ *   policies and avoids duplication of aggregation logic.
  */
 
 "use strict";

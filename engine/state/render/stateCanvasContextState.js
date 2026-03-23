@@ -8,6 +8,10 @@
  * ARCHITECTURE:
  *   This is one global state variable / domain, the first full migration
  *   for the old `window`-scoped ctx. All new code should import from here.
+ *
+ * WHY THIS EXISTS:
+ *   Explicitly documents the reason for segregated canvas context state and
+ *   ensures it is included in the style guidelines.
  */
 
 "use strict";

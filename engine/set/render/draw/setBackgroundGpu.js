@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Used by main scene renderer in GPU mode.
  *   Separates GPU background pipeline from CPU background pipeline.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a dedicated GPU particle background path to keep mode-specific
+ *   rendering behavior isolated and maintainable.
  */
 
 "use strict";

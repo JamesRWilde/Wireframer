@@ -11,6 +11,10 @@
  *   Produces a new mesh object (morphState.currentMesh) that the renderer
  *   draws in place of the static mesh until the animation completes.
  *
+ * WHY THIS EXISTS:
+ *   Converts morph state into concrete per-frame mesh output so the renderer
+ *   can remain stateless and simply draw the current mesh.
+ *
  * THREE PHASES:
  *   1. Decimation (0 → 0.33): High-poly source smooths toward low-poly shape
  *      using the _oldToNew cluster mapping. Vertices slide along sphere surface.

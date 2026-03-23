@@ -10,7 +10,11 @@
  * ARCHITECTURE ROLE:
  *   Called by triangulateFaceEarClipping to determine the polygon's winding order.
  *   The winding order is needed to correctly interpret the convexity test results.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes winding-order evaluation to avoid subtle orientation bugs when
+ *   triangulating non-uniform vertex point sets.
+ *
  * MATHEMATICAL BASIS:
  *   Uses the shoelace formula (also known as the surveyor's formula):
  *   Area = ½ × Σ(xᵢ × yᵢ₊₁ - xᵢ₊₁ × yᵢ)

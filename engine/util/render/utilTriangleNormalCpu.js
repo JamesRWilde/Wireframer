@@ -9,6 +9,10 @@
  *   Called by fill renderer to get normals for lighting calculations.
  *   Handles rotation of model-space normals to view space.
  * 
+ * WHY THIS EXISTS:
+ *   Centralizes triangle normal math so rendering paths share consistent
+ *   shading behavior and neatly handles degenerate triangles.
+ * 
  * SHADING MODES:
  *   - Flat: Computes face normal from edge cross product
  *   - Smooth: Averages pre-computed corner normals, rotated to view space

@@ -9,6 +9,10 @@
  *   Called on app initialization to restore the user's last-known UI configuration.
  *   Also persists a migrated, cleaned-up state shape back to localStorage.
  *
+ * WHY THIS EXISTS:
+ *   Ensures the app recovers user preferences reliably and handles legacy state
+ *   formats in a single location.
+ *
  * DATA FORMAT:
  *   - Stored state is JSON with keys like lod, fillOpacity, bgDensity, etc.
  */

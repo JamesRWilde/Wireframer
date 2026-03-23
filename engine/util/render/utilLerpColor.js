@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Utility used by rendering pipeline for computing intermediate colors during shading transitions.
  *
+ * WHY THIS EXISTS:
+ *   Ensures a common color interpolation implementation to avoid drift in theme
+ *   or shading color operations.
+ *
  * DATA FORMAT:
  *   - Hex colors must be in the form '#RRGGBB'.
  *   - RGB arrays are expected as [r, g, b] with values in 0-255.

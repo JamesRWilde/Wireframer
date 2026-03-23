@@ -11,6 +11,10 @@
  *   The resolved mode is stored in StateEngineLoop.foregroundRenderMode and read
  *   by the frame loop to select the appropriate rendering path.
  * 
+ * WHY THIS EXISTS:
+ *   Centralizes render path decision making and reduces branching logic that
+ *   would otherwise be repeated across render loop code.
+ * 
  * DETECTION LOGIC:
  *   1. If mode is already resolved (not 'unknown'), return cached value
  *   2. Check if GPU renderer is available via getSceneRendererGpu()

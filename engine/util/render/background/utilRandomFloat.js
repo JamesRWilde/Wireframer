@@ -1,7 +1,16 @@
 /**
  * randomFloat.js - Random float in range
  *
- * One function per file module.
+ * PURPOSE:
+ *   Generates a random float between min (inclusive) and max (exclusive).
+ *
+ * ARCHITECTURE ROLE:
+ *   Used in background particle and mesh animation systems that need
+ *   non-deterministic variation for visual richness.
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes random range generation so that all modules produce
+ *   consistent random values and easy testability.
  */
 
 "use strict";

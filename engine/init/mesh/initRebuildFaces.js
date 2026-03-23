@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by greedyClusterDecimator after vertices have been clustered.
  *   This is the final step that produces the simplified mesh's face list.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Ensures consistent post-clustering face cleanup and avoids carried-over
+ *   degenerate faces in simplified meshes.
+ *
  * HOW IT WORKS:
  *   1. For each face, map old vertex indices to new indices
  *   2. Skip faces that reference removed vertices (undefined mapping)

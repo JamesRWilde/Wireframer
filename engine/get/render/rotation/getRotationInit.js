@@ -1,5 +1,5 @@
 /**
- * rotationInitialize.js - Initial Rotation Matrix Setup
+ * getRotationInit.js - Initial Rotation Matrix Setup
  * 
  * PURPOSE:
  *   Sets up the initial rotation matrix for the 3D model. This provides a
@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by startApp() before the animation loop begins. Initializes the
  *   global rotation matrix that the physics system and renderer use.
+ * 
+ * WHY THIS EXISTS:
+ *   Provides a deterministic startup orientation and makes it easy to change
+ *   initial model presentation in one location.
  * 
  * WHY THESE ANGLES:
  *   The combination of 0.4 radians (~23°) Y rotation and 0.18 radians (~10°)

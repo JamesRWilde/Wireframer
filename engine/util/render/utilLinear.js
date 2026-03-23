@@ -1,3 +1,19 @@
+/**
+ * utilLinear.js - sRGB to Linear Gamma Conversion
+ *
+ * PURPOSE:
+ *   Converts 0-255 sRGB color components to linear gamma space values
+ *   in the range 0-1 for lighting and luminance calculations.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called by color and shading utilities (e.g., utilRelativeLuminanceRaw)
+ *   to convert display-coded color values to linear light measurements.
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes gamma conversion so all lighting math uses a consistent
+ *   linearized color space.
+ */
+
 'use strict';
 
 /**

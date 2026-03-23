@@ -11,6 +11,10 @@
  *   Receives packed particle data (Float32Array) from the background worker
  *   and renders it using WebGL. Manages shader program, buffers, and context.
  *
+ * WHY THIS EXISTS:
+ *   Provides fast GPU particle rendering path and ensures rendering behavior
+ *   is isolated into a dedicated module.
+ *
  * RENDERING TECHNIQUE:
  *   - Each particle is a vertex with attributes: x, y, size, alpha
  *   - Vertex shader converts to clip space and passes color/alpha

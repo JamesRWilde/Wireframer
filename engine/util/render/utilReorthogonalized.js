@@ -12,6 +12,10 @@
  *   Called periodically by physics() (every 120 frames) to prevent
  *   visual artifacts from accumulated numerical errors.
  * 
+ * WHY THIS EXISTS:
+ *   Keeps the rotation matrix valid for long-running scenes and avoids
+ *   subtle incorrect geometry artifacts from drift.
+ * 
  * MATHEMATICAL BASIS:
  *   Uses Gram-Schmidt orthogonalization:
  *   1. Normalize the first row (X axis)

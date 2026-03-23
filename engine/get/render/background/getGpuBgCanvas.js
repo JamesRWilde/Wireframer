@@ -1,7 +1,14 @@
 /**
- * gpuBackgroundCanvas.js - Get GPU background canvas element
+ * getGpuBgCanvas.js - GPU Background Canvas Getter
  *
- * One function per file module.
+ * PURPOSE:
+ *   Returns the GPU background canvas element.
+ *
+ * ARCHITECTURE ROLE:
+ *   Getter module in engine/get/render/background for GPU path canvas access.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates canvas retrieval to avoid direct state usage in downstream modules.
  */
 
 "use strict";
@@ -9,7 +16,7 @@
 import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
 
 /**
- * gpuBackgroundCanvas - Returns the GPU background canvas element
+ * getGpuBgCanvas - Returns the GPU background canvas element
  *
  * @returns {HTMLCanvasElement|null} The GPU background canvas or null
  */

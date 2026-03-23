@@ -5,6 +5,10 @@
  *   Releases GPU resources allocated by the background renderer by deleting the WebGL buffer and program.
  *   Prevents memory/resource leaks in the browser and ensures proper cleanup when the renderer is no longer needed.
  *
+ * WHY THIS EXISTS:
+ *   Provides a well-defined API for repeating GPU resource cleanup to avoid
+ *   inconsistent releases between renderer lifecycles.
+ *
  * PARAMETERS:
  *   @param {WebGLRenderingContext} gl - The WebGL context used for rendering.
  *     - Must be a valid, active context. If the context is lost, deletion is a no-op.

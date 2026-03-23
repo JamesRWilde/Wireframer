@@ -29,6 +29,11 @@
  *   - Call this only after updating the buffer and uniforms for the current frame.
  *   - This function does not manage buffer or program lifetimes; see disposeBackground for cleanup.
  *
+ * WHY THIS EXISTS:
+ *   Locks GPU background draw call setup in a single place so shader state,
+ *   attribute layouts, and blend configuration remain consistent and easy
+ *   to audit.
+ *
  * MAINTAINER GUIDELINES:
  *   - This file must only contain this function and its export.
  *   - Update comments if attribute/uniform layout or rendering logic changes.

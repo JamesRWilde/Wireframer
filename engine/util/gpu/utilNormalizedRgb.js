@@ -10,6 +10,10 @@
  *   Called by sceneModel.js to convert theme colors (stored as
  *   0-255 RGB arrays) into normalized format for GPU uniform uploads.
  *
+ * WHY THIS EXISTS:
+ *   Provides a single utility for consistent color normalization and avoids
+ *   repeated division operations spread throughout shader setup code.
+ *
  * DETAILS:
  *   Falls back to the provided fallback color if the source is null
  *   or has missing components.

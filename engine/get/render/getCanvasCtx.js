@@ -1,12 +1,21 @@
 /**
- * get/render/canvasContext.js - Canvas context getter
+ * getCanvasCtx.js - Get Canvas 2D Context
  *
- * Exposes canonical UI state value for the active 2D rendering context.
- * This is the accessor side of the legacy canvas ctx replacement.
+ * PURPOSE:
+ *   Exposes the active 2D canvas rendering context from centralized state.
+ *
+ * ARCHITECTURE ROLE:
+ *   Getter module in engine/get/render for rendering pipeline initialization.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a safe, single source of truth for canvas context access,
+ *   avoiding direct state object coupling across UI modules.
  */
 
 "use strict";
 
+// Import the shared canvas context state container
+// Used by render loop and drawing utilities needing 2D context.
 import { canvasContext } from '@engine/state/render/stateCanvasContextState.js';
 
 /**
@@ -14,5 +23,6 @@ import { canvasContext } from '@engine/state/render/stateCanvasContextState.js';
  * @returns {CanvasRenderingContext2D|null}
  */
 export function getCanvasCtx() {
+  // Use shared state accessor; the context can be null if not setup yet.
   return canvasContext.ctx;
 }

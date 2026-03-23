@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by setRunFrame() each frame with timing measurements. Updates the
  *   smoothed EMA values in StateEngineLoop that are read by hud().
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes performance telemetry smoothing so display updates are stable
+ *   and the algorithm can be improved without touching render loop logic.
+ *
  * EMA FORMULA:
  *   newValue = alpha * currentSample + (1 - alpha) * previousEMA
  *   

@@ -1,7 +1,16 @@
 /**
  * normalizeToBoundingSphere.js - Normalize model vertices to unit sphere
  *
- * One function per file module.
+ * PURPOSE:
+ *   Transforms vertices from world-space bounding box into unit sphere space.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called by mesh load pipeline to normalize different model scales and
+ *   guarantee consistent coordinate range for rendering and morphing.
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes the bounding sphere normalization sequence and keeps
+ *   transformation steps re-usable.
  */
 
 "use strict";

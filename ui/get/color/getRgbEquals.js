@@ -8,6 +8,9 @@
  * ARCHITECTURE ROLE:
  *   Called by updateCustomColor to mark the currently active preset.
  *   Provides simple component-wise color comparison.
+ *
+ * WHY THIS EXISTS:
+ *   Creates a reusable color equality assertion so active preset rendering is consistent.
  */
 
 "use strict";

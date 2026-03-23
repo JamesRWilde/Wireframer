@@ -1,11 +1,19 @@
 /**
- * geometrySumNormals.js - Helper to sum normals within crease threshold
+ * utilSummedNormals.js - Helper to sum normals within crease threshold
  *
  * PURPOSE:
  *   Sums the normals of adjacent faces for a vertex, including only those
  *   whose dot product with the reference normal is above the crease threshold.
  *   Optionally respects OBJ smoothing groups: faces in different groups
  *   are never blended, regardless of crease angle.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by mesh normal generation in CPU and init mesh pipelines to compute
+ *   smooth normals for shaded rendering.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates crease-aware normal blending in one helper to ensure smooth
+ *   shading is consistent between models and smoothing-group behavior.
  *
  * @param {Array<number>} nRef - Reference normal [x, y, z] for the current face
  * @param {Array<Array<number>>} faceNormals - Array of all face normals ([x, y, z] per face)

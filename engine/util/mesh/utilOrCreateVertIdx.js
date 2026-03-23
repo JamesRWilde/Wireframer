@@ -11,10 +11,10 @@
  *   Called by parseFace to get or create unique vertex indices. Maintains
  *   a map from (position/normal/UV) combinations to unique indices.
  * 
- * WHY DEDUPLICATION:
- *   OBJ format can have many duplicate vertex positions. Deduplication
- *   reduces memory usage and improves rendering performance while
- *   preserving the visual appearance (smooth normals, texture mapping).
+ * WHY THIS EXISTS:
+ *   Prevents duplicate vertex data by canonicalizing indices, which
+ *   reduces memory usage and keeps geometry consistent for shading and
+ *   rendering operations.
  */
 
 /**

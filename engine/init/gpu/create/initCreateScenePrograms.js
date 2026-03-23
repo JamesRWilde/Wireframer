@@ -12,6 +12,10 @@
  *   object with compiled programs and their location maps, consumed by
  *   the scene draw pipeline.
  *
+ * WHY THIS EXISTS:
+ *   Consolidates all required shader program creation and linking logic
+ *   into one module for consistent scene rendering behavior.
+ *
  * SHADERS PROVIDED:
  *   - fillProgram: Vertex + fragment for solid triangle fill with lighting
  *   - wireProgram: Vertex + fragment for edge wireframe with depth fading

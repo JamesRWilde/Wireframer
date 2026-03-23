@@ -12,6 +12,10 @@
  *   Read by budget.js, averageTime.js, determineTarget.js, and
  *   qualityApplyChange.js. Written by time.js and qualityApplyChange.js.
  *
+ * WHY THIS EXISTS:
+ *   Offers a single canonical definition of budget thresholds and adaptive
+ *   state to keep performance rules consistent across the rendering pipeline.
+ *
  * QUALITY LEVELS:
  *   - 'high': Target <14ms per frame (60+ FPS)
  *   - 'medium': Target <18ms per frame (~55 FPS)

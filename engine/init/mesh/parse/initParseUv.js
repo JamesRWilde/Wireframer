@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by parseObjLines for each "vt" line in the OBJ file. Stores
  *   parsed UVs in the state for later use when building faces.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates UV parsing and validation in one place so texture coordinates
+ *   are reliably added to parse state.
+ *
  * OBJ UV FORMAT:
  *   vt u v
  *   Where u and v are texture coordinates (typically 0-1 range).

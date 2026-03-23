@@ -1,7 +1,16 @@
 /**
  * recenterToOrigin.js - Recenter mesh vertices to the origin
  *
- * One function per file module.
+ * PURPOSE:
+ *   Translates mesh vertices so the model is centered at the origin.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by mesh initialization and morphing to keep object coordinate
+ *   systems consistent.
+ *
+ * WHY THIS EXISTS:
+ *   Ensures common centering behavior in one place and avoids floating
+ *   reference center discrepancies across pipeline stages.
  */
 
 "use strict";

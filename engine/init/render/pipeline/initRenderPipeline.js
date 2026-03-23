@@ -10,7 +10,11 @@
  *   Called during app startup (in startApp.js) after canvas initialization.
  *   This is the ONLY place where WebGL detection happens. It sets the
  *   renderForeground function pointer and initializes the chosen pipeline.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates the WebGL vs CPU path decision in a single function to
+ *   avoid duplicated mode checks and initialization logic.
+ *
  * INITIALIZATION FLOW:
  *   1. Check if GPU canvas exists and WebGL is available
  *   2. If WebGL available:

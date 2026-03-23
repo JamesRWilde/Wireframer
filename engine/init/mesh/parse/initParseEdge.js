@@ -17,6 +17,10 @@
  *   the mesh builder, which preserves them as-is. Face-derived edges
  *   and explicit OBJ edges are kept separate so the renderer knows
  *   which came from the author and which were computed.
+ *
+ * WHY THIS EXISTS:
+ *   Ensures explicit OBJ edge geometry is preserved and tracked separately
+ *   from face-derived connections, enabling accurate wireframe rendering.
  */
 
 export function parseEdge(parts, state) {

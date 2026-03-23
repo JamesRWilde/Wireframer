@@ -10,14 +10,14 @@
  *   Called by physics() each frame to apply angular velocity increments
  *   to the rotation matrix. Modifies the matrix in-place for performance.
  * 
+ * WHY THIS EXISTS:
+ *   Modifying the matrix in-place avoids allocating new arrays each frame,
+ *   which reduces garbage collection pressure and improves performance.
+ *
  * MATHEMATICAL BASIS:
  *   Constructs a combined rotation matrix M = Ry * Rx * Rz from the Euler angles,
  *   then multiplies it with the existing rotation matrix: R = M * R
  *   This applies the incremental rotation in the model's local coordinate space.
- * 
- * WHY IN-PLACE:
- *   Modifying the matrix in-place avoids allocating new arrays each frame,
- *   which reduces garbage collection pressure and improves performance.
  */
 
 "use strict";

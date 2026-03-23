@@ -11,6 +11,10 @@
  *   draw calls. Acts as a thin cache layer over buildModelBuffers, which handles
  *   the actual buffer creation and data upload.
  *
+ * WHY THIS EXISTS:
+ *   Prevents expensive repeated buffer allocations and uploads across frames
+ *   by caching per-model buffer sets with automatic lifecycle management.
+ *
  * CACHING STRATEGY:
  *   Uses a WeakMap keyed by the model object reference. This means:
  *   - Same model object → instant buffer lookup (no rebuild)

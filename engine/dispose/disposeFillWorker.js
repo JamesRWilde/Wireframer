@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called during engine shutdown or when switching render modes to
  *   release worker thread resources and prevent memory leaks.
+ *
+ * WHY THIS EXISTS:
+ *   Ensures fill rendering resources are explicitly released, preventing
+ *   stale workers or leaks after mode changes.
  */
 
 "use strict";

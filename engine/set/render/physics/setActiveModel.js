@@ -1,3 +1,19 @@
+/**
+ * setActiveModel.js - Set Active Mesh Model
+ *
+ * PURPOSE:
+ *   Sets the active mesh model in shared state and updates all dependent UI and
+ *   telemetry values.
+ *
+ * ARCHITECTURE ROLE:
+ *   Central model switcher used during object load, LOD changes, and mode swaps.
+ *   Ensures one source-of-truth for active mesh and invalidates stale cached metrics.
+ *
+ * WHY THIS EXISTS:
+ *   Prevents inconsistent model references by providing a single mutation path
+ *   for active model changes.
+ */
+
 'use strict';
 
 import { statsState } from '@ui/state/stateStats.js';

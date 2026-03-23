@@ -10,6 +10,10 @@
  *   Called during app initialization (startApp) after DOM elements are available.
  *   Centralizes slider event binding logic to keep startApp focused on orchestration.
  * 
+ * WHY THIS EXISTS:
+ *   Provides a single point for slider event binding and error handling, so
+ *   that slider-based render state updates are consistent and easy to maintain.
+ *
  * WHY SEPARATE:
  *   The LOD slider requires special handling (triggers model decimation), while other
  *   sliders only need to sync render toggles. Separating this logic keeps the code

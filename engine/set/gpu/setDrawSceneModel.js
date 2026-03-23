@@ -10,6 +10,10 @@
  *   Called by the render loop when the engine is in GPU mode. Delegates
  *   to the scene renderer's model() method and catches any GPU errors
  *   to trigger graceful fallback.
+ *
+ * WHY THIS EXISTS:
+ *   Consolidates GPU render resilience behavior (error fallback, failure marker)
+ *   in one place so the render loop can remain simple.
  */
 
 "use strict";

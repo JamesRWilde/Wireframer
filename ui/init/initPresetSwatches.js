@@ -11,6 +11,10 @@
  *   preset swatch container with buttons and registers click handlers that
  *   apply the selected preset color to the current scene.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes preset swatch setup and click handling so theme application
+ *   behavior is consistent across user interactions.
+ *
  * DEPENDENCIES:
  *   - toHex / toRgbCss: Color format conversions for display
  *   - customRgb: Applies and persists the selected preset color

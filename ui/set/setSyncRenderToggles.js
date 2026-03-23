@@ -9,6 +9,10 @@
  *   Called whenever the render control sliders change (or during initialization)
  *   to keep the UI and global rendering configuration in sync.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes synchronization logic between UI controls and engine render
+ *   parameters, to prevent inconsistent states across modules.
+ *
  * DATA FORMAT:
  *   - Global state values are stored as 0-1 percentages (e.g., 0.75 for 75%).
  */

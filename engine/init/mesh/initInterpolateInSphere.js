@@ -1,7 +1,14 @@
 /**
  * interpolateInSphere.js - Vertex interpolation preserving the unit sphere law
  *
- * One function per file module.
+ * PURPOSE:
+ *   Interpolates between two points ensuring results remain on/inside a unit sphere.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by morph and smooth transition code to avoid vertices escaping bounding sphere.
+ *
+ * WHY THIS EXISTS:
+ *   Centralized sphere-safe interpolation logic prevents drift and keeps morph behavior predictable.
  */
 
 "use strict";

@@ -11,6 +11,10 @@
  * ARCHITECTURE ROLE:
  *   Called each physics frame to decay rotation speeds. The default
  *   factor of 0.85 reduces velocities by 15% per frame.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates rotation damping behavior so motion physics are central and
+ *   easily adjustable from one function.
  */
 
 import { physicsState } from '@engine/state/render/statePhysicsState.js';

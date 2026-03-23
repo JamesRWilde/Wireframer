@@ -7,6 +7,9 @@
  * ARCHITECTURE ROLE:
  *   Called when the user changes the custom color, allowing it to be restored on reload.
  *
+ * WHY THIS EXISTS:
+ *   Ensures custom color is persisted across user sessions and device reloads.
+ *
  * DATA FORMAT:
  *   - Stored as a JSON stringified array [r, g, b] under CUSTOM_RGB_KEY.
  */

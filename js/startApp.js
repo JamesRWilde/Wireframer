@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by the frame loop entry point after all modules are loaded.
  *   Orchestrates the startup sequence to ensure proper initialization order.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a clear application bootstrap and records the high-level startup
+ *   contract for integration tests and documentation.
  */
 
 "use strict";

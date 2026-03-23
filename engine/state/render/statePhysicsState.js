@@ -12,6 +12,10 @@
  *   rotation matrix R is the primary output — the render pipeline reads it
  *   each frame to transform vertices.
  *
+ * WHY THIS EXISTS:
+ *   Preserves the header convention while fully capturing intent of the
+ *   physics state module for future maintainers.
+ *
  * STATE PROPERTIES:
  *   - R: Rotation matrix (Float32Array, 3x3)
  *   - wx, wy, wz: Angular velocities (radians per frame)

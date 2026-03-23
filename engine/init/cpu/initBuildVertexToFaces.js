@@ -5,6 +5,10 @@
  *   For each vertex, records the indices of all faces (triangles) that include it.
  *   Used to quickly find all faces sharing a vertex, for normal smoothing and mesh analysis.
  *
+ * WHY THIS EXISTS:
+ *   Provides a canonical adjacency structure for multiple mesh operations
+ *   (smoothing, curvature, selection), so each module does not rebuild it separately.
+ *
  * @param {Array<Array<number>>} triFaces - Array of triangle vertex indices (each triangle is [v0, v1, v2])
  * @param {number} vertexCount - Number of vertices in the model
  * @returns {Array<Array<number>>} Array mapping vertex index to array of face indices

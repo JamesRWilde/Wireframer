@@ -8,7 +8,11 @@
  * ARCHITECTURE ROLE:
  *   Called by getModelTriCornerNormals to compute base face normals.
  *   Results are cached on the model object for reuse.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Standardizes outward face normal computation with caching and orientation
+ *   correction, so shading quality is consistent across mesh loaders.
+ *
  * NORMAL ORIENTATION:
  *   Normals are oriented to point outward by checking dot product with
  *   vector from mesh center to face center. If negative, normal is flipped.

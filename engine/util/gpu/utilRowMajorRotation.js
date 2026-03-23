@@ -11,6 +11,10 @@
  *   the GPU. Ensures a valid rotation matrix is always used, even
  *   if the physics state hasn't been initialized yet.
  *
+ * WHY THIS EXISTS:
+ *   Provides defensive matrix input validation for GPU shader uniforms,
+ *   eliminating invalid state propagation and crash conditions.
+ *
  * DETAILS:
  *   Uses a shared identity matrix constant to avoid per-call allocation.
  */

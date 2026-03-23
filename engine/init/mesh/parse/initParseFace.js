@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by parseObjLines for each "f" line in the OBJ file. Produces
  *   triangle face objects with indices and metadata (group, object, smoothing).
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Isolates face line parsing and fan triangulation, ensuring a single
+ *   behavior across the parser and easier maintenance.
+ *
  * FAN TRIANGULATION:
  *   For polygons with more than 3 vertices, we use fan triangulation:
  *   - Triangle 1: vertices [0, 1, 2]

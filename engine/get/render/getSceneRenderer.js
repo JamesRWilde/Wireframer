@@ -11,6 +11,11 @@
  *   lazily create the singleton GPU renderer. Returns an object with model()
  *   and clear() methods for the render loop.
  *
+ * WHY THIS EXISTS:
+ *   Encapsulates GPU renderer object creation so that top-level render
+ *   loop logic remains agnostic of initialization details and can retrieve
+ *   ready-to-use draw APIs.
+ *
  * DETAILS:
  *   - Tries WebGL2 first, falls back to WebGL1 and experimental-webgl
  *   - Uses module-level state for the GL context through set/get functions

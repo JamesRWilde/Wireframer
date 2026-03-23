@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by the scene draw API to clear the GPU canvas before rendering.
  *   Acts as a thin forwarding layer to sceneCanvas.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a minimal abstraction for GPU canvas clear operations, allowing
+ *   future behavior to be inserted here without changing call sites.
  */
 
 "use strict";

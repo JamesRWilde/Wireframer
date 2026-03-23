@@ -10,7 +10,11 @@
  * ARCHITECTURE ROLE:
  *   Used by startMorph to clone source and target meshes, and by
  *   advanceMorphFrame to create the final mesh when morph completes.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Ensures morph operations never mutate original mesh data by providing a
+ *   reusable deep-clone helper.
+ *
  * WHY DEEP CLONE:
  *   During morphing, vertex positions are interpolated in-place. Without
  *   deep cloning, the original meshes would be corrupted by the interpolation

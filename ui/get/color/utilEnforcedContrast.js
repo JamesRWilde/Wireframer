@@ -8,7 +8,11 @@
  * ARCHITECTURE ROLE:
  *   Called by buildCustomTheme to ensure UI text meets WCAG contrast standards.
  *   Iteratively adjusts colors toward white or black until contrast is met.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates contrast remediation logic so theme palette generation can
+ *   rely on a single accessible color correction algorithm.
+ *
  * DATA FORMAT:
  *   - fg/bg: [r, g, b] arrays (0-255)
  *   - minRatio: contrast ratio (e.g., 4.5 for WCAG AA)

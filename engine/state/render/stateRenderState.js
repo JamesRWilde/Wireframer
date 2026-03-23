@@ -10,6 +10,10 @@
  *   Written by setTheme, setFillOpacity, setWireOpacity, and derived
  *   color computation functions. Read by all getter modules and the
  *   GPU/CPU rendering pipelines.
+ *
+ * WHY THIS EXISTS:
+ *   Clarifies how this core render state object functions as a shared
+ *   normalized render configuration store.
  */
 
 'use strict';

@@ -9,9 +9,10 @@
  *   Called by fill renderer before rasterizing triangles.
  *   Eliminates thin gaps that can appear between triangles due to rounding.
  *
- * WHY EXPANSION IS NEEDED:
- *   When triangles share edges, sub-pixel rounding can leave tiny gaps.
- *   Expanding each triangle slightly ensures edges overlap, eliminating gaps.
+ * WHY THIS EXISTS:
+ *   Without explicit seam expansion, rasterization rounding may expose
+ *   cracks between adjacent triangles. This function makes seams visually
+ *   robust across rendering contexts.
  */
 
 "use strict";

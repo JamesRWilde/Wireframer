@@ -10,10 +10,10 @@
  *   Called by toRuntime before parsing begins. Acts as a gatekeeper
  *   to catch invalid input early with clear error messages.
  * 
- * VALIDATION CHECKS:
- *   1. Input is not null or undefined
- *   2. Input is a string
- *   3. Splitting produces at least one line
+ * WHY THIS EXISTS:
+ *   Parsing only valid text avoids later failures in mesh creation.
+ *   This helper standardizes errors and supports consistent loader
+ *   behavior across engines.
  */
 
 /**

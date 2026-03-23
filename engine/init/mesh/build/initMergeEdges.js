@@ -1,12 +1,17 @@
 /**
  * mergeEdges.js - Merge and dedupe edge sets (OBJ + face-derived)
  *
- * Purpose:
+ * PURPOSE:
  *   Merge explicit OBJ edges and face-derived edges into one unique list
  *   while preserving author-provided edges first and deduplicating.
  *
- * Architecture:
- *   One function per file requirement. This module exports only mergeEdges.
+ * ARCHITECTURE ROLE:
+ *   Used by OBJ mesh loader to combine explicit and inferred edges in a
+ *   deterministic manner.
+ *
+ * WHY THIS EXISTS:
+ *   Ensures edge merging is centralized for consistent behavior and to
+ *   avoid duplication in different parsers/loaders.
  */
 
 "use strict";

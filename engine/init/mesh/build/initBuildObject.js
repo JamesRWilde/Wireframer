@@ -10,6 +10,10 @@
  *   Called by toRuntime after parsing is complete. Produces the mesh
  *   object format expected by the engine's rendering pipeline.
  *
+ * WHY THIS EXISTS:
+ *   Provides a single canonical mesh object shape for the renderer, avoiding
+ *   duplicates and ensuring consistent properties across loaded content.
+ *
  * MESH OBJECT STRUCTURE:
  *   - V: Vertex positions (with embedded normals and UVs)
  *   - F: Face index arrays (objects with indices, material, etc.)

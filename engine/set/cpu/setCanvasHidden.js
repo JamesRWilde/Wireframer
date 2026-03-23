@@ -10,7 +10,11 @@
  *   Called by renderCpuPath and renderGpuPath to manage canvas visibility.
  *   The CPU canvas should be visible when using CPU rendering and hidden
  *   when using GPU rendering to avoid visual conflicts.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates visibility control and avoids function-level DOM style updates
+ *   in multiple rendering flow branches.
+ *
  * WHY CSS DISPLAY:
  *   We use CSS display (none/block) rather than visibility or opacity because:
  *   - display: none removes the element from layout (no rendering overhead)

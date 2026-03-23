@@ -12,6 +12,10 @@
  *   version. detailLevel() then decimates from CPU_BASE_MODEL for the
  *   detail slider, ensuring CPU mode never exceeds the caps.
  *
+ * WHY THIS EXISTS:
+ *   Keeps CPU performance safe by preemptively capping extreme meshes and
+ *   expresses the CPU path's constraint policy in a single helper.
+ *
  * RATIONALE:
  *   Complex meshes (e.g. pinecone: 40000+ verts) bring CPU rendering to
  *   single-digit FPS. By capping at a safe maximum, CPU mode stays usable

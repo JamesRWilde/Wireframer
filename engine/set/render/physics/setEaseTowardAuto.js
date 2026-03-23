@@ -11,6 +11,10 @@
  * ARCHITECTURE ROLE:
  *   Called each physics frame when auto-rotation is active. Uses a
  *   fixed easing factor of 0.04 for smooth interpolation.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a dedicated easing function so rotation target updates are
+ *   smooth and isolated from general physics update logic.
  */
 
 import { physicsState } from '@engine/state/render/statePhysicsState.js';

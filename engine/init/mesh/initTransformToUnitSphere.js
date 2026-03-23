@@ -1,7 +1,16 @@
 /**
  * transformToUnitSphere.js - Transforms points from center/radius to unit sphere
  *
- * One function per file module.
+ * PURPOSE:
+ *   Normalizes mesh vertices to unit sphere coordinates given center/radius.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used during mesh normalization to map bounding sphere geometry to [-1,1]
+ *   coordinate space for consistent rendering behavior.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a central normalization step so transformations are identical
+ *   for all meshes and avoids repeated manual coordinate math.
  */
 
 "use strict";

@@ -1,9 +1,16 @@
 /**
- * geometryGetTriNormals.js - Helper to return triangleNormals if present
+ * utilTriNormals.js - Helper to return triangleNormals if present
  *
  * PURPOSE:
  *   Returns a copy of model.triangleNormals if present, or null otherwise.
  *   Used to provide precomputed per-corner normals for each triangle, if available.
+ *
+ * ARCHITECTURE ROLE:
+ *   Utility in engine/util/cpu/geometry that supports normal preprocessing in render paths.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a defensive read of precomputed triangle normals and avoids mutating
+ *   shared arrays while preserving cached data for fast CPU shading.
  *
  * @param {Object} model - Model object, may contain triangleNormals property
  * @param {number} triCount - Number of triangles expected in the output

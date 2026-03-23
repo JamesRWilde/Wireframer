@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by the HUD telemetry module to update stat display elements
  *   with computed values (FPS, frame budget, etc.).
+ *
+ * WHY THIS EXISTS:
+ *   Provides a small, safe wrapper for stat text updates and idempotent null
+ *   checking in one place.
  */
 
 "use strict";

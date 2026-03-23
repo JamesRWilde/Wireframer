@@ -10,6 +10,10 @@
  *   with a simple per-triangle rendering loop. Each triangle is drawn completely
  *   (fill then edges) before moving to the next.
  *
+ * WHY THIS EXISTS:
+ *   Provides an alternative unified raster path for fallback or debugging, allowing
+ *   CPU rendering to be simplified and turbo-charged by single-pass loop logic.
+ *
  * RENDERING APPROACH:
  *   1. Sort triangles back-to-front (painter's algorithm)
  *   2. For each triangle:

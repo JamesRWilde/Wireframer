@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by initRenderPipeline() and setToggleRenderMode(). Configures
  *   the render function pointer to use CPU rendering and updates UI.
+ *
+ * WHY THIS EXISTS:
+ *   Ensures a clearly documented path for CPU rendering initialization and
+ *   maintains a consistent mode switch contract.
  */
 
 "use strict";

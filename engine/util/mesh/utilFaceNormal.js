@@ -8,6 +8,11 @@
  * ARCHITECTURE ROLE:
  *   Used by winding detection (fixWinding) and any mesh analysis that
  *   needs face orientation without requiring precomputed normals.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a single source of truth for face normal calculations
+ *   enabling consistent orientation tests and geometric checks
+ *   without duplication.
  */
 
 "use strict";

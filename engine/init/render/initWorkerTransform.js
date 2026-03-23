@@ -12,6 +12,10 @@
  *
  * SIDE EFFECTS:
  *   - Mutates vertexTransformState (worker, workerAvailable, cachedResult, etc.)
+ *
+ * WHY THIS EXISTS:
+ *   Defines worker startup and events for vertex transform offloading,
+ *   enabling responsive rendering in complex scenes.
  */
 
 "use strict";

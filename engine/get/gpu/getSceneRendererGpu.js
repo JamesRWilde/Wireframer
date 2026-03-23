@@ -11,6 +11,10 @@
  *   Called by setDrawSceneModel and other GPU render modules to obtain the
  *   renderer. This is the single entry point for GPU renderer access.
  *
+ * WHY THIS EXISTS:
+ *   Ensures reliable GPU renderer lifetime management and avoids duplicate
+ *   initialization code paths.
+ *
  * DETAILS:
  *   - Returns cached renderer if already created
  *   - Returns null immediately if GPU previously failed (fast fail path)

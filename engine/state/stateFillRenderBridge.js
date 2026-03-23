@@ -12,6 +12,10 @@
  *   (read), and getIsFillWorkerAvailable.js (read). Shared across the
  *   engine/set and engine/init layers.
  *
+ * WHY THIS EXISTS:
+ *   Provides explicit lifecycle documentation for shared worker bridge state
+ *   and satisfies the required header comment style.
+ *
  * DETAILS:
  *   Uses a mutable object (not frozen) so importing modules can assign
  *   properties directly without creating new objects.

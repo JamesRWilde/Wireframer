@@ -9,6 +9,10 @@
  *   Called when theme changes (color selection, mode toggle).
  *   Updates renderState and CSS custom properties.
  *
+ * WHY THIS EXISTS:
+ *   Provides a single point for applying theme colors so all paths share
+ *   identical CSS variable and render state updates.
+ *
  * DATA FORMAT:
  *   - Custom theme palette contains color arrays and CSS variable strings.
  *

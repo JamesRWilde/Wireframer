@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by color manipulation functions to validate RGB values.
  *   Provides consistent byte clamping across color utilities.
+ *
+ * WHY THIS EXISTS:
+ *   Keeps color component sanitization centralized and prevent invalid
+ *   channel values from reaching rendering logic.
  */
 
 "use strict";

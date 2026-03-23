@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by qualityApplyChange.js to compare current vs target
  *   quality levels numerically.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates quality priority scoring so threshold logic doesn’t leak
+ *   into multiple modules.
  */
 
 "use strict";

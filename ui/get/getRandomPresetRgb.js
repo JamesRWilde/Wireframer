@@ -9,6 +9,10 @@
  *   Used by the theme UI when selecting a random preset color. Ensures generated
  *   colors are bright and varied enough to appear distinct from default themes.
  *
+ * WHY THIS EXISTS:
+ *   Standardizes random preset generation with contrast/saturation checks so the
+ *   random option produces usable colors.
+ *
  * @returns {number[]} RGB array [r, g, b]
  */
 

@@ -10,6 +10,10 @@
  *   zoom value to compute field-of-view. Input handlers write zoom on wheel
  *   events. FitCamera writes zoom + bounds after model load.
  *
+ * WHY THIS EXISTS:
+ *   Completes header standardization and clarifies zoom state responsibilities
+ *   for future refactors.
+ *
  * DEFAULTS:
  *   - zoom: 1.0 (no zoom)
  *   - zoomMin: 0.45 (zoomed out limit)

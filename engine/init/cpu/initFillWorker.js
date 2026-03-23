@@ -11,6 +11,10 @@
  *   pipeline. The worker receives render commands and returns rendered
  *   ImageBitmaps for compositing onto the main canvas.
  *
+ * WHY THIS EXISTS:
+ *   Provides a reusable worker setup for CPU fill path that handles platform
+ *   capability detection and worker lifecycle in one place.
+ *
  * SIDE EFFECTS:
  *   - Mutates fillRenderState (worker, offscreenCanvas, workerReady, etc.)
  *   - Posts init message to worker with OffscreenCanvas transfer

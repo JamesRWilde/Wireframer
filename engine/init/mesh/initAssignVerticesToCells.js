@@ -10,7 +10,11 @@
  *   Called by greedyClusterDecimator to partition vertices into spatial cells.
  *   The cell size is computed based on the target face count to achieve the
  *   desired level of decimation.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Provides an independent cell assignment helper so clustering logic stays
+ *   separate from vertex merge logic, and both can be unit tested.
+ *
  * HOW IT WORKS:
  *   1. Creates a 3D grid covering the mesh's bounding box
  *   2. Assigns each vertex to a cell based on its position

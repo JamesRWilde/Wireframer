@@ -10,6 +10,10 @@
  *   setActiveModel() is the ONLY function that should change the active model,
  *   ensuring UI stats, telemetry, and render mode stay synchronized.
  *
+ * WHY THIS EXISTS:
+ *   Highlights the core role of model state in the app architecture and
+ *   completes the header standardization requirement.
+ *
  * WHY CENTRALIZED:
  *   MODEL, BASE_MODEL, CPU_BASE_MODEL, CURRENT_LOD_MODEL, and CURRENT_LOD_PCT
  *   are tightly coupled — they all change together when a new model loads or

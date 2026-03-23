@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by triangulateFaceEarClipping to validate potential ears.
  *   Uses barycentric coordinates for an efficient and robust test.
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes point-in-triangle truth in one helper so triangulation and
+ *   collision geometry checks use the same precise logic.
  * 
  * MATHEMATICAL BASIS:
  *   Uses barycentric coordinates to express the point as a weighted combination

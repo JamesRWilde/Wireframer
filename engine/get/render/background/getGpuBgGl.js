@@ -1,7 +1,14 @@
 /**
- * gpuBackgroundGl.js - Get GPU background WebGL context
+ * getGpuBgGl.js - Gets GPU Background WebGL Context
  *
- * One function per file module.
+ * PURPOSE:
+ *   Returns or initializes the WebGL context for the GPU background canvas.
+ *
+ * ARCHITECTURE ROLE:
+ *   Getter module in engine/get/render/background for GPU path context retrieval.
+ *
+ * WHY THIS EXISTS:
+ *   Ensures there's a single, cached path for WebGL context creation and reuse.
  */
 
 "use strict";
@@ -10,7 +17,7 @@ import { bgState } from '@engine/state/render/background/stateBackgroundState.js
 import { getGpuBgCanvas } from '@engine/get/render/background/getGpuBgCanvas.js';
 
 /**
- * gpuBackgroundGl - Returns the GPU background WebGL context, creating it if needed
+ * getGpuBgGl - Returns the GPU background WebGL context, creating it if needed
  *
  * @returns {WebGLRenderingContext|null} The WebGL context or null if unavailable
  */

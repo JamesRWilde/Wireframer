@@ -10,7 +10,11 @@
  *   Called by load after the model has been validated, processed, and
  *   the camera has been fitted. Handles the transition from the old model
  *   to the new one, either instantly or via morph animation.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Isolates final transition logic so morph and instant path can be
+ *   managed consistently without cluttering the main loader.
+ *
  * WHY SEPARATE:
  *   The finalization logic is complex (morph vs instant, LOD setup, callback
  *   handling) and benefits from being isolated for maintainability.

@@ -13,6 +13,10 @@
  *   run with zero setup cost per frame. All meshes are in bounding sphere
  *   space (radius 1, centre at origin), so no alignment step is needed.
  *
+ * WHY THIS EXISTS:
+ *   Allows expensive morph setup to be done once, enabling smooth per-frame
+ *   morph updates with low CPU cost.
+ *
  * MORPH PIPELINE:
  *   startMorph → [advanceMorphFrame x N frames] → completion
  *     1. Decimate both meshes to MORPH_DETAIL (10% vertex count)

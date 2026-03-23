@@ -10,13 +10,10 @@
  *   Called by load before processing mesh data. Ensures the mesh
  *   has valid V (vertices) and F (faces) arrays with minimum counts.
  * 
- * WHY VALIDATE:
- *   Mesh data can be malformed due to:
- *   - Parser errors
- *   - Invalid OBJ files
- *   - Network corruption
- *   - Programming errors in mesh generators
- *   Early validation prevents cryptic errors later in the pipeline.
+ * WHY THIS EXISTS:
+ *   Mesh data may be malformed for many reasons including parser errors,
+ *   invalid source files, or corrupted network transfers. Early validation
+ *   reduces hard to debug pipeline failures and improves developer UX.
  */
 
 /**

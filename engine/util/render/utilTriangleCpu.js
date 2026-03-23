@@ -4,6 +4,13 @@
  * PURPOSE:
  *   Computes the shaded color for a triangle using Blinn-Phong lighting.
  *   Combines ambient, diffuse, and specular components for realistic shading.
+ *
+ * ARCHITECTURE ROLE:
+ *   Used by fill renderer to calculate triangle color for CPU rasterization.
+ *
+ * WHY THIS EXISTS:
+ *   Extracts triangle lighting calculations into a dedicated utility to
+ *   ensure consistent rendering behavior and easier maintenance.
  */
 
 "use strict";

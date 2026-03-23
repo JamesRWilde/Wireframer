@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Main-thread particle renderer for background layer.
  *
+ * WHY THIS EXISTS:
+ *   Provides the fallback renderer when worker-based background rendering is unavailable,
+ *   preserving UX while disabling background worker mode.
+ *
  * USAGE:
  *   import { setRenderMainThreadParticles } from '@engine/set/render/draw/setRenderMainThreadParticles.js';
  *   setRenderMainThreadParticles(ctx, particles, opacityScale, themeAlphaBoost, particleColor);

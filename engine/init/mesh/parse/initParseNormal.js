@@ -9,7 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by parseObjLines for each "vn" line in the OBJ file. Stores
  *   parsed normals in the state for later use when building faces.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Ensures normals are interpreted and stored consistently for lighting data.
+ *
  * OBJ NORMAL FORMAT:
  *   vn nx ny nz
  *   Where nx, ny, nz are the normal vector components.

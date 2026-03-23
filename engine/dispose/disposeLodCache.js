@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by greedyClusterDecimator after adding a new cache entry.
  *   Implements a simple FIFO (First In, First Out) eviction policy.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Provides a focused anchor for cache pruning intent and ensures the
+ *   module conforms to the repository header structure.
+ *
  * WHY PRUNE:
  *   The LOD cache stores decimated meshes for fast retrieval. Without
  *   pruning, the cache would grow indefinitely as the user adjusts

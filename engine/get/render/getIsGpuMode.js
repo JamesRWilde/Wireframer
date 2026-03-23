@@ -6,10 +6,14 @@
  *
  * ARCHITECTURE ROLE:
  *   Getter module in engine/get/render/.
+ *
+ * WHY THIS EXISTS:
+ *   Provides clear API for runtime routing between GPU and CPU render paths.
  */
 
 "use strict";
 
+// Import GPU mode tracking state from set layer.
 import { gpuModeState } from '@engine/set/render/setGpuModeState.js';
 
 /**

@@ -8,6 +8,10 @@
  *   Used during initialization to restore the user's saved custom color.
  *   Ensures values are clamped and defaults are used on corruption.
  *
+ * WHY THIS EXISTS:
+ *   Provides a resilient custom color loading routine that avoids broken
+ *   themes when localStorage values are malformed or missing.
+ *
  * DATA FORMAT:
  *   - Stored in localStorage as JSON array [r,g,b].
  *

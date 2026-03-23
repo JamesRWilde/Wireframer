@@ -10,16 +10,15 @@
  *   Called by renderScene each frame to decide which mesh to render.
  *   Part of the morph API exposed globally via morphApi.js.
  * 
- * WHY SEPARATE:
- *   This simple accessor provides a clean boolean check without exposing
- *   internal state details. It's more readable than checking morphState.active
- *   directly throughout the codebase.
+ * WHY THIS EXISTS:
+ *   Provides a minimal boolean accessor for morph status checks so render
+ *   logic stays clear and decoupled from internal morph state representation.
  */
 
 "use strict";
 
-// Import morph state to check active flag
-import {morphState} from '@engine/state/mesh/stateMorph.js';
+// Import morph state to check active flag and avoid state duplication across modules
+import { morphState } from '@engine/state/mesh/stateMorph.js';
 
 /**
  * getIsMorphing - Checks if a morph animation is in progress

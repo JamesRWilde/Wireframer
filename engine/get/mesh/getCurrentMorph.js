@@ -1,33 +1,31 @@
 /**
- * currentMorph.js - Current Morph Mesh Accessor
+ * getCurrentMorph.js - Current Morph Mesh Accessor
  * 
  * PURPOSE:
- *   Returns the current interpolated mesh during a morph animation. This is
- *   called by renderScene to get the mesh to render each frame while a morph
- *   is in progress.
+ *   Returns the current interpolated mesh during a morph animation.
+ *   This is called by renderScene to choose frame-by-frame morph output.
  * 
  * ARCHITECTURE ROLE:
- *   Called by renderScene each frame to determine which mesh to render.
- *   Part of the morph API exposed globally via morphApi.js.
+ *   Called by renderScene each frame to decide whether to render morph mesh.
+ *   Part of the morph API contract in engine/get/mesh.
  * 
- * WHY SEPARATE:
- *   This accessor provides a clean interface for checking morph state and
- *   getting the current mesh without exposing internal state details.
+ * WHY THIS EXISTS:
+ *   Provides a focused getter that abstracts morph state and protects from
+ *   direct state access, ensuring consistency in render consumer code.
  */
 
 "use strict";
 
-// Import morph state to check if morph is active
-import {morphState} from '@engine/state/mesh/stateMorph.js';
+// Import morph state to determine active morph and output mesh pointer
+import { morphState } from '@engine/state/mesh/stateMorph.js';
 
 /**
  * currentMorph - Gets the current interpolated mesh
  * 
  * @returns {Object|null} The current interpolated mesh, or null if no morph is active
  * 
- * During a morph animation, this returns the intermediate mesh at the current
- * progress point. When no morph is active, returns null so renderScene knows
- * to use the regular model.
+ * During a morph animation, returns intermediate mesh at current progress point.
+ * When no morph is active, returns null for fallback to base geometry.
  */
 export function getCurrentMorph() {
   // Return current mesh if morph is active, otherwise null

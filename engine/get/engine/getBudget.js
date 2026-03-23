@@ -11,6 +11,10 @@
  *   rendering quality based on performance. Returns the current quality
  *   level after evaluation.
  *
+ * WHY THIS EXISTS:
+ *   Abstracts adaptive performance logic into a single component so tuning
+ *   and fixes happen in one place.
+ *
  * FLOW:
  *   1. Compute average frame time from circular buffer
  *   2. Determine target quality based on budget thresholds

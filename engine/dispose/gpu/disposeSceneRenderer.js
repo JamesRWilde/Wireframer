@@ -10,6 +10,10 @@
  *   Called by setDrawSceneModel when a GPU rendering error is caught.
  *   Also callable directly when GPU initialization fails. Ensures
  *   graceful degradation to the CPU render path.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a clear failover pathway for GPU rendering errors and
+ *   centralizes GPU failure handling.
  */
 
 "use strict";

@@ -12,12 +12,10 @@
  *   Called by load to clean up edge data before creating the model object.
  *   Ensures the edge list only contains valid, renderable edges.
  * 
- * WHY FILTER:
- *   Edge lists can contain invalid entries due to:
- *   - Parser errors or malformed input
- *   - Degenerate geometry (zero-area faces)
- *   - Duplicate edge detection artifacts
- *   Filtering prevents rendering errors and improves performance.
+ * WHY THIS EXISTS:
+ *   Invalid edges can cause renderer exceptions and visual artifacts. This
+ *   utility centralizes edge validation and deduplication to avoid
+ *   inconsistent behavior across loaders.
  */
 
 /**

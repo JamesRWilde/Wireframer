@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by buildCustomTheme to create theme color variations.
  *   Used extensively for generating UI colors from base color.
+ *
+ * WHY THIS EXISTS:
+ *   Consolidates RGB mixing behavior in one helper so generated theme
+ *   colors remain consistent and easy to read.
  */
 
 "use strict";

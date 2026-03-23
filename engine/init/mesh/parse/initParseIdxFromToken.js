@@ -9,7 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by parseFace to extract indices from each vertex reference in a face.
  *   Converts OBJ's 1-based indices to 0-based indices for internal use.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Consolidates face token index parsing and support for all OBJ index forms in one place.
+ *
  * OBJ FACE FORMATS:
  *   - "v": Position only
  *   - "v/vt": Position and texture coordinate

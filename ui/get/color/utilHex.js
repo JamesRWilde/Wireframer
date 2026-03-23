@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by updateCustomColor and initPresetSwatches to display
  *   color values in hex format.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a single consistent conversion from RGB array to CSS hex
+ *   so color text labels are accurate and consistent.
  */
 
 "use strict";

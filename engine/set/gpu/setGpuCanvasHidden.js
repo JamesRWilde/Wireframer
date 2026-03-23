@@ -11,6 +11,10 @@
  *   The GPU canvas should be visible when using GPU rendering and hidden
  *   when using CPU rendering to avoid visual conflicts.
  *
+ * WHY THIS EXISTS:
+ *   Wraps GPU visibility rules (especially WebGL constraints) so render path
+ *   switching can remain high-level and declarative.
+ *
  * WHY VISIBILITY (NOT DISPLAY):
  *   - display: none prevents WebGL context creation in Chrome
  *   - visibility: hidden keeps the element in the render tree (WebGL works)

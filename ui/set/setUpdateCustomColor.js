@@ -8,6 +8,9 @@
  * ARCHITECTURE ROLE:
  *   Called when custom color values change (either via sliders or preset swatches)
  *   to ensure the UI reflects the latest RGB values and updates the active swatch.
+ *
+ * WHY THIS EXISTS:
+ *   Guarantees UI controls are always consistent with the current theme color state.
  */
 
 "use strict";

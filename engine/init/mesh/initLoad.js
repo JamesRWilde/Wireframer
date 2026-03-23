@@ -11,6 +11,10 @@
  *   for OBJ files and by other modules that need to process mesh data.
  *   Registers the loader function in module state via setInitMeshEngineLoad.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes the model loading pipeline so validation, normalization, and
+ *   pipeline steps are maintained in one robust path and not duplicated.
+ *
  * PIPELINE STEPS:
  *   1. Validate mesh data structure
  *   2. Build edges from faces (if not provided)

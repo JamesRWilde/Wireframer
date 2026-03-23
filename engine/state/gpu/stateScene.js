@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Extracted to a separate file to avoid circular dependencies between
  *   sceneRenderer.js and disableSceneRenderer.js.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes GPU scene renderer lifecycle flags in a shared mutable state
+ *   container, enabling failover and cleanup logic to read/update status.
+ *
  * Uses a mutable object so all modules share the same reference.
  */
 

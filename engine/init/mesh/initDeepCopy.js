@@ -10,7 +10,10 @@
  *   Used by LOD algorithms to return copies of cached meshes, preventing
  *   cache pollution. Also used when creating modified versions of meshes
  *   without affecting the original.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Ensures a shared deep-copy utility is used consistently where clone semantics are needed, preventing accidental mutation bugs.
+ *
  * WHY DEEP COPY:
  *   JavaScript objects are passed by reference. Without deep copying,
  *   modifications to a "copy" would affect the original. This is

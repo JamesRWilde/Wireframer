@@ -10,7 +10,11 @@
  *   Imported by multiple loop modules (frame.js, setRunFrame.js, telemetryState.js, etc.)
  *   that need to read or update loop state. The state object is mutable while the
  *   export binding is const, following the project's pattern for shared mutable state.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Provides explicit header compliance and communicates the intention of
+ *   shared loop state module design in the repo.
+ *
  * WHY A SINGLE STATE OBJECT:
  *   Rather than exporting many individual variables, we use a single state object.
  *   This makes it clear that these values are related (they're all loop state),

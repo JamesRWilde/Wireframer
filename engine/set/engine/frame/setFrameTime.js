@@ -10,6 +10,10 @@
  *   frame timing. The recorded times are consumed by averageTime.js
  *   and budget.js for quality level decisions.
  *
+ * WHY THIS EXISTS:
+ *   Isolates frame timing persistence so quality and budget calculations can
+ *   remain stateless and purely analytical.
+ *
  * DETAILS:
  *   Uses a circular buffer (Float32Array) to avoid allocation overhead.
  *   The index wraps around after WINDOW_SIZE entries.

@@ -10,7 +10,11 @@
  *   Called by load after a new model is loaded. Computes the model's
  *   bounding box and adjusts zoom, center, and depth parameters to fit
  *   the model in the viewport.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Ensures consistent camera framing for any mesh load, preventing extreme
+ *   scale differences from requiring manual adjustment by the user.
+ *
  * WHY AUTOMATIC FITTING:
  *   Models can have vastly different scales (a tiny sphere vs a large
  *   Menger sponge). Automatic fitting ensures all models are visible

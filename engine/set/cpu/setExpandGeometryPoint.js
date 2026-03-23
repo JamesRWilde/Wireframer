@@ -7,6 +7,14 @@
  *   Moves a 2D point outward from a given centroid by a specified distance.
  *   Used for triangle seam expansion to prevent visible gaps between triangles.
  *
+ * ARCHITECTURE ROLE:
+ *   Called by triangle filling logic to on-the-fly inflate triangle vertices.
+ *   Helps avoid drawing cracks when coordinating adjacent triangle fill regions.
+ *
+ * WHY THIS EXISTS:
+ *   This helper centralizes geometric expansion behavior so the CPU fill path
+ *   uses consistent seam handling without inlining this math.
+ *
  * @param {number} px - Point X coordinate
  * @param {number} py - Point Y coordinate
  * @param {number} mx - Centroid X coordinate

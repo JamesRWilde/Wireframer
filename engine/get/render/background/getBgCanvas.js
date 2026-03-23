@@ -10,6 +10,10 @@
  *   Called by setDrawBackground to get the canvas for rendering. Centralizes
  *   canvas access and dimension synchronization.
  * 
+ * WHY THIS EXISTS:
+ *   Prevents duplicate dimension-sync and context lookup logic in multiple
+ *   places, and ensures background rendering always uses the correct resolution.
+ * 
  * WHY SYNCHRONIZE DIMENSIONS:
  *   Canvas pixel dimensions must match CSS dimensions for crisp rendering.
  *   We update width/height from clientWidth/clientHeight each frame to

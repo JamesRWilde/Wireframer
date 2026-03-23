@@ -1,5 +1,20 @@
 'use strict';
 
+/**
+ * setRebuildDerivedCache.js - Recompute Derived Render State Cache
+ *
+ * PURPOSE:
+ *   Recalculates derived render values (shades, fill colors, edge colors)
+ *   when theme state changes.
+ *
+ * ARCHITECTURE ROLE:
+ *   Called by get render getters when theme version changes to keep cached
+ *   dependent values in sync.
+ *
+ * WHY THIS EXISTS:
+ *   Avoids recomputing derived color data on every render call by tracking
+ *   theme versions and rebuilding only when needed.
+ */
 import { renderState } from '@engine/state/render/stateRenderState.js';
 import { utilRelativeLuminanceRaw } from '@engine/util/render/utilRelativeLuminanceRaw.js';
 

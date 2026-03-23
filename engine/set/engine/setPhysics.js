@@ -11,6 +11,10 @@
  *   matrix via physicsState setters so the rendering pipeline reads a fresh
  *   matrix each frame to transform vertices.
  *
+ * WHY THIS EXISTS:
+ *   Encapsulates per-frame rotation physics, including auto-rotation and drag,
+ *   so the simulation can be maintained and tuned separately from rendering.
+ *
  * PHYSICS MODEL:
  *   - Angular velocities (wx, wy, wz) control rotation speed around each axis
  *   - Auto-rotation gradually eases velocities toward AUTO_* targets

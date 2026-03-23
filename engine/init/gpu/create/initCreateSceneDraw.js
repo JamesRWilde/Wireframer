@@ -10,6 +10,10 @@
  *   Called by sceneRenderer during GPU initialization. Encapsulates the
  *   WebGL draw pipeline behind a simple interface consumed by the
  *   render loop.
+ *
+ * WHY THIS EXISTS:
+ *   Documents this module as the GPU draw API factory and makes intent
+ *   explicit for maintainers.
  */
 
 "use strict";

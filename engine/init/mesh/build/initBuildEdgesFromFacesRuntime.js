@@ -8,7 +8,11 @@
  * ARCHITECTURE ROLE:
  *   Called during mesh loading to build the edge array (E) from face data (F).
  *   The edge array is used by wireframe rendering and edge classification.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes edge extraction so face-to-edge mapping is consistent and
+ *   the same algorithm is used for all mesh loads.
+ *
  * EDGE EXTRACTION:
  *   For each face with indices [a, b, c, ...], edges are:
  *   (a,b), (b,c), (c,...), ..., (last,a)

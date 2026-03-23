@@ -12,6 +12,10 @@
  *   2. Render filled triangles (Blinn-Phong lit)
  *   3. Render wireframe edges (depth-faded)
  *
+ * WHY THIS EXISTS:
+ *   Provides a single entry point for full GPU model rendering so all render
+ *   path assumptions (state, blend modes, uniforms) are configured together.
+ *
  * DETAILS:
  *   Uses pre-allocated temporary arrays to avoid per-frame allocation.
  *   Fill uses alpha blending (SRC_ALPHA, ONE_MINUS_SRC_ALPHA).

@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Worker-path particle renderer for background layer.
  *
+ * WHY THIS EXISTS:
+ *   Translates worker-provided particle buffers into efficient main-thread rendering
+ *   while keeping the worker interface separate from draw execution.
+ *
  * USAGE:
  *   import { setRenderWorkerParticles } from '@engine/set/render/draw/setRenderWorkerParticles.js';
  *   setRenderWorkerParticles(ctx, data, count, opacity, particleColor, themeMode);

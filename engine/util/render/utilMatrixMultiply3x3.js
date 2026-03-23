@@ -9,6 +9,10 @@
  *   Used by rotationInitialize() to combine rotation matrices, and available
  *   for any other matrix composition needs.
  * 
+ * WHY THIS EXISTS:
+ *   Provides a single, tested matrix multiplication implementation to
+ *   avoid math errors from duplicated logic and to support stable rotation blending.
+ * 
  * MATRIX LAYOUT:
  *   Matrices are stored as flat arrays in row-major order:
  *   [m00, m01, m02, m10, m11, m12, m20, m21, m22]

@@ -11,6 +11,10 @@
  *   the nested array format used by the CPU fill renderer and other
  *   modules.
  *
+ * WHY THIS EXISTS:
+ *   Avoids duplicating the flat-to-nested conversion logic and clearly
+ *   documents data layout semantics between worker and CPU code.
+ *
  * DETAILS:
  *   The worker returns flat arrays for transfer efficiency. This
  *   converter restores the nested format without modifying the originals.

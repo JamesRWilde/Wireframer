@@ -9,7 +9,11 @@
  *   Receives flat Float32Array vertex data and rotation matrix, computes
  *   transformed 3D positions (T) and projected 2D screen coordinates (P2),
  *   then transfers results back to main thread via zero-copy transferable.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Documents worker-side transform logic so main thread GPU pathways understand
+ *   offloaded computation expectations and for easier debugging of worker flows.
+ *
  * MESSAGE PROTOCOL:
  *   Main → Worker:
  *     { type: 'transform', vertices: Float32Array, rotation: Float32Array,

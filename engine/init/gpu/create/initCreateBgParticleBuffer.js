@@ -5,6 +5,14 @@
  *   Encapsulates the logic for converting an array of particle objects into a Float32Array
  *   and uploading it to a WebGL buffer for use in the GPU background renderer.
  *
+ * ARCHITECTURE ROLE:
+ *   Called by initCreateBackgroundRenderer in the GPU pipeline to transfer
+ *   particle simulation state to GPU memory.
+ *
+ * WHY THIS EXISTS:
+ *   Provides a module-level explanation for why this buffer upload helper is
+ *   necessary and conforms to repository header requirements.
+ *
  * PARAMETERS:
  *   @param {WebGLRenderingContext} gl - The WebGL context
  *   @param {WebGLBuffer} buffer - The buffer to upload data into

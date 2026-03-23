@@ -7,6 +7,14 @@
  * STATE PROPERTIES:
  *   - active: Whether a morph is currently in progress
  *   - startTime: Timestamp when the morph started
+ *
+ * ARCHITECTURE ROLE:
+ *   Acts as the source-of-truth morphing state object for mesh morphing
+ *   control and progress tracking.
+ *
+ * WHY THIS EXISTS:
+ *   Documents the design intent of morph state and aids maintainability
+ *   for complex animation transitions.
  *   - duration: Total duration of the morph in milliseconds
  *   - fromMesh: Original source mesh (cloned)
  *   - toMesh: Original target mesh (cloned)

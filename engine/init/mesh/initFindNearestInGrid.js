@@ -1,10 +1,16 @@
 /**
  * findNearestInGrid.js - helper for nearest neighbor search in spatial grid
  *
- * Architecture:
- *   Internal helper (one function) for managing nested loops and candidate
- *   cell checks. This keeps `probeGrid.js` lightweight and reduces its
- *   Cognitive Complexity.
+ * PURPOSE:
+ *   Finds the closest vertex to a query point using a spatial hash grid.
+ *
+ * ARCHITECTURE ROLE:
+ *   Internal helper for probeGrid; handles optimization of search rings and
+ *   early exit conditions.
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates performance-critical nearest-neighbor grid probing so the
+ *   higher-level mesh solver code remains easy to understand and maintain.
  */
 
 "use strict";

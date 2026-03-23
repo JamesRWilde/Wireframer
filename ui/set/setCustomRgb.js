@@ -9,6 +9,10 @@
  *   Acts as the single authoritative setter for the custom RGB color used by
  *   the theme system. Keeps module-scoped state and legacy global state in sync.
  *
+ * WHY THIS EXISTS:
+ *   Consolidates all custom RGB update side effects (state, UI, persistence)
+ *   into one function to prevent drift and duplication.
+ *
  * DATA FORMAT:
  *   - rgb: [r, g, b] where each component is 0-255.
  *

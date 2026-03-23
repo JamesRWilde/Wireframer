@@ -8,7 +8,11 @@
  * ARCHITECTURE ROLE:
  *   Called by contrastRatio to compute luminance values.
  *   Used by randomPresetRgb to ensure generated colors have sufficient brightness.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes WCAG luminance logic so contrast and color policy checks use
+ *   the same formula across the app.
+ *
  * WCAG FORMULA:
  *   L = 0.2126 * R + 0.7152 * G + 0.0722 * B
  *   where R, G, B are linear (not sRGB) values

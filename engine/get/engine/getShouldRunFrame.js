@@ -10,6 +10,10 @@
  *   Called at the start of setRunFrame() to decide whether to proceed with rendering
  *   or return early. When MAX_FPS is 0 (uncapped), all frames run.
  * 
+ * WHY THIS EXISTS:
+ *   Provides a central decision function for frame skipping so timing policy can
+ *   be changed in one place without scattered conditional checks.
+ * 
  * HOW IT WORKS:
  *   Compares the time since the last frame against MIN_FRAME_INTERVAL_MS.
  *   If insufficient time has passed, returns null to signal "skip this frame".

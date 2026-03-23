@@ -12,6 +12,11 @@
  *   consistent face orientation before rendering. Sets _windingFixed
  *   and _windingDirection flags on the mesh for diagnostic use.
  *
+ * WHY THIS EXISTS:
+ *   Inconsistent winding causes incorrect normals and lighting.
+ *   Normalizing face orientation early avoids rendering artifacts
+ *   and simplifies downstream mesh processing.
+ *
  * APPROACH:
  *   1. Compute the bounding box center
  *   2. For each face, compute the normal (cross product of edges)

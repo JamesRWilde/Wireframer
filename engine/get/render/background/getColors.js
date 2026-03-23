@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called by setDrawBackground to get colors for rendering.
  *
+ * WHY THIS EXISTS:
+ *   Encapsulates theme color selection precedence so calling code stays simple
+ *   and consistent.
+ *
  * COLOR RESOLUTION ORDER:
  *   1. Theme particle color (if set)
  *   2. Custom RGB color (user-selected)

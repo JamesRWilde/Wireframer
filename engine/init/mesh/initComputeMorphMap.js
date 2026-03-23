@@ -6,6 +6,14 @@
  *   on the target mesh, along with the pre-resolved target positions.
  *   Uses a spatial hash grid for O(n) performance.
  *
+ * ARCHITECTURE ROLE:
+ *   Used during morph initialization to create consistent vertex correspondences
+ *   between source and target meshes, enabling smooth interpolation.
+ *
+ * WHY THIS EXISTS:
+ *   Avoids repeated expensive nearest-neighbor search during per-frame morphing
+ *   by computing a persistent index and position map once.
+ *
  * HOW IT WORKS:
  *   1. Build a 3D spatial grid of target vertices
  *   2. For each source vertex, find the nearest target vertex

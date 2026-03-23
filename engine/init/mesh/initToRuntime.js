@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by loader.js when loading OBJ files. Consumers import the
  *   function directly and parse OBJ text without relying on globals.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Centralizes OBJ parsing and validation into one place so all
+ *   loaders produce consistent mesh objects and error handling.
+ *
  * PIPELINE:
  *   1. Validate input (must be non-null string)
  *   2. Split text into lines and validate format

@@ -9,7 +9,11 @@
  * ARCHITECTURE ROLE:
  *   Called by detailLevel to generate LOD versions of the base model.
  *   Delegates to greedyClusterDecimator for the actual decimation algorithm.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Provides a single high-level LOD API so all detail adjustments use the
+ *   same decimation behavior and fallback guards.
+ *
  * HOW IT WORKS:
  *   1. Validates input model
  *   2. Calculates target face count from percentage

@@ -9,6 +9,10 @@
  *   Given triangle vertex indices and optional smooth normals, resolves a
  *   normalized surface normal that is used by lighting and shading passes.
  *
+ * WHY THIS EXISTS:
+ *   Keeps normal computation central to avoid mismatched shadings in CPU/GPU
+ *   triangle lighting logic.
+ *
  * DATA FORMAT:
  *   - tri: [a, b, c] indices into the vertex array
  *   - T: Array of transformed 3D vertex positions (e.g. [[x,y,z], ...])

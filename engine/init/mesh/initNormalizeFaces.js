@@ -10,7 +10,11 @@
  * ARCHITECTURE ROLE:
  *   Called by LOD algorithms to ensure consistent face format before
  *   processing. This prevents errors from format mismatches.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates face format normalization so all algorithms can assume
+ *   a single face format and skip ad-hoc type checks.
+ *
  * WHY NORMALIZE:
  *   Different mesh parsers may produce different face formats. By
  *   normalizing to a single format, we simplify downstream processing

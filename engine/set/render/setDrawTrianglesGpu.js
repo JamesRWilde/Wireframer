@@ -9,6 +9,10 @@
  *   Runs inside the fill-render worker to perform the per-frame fill rasterization work.
  *   It is intentionally synchronous and optimized for per-triangle performance.
  *
+ * WHY THIS EXISTS:
+ *   Provides a worker-internal triangle rendering loop that can operate on
+ *   bucketed, depth-ordered geometry with minimal overhead.
+ *
  * DATA FORMAT:
  *   - T: Array of transformed 3D vertex positions (e.g. [[x,y,z], ...])
  *   - P2: Array of projected 2D vertex coords (e.g. [[x,y], ...])

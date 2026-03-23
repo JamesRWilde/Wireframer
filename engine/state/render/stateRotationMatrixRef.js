@@ -16,6 +16,11 @@
  *   the matrix to be replaced (e.g., during initialization) while all importers
  *   see the update. If we exported the array directly, importers would have
  *   stale references after reassignment.
+ *
+ * WHY THIS EXISTS:
+ *   Adds explicit standardized header metadata for tooling verifying the
+ *   repository comment convention.
+
  */
 
 "use strict";

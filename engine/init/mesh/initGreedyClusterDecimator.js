@@ -11,7 +11,11 @@
  *   Called by decimateByPercent to perform the actual mesh simplification.
  *   This is the core LOD algorithm that balances visual quality with
  *   performance.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates the full greedy decimation pipeline so LOD behavior is consistent
+ *   and centralized, including caching and finalization.
+ *
  * ALGORITHM OVERVIEW:
  *   1. Check cache for previously computed LOD at this detail level
  *   2. Normalize faces to consistent format

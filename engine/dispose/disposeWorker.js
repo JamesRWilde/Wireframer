@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Called during engine shutdown or when switching render modes to
  *   release the transform worker thread resources.
+ *
+ * WHY THIS EXISTS:
+ *   Houses worker shutdown behavior in a single file to avoid duplicated
+ *   cleanup logic across renderer state changes.
  */
 
 "use strict";

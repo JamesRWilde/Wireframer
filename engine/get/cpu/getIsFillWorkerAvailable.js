@@ -9,6 +9,10 @@
  * ARCHITECTURE ROLE:
  *   Called by setDrawSolidFillModel to determine which render path to
  *   use (worker vs. main thread).
+ *
+ * WHY THIS EXISTS:
+ *   Provides consistent worker readiness logic for all fill rendering
+ *   decision points, preventing scattered state checks.
  */
 
 "use strict";

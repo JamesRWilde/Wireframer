@@ -8,6 +8,10 @@
  *   Low-level rasterization helper used by the fill-render worker to draw
  *   each triangle after lighting and seam expansion.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes triangle fill drawing into a shared utility for CPU and worker
+ *   rasterizers, making behavior consistent and easier to maintain.
+ *
  * DATA FORMAT:
  *   - tri2d: [[x0,y0], [x1,y1], [x2,y2]] coordinate pairs for triangle vertices
  *   - color: [r,g,b] 0-255 values

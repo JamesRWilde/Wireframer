@@ -11,6 +11,10 @@
  *   initialized yet. Delegates particle computation to a dedicated worker
  *   thread, improving main-thread frame budget.
  *
+ * WHY THIS EXISTS:
+ *   Encapsulates worker startup and message handling in a single module,
+ *   making fallback and thread state transitions easier to reason about.
+ *
  * SIDE EFFECTS:
  *   - Mutates backgroundWorkerState (worker, workerReady, workerInitialized, etc.)
  *   - Posts init message to worker with canvas dimensions and theme settings

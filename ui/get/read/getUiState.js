@@ -8,6 +8,10 @@
  *   Used during application startup to restore slider values and theme state.
  *   Handles legacy storage key bugs by checking both the current and old keys.
  *
+ * WHY THIS EXISTS:
+ *   Provides a robust persisted state read path that is resilient to legacy
+ *   key issues and malformed data.
+ *
  * DATA FORMAT:
  *   - Stored as JSON string representing an object like { lod, fillOpacity, bgDensity, ... }
  *
