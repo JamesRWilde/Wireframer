@@ -9,9 +9,13 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/render/getWireOpacity.js
+ *
+ * WHY THIS EXISTS:
+ *   Provides stable access to opacity value used by line drawing logic.
  */
 
-import { renderState } from '@engine/state/render/renderState.js';
+// Import render state containing wire rendering properties.
+import { renderState } from '@engine/state/render/stateRenderState.js';
 
 
 /**

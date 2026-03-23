@@ -1,0 +1,28 @@
+/**
+ * viewportState.js - Canvas and Viewport Dimensions
+ *
+ * PURPOSE:
+ *   Centralized state for canvas/viewport width and height, plus projection
+ *   parameters (MODEL_CY) that depend on the loaded model.
+ *
+ * ARCHITECTURE ROLE:
+ *   Single source of truth for rendering dimensions. Written by canvas init
+ *   and resize handlers; read by projection, clearing, and GPU setup code.
+ *
+ * WHY THIS EXISTS:
+ *   Makes explicit why viewport state is in a dedicated file and preserves
+ *   the header convention for all state modules.
+ *
+ * DEFAULTS:
+ *   - W/H: Set from window.innerWidth/innerHeight during canvas init
+ *   - MODEL_CY: 0 (model centred at origin per sphere law, immutable)
+ */
+
+"use strict";
+
+// Single source of truth for viewport values.
+export const viewportState = {
+  W: 0,
+  H: 0,
+  MODEL_CY: 0,
+};

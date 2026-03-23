@@ -9,10 +9,17 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/render/getParticleColor.js
+ *
+ * WHY THIS EXISTS:
+ *   Provides a consistent accessor for particle shader/color routines and ensures
+ *   derived state is refreshed before reads.
  */
 
-import { renderState } from '@engine/state/render/renderState.js';
-import { rebuildDerivedCache } from '@engine/set/render/physics/rebuildDerivedCache.js';
+// Import render state containing particle color values.
+import { renderState } from '@engine/state/render/stateRenderState.js';
+
+// Import derived cache invalidation utility.
+import { setRebuildDerivedCache } from '@engine/set/render/physics/setRebuildDerivedCache.js';
 
 
 /**
@@ -20,6 +27,7 @@ import { rebuildDerivedCache } from '@engine/set/render/physics/rebuildDerivedCa
  * @returns {*} The current value from state.
  */
 export function getParticleColor() {
-  rebuildDerivedCache();
+  // Ensure color is up-to-date before returning.
+  setRebuildDerivedCache();
   return renderState.particleColor;
 }

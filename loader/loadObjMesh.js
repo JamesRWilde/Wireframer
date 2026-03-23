@@ -8,6 +8,10 @@
  * ARCHITECTURE ROLE:
  *   Primary mesh loading entry point. Called by UI when user selects a shape.
  *
+ * WHY THIS EXISTS:
+ *   Standardizes OBJ loading path with error handling so app logic can rely on
+ *   backfilled mesh state and active model setup.
+ *
  * USAGE:
  *   import { loadObjMesh } from '@loader/loadObjMesh.js';
  *   const mesh = await loadObjMesh('/meshes/cube.obj', 'Cube');
@@ -15,8 +19,8 @@
 
 "use strict";
 
-import { objectList } from '@engine/get/render/objectList.js';
-import { toRuntime } from '@engine/init/mesh/toRuntime.js';
+import { objectList } from '@engine/get/render/getObjectList.js';
+import { toRuntime } from '@engine/init/mesh/initToRuntime.js';
 import { getInitMeshEngineLoad } from '@engine/get/mesh/getInitMeshEngineLoad.js';
 import { setActiveModel } from '@engine/set/render/physics/model.js';
 

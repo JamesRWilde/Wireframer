@@ -9,9 +9,14 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/render/getH.js
+ *
+ * WHY THIS EXISTS:
+ *   Provides responsive render loop access to viewport dimensions without
+ *   requiring direct dependency on window size measures.
  */
 
-import { viewportState } from '@engine/state/render/viewportState.js';
+// Import viewport state object that tracks dimensions.
+import { viewportState } from '@engine/state/render/stateViewportState.js';
 
 
 /**

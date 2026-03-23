@@ -1,22 +1,30 @@
-'use strict';
-
 /**
- * setW - Set W
+ * setW.js - Set Viewport Width
  *
  * PURPOSE:
- *   Sets viewport width in css pixels.
+ *   Stores the current viewport width in CSS pixels. Read by the rendering
+ *   pipeline to set canvas dimensions, viewport uniforms, and projection.
  *
  * ARCHITECTURE ROLE:
- *   Part of the one-function-per-file module architecture.
- *   Setter Module: engine/set/render/setW.js
+ *   Setter for viewportState.W. Written by setSyncCanvasSize during
+ *   initialization and window resize. Read by GPU and CPU renderers
+ *   for viewport setup and projection calculations.
+ *
+ * WHY THIS EXISTS:
+ *   The viewport width is needed by multiple rendering stages (canvas sizing,
+ *   GPU viewport, projection matrix). This setter ensures it's stored in one
+ *   shared location and updated atomically alongside the height.
  */
 
-import { viewportState } from '@engine/state/render/viewportState.js';
+"use strict";
 
+// Import the viewport state container
+// Holds width, height, and projection parameters used by the renderers
+import { viewportState } from '@engine/state/render/stateViewportState.js';
 
 /**
- * Sets viewport width in css pixels.
- * @param {*} v - The value to set.
+ * setW - Stores the viewport width in CSS pixels
+ * @param {number} v - The viewport width in CSS pixels
  */
 export function setW(v) {
   viewportState.W = v;

@@ -10,7 +10,11 @@
  *   Called during app startup (in startApp.js) after canvas initialization.
  *   This is the ONLY place where WebGL detection happens. It sets the
  *   renderForeground function pointer and initializes the chosen pipeline.
- * 
+ *
+ * WHY THIS EXISTS:
+ *   Encapsulates the WebGL vs CPU path decision in a single function to
+ *   avoid duplicated mode checks and initialization logic.
+ *
  * INITIALIZATION FLOW:
  *   1. Check if GPU canvas exists and WebGL is available
  *   2. If WebGL available:
@@ -40,35 +44,35 @@ import { setRenderForeground } from '@engine/set/render/setRenderForeground.js';
 import { setIsGpuMode } from '@engine/set/render/setIsGpuMode.js';
 
 // Import GPU path function (for WebGL rendering)
-import { gpuPath } from '@engine/set/render/gpuPath.js';
+import { setGpuPath } from '@engine/set/render/setGpuPath.js';
 
 // Import GPU UI canvas and context state helpers
 import { getGpuCanvas } from '@engine/get/render/getGpuCanvas.js';
 import { setGpuGl } from '@engine/set/gpu/setGpuGl.js';
 
 // Import CPU path function (for Canvas 2D rendering)
-import { cpuPath } from '@engine/set/render/cpuPath.js';
+import { setCpuPath } from '@engine/set/render/setCpuPath.js';
 
 // Import canvas visibility controls
-import { canvasHidden } from '@engine/set/gpu/canvasHidden.js';
-import { canvasCpuHidden } from '@engine/set/cpu/canvasCpuHidden.js';
+import { setGpuCanvasHidden } from '@engine/set/gpu/setGpuCanvasHidden.js';
+import { setCanvasCpuHidden } from '@engine/set/cpu/setCanvasCpuHidden.js';
 
 // Import HUD updater to display the current render mode
-import { hud } from '@engine/set/engine/hud.js';
+import { setHud } from '@engine/set/engine/setHud.js';
 
 // Import GPU renderer getter (for WebGL context creation)
-import { sceneRenderer } from '@engine/get/gpu/sceneRenderer.js';
-import { bgState } from '@engine/state/render/background/backgroundState.js';
-import { createBackgroundRenderer } from '@engine/init/gpu/background/createBackgroundRenderer.js';
+import { getSceneRendererGpu } from '@engine/get/gpu/getSceneRendererGpu.js';
+import { bgState } from '@engine/state/render/background/stateBackgroundState.js';
+import { createBackgroundRenderer } from '@engine/init/gpu/background/initCreateBackgroundRenderer.js';
 
 // Import loop state to maintain backward compatibility
-import { state } from '@engine/state/loop.js';
+import { state } from '@engine/state/stateLoop.js';
 
 // Import model state for LOD management
-import { modelState } from '@engine/state/render/model.js';
+import { modelState } from '@engine/state/render/stateModel.js';
 
 // Import CPU pipeline initialization helper
-import { initializeCpuPipeline } from '@engine/init/render/pipeline/initializeCpuPipeline.js';
+import { initCpuPipeline } from '@engine/init/render/pipeline/initCpuPipeline.js';
 
 /**
  * initRenderPipeline - Detects WebGL and initializes the appropriate pipeline
@@ -84,7 +88,7 @@ export function initRenderPipeline() {
   const gpuCanvas = getGpuCanvas();
   
   if (!gpuCanvas) {
-    initializeCpuPipeline();
+    initCpuPipeline();
     return false;
   }
   
@@ -94,7 +98,7 @@ export function initRenderPipeline() {
              gpuCanvas.getContext('experimental-webgl');
   
   if (!gl) {
-    initializeCpuPipeline();
+    initCpuPipeline();
     return false;
   }
   
@@ -102,10 +106,10 @@ export function initRenderPipeline() {
   setGpuGl(gl);
   
   // Try to initialize GPU renderer
-  const renderer = sceneRenderer(gl);
+  const renderer = getSceneRendererGpu(gl);
   
   if (!renderer) {
-    initializeCpuPipeline();
+    initCpuPipeline();
     return false;
   }
   
@@ -116,7 +120,7 @@ export function initRenderPipeline() {
 
   // Set the render function pointer to GPU path
   setRenderForeground((meshToRender, backgroundOnSeparateCanvas, morphing) => {
-    return gpuPath(gl, meshToRender, morphing);
+    return setGpuPath(gl, meshToRender, morphing);
   });
   setIsGpuMode(true);
   
@@ -124,11 +128,11 @@ export function initRenderPipeline() {
   state.foregroundRenderMode = 'gpu';
   
   // Update HUD to show GPU mode
-  hud('gpu');
+  setHud('gpu');
   
   // Show GPU canvas, hide CPU canvas
-  canvasHidden(false);
-  canvasCpuHidden(true);
+  setGpuCanvasHidden(false);
+  setCanvasCpuHidden(true);
   
   // Reset LOD to full detail for GPU mode (GPU should not apply CPU LOD caps)
   modelState.currentLodPct = 1;

@@ -9,10 +9,16 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/render/getShadeBrightRgb.js
+ *
+ * WHY THIS EXISTS:
+ *   Consistent accessor for calculated shade color tier used in rendering.
  */
 
-import { renderState } from '@engine/state/render/renderState.js';
-import { rebuildDerivedCache } from '@engine/set/render/physics/rebuildDerivedCache.js';
+// Import render state storing shade color values
+import { renderState } from '@engine/state/render/stateRenderState.js';
+
+// Ensure derived render state is refreshed on each lookup
+import { setRebuildDerivedCache } from '@engine/set/render/physics/setRebuildDerivedCache.js';
 
 
 /**
@@ -20,6 +26,6 @@ import { rebuildDerivedCache } from '@engine/set/render/physics/rebuildDerivedCa
  * @returns {*} The current value from state.
  */
 export function getShadeBrightRgb() {
-  rebuildDerivedCache();
+  setRebuildDerivedCache();
   return renderState.shadeBrightRgb;
 }

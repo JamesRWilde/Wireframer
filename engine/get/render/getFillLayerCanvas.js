@@ -9,9 +9,13 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/render/getFillLayerCanvas.js
+ *
+ * WHY THIS EXISTS:
+ *   Ensures all modules access the same canvas instance when rendering fills.
  */
 
-import { canvasElementsState } from '@engine/state/render/canvasElementsState.js';
+// Import shared canvas elements state reference
+import { canvasElementsState } from '@engine/state/render/stateCanvasElementsState.js';
 
 /**
  * Returns fill layer canvas dom element.

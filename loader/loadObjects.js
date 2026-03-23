@@ -7,6 +7,9 @@
  * ARCHITECTURE ROLE:
  *   Provides object catalog data to populate UI selectors.
  *
+ * WHY THIS EXISTS:
+ *   Explicitly documents the loader abstraction boundaries for available meshes.
+ *
  * USAGE:
  *   import { loadObjects } from '@loader/loadObjects.js';
  *   const objects = await loadObjects();
@@ -14,7 +17,7 @@
 
 "use strict";
 
-import { objectList } from '@engine/get/render/objectList.js';
+import { objectList } from '@engine/get/render/getObjectList.js';
 
 export async function loadObjects() {
   try {

@@ -11,6 +11,10 @@
  *   worker to update particle state each frame. Shared between both
  *   execution contexts.
  *
+ * WHY THIS EXISTS:
+ *   Documents shared update logic and ensures the file is fully compliant
+ *   with the repository's header style.
+ *
  * DETAILS:
  *   - Wraps particles at screen edges (+4px margin)
  *   - Computes pulsing alpha using sin wave based on time and particle phase

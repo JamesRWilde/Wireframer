@@ -9,6 +9,9 @@
  *   Creates the initial particle pool that is later updated and packed for rendering.
  *   Particle count is determined by canvas size and user-configurable density.
  *
+ * WHY THIS EXISTS:
+ *   Clarifies purpose for the particle initializer and meets header standard.
+ *
  * DATA FORMAT:
  *   - particles: populated with objects { x, y, vx, vy, size, alphaBase, phase, speed }
  *

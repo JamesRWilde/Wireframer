@@ -9,6 +9,10 @@
  *   Called during app startup to initialize the object selector UI.
  *   Handles restoring a previously selected shape and persisting selection.
  *
+ * WHY THIS EXISTS:
+ *   Centralizes object dropdown initialization and selection persistence
+ *   behavior so this UI concern is not duplicated in multiple startup paths.
+ *
  * DATA FORMAT:
  *   - OBJECTS is an array of { name, obj } entries representing meshes.
  *   - The select element stores the selected index as its value.
@@ -18,9 +22,9 @@
 
 "use strict";
 
-import {objectList}from '@engine/get/render/objectList.js';
+import {objectList}from '@engine/get/render/getObjectList.js';
 import { getLoadObjMesh } from '@engine/get/mesh/getLoadObjMesh.js';
-import { state as persistState }from '@ui/set/persist/state.js';
+import { setPersistedState }from '@ui/set/persist/setPersistedState.js';
 
 
 export async function initObjectSelector(restoredShapeName = null) {
@@ -59,7 +63,7 @@ export async function initObjectSelector(restoredShapeName = null) {
     if (Number.isInteger(idx) && idx >= 0 && idx < OBJECTS.length) {
       const name = OBJECTS[idx].name;
       await loadObjMeshFn(OBJECTS[idx].obj, name);
-      persistState(OBJECTS);
+      setPersistedState(OBJECTS);
     }
   });
 }

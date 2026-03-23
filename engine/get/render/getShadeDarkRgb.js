@@ -9,10 +9,16 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/render/getShadeDarkRgb.js
+ *
+ * WHY THIS EXISTS:
+ *   Consistent accessor for darker shade variation used in style computations.
  */
 
-import { renderState } from '@engine/state/render/renderState.js';
-import { rebuildDerivedCache } from '@engine/set/render/physics/rebuildDerivedCache.js';
+// Import render state holding color and shade parameters
+import { renderState } from '@engine/state/render/stateRenderState.js';
+
+// Ensure derived render state is refreshed before returning shade data
+import { setRebuildDerivedCache } from '@engine/set/render/physics/setRebuildDerivedCache.js';
 
 
 /**
@@ -20,6 +26,6 @@ import { rebuildDerivedCache } from '@engine/set/render/physics/rebuildDerivedCa
  * @returns {*} The current value from state.
  */
 export function getShadeDarkRgb() {
-  rebuildDerivedCache();
+  setRebuildDerivedCache();
   return renderState.shadeDarkRgb;
 }

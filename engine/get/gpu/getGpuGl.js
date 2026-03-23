@@ -9,9 +9,14 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/gpu/getGpuGl.js
+ *
+ * WHY THIS EXISTS:
+ *   Provides a single entrypoint for WebGL context reads to avoid
+ *   duplicate state references and to simplify context recreation handling.
  */
 
-import { glState } from '@engine/state/gpu/glState.js';
+// Import global GPU GL state container
+import { glState } from '@engine/state/gpu/stateGlState.js';
 
 /**
  * Returns webgl rendering context.

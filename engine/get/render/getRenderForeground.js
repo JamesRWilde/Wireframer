@@ -1,26 +1,30 @@
 /**
- * getRenderForeground.js - Getter for foreground render function
+ * getRenderForeground.js - Get Active Foreground Render Function
  *
  * PURPOSE:
- *   Returns the currently active foreground render function.
+ *   Returns the current foreground render function pointer (either GPU or CPU path).
+ *   The frame loop calls this each frame to get the active renderer and invoke it.
  *
  * ARCHITECTURE ROLE:
- *   Getter module in engine/get/render/. Imports state directly
- *   and returns the function pointer.
+ *   Getter for the mutable render function reference in renderForegroundState.
+ *   Paired with setRenderForeground, which sets the pointer during initialization.
  *
- * USAGE:
- *   import { getRenderForeground } from '@engine/get/render/getRenderForeground.js';
- *   const renderFn = getRenderForeground();
+ * WHY THIS EXISTS:
+ *   Provides a clean access point for the frame loop to retrieve the active
+ *   renderer without directly accessing the state object. This maintains the
+ *   setter/getter encapsulation pattern used throughout the codebase.
  */
 
 "use strict";
 
-import { renderForegroundState } from '@engine/state/render/renderForegroundState.js';
+// Import the render foreground state container
+// Holds the function pointer (fn) that the frame loop invokes each frame
+import { renderForegroundState } from '@engine/state/render/stateRenderForegroundState.js';
 
 /**
- * getRenderForeground - Returns the current foreground render function
- * @returns {function|null} The active render function
+ * getRenderForeground - Returns the active foreground render function
+ * @returns {Function} The render function (gpuPath or cpuPath) set during initialization
  */
 export function getRenderForeground() {
-  return renderForegroundState._renderForeground;
+  return renderForegroundState.fn;
 }

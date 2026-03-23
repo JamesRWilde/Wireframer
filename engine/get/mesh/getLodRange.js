@@ -7,9 +7,16 @@
  * ARCHITECTURE ROLE:
  *   Part of the one-function-per-file module architecture.
  *   Getter Module: engine/get/mesh/getLodRange.js
+ *
+ * WHY THIS EXISTS:
+ *   Provides a single access point for level-of-detail thresholds used by
+ *   mesh LOD selection logic.
  */
 
-import { lodRangeState } from '@engine/state/mesh/lodRangeState.js';
+"use strict";
+
+// Import LOD range state that tunes mesh detail switching.
+import { lodRangeState } from '@engine/state/mesh/stateLodRangeState.js';
 
 
 /**

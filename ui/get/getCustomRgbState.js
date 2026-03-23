@@ -8,11 +8,14 @@
  * ARCHITECTURE ROLE:
  *   Getter module in the ui/get/ layer. Imports state directly
  *   and exports a function that returns a copy.
+ *
+ * WHY THIS EXISTS:
+ *   Prevents callers from mutating internal state by returning a separate copy.
  */
 
 "use strict";
 
-import { customRgbState } from '@ui/state/customRgbState.js';
+import { customRgbState } from '@ui/state/stateCustomRgbState.js';
 
 /**
  * getCustomRgbState - Returns the current custom RGB as [r,g,b]
