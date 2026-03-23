@@ -24,15 +24,15 @@ import {presetSwatches}from '@ui/init/presetSwatches.js';
 
 // Import the function to read saved custom RGB values from localStorage
 // Returns null if no saved colors exist (first visit or cleared storage)
-import { getCustomRgb as readCustomRgb }from '@ui/get/read/getCustomRgb.js';
-import { setCustomRgb as writeCustomRgb }from '@ui/set/setCustomRgb.js';
+import { getCustomRgb }from '@ui/get/read/getCustomRgb.js';
+import { setCustomRgb }from '@ui/set/setCustomRgb.js';
 
 // Import the function to apply custom RGB values to the theme
 // Updates CSS variables, particle colors, wire colors, etc.
 
 // Import the function to set dark/light theme mode
 // Adjusts background brightness, contrast enforcement, etc.
-import { setThemeMode }from '@ui/set/setThemeMode.js';
+import { setUiThemeMode }from '@ui/set/setUiThemeMode.js';
 import { customRed, customGreen, customBlue } from '@ui/state/dom.js';
 
 // Import the function to persist UI state to localStorage
@@ -58,13 +58,13 @@ export function themeControls() {
     presetSwatches();
     
     // Step 2: Restore saved custom color from localStorage (if any)
-    // readCustomRgb returns { r, g, b } or null if nothing saved
-    const saved = readCustomRgb();
+    // getCustomRgb returns { r, g, b } or null if nothing saved
+    const saved = getCustomRgb();
     if (saved) {
       // Apply the saved color without persisting (already saved) but with visual update
       // persist: false avoids redundant localStorage write
       // apply: true updates CSS variables and canvas colors immediately
-      writeCustomRgb(saved, { persist: false, apply: true });
+      setCustomRgb(saved, { persist: false, apply: true });
     }
 
     // Step 3: Wire RGB sliders to custom color updates
@@ -74,7 +74,7 @@ export function themeControls() {
         const r = Number(customRed.value || '0');
         const g = Number(customGreen.value || '0');
         const b = Number(customBlue.value || '0');
-        writeCustomRgb([r, g, b], { persist: true, apply: true });
+        setCustomRgb([r, g, b], { persist: true, apply: true });
       };
 
       customRed.addEventListener('input', applySliderRgb);
@@ -94,13 +94,13 @@ export function themeControls() {
       
       // Apply the initial theme mode from the select's current value
       // apply: true updates CSS variables and background immediately
-      themeMode(tm.value, { apply: true });
+      setUiThemeMode(tm.value, { apply: true });
 
       // Attach input event handler for live theme mode changes
       // 'input' fires continuously while the user interacts with the select
       tm.addEventListener('input', () => {
         // Apply the new theme mode
-        themeMode(tm.value, { apply: true });
+        setUiThemeMode(tm.value, { apply: true });
         
         // Persist the new theme mode to localStorage
         // Wrapped in try/catch because persistence is non-critical

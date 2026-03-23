@@ -25,7 +25,7 @@ import { setCustomRgbState } from '@ui/set/setCustomRgbState.js';
 
 import { getClampByte } from '@ui/get/color/getClampByte.js';
 import { setUpdateCustomColor }from '@ui/set/setUpdateCustomColor.js';
-import { getCustomRgb as readCustomRgb }from '@ui/get/read/getCustomRgb.js';
+import { getCustomRgb }from '@ui/get/read/getCustomRgb.js';
 import { setPalette }from '@ui/set/apply/setPalette.js';
 
 export function setCustomRgb(rgb, options = {}) {
@@ -44,6 +44,6 @@ export function setCustomRgb(rgb, options = {}) {
   setCustomRgbState(newRgb);
 
   setUpdateCustomColor();
-  if (persist) readCustomRgb();
+  if (persist) getCustomRgb();
   if (apply) setPalette();
 }

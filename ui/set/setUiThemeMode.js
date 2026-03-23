@@ -17,7 +17,7 @@
 "use strict";
 
 import { setPalette }from '@ui/set/apply/setPalette.js';
-import { setThemeMode as engineSetThemeMode } from '@engine/set/render/setThemeMode.js';
+import { setEngineThemeMode } from '@engine/set/render/setEngineThemeMode.js';
 
 /**
  * themeMode - Sets application theme mode
@@ -28,11 +28,11 @@ import { setThemeMode as engineSetThemeMode } from '@engine/set/render/setThemeM
  *
  * @returns {void}
  */
-export function setThemeMode(mode, options = {}) {
+export function setUiThemeMode(mode, options = {}) {
   const { apply = true } = options;
 
   const normalized = mode === 'light' ? 'light' : 'dark';
-  engineSetThemeMode(normalized);
+  setEngineThemeMode(normalized);
 
   // Update theme mode select element if available
   const el = document.getElementById('theme-mode');
