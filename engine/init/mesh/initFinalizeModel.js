@@ -26,7 +26,7 @@ import { setDetailLevel }from '@engine/set/mesh/setDetailLevel.js';
 import { modelState } from '@engine/state/render/stateModel.js';
 import { getMorph } from '@engine/get/mesh/getMorph.js';
 import { getMorphDuration } from '@engine/get/mesh/getMorphDuration.js';
-import { setCapModelForCpu } from '@engine/set/mesh/setCapModelForCpu.js';
+import { setCpuDetailCap } from '@engine/set/mesh/setCpuDetailCap.js';
 import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 import { setLodRangeForModel } from '@engine/set/mesh/setLodRangeForModel.js';
 
@@ -53,7 +53,7 @@ export function finalizeModel(newModelCopy, animateMorph, name, detailLevelPct, 
   // In CPU mode, create CPU_BASE_MODEL by applying the cap
   // GPU mode uses the full base model directly
   if (!getIsGpuMode()) {
-    modelState.cpuBaseModel = setCapModelForCpu(newModelCopy);
+    modelState.cpuBaseModel = setCpuDetailCap(newModelCopy);
     // Update LOD range to reflect the capped model's vertex count
     // This ensures the slider's 100% corresponds to the actual maximum available in CPU mode
     setLodRangeForModel(modelState.cpuBaseModel);

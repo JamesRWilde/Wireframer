@@ -15,7 +15,7 @@
  *   performance cliff states while keeping LOD behavior centralized.
  *
  * DEPENDENCIES:
- *   - Uses setCapModelForCpu to create a capped base model
+ *   - Uses setCpuDetailCap to create a capped base model
  *   - Uses detailLevel to set the active LOD model
  */
 
@@ -30,7 +30,7 @@ import { setDetailLevel } from '@engine/set/mesh/setDetailLevel.js';
 // Import LOD range setter — updates the slider range to match the model's vertex count
 import { setLodRangeForModel } from '@engine/set/mesh/setLodRangeForModel.js';
 // Import CPU cap applier — pre-decimates the model to CPU-safe limits
-import { setCapModelForCpu } from '@engine/set/mesh/setCapModelForCpu.js';
+import { setCpuDetailCap } from '@engine/set/mesh/setCpuDetailCap.js';
 
 /**
  * setApplyCpuLodCap - Applies the CPU LOD cap to the current model
@@ -51,7 +51,7 @@ export function setApplyCpuLodCap() {
 
   // Apply the CPU cap to create a CPU-safe base model
   // This ensures the model respects CPU_MAX_VERTS limit
-  modelState.cpuBaseModel = setCapModelForCpu(baseModel);
+  modelState.cpuBaseModel = setCpuDetailCap(baseModel);
 
   // Update LOD range to reflect the capped model's vertex count in CPU mode
   // This ensures the slider's 100% corresponds to the actual maximum available

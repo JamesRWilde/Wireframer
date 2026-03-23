@@ -33,7 +33,7 @@ import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
 // Import GPU mode check — determines which base model to decimate from
 import { isGpuMode as getIsGpuMode } from '@engine/get/render/getIsGpuMode.js';
 // Import CPU vertex cap — used to decide whether to use uncapped base for small models
-import { CPU_MAX_VERTS } from '@engine/set/mesh/setCapModelForCpu.js';
+import { CPU_MAX_VERTS } from '@engine/set/mesh/setCpuDetailCap.js';
 
 /**
  * detailLevel - Sets the LOD detail level for the active model
