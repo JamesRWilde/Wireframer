@@ -20,8 +20,10 @@ import { utilRandomFloat } from '@engine/util/render/background/utilRandomFloat.
  * @returns {{count: number, data: Float32Array}} Particle count and packed buffer data
  */
 export function createParticleBufferData(width, height, density, baseSpeed) {
+  if (density <= 0) return { count: 0, data: new Float32Array(0) };
+
   const baseCount = Math.max(32, Math.round((width * height) / 90000));
-  const count = Math.max(8, Math.round(baseCount * Math.min(2.5, 1 + density)));
+  const count = Math.round(baseCount * Math.min(2.5, density));
   const data = new Float32Array(count * 8);
 
   for (let i = 0; i < count; i++) {
