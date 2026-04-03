@@ -125,7 +125,7 @@ export async function parseObjLines(lines, overrides) {
       continue;
     }
     // Yield every 500 lines to prevent UI jank
-    if (state.lineNumber % 500 === 0) {
+    if (state.lineNumber % 2000 === 0) {
       await new Promise(resolve => setTimeout(resolve, 0));
     }
   }
