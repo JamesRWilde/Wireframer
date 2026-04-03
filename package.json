@@ -1,18 +1,5 @@
 {
-  "name": "wireframer",
-  "version": "1.0.0",
-  "description": "3D wireframe renderer with Node.js server",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
-  "dependencies": {
-    "compression": "^1.8.1",
-    "express": "^4.19.2"
-  },
   "devDependencies": {
-    "@playwright/test": "^1.58.2",
-    "nodemon": "^3.1.4"
+    "@playwright/test": "^1.59.1"
   }
 }

@@ -44,7 +44,7 @@ import {parseEdge}from '@engine/init/mesh/parse/initParseEdge.js';
  *   - failingLines: Array of error messages
  *   - vertices, normals, uvs: Raw parsed data
  */
-export function parseObjLines(lines, overrides) {
+export async function parseObjLines(lines, overrides) {
   // Initialize parse state
   const state = {
     lineNumber: 0,
@@ -123,6 +123,10 @@ export function parseObjLines(lines, overrides) {
       state.failingLines.push(`[${state.lineNumber}] Exception parsing line in OBJ file '${fileName}': '${line}' | Error: ${err?.message ?? err}`);
       console.error(`[toRuntime] Exception at line ${state.lineNumber} in OBJ file '${fileName}':`, line, err);
       continue;
+    }
+    // Yield every 500 lines to prevent UI jank
+    if (state.lineNumber % 500 === 0) {
+      await new Promise(resolve => setTimeout(resolve, 0));
     }
   }
 

@@ -36,7 +36,7 @@ export async function loadObjMesh(objPath, name = 'Shape') {
   const resp = await fetch(objPath);
   if (!resp.ok) throw new Error('Failed to fetch OBJ: ' + objPath);
   const objText = await resp.text();
-  const mesh = toRuntime(objText, { meshFileName: objPath, meshType: 'OBJ' });
+  const mesh = await toRuntime(objText, { meshFileName: objPath, meshType: 'OBJ' });
   return load(mesh, name, { animateMorph: true });
 }
 

@@ -50,7 +50,7 @@ import { setMeshParseErrors } from '@engine/set/mesh/setMeshParseErrors.js';
  * @returns {Object} Mesh object with V, F, E arrays and metadata
  * @throws {Error} If input is invalid or parsing fails critically
  */
-export function toRuntime(text, overrides = {}) {
+export async function toRuntime(text, overrides = {}) {
   // Validate input is not null/undefined
   if (text === undefined || text === null) {
     console.error('[toRuntime] Input mesh is undefined/null.', { meshFile: overrides.meshFileName || 'unknown', meshType: overrides.meshType || 'OBJ' });
@@ -67,7 +67,7 @@ export function toRuntime(text, overrides = {}) {
   const lines = utilRawObjText(text, overrides);
 
   // Step 2: Parse lines into raw mesh data
-  const {uniqueVerts, faces, rawEdges, rawLines, materialSections, failingLines} = parseObjLines(lines, overrides);
+  const {uniqueVerts, faces, rawEdges, rawLines, materialSections, failingLines} = await parseObjLines(lines, overrides);
 
   // Store parse errors in shared state for debugging
   setMeshParseErrors(failingLines);
