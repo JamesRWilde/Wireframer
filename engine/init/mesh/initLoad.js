@@ -62,6 +62,10 @@ if (!getMeshClone()) {
   setMeshClone(cloneMesh);
 }
 
+function yieldToMainThread() {
+  return new Promise(resolve => setTimeout(resolve, 0));
+}
+
 /**
  * load - Loads and processes a mesh for rendering.
  *
@@ -77,7 +81,7 @@ if (!getMeshClone()) {
  * @param {string} [options.meshType='OBJ'] - Mesh format type
  * @returns {Object} The processed model ready for rendering
  */
-export function load(mesh, name = 'Shape', options = {}) {
+export async function load(mesh, name = 'Shape', options = {}) {
 
   // Extract options with defaults
   const {
@@ -89,6 +93,7 @@ export function load(mesh, name = 'Shape', options = {}) {
 
   // Step 1: Validate mesh structure
   utilValidationResult(mesh, name, meshFileName, meshType);
+  await yieldToMainThread();
 
   // Step 2: Extract vertices and faces
   const V = mesh.V;
@@ -103,10 +108,12 @@ export function load(mesh, name = 'Shape', options = {}) {
     }
     return edgeBuilder ? edgeBuilder(F) : [];
   })();
+  await yieldToMainThread();
 
   // Step 4: Normalise to bounding sphere space.
   // Centre at origin, scale to radius 1, then hard-clamp to sphere.
   normalizeToBoundingSphere(V);
+  await yieldToMainThread();
 
   // Step 5: Create the model object with filtered edges
   const newModel = {
@@ -117,9 +124,11 @@ export function load(mesh, name = 'Shape', options = {}) {
     _shadingMode: 'auto',
     _creaseAngleDeg: undefined,
   };
+  await yieldToMainThread();
 
   // Step 6: Set LOD range for detail level control
   setLodRangeForModel(newModel);
+  await yieldToMainThread();
 
   // Step 7: Clamp detail percent to valid range
   const clampedDetail = Math.max(0, Math.min(1, Number(detailPercent) || 1));
@@ -127,6 +136,7 @@ export function load(mesh, name = 'Shape', options = {}) {
   // Step 8: Clone the mesh for caching
   const meshCloneFn = getMeshClone();
   const newModelCopy = meshCloneFn ? meshCloneFn(newModel) : newModel;
+  await yieldToMainThread();
 
   // Step 9: Fit camera to model bounds (first load only, not morphs)
   // Zoom is constant for all meshes — only set it on first load
@@ -134,9 +144,11 @@ export function load(mesh, name = 'Shape', options = {}) {
     fitCameraToModel(newModel);
   }
   const targetZoom = getZoom();
+  await yieldToMainThread();
 
   // Step 10: Finalize model (activate, optionally morph)
   finalizeModel(newModelCopy, animateMorph, name, clampedDetail, targetZoom);
+  await yieldToMainThread();
 
   // Step 11: Set as active model for rendering
   try {

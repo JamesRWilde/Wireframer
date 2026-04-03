@@ -34,7 +34,7 @@ export async function loadObjMesh(objPath, name) {
   const engineLoad = getInitMeshEngineLoad();
   if (engineLoad) {
     try {
-      const result = engineLoad(mesh, name || objPath, { animateMorph: true });
+      const result = await engineLoad(mesh, name || objPath, { animateMorph: true });
       if (result) {
         setActiveModel(result, name || objPath);
       }
