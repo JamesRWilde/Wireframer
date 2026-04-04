@@ -25,8 +25,6 @@
 
 "use strict";
 
-// Import decimation helper — reduces model complexity by percentage
-import { decimateByPercent } from '@engine/init/mesh/initDecimateByPercent.js';
 // Import binary search decimator — finds optimal detail level under vertex/edge caps
 import { setDecimateToCap } from '@engine/set/mesh/setDecimateToCap.js';
 
@@ -57,8 +55,8 @@ export function utilCpuDetailCap(model) {
     return model;
   }
 
-  // If completely over, find the best cell-cluster decimation result under caps.
-  const best = setDecimateToCap(model, CPU_MAX_VERTS, CPU_MAX_EDGES);
+  // If completely over, find the best CPU-safe decimation under caps.
+  const best = setDecimateToCap(model);
 
   return best || model;
 }

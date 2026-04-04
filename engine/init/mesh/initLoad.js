@@ -20,8 +20,9 @@
  *   2. Build edges from faces (if not provided)
  *   3. Filter invalid edges (zero-length, duplicate)
  *   4. Normalise to bounding sphere space (centre at origin, radius 1)
- *   5. Set LOD range for the model
- *   6. Clone the mesh (for caching)
+ *   5. Bake the model into clean internal format (face normals, adjacency, corners)
+ *   6. Set LOD range for the model
+ *   7. Clone the mesh (for caching)
  *   7. Fit camera to model bounds (first load only)
  *   8. Finalize model (activate, optionally morph)
  *   9. Set as active model
@@ -34,7 +35,6 @@
 
 "use strict";
 
-import { utilFilteredValidEdges }from '@engine/util/mesh/utilFilteredValidEdges.js';
 import { utilValidationResult }from '@engine/util/mesh/utilValidationResult.js';
 import { setLodRangeForModel }from '@engine/set/mesh/setLodRangeForModel.js';
 import { fitCameraToModel }from '@engine/init/mesh/initFitCameraToModel.js';
@@ -52,6 +52,11 @@ import { modelState } from '@engine/state/render/stateModel.js';
 import { setActiveModel } from '@engine/set/render/physics/setActiveModel.js';
 import { setInitMeshEngineLoad } from '@engine/set/mesh/setInitMeshEngineLoad.js';
 
+// Import the baker — transforms raw mesh into clean internal format once
+import { initBakeMesh } from '@engine/init/mesh/initBakeMesh.js';
+// Import bake state — stores the baker's pristine shelf model
+import { bakeState } from '@engine/state/mesh/stateBakeState.js';
+
 // Register through module state so callers can retrieve the shared builder.
 if (!getMeshEdgesFromFacesRuntime()) {
   setMeshEdgesFromFacesRuntime(buildEdgesFromFacesRuntime);
@@ -60,10 +65,6 @@ if (!getMeshEdgesFromFacesRuntime()) {
 // Register clone API in state for safe module-based access (no global object)
 if (!getMeshClone()) {
   setMeshClone(cloneMesh);
-}
-
-function yieldToMainThread() {
-  return new Promise(resolve => setTimeout(resolve, 0));
 }
 
 /**
@@ -81,11 +82,12 @@ function yieldToMainThread() {
  * @param {string} [options.meshType='OBJ'] - Mesh format type
  * @returns {Object} The processed model ready for rendering
  */
-export async function load(mesh, name = 'Shape', options = {}) {
+export function load(mesh, name = 'Shape', options = {}) {
 
   // Extract options with defaults
   const {
     animateMorph = false,
+    detailMode,
     detailPercent = 1,
     meshFileName,
     meshType = 'OBJ',
@@ -93,7 +95,6 @@ export async function load(mesh, name = 'Shape', options = {}) {
 
   // Step 1: Validate mesh structure
   utilValidationResult(mesh, name, meshFileName, meshType);
-  await yieldToMainThread();
 
   // Step 2: Extract vertices and faces
   const V = mesh.V;
@@ -108,47 +109,60 @@ export async function load(mesh, name = 'Shape', options = {}) {
     }
     return edgeBuilder ? edgeBuilder(F) : [];
   })();
-  await yieldToMainThread();
 
   // Step 4: Normalise to bounding sphere space.
   // Centre at origin, scale to radius 1, then hard-clamp to sphere.
   normalizeToBoundingSphere(V);
-  await yieldToMainThread();
 
-  // Step 5: Create the model object with filtered edges
-  const newModel = {
+  // Step 5: Bake the model into clean internal format.
+  // The baker (initBakeMesh) transforms raw OBJ-informed mesh data into
+  // the canonical internal format: clean [x,y,z] vertices, bare [a,b,c]
+  // faces, pre-computed face normals, and corner normals. This heavy
+  // computation happens ONCE at load time, not every frame.
+  // The baker's output becomes the single source of truth for all
+  // downstream operations — decimation, morphing, LOD changes.
+  // Nobody ever goes back to the raw OBJ text.
+  const bakedModel = initBakeMesh({
     V,
     F,
-    E: utilFilteredValidEdges(E, V),
-    _meshFormat: 'obj-style',
-    _shadingMode: 'auto',
-    _creaseAngleDeg: undefined,
-  };
-  await yieldToMainThread();
+    E,
+    triangleSmoothing: mesh.triangleSmoothing || null,
+    triangleMaterials: mesh.triangleMaterials || null,
+  }, detailMode, detailPercent);
+
+  // Wire the self-reference so the shelf can find itself.
+  // This ensures that any clone or copy of this model can always find
+  // the pristine original — the lifeline that prevents re-parsing OBJ.
+  bakedModel._bakedShelfModel = bakedModel;
+
+  // Store the pristine shelf model in state.
+  // Everyone who needs a fresh start — including decimation, morphing,
+  // and detail upgrades — clones from this reference.
+  bakeState._bakedShelfModel = bakedModel;
 
   // Step 6: Set LOD range for detail level control
-  setLodRangeForModel(newModel);
-  await yieldToMainThread();
+  setLodRangeForModel(bakedModel);
 
   // Step 7: Clamp detail percent to valid range
   const clampedDetail = Math.max(0, Math.min(1, Number(detailPercent) || 1));
 
-  // Step 8: Clone the mesh for caching
+  // Step 8: Clone the mesh for the pipeline.
+  // The active render pipeline works from a clone, not the shelf.
+  // This ensures mutations (decimation, morphing) don't corrupt the
+  // baker's pristine copy. Pass bakedModel as shelfModel so the
+  // clone's _bakedShelfModel points to the shelf.
   const meshCloneFn = getMeshClone();
-  const newModelCopy = meshCloneFn ? meshCloneFn(newModel) : newModel;
-  await yieldToMainThread();
+  const newModelCopy = meshCloneFn ? meshCloneFn(bakedModel, bakedModel) : cloneMesh(bakedModel, bakedModel);
 
   // Step 9: Fit camera to model bounds (first load only, not morphs)
   // Zoom is constant for all meshes — only set it on first load
   if (!modelState.model) {
-    fitCameraToModel(newModel);
+    fitCameraToModel(newModelCopy);
   }
   const targetZoom = getZoom();
-  await yieldToMainThread();
 
   // Step 10: Finalize model (activate, optionally morph)
   finalizeModel(newModelCopy, animateMorph, name, clampedDetail, targetZoom);
-  await yieldToMainThread();
 
   // Step 11: Set as active model for rendering
   try {
