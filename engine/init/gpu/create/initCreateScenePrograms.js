@@ -56,7 +56,6 @@ export function createScenePrograms(gl) {
     uniform float u_projX;
     uniform float u_projY;
     uniform float u_modelCy;
-    uniform float u_depthScale;
     varying vec3 v_normal;
     varying vec2 v_uv;
     // Apply 3x3 rotation matrix stored as three row vectors
@@ -66,8 +65,9 @@ export function createScenePrograms(gl) {
     void main() {
       vec3 p = applyRot(a_pos);
       vec3 n = normalize(applyRot(a_normal));
-      // Orthographic projection: no depth-dependent scaling
-      gl_Position = vec4(p.x * u_projX, (p.y - u_modelCy) * u_projY, clamp(p.z * u_depthScale, -1.0, 1.0), 1.0);
+      // In true orthographic projection Z passes through unchanged —
+      // it is used only for depth-buffer ordering, not for scaling.
+      gl_Position = vec4(p.x * u_projX, (p.y - u_modelCy) * u_projY, p.z, 1.0);
       v_normal = n;
       v_uv = a_uv;
     }
@@ -101,15 +101,15 @@ export function createScenePrograms(gl) {
     uniform float u_projY;
     uniform float u_modelCy;
     uniform float u_zHalf;
-    uniform float u_depthScale;
     varying float v_t;
     vec3 applyRot(vec3 v) {
       return vec3(dot(u_r0, v), dot(u_r1, v), dot(u_r2, v));
     }
     void main() {
       vec3 p = applyRot(a_pos);
-      // Orthographic projection: no depth-dependent scaling
-      gl_Position = vec4(p.x * u_projX, (p.y - u_modelCy) * u_projY, clamp(p.z * u_depthScale, -1.0, 1.0), 1.0);
+      // In true orthographic projection Z passes through unchanged —
+      // it is used only for depth-buffer ordering, not for scaling.
+      gl_Position = vec4(p.x * u_projX, (p.y - u_modelCy) * u_projY, p.z, 1.0);
       // Compute depth-based interpolation factor for color fading
       float denom = max(0.0001, u_zHalf * 2.0);
       v_t = clamp((u_zHalf - p.z) / denom, 0.0, 0.999);
@@ -144,7 +144,6 @@ export function createScenePrograms(gl) {
     uProjX: gl.getUniformLocation(fillProgram, 'u_projX'),
     uProjY: gl.getUniformLocation(fillProgram, 'u_projY'),
     uModelCy: gl.getUniformLocation(fillProgram, 'u_modelCy'),
-    uDepthScale: gl.getUniformLocation(fillProgram, 'u_depthScale'),
     uLightDir: gl.getUniformLocation(fillProgram, 'u_lightDir'),
     uViewDir: gl.getUniformLocation(fillProgram, 'u_viewDir'),
     uShadeDark: gl.getUniformLocation(fillProgram, 'u_shadeDark'),
@@ -164,7 +163,6 @@ export function createScenePrograms(gl) {
     uProjY: gl.getUniformLocation(wireProgram, 'u_projY'),
     uModelCy: gl.getUniformLocation(wireProgram, 'u_modelCy'),
     uZHalf: gl.getUniformLocation(wireProgram, 'u_zHalf'),
-    uDepthScale: gl.getUniformLocation(wireProgram, 'u_depthScale'),
     uWireNear: gl.getUniformLocation(wireProgram, 'u_wireNear'),
     uWireFar: gl.getUniformLocation(wireProgram, 'u_wireFar'),
     uAlpha: gl.getUniformLocation(wireProgram, 'u_alpha'),
